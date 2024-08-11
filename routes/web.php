@@ -29,7 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [PageController::class, 'dashboard']);
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
-    Route::middleware(['checkRole:admin, facility manager'])->group(function () {
+    Route::middleware(['checkRole:admin,facility manager'])->group(function () {
         Route::get('/users', [PageController::class, 'users']);
         Route::get('/add-user', [PageController::class, 'addUser'])->name('add-user');
         Route::post('/add-user', [UserController::class, 'addUserPost'])->name('addUserPost');

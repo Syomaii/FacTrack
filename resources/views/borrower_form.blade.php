@@ -30,77 +30,82 @@
             </div>
         @endif
 
-        <div class="row">
-            <div class="col-md-6">
-                <form action="/borrower-form" method="post">
-                    @csrf
-                    <div class="card h-100 p-0 radius-12">
-                        <div class="card-body p-24">
-                            <input type="hidden" name="borrowed_date" value="{{ now()->format('Y-m-d\TH:i') }}">
-                            <div class="mb-3">
-                                <label for="borrowers_name"
-                                    class="form-label fw-semibold text-primary-light text-sm mb-8">Borrower's
-                                    Name</label>
-                                <input type="text"
-                                    class="form-control radius-8 {{ $errors->has('borrowers_name') ? 'is-invalid' : '' }}"
-                                    id="borrowers_name" name="borrowers_name" placeholder="Enter Borrower's Name"
-                                    value="{{ old('borrowers_name') }}">
-                                <small class="text-danger">{{ $errors->first('borrowers_name') }}</small>
+        
+        <div class="card h-100% p-0 radius-12">
+            <div class="card-body p-24">
+                <div class="row justify-content-center">
+                    <div class="col-xxl-6 col-xl-8 col-lg-10">
+                        <div class="card border">
+                            <div class="card-body">
+                                <form action="/borrower-form" method="post">
+                                    @csrf
+                                    <input type="hidden" name="borrowed_date" value="{{ now()->format('Y-m-d\TH:i') }}">
+                                    <div class="mb-3">
+                                        <label for="borrowers_name"
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Borrower's
+                                            Name</label>
+                                        <input type="text"
+                                            class="form-control radius-8 {{ $errors->has('borrowers_name') ? 'is-invalid' : '' }}"
+                                            id="borrowers_name" name="borrowers_name" placeholder="Enter Borrower's Name"
+                                            value="{{ old('borrowers_name') }}">
+                                        <small class="text-danger">{{ $errors->first('borrowers_name') }}</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="borrower_id"
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Borrower's ID</label>
+                                        <input type="text"
+                                            class="form-control radius-8 {{ $errors->has('borrowers_id_no') ? 'is-invalid' : '' }}"
+                                            id="borrowers_id_no" name="borrowers_id_no" placeholder="Enter Borrower's ID"
+                                            value="{{ old('borrowers_id_no') }}">
+                                        <small class="text-danger">{{ $errors->first('borrowers_id_no') }}</small>
+                                    </div>
+                                    {{-- <div class="mb-3">
+                                            <label for="user_id"
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">User ID</label> 
+                                        <input type="text"
+                                            class="form-control radius-8 {{ $errors->has('user_id') ? 'is-invalid' : '' }}"
+                                            id="user_id" name="user_id" placeholder="Enter User ID"
+                                            value="{{ auth()->user()->id }}" hidden>
+                                        <small class="text-danger">{{ $errors->first('user_id') }}</small>
+                                    </div> --}}
+                                    {{-- <div class="mb-3">
+                                        <label for="borrowed_date"
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Borrowed Date</label>
+                                        <input type="datetime-local"
+                                            class="form-control radius-8 {{ $errors->has('borrowed_date') ? 'is-invalid' : '' }}"
+                                            id="borrowed_date" name="borrowed_date"
+                                            value="{{ old('borrowed_date', now()->format('Y-m-d')) }}">
+                                        <small class="text-danger">{{ $errors->first('borrowed_date') }}</small>
+                                    </div> --}}
+                                    <div class="mb-3">
+                                        <label for="returned_date"
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Expected Return
+                                            Date</label>
+                                        <input type="datetime-local"
+                                            class="form-control radius-8 {{ $errors->has('returned_date') ? 'is-invalid' : '' }}"
+                                            id="returned_date" name="returned_date" value="{{ old('returned_date') }}">
+                                        <small class="text-danger">{{ $errors->first('returned_date') }}</small>
+                                    </div>
+            
+                                    <div class="d-flex align-items-center justify-content-center gap-3">
+                                        <a href="/equipments">
+                                            <button type="button"
+                                                class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8">
+                                                Cancel
+                                            </button>
+                                        </a>
+                                        <button type="submit"
+                                            class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8">
+                                            Borrow Equipment
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="mb-3">
-                                <label for="borrower_id"
-                                    class="form-label fw-semibold text-primary-light text-sm mb-8">Borrower's ID</label>
-                                <input type="text"
-                                    class="form-control radius-8 {{ $errors->has('borrowers_id_no') ? 'is-invalid' : '' }}"
-                                    id="borrowers_id_no" name="borrowers_id_no" placeholder="Enter Borrower's ID"
-                                    value="{{ old('borrowers_id_no') }}">
-                                <small class="text-danger">{{ $errors->first('borrowers_id_no') }}</small>
-                            </div>
-                            {{-- <div class="mb-3">
-                                 <label for="user_id"
-                                    class="form-label fw-semibold text-primary-light text-sm mb-8">User ID</label> 
-                                <input type="text"
-                                    class="form-control radius-8 {{ $errors->has('user_id') ? 'is-invalid' : '' }}"
-                                    id="user_id" name="user_id" placeholder="Enter User ID"
-                                    value="{{ auth()->user()->id }}" hidden>
-                                <small class="text-danger">{{ $errors->first('user_id') }}</small>
-                            </div> --}}
-                            {{-- <div class="mb-3">
-                                <label for="borrowed_date"
-                                    class="form-label fw-semibold text-primary-light text-sm mb-8">Borrowed Date</label>
-                                <input type="datetime-local"
-                                    class="form-control radius-8 {{ $errors->has('borrowed_date') ? 'is-invalid' : '' }}"
-                                    id="borrowed_date" name="borrowed_date"
-                                    value="{{ old('borrowed_date', now()->format('Y-m-d')) }}">
-                                <small class="text-danger">{{ $errors->first('borrowed_date') }}</small>
-                            </div> --}}
-                            <div class="mb-3">
-                                <label for="returned_date"
-                                    class="form-label fw-semibold text-primary-light text-sm mb-8">Expected Return
-                                    Date</label>
-                                <input type="datetime-local"
-                                    class="form-control radius-8 {{ $errors->has('returned_date') ? 'is-invalid' : '' }}"
-                                    id="returned_date" name="returned_date" value="{{ old('returned_date') }}">
-                                <small class="text-danger">{{ $errors->first('returned_date') }}</small>
-                            </div>
-
-                            <div class="d-flex align-items-center justify-content-center gap-3">
-                                <a href="/equipments">
-                                    <button type="button"
-                                        class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8">
-                                        Cancel
-                                    </button>
-                                </a>
-                                <button type="submit"
-                                    class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8">
-                                    Borrow Equipment
-                                </button>
-                            </div>
-
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
+        </div>
 
             {{-- <div class="col-md-6">
                 <div class="card h-100 p-0 radius-12">
@@ -136,7 +141,6 @@
                     </div>
                 </div>
             </div> --}}
-        </div>
 
         
     </div>
