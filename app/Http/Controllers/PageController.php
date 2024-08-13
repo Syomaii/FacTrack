@@ -112,7 +112,7 @@ class PageController extends Controller
     public function facilityEquipments($id)
     {
         $facility = Facility::findOrFail($id);
-        $equipments = Equipment::where('facility_id', $id)->get();
+        $equipments = Equipment::where('facility_id', $id)->paginate(5);
 
         return view('facility_equipments', compact('facility', 'equipments'))->with('title', 'Facility Equipments');
     }
