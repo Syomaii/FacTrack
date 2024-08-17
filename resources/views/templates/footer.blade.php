@@ -49,7 +49,6 @@
     </script>
 @endif
 @if (url()->current() == url('scan-code'))
-    :
     <script src="/assets/js/lib/html5-qrcode.min.js"></script>
     <script>
         // console.log(Html5QrcodeScanner);
