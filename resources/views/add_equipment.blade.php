@@ -90,10 +90,10 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="serial_no"
-                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Name</label>
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Serial No</label>
                                         <input type="text"
                                             class="form-control radius-8 {{ $errors->has('serial_no') ? 'is-invalid' : '' }}"
-                                            id="serial_no" serial_no="serial_no" placeholder="Enter Equipment Name"
+                                            id="serial_no" serial_no="serial_no" placeholder="Enter Equipment Serial No"
                                             value="{{ old('serial_no') }}">
                                         <small class="text-danger">{{ $errors->first('serial_no') }}</small>
                                     </div>
