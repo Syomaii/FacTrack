@@ -9,10 +9,10 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function countForWidgets(){
-        $count = User::count();
+        $userCount = User::count();
 
         $data = [
-            'count' => $count,
+            'userCount' => $userCount,
             'title' => 'Dashboard'
         ];
 
