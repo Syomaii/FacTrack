@@ -60,7 +60,7 @@
                                                     for="upload-file">
                                                     <iconify-icon icon="solar:camera-outline"
                                                         class="text-xl text-secondary-light"></iconify-icon>
-                                                    <span class="fw-semibold text-secondary-light">Upload</span>
+                                                    <span class="fw-semibold text-secondary-light">Uploads</span>
                                                     <input id="upload-file" type="file" name="image" hidden>
                                                 </label>
                                             </div>
