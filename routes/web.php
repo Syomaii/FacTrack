@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['checkRole:operator,facility manager'])->group(function () {
         //Page Controller
         Route::get('/scan-code', [PageController::class, 'scanCode']);
+        Route::get('/return-equipment', [PageController::class, 'returnEquipment']);
         Route::get('/equipments', [PageController::class, 'equipments'])->name('equipments');
         Route::get('/borrowed-equipments', [PageController::class, 'borrowedEquipmentReports']);
         Route::get('/equipment-details/{code}', [PageController::class, 'equipmentDetails']);
