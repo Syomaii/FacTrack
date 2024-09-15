@@ -77,6 +77,10 @@ class PageController extends Controller
     public function scanCode(){
         return view('scancode')->with('title', 'Scan Code');
     }
+
+    public function returnEquipment(){
+        return view('return_equipment')->with('title', 'Return Equipment');
+    }
     
     public function error404(){
         return view('errors.404')->with('title', 'Error 404 - Page Not Found');
