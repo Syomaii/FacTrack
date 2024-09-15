@@ -48,7 +48,7 @@
                 <a href="/borrower-form"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i>Borrow equipments</a>
               </li>
               <li>
-                <a href="/scan-code"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>Return equipments</a>
+                <a href="/return-equipment"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>Return equipments</a>
               </li>
               </li>
             </ul>
