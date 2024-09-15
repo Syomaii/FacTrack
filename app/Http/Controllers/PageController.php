@@ -19,7 +19,17 @@ class PageController extends Controller
     }
 
     public function dashboard(){
-        return view('dashboard')->with('title', 'Dashboard');
+        $userCount = User::count();
+        $equipmentCount = Equipment::count();
+    
+        $data = [
+            'userCount' => $userCount,
+            'equipmentCount' => $equipmentCount,
+            'title' => 'Dashboard'
+        ];
+    
+
+        return view('dashboard')->with($data);
     }
 
     public function facilities(){
