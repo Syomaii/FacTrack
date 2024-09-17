@@ -48,7 +48,7 @@
         // ========================= Password Show Hide Js End ===========================
     </script>
 @endif
-@if (url()->current() == url('scan-code'))
+@if (url()->current() == url('return-equipment') || url()->current() == url('borrow-equipment'))
     <script src="/assets/js/lib/html5-qrcode.min.js"></script>
     <script>
         // console.log(Html5QrcodeScanner);
