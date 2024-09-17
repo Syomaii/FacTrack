@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 
 class BorrowerController extends Controller
 {
-    public function borrowerForm(){
-        return view('borrower_form')->with('title', 'Borrower Form');
+    public function borrowEquipment(){
+        return view('borrow_equipments')->with('title', 'Borrow Equipment');
     }
     public function borrowerFormPost(Request $request)
     {
