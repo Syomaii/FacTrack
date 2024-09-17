@@ -45,7 +45,7 @@
             </a>
             <ul class="sidebar-submenu">
               <li>
-                <a href="/borrower-form"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i>Borrow equipments</a>
+                <a href="/borrow-equipment"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i>Borrow equipments</a>
               </li>
               <li>
                 <a href="/return-equipment"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>Return equipments</a>
@@ -75,16 +75,13 @@
           </a>
           <ul class="sidebar-submenu">
             <li>
-              <a href="invoice-list.html"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i>Available equipments</a>
-            </li>
-            <li>
               <a href="/borrowed-equipments"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>Borrowed equipments</a>
             </li>
             <li>
-              <a href="invoice-add.html"><i class="ri-circle-fill circle-icon text-info-main w-auto"></i>In maintenance equipments</a>
+              <a href="/maintainanced-equipments"><iconify-icon icon="carbon:calendar-tools" class="menu-icon"></iconify-icon></i>In maintenance equipments</a>
             </li>
             <li>
-              <a href="invoice-edit.html"><i class="ri-circle-fill circle-icon text-danger-main w-auto"></i>In repair equipments</a>
+              <a href="/repaired-equipments"><iconify-icon icon="mdi:scheduled-maintenance" class="menu-icon"></iconify-icon></i>In repair equipments</a>
             </li>
           </ul>
         </li>
