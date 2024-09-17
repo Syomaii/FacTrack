@@ -55,7 +55,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/qr-code/{code}', [QRCodeController::class, 'index'])->name('qr_code');
         
         //BorrowerController
-        Route::get('/borrower-form/', [BorrowerController::class, 'borrowerForm'])->name('borrower_form');
+        Route::get('/borrow-equipment/', [BorrowerController::class, 'borrowEquipment'])->name('borrow-equipment');
         Route::post('/borrower-form', [BorrowerController::class, 'borrowerFormPost']);
     });
 
