@@ -101,7 +101,7 @@
                                         <label for="acquired_date"
                                             class="form-label fw-semibold text-primary-light text-sm mb-8">Acquired
                                             Date</label>
-                                        <input type="datetime-local"
+                                        <input type="date"
                                             class="form-control radius-8 {{ $errors->has('acquired_date') ? 'is-invalid' : '' }}"
                                             id="acquired_date" name="acquired_date" value="{{ old('acquired_date') }}">
                                         <small class="text-danger">{{ $errors->first('acquired_date') }}</small>
