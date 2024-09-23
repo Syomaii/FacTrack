@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Borrower;
 use App\Models\Equipment;
 use Illuminate\Http\Request;
-dsda
+
 class BorrowerController extends Controller
 {
     public function borrowEquipment(){
