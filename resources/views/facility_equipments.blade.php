@@ -47,7 +47,7 @@
                     <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
                     {{ session('addEquipmentSuccessfully') }}
                 </div>
-            </div>
+            </div>sdsd
         @endif
 
         <div class="row gy-4" id="equipmentList">
