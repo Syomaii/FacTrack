@@ -13258,28 +13258,24 @@ td.fc-header-center {
 
 .timeline-horizontal {
   display: flex;
-  /* justify-content: space-between; */
   align-items: center;
-  overflow-x: scroll;
+  overflow-x: auto; 
+  overflow-y: hidden; 
   margin-top: 60px;
-  padding: 10px 0;
+  padding: 8px 0;
   position: relative;
-  width: 100%;
+  width: 100%; 
+  height: 400px;
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
 }
 
-.timeline-horizontal::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background-color: #e0e0e0;
-  z-index: 1;
+.timeline-horizontal::-webkit-scrollbar {
+  display: none; 
 }
 
 .timeline-item {
-  width: 500px !important;
+  width: 500px; 
   background-color: #fff;
   padding: 10px 20px;
   border-radius: 6px;
@@ -13287,13 +13283,17 @@ td.fc-header-center {
   position: relative;
   z-index: 2;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex: none; 
 }
+
 .timeline-item.above {
   transform: translateY(-50%);
 }
+
 .timeline-item.below {
   transform: translateY(50%);
 }
+
 .timeline-item::after {
   content: '';
   position: absolute;
@@ -13307,8 +13307,12 @@ td.fc-header-center {
   border-radius: 50%;
   z-index: 3;
 }
+
 .timeline-item.below::after {
   top: -10px;
   bottom: auto;
 }
 
+.circle-none circle {
+  display: none;
+}
