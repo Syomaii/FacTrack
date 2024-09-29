@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Equipment;
 use App\Models\Facility;
+use App\Models\Timeline;
 use App\Models\Office;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -40,7 +41,14 @@ class EquipmentController extends Controller
             $data['image'] = 'images/equipments/' . $image->getClientOriginalName();
         }
 
-        Equipment::create($data);
+        $equipment = Equipment::create($data);
+
+        Timeline::create([
+            'equipment_id' => $equipment->id,
+            'status' => $equipment->status,
+            'remarks' => 'The day the equipment is added in the system',
+            'user_id' => auth()->id()
+        ]);
 
         return redirect()->route('facility_equipments', ['id' => $facility->id])
                      ->with('title', 'Facility Equipment')
@@ -49,29 +57,55 @@ class EquipmentController extends Controller
     
     public function updateEquipment(Request $request)
     {
+        // Validate the form data
         $data = $request->validate([
             'name' => 'required',
             'description' => 'required',
             'acquired_date' => 'required|date|before_or_equal:now',
-            'facility' => 'required',
+            'facility' => 'required|string', // Expect facility as name or id
             'status' => 'required|in:Available,In Maintenance,In Repair,Borrowed',
         ]);
-
+    
         $acquiredDate = new \DateTime($data['acquired_date']);
         $now = new \DateTime();
-
+    
         if ($acquiredDate > $now) {
-            return back()->withErrors(['acquired_date' => 'The acquisition date must be present or past date.']);
+            return back()->withErrors(['acquired_date' => 'The acquisition date must be a present or past date.']);
         }
-
-        Equipment::where('id', $request['id'])->update($data);
+    
+        // Find the facility by name or ID
+        $facility = Facility::where('name', $data['facility'])->first();
+    
+        if (!$facility) {
+            return back()->withErrors(['facility' => 'Facility not found.']);
+        }
+    
+        // Prepare the data to update the equipment
+        $updateData = [
+            'name' => $data['name'],
+            'description' => $data['description'],
+            'acquired_date' => $data['acquired_date'],
+            'facility_id' => $facility->id, // Use facility_id instead of facility name
+            'status' => $data['status']
+        ];
+    
+        $equipment = Equipment::where('id', $request['id'])->first();
+        $equipment->update($updateData);
+    
+        Timeline::create([
+            'equipment_id' => $equipment->id,
+            'status' => $equipment->status,
+            'remarks' => 'The day the equipment is updated in the system',
+            'user_id' => auth()->id()
+        ]);
+    
         return redirect()->route('equipments')->with('updateEquipmentSuccessfully', 'Equipment updated successfully');
-    }
+    }    
 
     public function deleteEquipment($id){
 
         Equipment::where('id', $id)->delete();
-        return redirect('/equipments')->with('deleteEquipmentSuccessfully', 'Equipment deleted successfully');
+        return redirect('equipments/equipments')->with('deleteEquipmentSuccessfully', 'Equipment deleted successfully');
     }
 
     
