@@ -63,7 +63,7 @@
             </li>
         @endif
         <li>
-          <a href="/profile">
+          <a href="{{ route('profile', ['id' => Auth::user()->id]) }}">
             <iconify-icon icon="flowbite:user-outline" class="menu-icon"></iconify-icon>
             <span>Profile</span>
           </a>
