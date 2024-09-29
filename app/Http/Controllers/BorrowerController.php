@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class BorrowerController extends Controller
 {
     public function borrowEquipment(){
-        return view('borrow_equipments')->with('title', 'Borrow Equipment');
+        return view('equipments/borrow_equipments')->with('title', 'Borrow Equipment');
     }
     public function borrowerFormPost(Request $request)
     {
@@ -54,7 +54,7 @@ class BorrowerController extends Controller
             'status' => $equipment->status,
         ]);
     
-        return redirect()->route('equipments')->with('borrowedSuccessfully', 'Equipment borrowed successfully');
+        return redirect()->route('equipments/equipments')->with('borrowedSuccessfully', 'Equipment borrowed successfully');
     }
 
     public function showDetails($code)
