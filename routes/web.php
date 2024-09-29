@@ -5,6 +5,7 @@ use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\QRCodeController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,8 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [PageController::class, 'dashboard']);
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+    Route::get('/profile/{id}', [PageController::class, 'profile'])->name('profile');
+    Route::put('/profile/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
 
     Route::middleware(['checkRole:admin,facility manager'])->group(function () {
         Route::get('/users', [PageController::class, 'users']);
@@ -44,7 +47,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/scan-code', [PageController::class, 'scanCode']);
         Route::get('/return-equipment', [PageController::class, 'returnEquipment']);
         Route::get('/equipments', [PageController::class, 'equipments'])->name('equipments');
-        Route::get('/borrowed-equipments', [PageController::class, 'borrowedEquipmentReports']);
+        Route::get('/borrowed-equipments', [ReportController::class, 'borrowedEquipmentReports']);
+        Route::get('/maintenanced-equipments', [ReportController::class, 'maintenancedEquipmentReports']);
+        Route::get('/repaired-equipments', [ReportController::class, 'repairedEquipmentReports']);
         Route::get('/equipment-details/{code}', [PageController::class, 'equipmentDetails']);
         // Route::get('/product-details/{id}', [PageController::class, 'productDetails'])->name('product.details');
         
