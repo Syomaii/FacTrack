@@ -81,7 +81,7 @@ class UserController extends Controller
 
             $user = Auth::user();
 
-            return redirect()->intended('/dashboard');
+            return redirect()->intended('/dashboard')->with('loginUserSuccessfully', 'You have successfully loged-in!');
         }
 
         return back()->withErrors([
@@ -101,6 +101,23 @@ class UserController extends Controller
     public function deleteUser($id){
 
         User::where('id', $id)->delete();
-        return redirect('/users')->with('deleteUserSuccessfully', 'Equipment deleted successfully');
+        return redirect('users/users')->with('deleteUserSuccessfully', 'Equipment deleted successfully');
+    }
+
+    public function updateProfile(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+    
+        $data = $request->validate([
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'mobile_no' => 'required|string|max:15',
+            'designation_id' => 'required|exists:designations,id',
+        ]);
+    
+        $user->update($data);
+    
+        return redirect()->route('profile', ['id' => $id])->with('updateprofilesuccessfully', 'Profile updated successfully');
     }
 }
