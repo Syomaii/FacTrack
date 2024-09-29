@@ -81,7 +81,7 @@
               <ul class="to-top-list">
                 <li>
                   <a class="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
-                    href="view-profile.html">
+                    href="{{ route('profile', ['id' => Auth::user()->id]) }}">
                     <iconify-icon icon="solar:user-linear" class="icon text-xl"></iconify-icon> My Profile</a>
                 </li>
                 <li>
