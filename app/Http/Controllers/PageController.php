@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 class PageController extends Controller
 {
     public function login(){
-        return view('index')->with('title', 'Login');
+        return view('users/index')->with('title', 'Login');
     }
 
     public function dashboard(){
@@ -38,13 +38,13 @@ class PageController extends Controller
             $query->where('office_id', $officeId);
         })->paginate(5);
 
-        return view('facilities', compact('officeId', 'facilities'))->with('title', 'Facilities');
+        return view('facilities/facilities', compact('officeId', 'facilities'))->with('title', 'Facilities');
     }
 
     public function users(){
         $users = User::with(['designation', 'office'])->get();
 
-        return view('users', compact('users'))->with('title', 'Users');
+        return view('users/users', compact('users'))->with('title', 'Users');
     }
 
     public function equipments(){
@@ -63,23 +63,27 @@ class PageController extends Controller
             })->orderBy('acquired_date', 'desc')->paginate(5);
         }
 
-        return view('equipments', compact('equipments'))->with('title', 'Equipments');
+        return view('equipments/equipments', compact('equipments'))->with('title', 'Equipments');
     }
 
-    public function borrowedEquipmentReports(){
-        return view('borrowed_equipments')->with('title', 'Borrowed Equipments');
+    public function profile($id)
+    {
+        $user = User::findOrFail($id);
+        $designations = Designation::all(); 
+
+        return view('users/profile', compact('user', 'designations'))->with('title', 'Profile');
     }
 
     public function addFacility(){
-        return view('add_facility')->with('title', 'Reports');
+        return view('facilities/add_facility')->with('title', 'Reports');
     }
 
     public function scanCode(){
-        return view('scancode')->with('title', 'Scan Code');
+        return view('equipments/scancode')->with('title', 'Scan Code');
     }
 
     public function returnEquipment(){
-        return view('return_equipment')->with('title', 'Return Equipment');
+        return view('equipments/return_equipment')->with('title', 'Return Equipment');
     }
     
     public function error404(){
@@ -90,22 +94,23 @@ class PageController extends Controller
         return view('errors.401')->with('title', 'Error 401 - Unauthorized');
     }
     public function offices(){
-        return view('offices')->with('title', 'Offices');
+        return view('offices/offices')->with('title', 'Offices');
     }
 
     public function addEquipment($id){
         $facility = Facility::find($id);
-        return view('add_equipment', compact('facility'))->with('title', 'Add Equipment');
+        return view('equipments/add_equipment', compact('facility'))->with('title', 'Add Equipment');
     }
 
     public function equipmentDetails($code){
         $equipments = Equipment::where('code', $code)->first();
         $data = [
             'equipments' => $equipments,
+            'timeline' => $equipments->timeline,
             'title' => 'Equipment Details'
         ];
 
-        return view('equipment_details', $data);
+        return view('equipments/equipment_details', $data);
     }
 
     public function addUser(){
@@ -114,13 +119,13 @@ class PageController extends Controller
         $userType = auth()->user()->type;
         $officeId = auth()->user()->office_id;
 
-        return view('add_user', compact('designations', 'offices', 'userType', 'officeId'))->with('title', 'Add User');
+        return view('users/add_user', compact('designations', 'offices', 'userType', 'officeId'))->with('title', 'Add User');
     }
 
     public function generatedQr(){
         $equipments = Equipment::findOrFail('id');
 
-        return view('generateqr', compact('equipments'))->with('title', 'Generated Qr');
+        return view('equipments/generateqr', compact('equipments'))->with('title', 'Generated Qr');
     }
 
     public function facilityEquipments($id)
@@ -128,7 +133,7 @@ class PageController extends Controller
         $facility = Facility::findOrFail($id);
         $equipments = Equipment::where('facility_id', $id)->paginate(5);
 
-        return view('facility_equipments', compact('facility', 'equipments'))->with('title', 'Facility Equipments');
+        return view('equipments/facility_equipments', compact('facility', 'equipments'))->with('title', 'Facility Equipments');
     }
 
     
