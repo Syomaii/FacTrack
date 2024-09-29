@@ -57,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
         //BorrowerController
         Route::get('/borrow-equipment/', [BorrowerController::class, 'borrowEquipment'])->name('borrow-equipment');
         Route::post('/borrower-form', [BorrowerController::class, 'borrowerFormPost']);
+        Route::get('/borrow-details/{code}', [BorrowerController::class, 'showDetails']);
     });
 
 
