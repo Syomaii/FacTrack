@@ -51,7 +51,6 @@
 @if (url()->current() == url('return-equipment') || url()->current() == url('borrow-equipment'))
     <script src="/assets/js/lib/html5-qrcode.min.js"></script>
     <script>
-        // console.log(Html5QrcodeScanner);
         const scanner = new Html5QrcodeScanner('preview', {
             qrbox: {
                 width: 300,
@@ -63,9 +62,8 @@
         scanner.render(success, error);
 
         function success(result) {
-            // console.log(result);
-            // window.location.href = "http://localhost:8000/equipment-details/"+result;
-            // window.location.href = result;
+            console.log(result);
+            window.location.href = "http://localhost:8000/borrow-details/"+result;
 
             $('#code').val(result)
             $('#scanId').submit()
@@ -81,8 +79,37 @@
         $('#b123').click(function() {
             $('#preview').css('opacity', 1)
         })
-    </script>
+
+
+        // const codeInput = document.getElementById('code');
+
+        // function checkCodeAndRedirect() {
+        //     // Check if the 'code' input has a value
+        //     if (codeInput.value.trim() !== "") {
+        //         // Redirect to the borrow-details page with the scanned code
+        //         const scannedCode = codeInput.value;
+        //         window.location.href = `/borrow-details/${scannedCode}`;
+        //     } else {
+        //         console.log("No QR code scanned yet.");
+        //         // You can add any alert or UI update here if needed.
+        //     }
+        // }
+
+        // // Call this function after the QR code is scanned
+        // function onQrCodeScanned(scannedCode) {
+        //     // Set the scanned code in the hidden input
+        //     codeInput.value = scannedCode;
+
+        //     // Call the function to check and redirect
+        //     checkCodeAndRedirect();
+        // }
+
+        
+</script>
 @endif
+
+
+
 <script>
     $(document).ready(function() {
         setTimeout(function() {
