@@ -56,4 +56,15 @@ class BorrowerController extends Controller
     
         return redirect()->route('equipments')->with('borrowedSuccessfully', 'Equipment borrowed successfully');
     }
+
+    public function showDetails($code)
+    {
+        $borrower = Borrower::where('borrower_code', $code)->first();
+        if (!$borrower) {
+            return redirect()->back()->with('error', 'Invalid QR code');
+        }
+
+        // Retrieve borrower and item details and display them on the next page
+        return view('borrow.details', compact('borrower'));
+    }
 }
