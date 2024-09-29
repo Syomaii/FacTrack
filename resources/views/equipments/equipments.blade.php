@@ -153,6 +153,7 @@
 </main>
 
 <!-- Edit Equipment Modal -->
+<!-- Edit Equipment Modal -->
 <div class="modal fade" id="editEquipmentModal" tabindex="-1" aria-labelledby="editEquipmentModalLabel"
     aria-hidden="true">
     <div class="modal-dialog">
