@@ -12,7 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('timeline', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->text('remarks');
+            $table->string('status', 50);
+            $table->unsignedInteger('equipment_id');
+            $table->unsignedInteger('user_id');
+            $table->foreign('equipment_id')->references('id')->on('equipments')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
