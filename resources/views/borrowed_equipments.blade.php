@@ -32,7 +32,7 @@
                 <iconify-icon icon="solar:download-linear" class="text-xl"></iconify-icon>
                 Download
               </a>
-              <a href="javascript:void(0)" class="btn btn-sm btn-success radius-8 d-inline-flex align-items-center gap-1">
+              <a href="j" class="btn btn-sm btn-success radius-8 d-inline-flex align-items-center gap-1">
                 <iconify-icon icon="uil:edit" class="text-xl"></iconify-icon>
                 Edit
               </a>
@@ -50,14 +50,13 @@
                   <div class="p-20 d-flex flex-wrap justify-content-between gap-3 border-bottom">
                     <div>
                       <h3 class="text-xl">Report #0001</h3>
-                      <p class="mb-1 text-sm">Date Issued: 07/07/2024</p>
-                      <p class="mb-0 text-sm">Date Due: 07/08/2024</p>
+                      <p class="mb-1 text-sm">Date Issued: {{ now()->format('Y-m-d') }}</p>
                     </div>
                     <div>
-                      <img src="assets/images/logo.png" alt="image" class="mb-8">
-                      <p class="mb-1 text-sm">University of Cebu Lapu-lapu and Mandaue </p>
+                      <img src="assets/images/logo1.png" alt="image" class="mb-8">
+                      <p class="mb-1 text-sm">University of Cebu Lapu-lapu and Mandaue</p>
                       <p class="mb-1 text-sm">A.C. Cortes Ave., Mandaue City, Cebu, 6014</p>
-                      <p class="mb-0 text-sm">kentdumagpi@gmail.com, +639686512378</p>
+                      <p class="mb-0 text-sm">{{ auth()->user()->email }}, {{ auth()->user()->mobile_no }}</p>
                     </div>
                   </div>
                   <div class="py-28 px-20">
@@ -68,15 +67,15 @@
                           <tbody>
                             <tr>
                               <td>Name</td>
-                              <td class="ps-8">:Kent Dumagpi</td>
+                              <td class="ps-8">: {{ ucwords(auth()->user()->firstname) }} {{ ucwords(auth()->user()->lastname) }}</td>
                             </tr>
                             <tr>
                               <td>Address</td>
-                              <td class="ps-8">:6014, UCLM, CCS, Computer Lab 1</td>
+                              <td class="ps-8">: 6014, UCLM, CCS, Computer Lab 1</td>
                             </tr>
                             <tr>
                               <td>Phone number</td>
-                              <td class="ps-8">:+1 543 2198</td>
+                              <td class="ps-8">: {{ auth()->user()->mobile_no }}</td>
                             </tr>
                           </tbody>
                         </table>
@@ -85,16 +84,12 @@
                         <table class="text-sm text-secondary-light">
                           <tbody>
                             <tr>
-                              <td>Issus Date</td>
-                              <td class="ps-8">:25 Jan 2024</td>
+                              <td>Issue Date</td>
+                              <td class="ps-8">: {{ now()->format('Y-m-d') }}</td>
                             </tr>
                             <tr>
                               <td>Order ID</td>
-                              <td class="ps-8">:#653214</td>
-                            </tr>
-                            <tr>
-                              <td>Shipment ID</td>
-                              <td class="ps-8">:#965215</td>
+                              <td class="ps-8">: </td>
                             </tr>
                           </tbody>
                         </table>
@@ -106,12 +101,12 @@
                         <table class="table bordered-table text-sm">
                           <thead>
                             <tr>
-                              <th scope="col" class="text-sm">SL.</th>
-                              <th scope="col" class="text-sm">Items</th>
+                              <th scope="col" class="text-sm">Equipment Id</th>
+                              <th scope="col" class="text-sm">Equipment</th>
                               <th scope="col" class="text-sm">Qty</th>
-                              <th scope="col" class="text-sm">Units</th>
-                              <th scope="col" class="text-sm">Unit Price</th>
-                              <th scope="col" class="text-end text-sm">Price</th>
+                              <th scope="col" class="text-sm">Date Borrowed</th>
+                              <th scope="col" class="text-sm">Date Returned</th>
+                              <th scope="col" class="text-end text-sm">Times Borrowed</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -123,30 +118,7 @@
                               <td>$200</td>
                               <td class="text-end">$1000.00</td>
                             </tr>
-                            <tr>
-                              <td>02</td>
-                              <td>Apple's Shoes</td>
-                              <td>5</td>
-                              <td>PC</td>
-                              <td>$200</td>
-                              <td class="text-end">$1000.00</td>
-                            </tr>
-                            <tr>
-                              <td>03</td>
-                              <td>Apple's Shoes</td>
-                              <td>5</td>
-                              <td>PC</td>
-                              <td>$200</td>
-                              <td class="text-end">$1000.00</td>
-                            </tr>
-                            <tr>
-                              <td>04</td>
-                              <td>Apple's Shoes</td>
-                              <td>5</td>
-                              <td>PC</td>
-                              <td>$200</td>
-                              <td class="text-end">$1000.00</td>
-                            </tr>
+                            
                           </tbody>
                         </table>
                       </div>
