@@ -45,10 +45,10 @@
             </a>
             <ul class="sidebar-submenu">
               <li>
-                <a href="/borrow-equipment"><i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i>Borrow equipments</a>
+                <a href="/borrow-equipment"><iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon></i>Borrow equipments</a>
               </li>
               <li>
-                <a href="/return-equipment"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>Return equipments</a>
+                <a href="/return-equipment"><iconify-icon icon="mdi:box-check-outline" class="menu-icon"></iconify-icon></i>Return equipments</a>
               </li>
               </li>
             </ul>
@@ -75,7 +75,7 @@
           </a>
           <ul class="sidebar-submenu">
             <li>
-              <a href="/borrowed-equipments"><i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>Borrowed equipments</a>
+              <a href="/borrowed-equipments"><iconify-icon icon="mdi:box-clock-outline" class="menu-icon"></iconify-icon></iconify-icon></i>Borrowed equipments</a>
             </li>
             <li>
               <a href="/maintainanced-equipments"><iconify-icon icon="carbon:calendar-tools" class="menu-icon"></iconify-icon></i>In maintenance equipments</a>
