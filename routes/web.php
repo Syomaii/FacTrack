@@ -60,9 +60,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/qr-code/{code}', [QRCodeController::class, 'index'])->name('qr_code');
         
         //BorrowerController
-        Route::get('/borrow-equipment/', [BorrowerController::class, 'borrowEquipment'])->name('borrow-equipment');
-        Route::post('/borrower-form', [BorrowerController::class, 'borrowerFormPost']);
-        Route::get('/borrow-details/{code}', [BorrowerController::class, 'showDetails']);
+        // Route::get('/borrow-equipment', [BorrowerController::class, 'borrowEquipment'])->name('borrow-equipment');
+        // Route::post('/borrow-equipment', [BorrowerController::class, 'borrowerFormPost']);
+        // Route::post('/borrow-submit/{id}', [BorrowerController::class, 'submitBorrow'])->name('borrow.submit');
+        // Route::get('/borrow-details/{code}', [BorrowerController::class, 'showDetails'])->name('borrow_details');
+
+        Route::get('/borrow-equipment', [BorrowerController::class, 'borrowEquipment'])->name('borrow_equipment');
+        Route::post('/borrow-equipment', [BorrowerController::class, 'borrowerFormPost']);
+        Route::get('/borrow-details/{code}', [BorrowerController::class, 'showBorrowDetails'])->name('borrow.details');
+        Route::post('/submit-borrow', [BorrowerController::class, 'submitBorrow'])->name('submit.borrow');
     });
 
 
