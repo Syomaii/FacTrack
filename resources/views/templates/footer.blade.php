@@ -63,21 +63,24 @@
 
         function success(result) {
             console.log(result);
-            window.location.href = "http://localhost:8000/borrow-details/"+result;
+            // window.location.href = "http://localhost:8000/borrow-details/"+result;
 
-            $('#code').val(result)
-            $('#scanId').submit()
+            $('#borrower_code').val(result); // Set the QR code result in the hidden field
+            
+            
 
             scanner.clear();
-            document.getElementById('reader').remove();
-        }
+            $('#scanModal').modal('hide');
 
+            $('#borrowEquipment').submit();
+        }
+a
         function error(err) {
             console.log(err);
         }
 
         $('#b123').click(function() {
-            $('#preview').css('opacity', 1)
+            
         })
 
 
