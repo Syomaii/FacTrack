@@ -37,7 +37,7 @@
                     <div class="col-xxl-6 col-xl-8 col-lg-10">
                         <div class="card border shadow-sm">
                             <div class="card-body">
-                                <form action="{{ url('/borrow-equipment') }}" method="post" id="borrowEquipment">
+                                <form action="{{ url('/borrow-equipment/{code}') }}" method="post" id="borrowEquipmentForm">
                                     @csrf
                                     <input type="hidden" name="borrowed_date" value="{{ now()->format('Y-m-d\TH:i') }}">
                                     <input type="text" name="borrower_code" id="borrower_code">
@@ -67,13 +67,13 @@
 
                                     <!-- Expected Return Date -->
                                     <div class="mb-3">
-                                        <label for="returned_date"
+                                        <label for="expected_return_date"
                                             class="form-label fw-semibold text-primary-light text-sm mb-8">Expected Return
                                             Date</label>
-                                        <input type="datetime-local"
-                                            class="form-control radius-8 {{ $errors->has('returned_date') ? 'is-invalid' : '' }}"
-                                            id="returned_date" name="returned_date" value="{{ old('returned_date') }}">
-                                        <small class="text-danger">{{ $errors->first('returned_date') }}</small>
+                                        <input type="date"
+                                            class="form-control radius-8 {{ $errors->has('expected_return_date') ? 'is-invalid' : '' }}"
+                                            id="expected_return_date" name="expected_return_date" value="{{ old('expected_return_date') }}">
+                                        <small class="text-danger">{{ $errors->first('expected_return_date') }}</small>
                                     </div>
 
 
