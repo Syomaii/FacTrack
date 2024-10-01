@@ -19,7 +19,7 @@
                                 <ul>
                                     <li><strong>Borrower's Name:</strong> {{ $borrowers_name }}</li>
                                     <li><strong>Borrower's ID:</strong> {{ $borrowers_id_no }}</li>
-                                    <li><strong>Expected Return Date:</strong> {{ $returned_date }}</li>
+                                    <li><strong>Expected Return Date:</strong> {{ $expected_returned_date }}</li>
                                     <li><strong>Equipment Name:</strong> {{ $equipment->name }}</li>
                                     <li><strong>Equipment Code:</strong> {{ $equipment->code }}</li>
                                     <li><strong>Equipment Status:</strong> {{ $equipment->status }}</li>
@@ -27,11 +27,11 @@
 
                                 <!-- Submit and Cancel Buttons -->
                                 <div class="d-flex justify-content-center gap-3 mt-4">
-                                    <form action="{{ route('borrow.submit', $equipment->id) }}" method="post">
+                                    <form action="{{ route('borrow-equipment-post', $equipment->id) }}" method="post">
                                         @csrf
-                                        <input type="hidden" name="borrowers_name" value="{{ $borrowers_name }}">
-                                        <input type="hidden" name="borrowers_id_no" value="{{ $borrowers_id_no }}">
-                                        <input type="hidden" name="returned_date" value="{{ $returned_date }}">
+                                        <input type="text" name="borrowers_name" value="{{ $borrowers_name }}">
+                                        <input type="text" name="borrowers_id_no" value="{{ $borrowers_id_no }}">
+                                        <input type="text" name="returned_date" value="{{ $expected_returned_date }}">
                                         <button type="submit" class="btn btn-primary px-5 py-2">Submit</button>
                                     </form>
 
