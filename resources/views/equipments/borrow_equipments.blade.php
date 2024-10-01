@@ -70,7 +70,7 @@
                                         <label for="expected_return_date"
                                             class="form-label fw-semibold text-primary-light text-sm mb-8">Expected Return
                                             Date</label>
-                                        <input type="date"
+                                        <input type="datetime-local"
                                             class="form-control radius-8 {{ $errors->has('expected_return_date') ? 'is-invalid' : '' }}"
                                             id="expected_return_date" name="expected_return_date" value="{{ old('expected_return_date') }}">
                                         <small class="text-danger">{{ $errors->first('expected_return_date') }}</small>
