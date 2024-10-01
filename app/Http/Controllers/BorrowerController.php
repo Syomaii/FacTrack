@@ -15,35 +15,35 @@ class BorrowerController extends Controller
     }
 
     // Step 1: Handle form submission and redirect to review page
-    // public function borrowerFormPost(Request $request)
-    // {
-    //     $data = $request->validate([
-    //         'borrowers_name' => 'required',
-    //         'borrowers_id_no' => 'required',
-    //         'expected_returned_date' => 'required|date|after:today',
-    //         'equipment_code' => 'required', // Equipment code from QR
-    //     ]);
+    public function borrowerFormPost(Request $request)
+    {
+        $data = $request->validate([
+            'borrowers_name' => 'required',
+            'borrowers_id_no' => 'required',
+            'expected_return_date' => 'required|date|after:today',
+            'equipment_code' => 'required', // Equipment code from QR
+        ]);
 
-    //     $equipment = Equipment::where('code', $data['equipment_code'])->first();
+        $equipment = Equipment::where('code', $data['equipment_code'])->first();
 
-    //     // Equipment validation
-    //     if (!$equipment) {
-    //         return back()->withErrors(['equipment_code' => 'Invalid equipment code.'])->withInput();
-    //     }
+        // Equipment validation
+        if (!$equipment) {
+            return back()->withErrors(['equipment_code' => 'Invalid equipment code.'])->withInput();
+        }
 
-    //     if ($equipment->status !== 'Available') {
-    //         return back()->withErrors(['equipment_code' => 'Equipment is already borrowed.'])->withInput();
-    //     }
+        if ($equipment->status !== 'Available') {
+            return back()->withErrors(['equipment_code' => 'Equipment is already borrowed.'])->withInput();
+        }
 
-    //     // Pass the data to the "borrow details" page for confirmation
-    //     return redirect()->route('equipments/borrow_details', ['code' => $equipment->code])
-    //                      ->with([
-    //                          'borrowers_name' => $data['borrowers_name'],
-    //                          'borrowers_id_no' => $data['borrowers_id_no'],
-    //                          'expected_returned_date' => $data['expected_returned_date'],
-    //                          'equipment' => $equipment,
-    //                      ]);
-    // }
+        // Pass the data to the "borrow details" page for confirmation
+        return redirect()->route('equipments/borrow_details', ['code' => $equipment->code])
+                         ->with([
+                             'borrowers_name' => $data['borrowers_name'],
+                             'borrowers_id_no' => $data['borrowers_id_no'],
+                             'expected_return_date' => $data['expected_return_date'],
+                             'equipment' => $equipment,
+                         ]);
+    }
 
     // Step 2: Show the borrow details for confirmation
     public function showBorrowDetails(Request $request, $code)
@@ -53,10 +53,10 @@ class BorrowerController extends Controller
 
         $borrowers_name = $request->query('borrowers_name');
         $borrowers_id_no = $request->query('borrowers_id_no');
-        $expected_returned_date = $request->query('expected_returned_date');
+        $expected_return_date = $request->query('expected_return_date');
 
 
-        return view('equipments/borrow_details', compact('equipment', 'borrowers_name', 'borrowers_id_no', 'expected_returned_date', 'code'))
+        return view('equipments/borrow_details', compact('equipment', 'borrowers_name', 'borrowers_id_no', 'expected_return_date', 'code'))
             ->with('title', 'Borrow Details');
 
         
@@ -69,7 +69,7 @@ class BorrowerController extends Controller
         $data = $request->validate([
             'borrowers_name' => 'required',
             'borrowers_id_no' => 'required',
-            'expected_returned_date' => 'required|date|after:today',
+            'expected_return_date' => 'required|date|after:today',
             'equipment_id' => 'required|exists:equipments,id',
         ]);
 
@@ -85,7 +85,7 @@ class BorrowerController extends Controller
             'borrowers_id_no' => $data['borrowers_id_no'],
             'user_id' => auth()->user()->id,
             'borrowed_date' => now(),
-            'expected_returned_date' => $data['expected_returned_date'],
+            'expected_return_date' => $data['expected_return_date'],
             'equipment_id' => $equipment->id,
             'status' => 'Borrowed',
         ]);
@@ -95,5 +95,10 @@ class BorrowerController extends Controller
         $equipment->save();
 
         return redirect()->route('equipments.equipments')->with('success', 'Equipment borrowed successfully.');
+    }
+    
+    public function returnEquipment(){
+
+
     }
 }
