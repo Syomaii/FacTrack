@@ -66,7 +66,7 @@ Route::middleware(['auth'])->group(function () {
         // Route::get('/borrow-details/{code}', [BorrowerController::class, 'showDetails'])->name('borrow_details');
 
         Route::get('/borrow-equipment', [BorrowerController::class, 'borrowEquipment'])->name('borrow_equipment');
-        // Route::post('/borrow-equipment', [BorrowerController::class, 'borrowerFormPost']);
+        Route::post('/borrow-equipment', [BorrowerController::class, 'borrowerFormPost']);
         Route::get('/borrow-details/{code}', [BorrowerController::class, 'showBorrowDetails'])->name('borrow_details');
         Route::post('/borrow-details/{code}', [BorrowerController::class, 'submitBorrow'])->name('borrow-equipment-post');
     });
