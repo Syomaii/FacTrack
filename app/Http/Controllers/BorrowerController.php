@@ -64,38 +64,43 @@ class BorrowerController extends Controller
 
 
     // Step 3: Final submission to save the borrow record
-    public function submitBorrow(Request $request)
-    {
-        $data = $request->validate([
-            'borrowers_name' => 'required',
-            'borrowers_id_no' => 'required',
-            'expected_return_date' => 'required|date|after:today',
-            'equipment_id' => 'required|exists:equipments,id',
-        ]);
+    public function submitBorrow(Request $request, $id)
+{
+    // Validate the incoming data
+    $validatedData = $request->validate([
+        'borrowers_name' => 'required|string|max:255',
+        'borrowers_id_no' => 'required|string|max:255',
+        'expected_returned_date' => 'required|date',  // Validate expected_returned_date field
+    ]);
 
-        $equipment = Equipment::find($data['equipment_id']);
+    // Find the equipment using the ID
+    $equipment = Equipment::findOrFail($id);
 
-        if ($equipment->status !== 'Available') {
-            return back()->withErrors(['equipment_code' => 'Equipment is already borrowed.'])->withInput();
-        }
-
-        // Create the borrower record
-        Borrower::create([
-            'borrowers_name' => $data['borrowers_name'],
-            'borrowers_id_no' => $data['borrowers_id_no'],
-            'user_id' => auth()->user()->id,
-            'borrowed_date' => now(),
-            'expected_return_date' => $data['expected_return_date'],
-            'equipment_id' => $equipment->id,
-            'status' => 'Borrowed',
-        ]);
-
-        // Update equipment status
-        $equipment->status = 'Borrowed';
-        $equipment->save();
-
-        return redirect()->route('equipments.equipments')->with('success', 'Equipment borrowed successfully.');
+    // Check if the equipment is available for borrowing
+    if ($equipment->status !== 'Available') {
+        return back()->withErrors(['equipment' => 'This equipment is not available for borrowing.']);
     }
+
+    // Insert the borrow details into the 'borrows' table
+    Borrower::create([
+        'borrowers_name' => $validatedData['borrowers_name'],
+        'borrowers_id_no' => $validatedData['borrowers_id_no'],
+        'user_id' => auth()->user()->id,
+        'borrowed_date' => now(),
+        'expected_returned_date' => $validatedData['expected_returned_date'],  // Save expected_returned_date
+        'equipment_id' => $equipment->id,
+        'status' => 'Borrowed',
+    ]);
+
+    // Update the equipment status to 'Borrowed'
+    $equipment->status = 'Borrowed';
+    $equipment->save();
+
+    // Redirect with a success message
+    return redirect()->route('borrow_equipment')->with('borrowEquipmentSuccessfully', 'Equipment borrowed successfully!');
+}
+
+    
     
     public function returnEquipment(){
 
