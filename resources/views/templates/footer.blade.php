@@ -63,25 +63,30 @@
 
         function success(result) {
             console.log(result);
-            // window.location.href = "http://localhost:8000/borrow-details/"+result;
 
-            $('#borrower_code').val(result); // Set the QR code result in the hidden field
-            
-            
+            // Set the QR code result in the hidden field (if needed)
+            $('#borrower_code').val(result);
+
+            // Gather the borrower data (assuming they are input fields in the form)
+            var borrowers_name = $('#borrowers_name').val();
+            var borrowers_id_no = $('#borrowers_id_no').val();
+            var expected_returned_date = $('#expected_returned_date').val();
+
+            // Redirect to the borrow details page with URL parameters
+            window.location.href = "/borrow-details/" + result + 
+                "?borrowers_name=" + encodeURIComponent(borrowers_name) + 
+                "&borrowers_id_no=" + encodeURIComponent(borrowers_id_no) + 
+                "&expected_returned_date=" + encodeURIComponent(expected_returned_date);
 
             scanner.clear();
             $('#scanModal').modal('hide');
-
-            $('#borrowEquipment').submit();
         }
+
 a
         function error(err) {
             console.log(err);
         }
 
-        $('#b123').click(function() {
-            
-        })
 
 
         // const codeInput = document.getElementById('code');
