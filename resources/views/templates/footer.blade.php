@@ -70,13 +70,19 @@
             // Gather the borrower data (assuming they are input fields in the form)
             var borrowers_name = $('#borrowers_name').val();
             var borrowers_id_no = $('#borrowers_id_no').val();
-            var expected_returned_date = $('#expected_returned_date').val();
+            var expected_return_date = $('#expected_return_date').val();
 
-            // Redirect to the borrow details page with URL parameters
+        if(borrowers_name != " " && borrowers_id_no != " " && expected_return_date != " "){
             window.location.href = "/borrow-details/" + result + 
                 "?borrowers_name=" + encodeURIComponent(borrowers_name) + 
                 "&borrowers_id_no=" + encodeURIComponent(borrowers_id_no) + 
-                "&expected_returned_date=" + encodeURIComponent(expected_returned_date);
+                "&expected_return_date=" + encodeURIComponent(expected_return_date);
+        }else{
+            window.location.href = "/borrow-equipment";
+        }    
+
+
+
 
             scanner.clear();
             $('#scanModal').modal('hide');
