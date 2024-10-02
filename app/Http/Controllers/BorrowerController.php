@@ -62,48 +62,73 @@ class BorrowerController extends Controller
         
     }
 
-
-    // Step 3: Final submission to save the borrow record
     public function submitBorrow(Request $request, $id)
-{
-    // Validate the incoming data
-    $validatedData = $request->validate([
-        'borrowers_name' => 'required|string|max:255',
-        'borrowers_id_no' => 'required|string|max:255',
-        'expected_returned_date' => 'required|date',  // Validate expected_returned_date field
-    ]);
+    {
+        // Validate the incoming data
+        $validatedData = $request->validate([
+            'borrowers_name' => 'required|string|max:255',
+            'borrowers_id_no' => 'required|string|max:255',
+            'expected_returned_date' => 'required|date',  // Validate expected_returned_date field
+        ]);
 
-    // Find the equipment using the ID
-    $equipment = Equipment::findOrFail($id);
+        // Find the equipment using the ID
+        $equipment = Equipment::findOrFail($id);
 
-    // Check if the equipment is available for borrowing
-    if ($equipment->status !== 'Available') {
-        return back()->withErrors(['equipment' => 'This equipment is not available for borrowing.']);
+        // Check if the equipment is available for borrowing
+        if ($equipment->status !== 'Available') {
+            return back()->withErrors(['equipment' => 'This equipment is not available for borrowing.']);
+        }
+
+        // Insert the borrow details into the 'borrows' table
+        Borrower::create([
+            'borrowers_name' => $validatedData['borrowers_name'],
+            'borrowers_id_no' => $validatedData['borrowers_id_no'],
+            'user_id' => auth()->user()->id,
+            'borrowed_date' => now(),
+            'expected_returned_date' => $validatedData['expected_returned_date'],  // Save expected_returned_date
+            'equipment_id' => $equipment->id,
+            'status' => 'Borrowed',
+        ]);
+
+        // Update the equipment status to 'Borrowed'
+        $equipment->status = 'Borrowed';
+        $equipment->save();
+
+        // Redirect with a success message
+        return redirect()->route('borrow_equipment')->with('borrowEquipmentSuccessfully', 'Equipment borrowed successfully!');
     }
 
-    // Insert the borrow details into the 'borrows' table
-    Borrower::create([
-        'borrowers_name' => $validatedData['borrowers_name'],
-        'borrowers_id_no' => $validatedData['borrowers_id_no'],
-        'user_id' => auth()->user()->id,
-        'borrowed_date' => now(),
-        'expected_returned_date' => $validatedData['expected_returned_date'],  // Save expected_returned_date
-        'equipment_id' => $equipment->id,
-        'status' => 'Borrowed',
-    ]);
+    public function returnEquipment(Request $request)
+    {
+        // Retrieve the equipment code from the query parameters
+        $code = $request->query('code');
 
-    // Update the equipment status to 'Borrowed'
-    $equipment->status = 'Borrowed';
-    $equipment->save();
+        // Fetch the equipment by its code
+        $equipment = Equipment::where('code', $code)->first();
 
-    // Redirect with a success message
-    return redirect()->route('borrow_equipment')->with('borrowEquipmentSuccessfully', 'Equipment borrowed successfully!');
-}
+        if (!$equipment) {
+            return back()->withErrors(['message' => 'Equipment not found.']);
+        }
 
-    
-    
-    public function returnEquipment(){
+        if ($equipment->status === "Borrowed") {
+            $equipment->status = "Available";
+            $equipment->save(); // Don't forget to save changes
 
+            return redirect()->route('equipments.equipments')
+                            ->with('returnEquipmentSuccessful', 'Equipment returned successfully!');
+        }
 
+        if ($equipment->status === "Available") {
+            $data = [
+                'equipments' => $equipment,
+                'timeline' => $equipment->timeline,
+                'title' => 'Equipment Details'
+            ];
+
+            return redirect()->route('', $data)->with('title', 'Equipment Details');
+        }
+
+        return back()->withErrors(['message' => 'Invalid equipment status.']);
     }
+
 }
