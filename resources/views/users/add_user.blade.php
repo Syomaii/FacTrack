@@ -39,7 +39,7 @@
         @endif
 
 
-        <form action=""{{ route('add-user') }}" method="POST">
+        <form action=""{{ route('add-user') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="card h-100 p-0 radius-12">
                 <div class="card-body p-24">
@@ -60,8 +60,8 @@
                                                 <label class="upload-file h-120-px w-120-px border input-form-light radius-8 overflow-hidden border-dashed bg-neutral-50 bg-hover-neutral-200 d-flex align-items-center flex-column justify-content-center gap-1" for="upload-file">
                                                     <iconify-icon icon="solar:camera-outline" class="text-xl text-secondary-light"></iconify-icon>
                                                     <span class="fw-semibold text-secondary-light">Upload</span>
-                                                    <input id="upload-file" type="file" name="image" hidden>
-                                                </label>
+                                                <input id="upload-file" type="file" name="image" hidden>
+                                                </label> 
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-center">
