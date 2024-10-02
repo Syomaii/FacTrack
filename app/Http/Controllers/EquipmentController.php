@@ -17,8 +17,8 @@ class EquipmentController extends Controller
         $data = $request->validate([
             'name' => 'required',
             'description' => 'required',
-            'acquired_date' => 'required|date',
-            'image' => 'mimes:jpg,png,jpeg,gif|max:2048',
+            'acquired_date' => 'required|date|before_or_equal:now',
+            'image' => 'required|mimes:jpg,png,jpeg,gif|max:2048',
             'status' => 'required|in:Available,In Maintenance,In Repair,Borrowed',
             'owned_by' => 'required',
         ]);
@@ -39,7 +39,7 @@ class EquipmentController extends Controller
             $image = $request->file('image');
             $path = $image->move(public_path('images/equipments'), $image->getClientOriginalName());
             $data['image'] = 'images/equipments/' . $image->getClientOriginalName();
-        }
+        } 
 
         $equipment = Equipment::create($data);
 
@@ -50,7 +50,7 @@ class EquipmentController extends Controller
             'user_id' => auth()->id()
         ]);
 
-        return redirect()->route('facility_equipments', ['id' => $facility->id])
+        return redirect()->route('facility_equipment', ['id' => $facility->id])
                      ->with('title', 'Facility Equipment')
                      ->with('addEquipmentSuccessfully', 'Equipment Added Successfully!');
     }

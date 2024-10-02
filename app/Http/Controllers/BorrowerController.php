@@ -57,31 +57,53 @@ class BorrowerController extends Controller
         
     }
 
+<<<<<<< HEAD
 
     public function submitBorrow(Request $request, $id)
     {
+=======
+    public function submitBorrow(Request $request, $id)
+    {
+        // Validate the incoming data
+>>>>>>> 668536f218def52b373ebd4c7264c4cca379b78e
         $validatedData = $request->validate([
             'borrowers_name' => 'required|string|max:255',
             'borrowers_id_no' => 'required|string|max:255',
             'expected_returned_date' => 'required|date',  // Validate expected_returned_date field
         ]);
 
+<<<<<<< HEAD
         $equipment = Equipment::findOrFail($id);
 
+=======
+        // Find the equipment using the ID
+        $equipment = Equipment::findOrFail($id);
+
+        // Check if the equipment is available for borrowing
+>>>>>>> 668536f218def52b373ebd4c7264c4cca379b78e
         if ($equipment->status !== 'Available') {
             return back()->withErrors(['equipment' => 'This equipment is not available for borrowing.']);
         }
 
+<<<<<<< HEAD
+=======
+        // Insert the borrow details into the 'borrows' table
+>>>>>>> 668536f218def52b373ebd4c7264c4cca379b78e
         Borrower::create([
             'borrowers_name' => $validatedData['borrowers_name'],
             'borrowers_id_no' => $validatedData['borrowers_id_no'],
             'user_id' => auth()->user()->id,
             'borrowed_date' => now(),
+<<<<<<< HEAD
             'expected_returned_date' => $validatedData['expected_returned_date'],  
+=======
+            'expected_returned_date' => $validatedData['expected_returned_date'],  // Save expected_returned_date
+>>>>>>> 668536f218def52b373ebd4c7264c4cca379b78e
             'equipment_id' => $equipment->id,
             'status' => 'Borrowed',
         ]);
 
+<<<<<<< HEAD
         $equipment->status = 'Borrowed';
         $equipment->save();
 
@@ -100,11 +122,47 @@ class BorrowerController extends Controller
         }
     }
 
+=======
+        // Update the equipment status to 'Borrowed'
+        $equipment->status = 'Borrowed';
+        $equipment->save();
 
-    
-    
-    public function returnEquipment(){
-
-
+        // Redirect with a success message
+        return redirect()->route('borrow_equipment')->with('borrowEquipmentSuccessfully', 'Equipment borrowed successfully!');
     }
+
+    public function returnEquipment(Request $request)
+    {
+        // Retrieve the equipment code from the query parameters
+        $code = $request->query('code');
+
+        // Fetch the equipment by its code
+        $equipment = Equipment::where('code', $code)->first();
+
+        if (!$equipment) {
+            return back()->withErrors(['message' => 'Equipment not found.']);
+        }
+>>>>>>> 668536f218def52b373ebd4c7264c4cca379b78e
+
+        if ($equipment->status === "Borrowed") {
+            $equipment->status = "Available";
+            $equipment->save(); // Don't forget to save changes
+
+            return redirect()->route('equipments.equipments')
+                            ->with('returnEquipmentSuccessful', 'Equipment returned successfully!');
+        }
+
+        if ($equipment->status === "Available") {
+            $data = [
+                'equipments' => $equipment,
+                'timeline' => $equipment->timeline,
+                'title' => 'Equipment Details'
+            ];
+
+            return redirect()->route('', $data)->with('title', 'Equipment Details');
+        }
+
+        return back()->withErrors(['message' => 'Invalid equipment status.']);
+    }
+
 }

@@ -10,7 +10,7 @@
             <h6 class="fw-semibold mb-0">Return Equipment</h6>
             <ul class="d-flex align-items-center gap-2">
                 <li class="fw-medium">
-                    <a href="index.html" class="d-flex align-items-center gap-1 hover-text-primary">
+                    <a href="{{ route('dashboard') }}" class="d-flex align-items-center gap-1 hover-text-primary">
                         <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
                         Dashboard
                     </a>
@@ -19,15 +19,27 @@
                 <li class="fw-medium">Return Equipment</li>
             </ul>
         </div>
+        
         <div class="container">
             <div class="card bg-white shadow rounded-3 p-3 border-0 align-items-center justify-content-center"
                 style="height: 80vh;">
-                <form id="scanId" method="get">
-                    <input class="form-control" type="hidden" id="code" name="code">
+                
+                <!-- Form to submit the equipment code -->
+                <form id="scanId" action="{{ route('return.equipment') }}" method="post"> <!-- Ensure the route matches the controller -->
+                    @csrf <!-- Include CSRF protection in forms -->
+                    
+                    <div class="form-group">
+                        <input class="form-control" type="text" id="code" name="code" required>
+                    </div>
+                    
                 </form>
-                <button id="b123" class="btn btn-primary">Scan</button>
-                <div id="preview" class="display-flex align-items-center justify-content-center"
-                    style="width: 500px; opacity: 0;"></div>
+                
+                <div class="d-flex align-items-center justify-content-center" style="width: 200px">
+                    <div id="return" class="d-flex align-items-center justify-content-center"
+                        style="width: 100%; height: 500px">
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

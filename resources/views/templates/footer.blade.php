@@ -48,7 +48,7 @@
         // ========================= Password Show Hide Js End ===========================
     </script>
 @endif
-@if (url()->current() == url('return-equipment') || url()->current() == url('borrow-equipment'))
+@if (url()->current() == url('borrow-equipment'))
     <script src="/assets/js/lib/html5-qrcode.min.js"></script>
     <script>
         const scanner = new Html5QrcodeScanner('preview', {
@@ -80,46 +80,39 @@
         }else{
             window.location.href = "/borrow-equipment";
         }    
-
-
-
-
             scanner.clear();
-            $('#scanModal').modal('hide');
+            $('#scanModal').modal('close');
         }
-
-a
         function error(err) {
             console.log(err);
         }
+    </script>
+@endif
 
+@if(url()->current() == url('return-equipment'))
+    <script src="/assets/js/lib/html5-qrcode.min.js"></script>
+    <script>
+        const scanner = new Html5QrcodeScanner('return', {
+            qrbox: {
+                width: 300,
+                height: 300,
+            },
+            fps: 20,
+        });
 
+        scanner.render(success, error);
 
-        // const codeInput = document.getElementById('code');
+        function success(result) {
+            console.log(result);
 
-        // function checkCodeAndRedirect() {
-        //     // Check if the 'code' input has a value
-        //     if (codeInput.value.trim() !== "") {
-        //         // Redirect to the borrow-details page with the scanned code
-        //         const scannedCode = codeInput.value;
-        //         window.location.href = `/borrow-details/${scannedCode}`;
-        //     } else {
-        //         console.log("No QR code scanned yet.");
-        //         // You can add any alert or UI update here if needed.
-        //     }
-        // }
-
-        // // Call this function after the QR code is scanned
-        // function onQrCodeScanned(scannedCode) {
-        //     // Set the scanned code in the hidden input
-        //     codeInput.value = scannedCode;
-
-        //     // Call the function to check and redirect
-        //     checkCodeAndRedirect();
-        // }
-
-        
-</script>
+            $('#code').val(result);
+            $('#scanId').submit();
+            scanner.clear();
+        }
+        function error(err) {
+            console.log(err);
+        }
+    </script>
 @endif
 
 

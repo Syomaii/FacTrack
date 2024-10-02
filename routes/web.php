@@ -27,7 +27,7 @@ Route::middleware(['guest'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [PageController::class, 'dashboard']);
+    Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     Route::get('/profile/{id}', [PageController::class, 'profile'])->name('profile');
     Route::put('/profile/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
@@ -45,7 +45,6 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['checkRole:operator,facility manager'])->group(function () {
         //Page Controller
         Route::get('/scan-code', [PageController::class, 'scanCode']);
-        Route::get('/return-equipment', [PageController::class, 'returnEquipment']);
         Route::get('/equipments', [PageController::class, 'equipments'])->name('equipments');
         Route::get('/borrowed-equipments', [ReportController::class, 'borrowedEquipmentReports']);
         Route::get('/maintenanced-equipments', [ReportController::class, 'maintenancedEquipmentReports']);
@@ -69,14 +68,20 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/borrow-equipment', [BorrowerController::class, 'borrowerFormPost']);
         Route::get('/borrow-details/{code}', [BorrowerController::class, 'showBorrowDetails'])->name('borrow_details');
         Route::post('/borrow-equipment/{id}', [BorrowerController::class, 'submitBorrow'])->name('borrow-equipment-post');
+<<<<<<< HEAD
         Route::post('/validate-equipment-status', [BorrowerController::class, 'validateEquipmentStatus']);
+=======
+
+        Route::get('/return-equipment', [PageController::class, 'returnEquipment']);
+        Route::post('/return-equipment', [BorrowerController::class, 'returnEquipment'])->name('return.equipment');
+>>>>>>> 668536f218def52b373ebd4c7264c4cca379b78e
     });
 
 
     //Operators
     Route::middleware(['checkRole:facility manager'])->group(function () {
         Route::get('/generatedqr', [PageController::class, 'generatedQr']);
-        Route::get('/facility-equipment/{id}', [PageController::class, 'facilityEquipments'])->name('facility_equipments');
+        Route::get('/facility-equipment/{id}', [PageController::class, 'facilityEquipments'])->name('facility_equipment');
         Route::get('/facilities', [PageController::class, 'facilities']);
         Route::get('/add-equipment/{id}', [PageController::class, 'addEquipment'])->name('add_equipment');
         Route::post('/add-equipment', [EquipmentController::class,'addEquipmentPost']);

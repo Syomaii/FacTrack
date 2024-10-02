@@ -27,7 +27,7 @@ class UserController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'type' => 'required|string|max:255',
         ];
-
+        
         if ($userRole === 'admin') {
             $rules['office_id'] = 'required|integer|exists:offices,id';
         }
