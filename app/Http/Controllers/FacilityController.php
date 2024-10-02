@@ -23,7 +23,7 @@ class FacilityController extends Controller
 
         Facility::create($facilityData);
 
-        return redirect('facilities/facilities')->with('addFacilitySuccessfully', 'Facility added successfully.');
+        return redirect('/facilities')->with('addFacilitySuccessfully', 'Facility added successfully.');
     }
     
 
@@ -46,7 +46,7 @@ class FacilityController extends Controller
     public function deleteFacility($id)
     {
         Facility::findOrFail($id)->delete();
-        return redirect('facilities/facilities')->with('deleteFacilitySuccess', 'Facility Deleted Successfully!');
+        return redirect('/facilities')->with('deleteFacilitySuccess', 'Facility Deleted Successfully!');
     }
 
     
