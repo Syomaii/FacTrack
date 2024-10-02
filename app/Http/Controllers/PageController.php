@@ -38,7 +38,7 @@ class PageController extends Controller
             $query->where('office_id', $officeId);
         })->paginate(5);
 
-        return view('facilities/facilities', compact('officeId', 'facilities'))->with('title', 'Facilities');
+        return view('/facilities', compact('officeId', 'facilities'))->with('title', 'Facilities');
     }
 
     public function users(){
