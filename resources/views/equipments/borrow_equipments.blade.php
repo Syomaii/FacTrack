@@ -40,7 +40,7 @@
                                 <form action="{{ url('/borrow-equipment/{code}') }}" method="post" id="borrowEquipmentForm">
                                     @csrf
                                     <input type="hidden" name="borrowed_date" value="{{ now()->format('Y-m-d\TH:i') }}">
-                                    <input type="text" name="borrower_code" id="borrower_code">
+                                    <input type="hidden" name="borrower_code" id="borrower_code">
 
                                     <!-- Borrower's Name -->
                                     <div class="mb-3">
