@@ -1,9 +1,11 @@
 @include('templates.header')
 <x-sidebar />
+
 <main class="dashboard-main">
     <x-navbar />
 
     <div class="dashboard-main-body">
+
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
             <h6 class="fw-semibold mb-0">Facilities</h6>
 
@@ -36,6 +38,7 @@
                 </div>
             </div>
         @endif
+
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -45,6 +48,15 @@
                 </ul>
             </div>
         @endif
+
+        <!-- Search Bar -->
+        <div class="input-group mb-3">
+            <input type="text" id="facilitySearch" class="form-control" placeholder="Search Facilities"
+                aria-label="Search Facilities">
+            <button class="btn btn-primary" type="button"><iconify-icon icon="ic:baseline-search"
+                    class="icon"></iconify-icon></button>
+        </div>
+
         <a href="#"
             class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2 mb-3"
             style="width: 170px" data-bs-toggle="modal" data-bs-target="#addFacilityModal">
@@ -82,9 +94,10 @@
             </div>
         </div>
 
+        <!-- Facility List -->
         <div class="row gy-4" id="facilityList">
             @foreach ($facilities as $facility)
-                <div class="col-xxl-3 col-sm-6">
+                <div class="col-xxl-3 col-sm-6 facility-item">
                     <div class="card h-100 radius-12 text-center">
                         <div class="card-body p-24">
                             <div
@@ -106,15 +119,19 @@
     </div>
 
     <script>
-        document.getElementById('addFacilityForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+        // Search Filter
+        document.getElementById('facilitySearch').addEventListener('input', function() {
+            let filter = this.value.toLowerCase();
+            let facilities = document.querySelectorAll('.facility-item');
 
-            let facilityName = document.getElementById('facilityName').value;
-            let facilityDescription = document.getElementById('facilityDescription').value;
-
-            document.querySelector('#facilityList').insertAdjacentHTML('beforeend', facilityCard);
-
-            document.querySelector('#addFacilityModal form').reset();
+            facilities.forEach(function(facility) {
+                let facilityName = facility.querySelector('h6').textContent.toLowerCase();
+                if (facilityName.includes(filter)) {
+                    facility.style.display = '';
+                } else {
+                    facility.style.display = 'none';
+                }
+            });
         });
     </script>
 
