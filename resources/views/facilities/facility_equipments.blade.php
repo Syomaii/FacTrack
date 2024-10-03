@@ -5,7 +5,6 @@
     <x-navbar />
 
     <div class="dashboard-main-body">
-
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
             <div>
                 <h6 class="fw-semibold mb-0">{{ $facility->name }}</h6>
@@ -22,26 +21,19 @@
                 <li class="fw-medium">{{ $facility->name }}</li>
             </ul>
         </div>
+
         @if (session('updateFacilitySuccess'))
-            <div
-                class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-2">
-                    <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
-                    {{ session('updateFacilitySuccess') }}
-                </div>
+            <div class="alert alert-success">
+                {{ session('updateFacilitySuccess') }}
             </div>
         @elseif (session('addEquipmentSuccessfully'))
-            <div
-                class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-2">
-                    <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
-                    {{ session('addEquipmentSuccessfully') }}
-                </div>
+            <div class="alert alert-success">
+                {{ session('addEquipmentSuccessfully') }}
             </div>
         @endif
+
         <!-- Search Bar and Buttons -->
         <div class="d-flex justify-content-between align-items-center mb-24">
-            <!-- Search bar -->
             <div class="input-group" style="max-width: 350px;">
                 <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
                     placeholder="Search equipment...">
@@ -50,7 +42,6 @@
                 </button>
             </div>
 
-            <!-- Buttons aligned to the right -->
             <div class="d-flex gap-3">
                 <button type="button" class="btn rounded-pill btn-outline-warning-600 radius-8 px-20 py-11"
                     id="updateFacilityBtn">Update</button>
@@ -63,15 +54,11 @@
             </div>
         </div>
 
-        
-
         <!-- No equipment message -->
-        
-        <!-- Equipment list -->
         <div class="row gy-4" id="equipmentList">
             @if ($equipments->isNotEmpty())
                 @foreach ($equipments as $facEquipment)
-                    <div class="col-xxl-3 col-sm-6">
+                    <div class="col-xxl-3 col-sm-6 equipment-card">
                         <div class="card h-100 radius-12 text-center">
                             <div class="card-body p-24">
                                 <div class="d-flex flex-column align-items-center">
@@ -110,12 +97,12 @@
                         </div>
                     </div>
                 @endforeach
-            @elseif ($equipments->isEmpty())    
-                    <div class="d-flex justify-content-center align-items-center w-100 h-100">
-                        <strong class="text-center">
-                            There are no equipments yet in this facility.
-                        </strong>
+            @else
+                <div class="col-12">
+                    <div class="alert alert-warning text-center">
+                        There are no equipments yet in this facility.
                     </div>
+                </div>
             @endif
         </div>
 
@@ -170,28 +157,10 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var equipmentList = document.getElementById('equipmentList');
-        var noEquipmentMessage = document.getElementById('noEquipmentMessage');
         var searchInput = document.getElementById('equipmentSearch');
-        var updateFacilityBtn = document.getElementById('updateFacilityBtn');
-        var deleteFacilityBtn = document.getElementById('deleteFacilityBtn');
 
-        // Check and toggle the no equipment message
-        function checkEquipments() {
-            var visibleEquipments = equipmentList.querySelectorAll('.col-xxl-3');
-            var hasVisibleEquipments = Array.from(visibleEquipments).some
-            var hasVisibleEquipments = Array.from(visibleEquipments).some(function(equipment) {
-                return equipment.style.display !== 'none';
-            });
-
-            if (!hasVisibleEquipments) {
-                noEquipmentMessage.classList.remove('d-none');
-            } else {
-                noEquipmentMessage.classList.add('d-none');
-            }
-        }
-
-        // Search equipment function
-        function searchEquipment() {
+        // Search Equipment Functionality
+        searchInput.addEventListener('input', function() {
             var filter = searchInput.value.toLowerCase();
             var equipmentCards = equipmentList.querySelectorAll('.col-xxl-3');
 
@@ -203,23 +172,15 @@
                     card.style.display = 'none'; // Hide non-matching card
                 }
             });
-
-            checkEquipments(); // Update the no equipment message
-        }
-
-        // Add event listener to the search input
-        searchInput.addEventListener('input', searchEquipment);
-
-        // Check the initial state of the equipment list
-        checkEquipments();
+        });
 
         // Update and Delete Facility Handlers
-        updateFacilityBtn.addEventListener('click', function() {
+        document.getElementById('updateFacilityBtn').addEventListener('click', function() {
             var editModal = new bootstrap.Modal(document.getElementById('editFacilityModal'));
             editModal.show();
         });
 
-        deleteFacilityBtn.addEventListener('click', function() {
+        document.getElementById('deleteFacilityBtn').addEventListener('click', function() {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
