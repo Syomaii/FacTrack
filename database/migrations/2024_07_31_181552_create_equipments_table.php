@@ -17,7 +17,9 @@ return new class extends Migration
             $table->unsignedInteger('user_id');
             $table->foreign('facility_id')->references('id')->on('facilities')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('brand', 50);
             $table->string('name', 255);
+            $table->string('serial_no', 255);
             $table->text('description');
             $table->dateTime('acquired_date');
             $table->string('code', 255);
