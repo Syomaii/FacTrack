@@ -81,7 +81,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/facility-equipment/{id}', [PageController::class, 'facilityEquipments'])->name('facility_equipment');
         Route::get('/facilities', [PageController::class, 'facilities']);
         Route::get('/add-equipment/{id}', [PageController::class, 'addEquipment'])->name('add_equipment');
-        Route::post('/add-equipment', [EquipmentController::class,'addEquipmentPost']);
+        Route::post('/add-equipment/{id}', [EquipmentController::class, 'addEquipmentPost'])->name('add_equipment');
         Route::delete('/equipments/{id}', [EquipmentController::class, 'deleteEquipment'])->name('delete_equipment');
 
         Route::put('/equipments/update', [EquipmentController::class, 'updateEquipment'])->name('update_equipment');

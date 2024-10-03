@@ -30,7 +30,8 @@
             </div>
         @endif
 
-        <form action="/add-equipment" enctype="multipart/form-data" method="post">
+        <form action="{{ route('add_equipment', ['id' => $facility->id]) }}" method="POST"
+            enctype="multipart/form-data">
             @csrf
             <input type="text" hidden name="facility" value="{{ $facility->id }}">
             <div class="card h-100 p-0 radius-12">
@@ -73,7 +74,7 @@
                                     <!-- Upload Image End -->
 
                                     <!-- Form Fields -->
-                                    
+
                                     <!-- Model Name -->
                                     <div class="mb-3">
                                         <label for="brand"
@@ -108,7 +109,8 @@
                                     <!-- Serial Number -->
                                     <div class="mb-3">
                                         <label for="serial_no"
-                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Serial Number</label>
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Serial
+                                            Number</label>
                                         <input type="text"
                                             class="form-control radius-8 {{ $errors->has('serial_no') ? 'is-invalid' : '' }}"
                                             id="serial_no" name="serial_no" placeholder="Enter Equipment Serial No"
@@ -129,23 +131,23 @@
 
 
                                     <div class="mb-3">
-                                        <label for="status"
-                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Status</label>
-                                        <select
-                                            class="form-control radius-8 {{ $errors->has('status') ? 'is-invalid' : '' }}"
-                                            id="status" name="status">
-                                            <option value="" hidden>Status</option>
+                                        <label for="status" class="form-label">Status</label>
+                                        <select class="form-control" id="status" name="status" required>
                                             <option value="Available"
                                                 {{ old('status') == 'Available' ? 'selected' : '' }}>Available</option>
                                             <option value="In Maintenance"
-                                                {{ old('status') == 'In Maintenance' ? 'selected' : '' }}>In Maintenance</option>
+                                                {{ old('status') == 'In Maintenance' ? 'selected' : '' }}>In
+                                                Maintenance</option>
                                             <option value="In Repair"
                                                 {{ old('status') == 'In Repair' ? 'selected' : '' }}>In Repair</option>
                                             <option value="Borrowed"
                                                 {{ old('status') == 'Borrowed' ? 'selected' : '' }}>Borrowed</option>
                                         </select>
-                                        <small class="text-danger">{{ $errors->first('status') }}</small>
+                                        @error('status')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
+
                                     {{-- <div class="mb-3">
                                         <label for="ownedby" class="form-label fw-semibold text-primary-light text-sm mb-8">Owned by University</label>
                                         <div class="row">
@@ -161,12 +163,19 @@
                                     </div> --}}
 
                                     <div class="mb-3" id="owned-by-container">
+<<<<<<< HEAD
                                         <label for="owned_by" class="form-label fw-semibold text-primary-light text-sm mb-8">Owned by</label>
+=======
+                                        <label for="ownedBy"
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Owned
+                                            by</label>
+>>>>>>> ea5f2647bb6a02078085848282a649eaf2acedd8
                                         <select
                                             class="form-control radius-8 {{ $errors->has('owned_by') ? 'is-invalid' : '' }}"
                                             id="owned_by" name="owned_by">
                                             <option value="" hidden>Owned By</option>
                                             <option value="University"
+<<<<<<< HEAD
                                                 {{ old('owned_by') == 'University' ? 'selected' : '' }}>University</option>
                                             <option value="Department"
                                                 {{ old('owned_by') == 'Department' ? 'selected' : '' }}>Department</option>
@@ -174,6 +183,18 @@
                                                 {{ old('owned_by') == 'Faculty' ? 'selected' : '' }}>Faculty</option>
                                             <option value="Student Organization"
                                                 {{ old('owned_by') == 'Student Organization' ? 'selected' : '' }}>Student Organization</option>
+=======
+                                                {{ old('owned_by') == 'University' ? 'selected' : '' }}>University
+                                            </option>
+                                            <option value="Department"
+                                                {{ old('owned_by') == 'Department' ? 'selected' : '' }}>Department
+                                            </option>
+                                            <option value="Faculty"
+                                                {{ old('owned_by') == 'Faculty' ? 'selected' : '' }}>Faculty</option>
+                                            <option value="Student Organization"
+                                                {{ old('owned_by') == 'Student Organization' ? 'selected' : '' }}>
+                                                Student Organization</option>
+>>>>>>> ea5f2647bb6a02078085848282a649eaf2acedd8
                                         </select>
                                         <small class="text-danger">{{ $errors->first('owned_by') }}</small>
                                     </div>
@@ -237,6 +258,6 @@
     //     $('input[name="radio1"]').on('change', toggleOwnedByInput);
 
     //     toggleOwnedByInput();
-    
+
     // });
 </script>
