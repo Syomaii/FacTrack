@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 30, 2024 at 05:54 AM
+-- Generation Time: Oct 03, 2024 at 11:21 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -59,8 +59,7 @@ CREATE TABLE `designations` (
 
 INSERT INTO `designations` (`id`, `name`) VALUES
 (1, 'Maintenance Personnel'),
-(2, 'Dean'),
-(3, 'Working Student');
+(2, 'Working Student');
 
 -- --------------------------------------------------------
 
@@ -100,7 +99,9 @@ CREATE TABLE `equipments` (
   `id` int(10) UNSIGNED NOT NULL,
   `facility_id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
+  `brand` varchar(50) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `serial_no` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `acquired_date` datetime NOT NULL,
   `code` varchar(255) NOT NULL,
@@ -110,14 +111,6 @@ CREATE TABLE `equipments` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `equipments`
---
-
-INSERT INTO `equipments` (`id`, `facility_id`, `user_id`, `name`, `description`, `acquired_date`, `code`, `image`, `status`, `owned_by`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, 'PC', 'This is PC', '2024-09-02 16:00:00', '241091710423857', 'images/equipments/pc.jpg', 'Available', 'University', '2024-09-16 20:38:57', '2024-09-28 04:07:50'),
-(2, 1, 2, 'Samsung TV', 'This is a Samsung TV', '2024-01-28 16:00:00', '241092611520747', 'images/equipments/2x2pic.png', 'In Repair', 'Ms miro', '2024-09-26 07:07:47', '2024-09-28 06:11:29');
 
 -- --------------------------------------------------------
 
@@ -139,7 +132,8 @@ CREATE TABLE `facilities` (
 --
 
 INSERT INTO `facilities` (`id`, `office_id`, `name`, `description`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Computer lab 1', 'A computer lab', '2024-08-24 21:18:36', '2024-08-24 21:18:36');
+(1, 1, 'Cisco LAb', 'A cisco laboratory', '2024-10-02 20:31:57', '2024-10-02 20:31:57'),
+(2, 1, 'C1', 'Computer Lab 1', '2024-10-02 23:16:00', '2024-10-02 23:16:00');
 
 -- --------------------------------------------------------
 
@@ -176,18 +170,18 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, '2024_07_31_181510_create_offices_table', 1),
-(2, '2024_07_31_181522_create_designations_table', 1),
-(3, '2024_07_31_181529_create_users_table', 1),
-(4, '2024_07_31_181542_create_facilities_table', 1),
-(5, '2024_07_31_181552_create_equipments_table', 1),
-(6, '2024_07_31_181613_create_maintenance_table', 1),
-(7, '2024_07_31_181629_create_repairs_table', 1),
-(8, '2024_07_31_181635_create_borrows_table', 1),
-(9, '2024_07_31_181650_create_disposed_table', 1),
-(10, '2024_08_05_081759_create_donated_table', 1),
-(12, '2024_08_07_170136_create_notifications_table', 1),
-(13, '2024_08_05_081814_create_timeline_table', 2);
+(14, '2024_07_31_181510_create_offices_table', 1),
+(15, '2024_07_31_181522_create_designations_table', 1),
+(16, '2024_07_31_181529_create_users_table', 1),
+(17, '2024_07_31_181542_create_facilities_table', 1),
+(18, '2024_07_31_181552_create_equipments_table', 1),
+(19, '2024_07_31_181613_create_maintenance_table', 1),
+(20, '2024_07_31_181629_create_repairs_table', 1),
+(21, '2024_07_31_181635_create_borrows_table', 1),
+(22, '2024_07_31_181650_create_disposed_table', 1),
+(23, '2024_08_05_081759_create_donated_table', 1),
+(24, '2024_08_05_081814_create_timeline_table', 1),
+(25, '2024_08_07_170136_create_notifications_table', 1);
 
 -- --------------------------------------------------------
 
@@ -261,19 +255,6 @@ CREATE TABLE `timeline` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `timeline`
---
-
-INSERT INTO `timeline` (`id`, `remarks`, `status`, `equipment_id`, `user_id`, `created_at`, `updated_at`) VALUES
-(1, 'The day the equipment is added in the system', 'Available', 2, 2, '2024-09-26 07:07:47', '2024-09-26 07:07:47'),
-(2, 'The day the equipment is updated in the system', 'Available', 1, 2, '2024-09-28 04:07:50', '2024-09-28 04:07:50'),
-(3, 'The day the equipment is updated in the system', 'Available', 2, 2, '2024-09-28 04:22:11', '2024-09-28 04:22:11'),
-(4, 'Status updated to In Maintenance', 'In Maintenance', 2, 2, '2024-09-28 06:07:44', '2024-09-28 06:07:44'),
-(5, 'The day the equipment is updated in the system', 'In Maintenance', 2, 2, '2024-09-28 06:07:44', '2024-09-28 06:07:44'),
-(6, 'Status updated to In Repair', 'In Repair', 2, 2, '2024-09-28 06:11:29', '2024-09-28 06:11:29'),
-(7, 'The day the equipment is updated in the system', 'In Repair', 2, 2, '2024-09-28 06:11:29', '2024-09-28 06:11:29');
-
 -- --------------------------------------------------------
 
 --
@@ -289,7 +270,7 @@ CREATE TABLE `users` (
   `email` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `mobile_no` varchar(50) NOT NULL,
-  `image` varchar(255) DEFAULT NULL,
+  `image` varchar(255) NOT NULL,
   `status` varchar(50) NOT NULL,
   `type` varchar(50) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -301,8 +282,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `designation_id`, `office_id`, `firstname`, `lastname`, `email`, `password`, `mobile_no`, `image`, `status`, `type`, `created_at`, `updated_at`) VALUES
-(1, NULL, NULL, 'admin', 'admin', 'admin@gmail.com', '$2y$12$1XlqEw/QMYVaHx6S2EhTUOxBa66ECPrKzOVBl0ymN0FJUNiNLpRmq', '09924821214', NULL, 'active', 'admin', NULL, NULL),
-(2, 2, 1, 'Christian jay', 'Putol', 'fmanager@gmail.com', '$2y$12$boM8h/c3b9CcWH5GMnlkseVHVOTvhKliQvkcT7xWVLYfkUqJkumZS', '09081666132', NULL, 'active', 'facility manager', '2024-08-24 21:17:49', '2024-09-26 05:58:53');
+(1, NULL, NULL, 'admin', 'admin', 'admin@gmail.com', '$2y$12$1XlqEw/QMYVaHx6S2EhTUOxBa66ECPrKzOVBl0ymN0FJUNiNLpRmq', '09924821214', '', 'active', 'admin', NULL, NULL),
+(2, 1, 1, 'facility', 'manager', 'fmanager@gmail.com', '$2y$12$5M9Po8GFHXLc6gk/3R0hKuZe7I56gtd5kLdjY72VZ7n4mShoYLIRK', '09081666131', 'images/profile_pictures/default-profile.png', 'active', 'facility manager', '2024-10-02 19:01:43', '2024-10-02 19:01:43');
 
 --
 -- Indexes for dumped tables
@@ -400,8 +381,8 @@ ALTER TABLE `timeline`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `users_email_unique` (`email`),
-  ADD KEY `users_designation_id_foreign` (`designation_id`),
-  ADD KEY `users_office_id_foreign` (`office_id`);
+  ADD KEY `users_office_id_index` (`office_id`),
+  ADD KEY `users_designation_id_foreign` (`designation_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -417,7 +398,7 @@ ALTER TABLE `borrows`
 -- AUTO_INCREMENT for table `designations`
 --
 ALTER TABLE `designations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `disposed`
@@ -435,13 +416,13 @@ ALTER TABLE `donated`
 -- AUTO_INCREMENT for table `equipments`
 --
 ALTER TABLE `equipments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `facilities`
 --
 ALTER TABLE `facilities`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `maintenance`
@@ -453,7 +434,7 @@ ALTER TABLE `maintenance`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `offices`
@@ -471,7 +452,7 @@ ALTER TABLE `repairs`
 -- AUTO_INCREMENT for table `timeline`
 --
 ALTER TABLE `timeline`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
