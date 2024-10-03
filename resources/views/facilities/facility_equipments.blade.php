@@ -22,7 +22,23 @@
                 <li class="fw-medium">{{ $facility->name }}</li>
             </ul>
         </div>
-
+        @if (session('updateFacilitySuccess'))
+            <div
+                class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                    <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
+                    {{ session('updateFacilitySuccess') }}
+                </div>
+            </div>
+        @elseif (session('addEquipmentSuccessfully'))
+            <div
+                class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                    <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
+                    {{ session('addEquipmentSuccessfully') }}
+                </div>
+            </div>
+        @endif
         <!-- Search Bar and Buttons -->
         <div class="d-flex justify-content-between align-items-center mb-24">
             <!-- Search bar -->
@@ -47,23 +63,7 @@
             </div>
         </div>
 
-        @if (session('updateFacilitySuccess'))
-            <div
-                class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-2">
-                    <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
-                    {{ session('updateFacilitySuccess') }}
-                </div>
-            </div>
-        @elseif (session('addEquipmentSuccessfully'))
-            <div
-                class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-2">
-                    <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
-                    {{ session('addEquipmentSuccessfully') }}
-                </div>
-            </div>
-        @endif
+        
 
         <!-- No equipment message -->
         <div id="noEquipmentMessage" class="alert alert-warning {{ $equipments->isEmpty() ? '' : 'd-none' }}">
