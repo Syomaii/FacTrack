@@ -14,19 +14,17 @@ class BorrowerController extends Controller
         return view('equipments/borrow_equipments')->with('title', 'Borrow Equipment');
     }
 
-    // Step 1: Handle form submission and redirect to review page
     public function borrowerFormPost(Request $request)
     {
         $data = $request->validate([
             'borrowers_name' => 'required',
             'borrowers_id_no' => 'required',
             'expected_return_date' => 'required|date|after:today',
-            'equipment_code' => 'required', // Equipment code from QR
+            'equipment_code' => 'required', 
         ]);
 
         $equipment = Equipment::where('code', $data['equipment_code'])->first();
 
-        // Equipment validation
         if (!$equipment) {
             return back()->withErrors(['equipment_code' => 'Invalid equipment code.'])->withInput();
         }
@@ -35,7 +33,6 @@ class BorrowerController extends Controller
             return back()->withErrors(['equipment_code' => 'Equipment is already borrowed.'])->withInput();
         }
 
-        // Pass the data to the "borrow details" page for confirmation
         return redirect()->route('equipments/borrow_details', ['code' => $equipment->code])
                          ->with([
                              'borrowers_name' => $data['borrowers_name'],
@@ -45,10 +42,8 @@ class BorrowerController extends Controller
                          ]);
     }
 
-    // Step 2: Show the borrow details for confirmation
     public function showBorrowDetails(Request $request, $code)
     {
-        // Fetch any necessary data based on the code (e.g., borrower, equipment, etc.)
         $equipment = Equipment::where('code', $code)->first();
 
         $borrowers_name = $request->query('borrowers_name');
@@ -62,34 +57,72 @@ class BorrowerController extends Controller
         
     }
 
+<<<<<<< HEAD
+
+    public function submitBorrow(Request $request, $id)
+    {
+=======
     public function submitBorrow(Request $request, $id)
     {
         // Validate the incoming data
+>>>>>>> 668536f218def52b373ebd4c7264c4cca379b78e
         $validatedData = $request->validate([
             'borrowers_name' => 'required|string|max:255',
             'borrowers_id_no' => 'required|string|max:255',
             'expected_returned_date' => 'required|date',  // Validate expected_returned_date field
         ]);
 
+<<<<<<< HEAD
+        $equipment = Equipment::findOrFail($id);
+
+=======
         // Find the equipment using the ID
         $equipment = Equipment::findOrFail($id);
 
         // Check if the equipment is available for borrowing
+>>>>>>> 668536f218def52b373ebd4c7264c4cca379b78e
         if ($equipment->status !== 'Available') {
             return back()->withErrors(['equipment' => 'This equipment is not available for borrowing.']);
         }
 
+<<<<<<< HEAD
+=======
         // Insert the borrow details into the 'borrows' table
+>>>>>>> 668536f218def52b373ebd4c7264c4cca379b78e
         Borrower::create([
             'borrowers_name' => $validatedData['borrowers_name'],
             'borrowers_id_no' => $validatedData['borrowers_id_no'],
             'user_id' => auth()->user()->id,
             'borrowed_date' => now(),
+<<<<<<< HEAD
+            'expected_returned_date' => $validatedData['expected_returned_date'],  
+=======
             'expected_returned_date' => $validatedData['expected_returned_date'],  // Save expected_returned_date
+>>>>>>> 668536f218def52b373ebd4c7264c4cca379b78e
             'equipment_id' => $equipment->id,
             'status' => 'Borrowed',
         ]);
 
+<<<<<<< HEAD
+        $equipment->status = 'Borrowed';
+        $equipment->save();
+
+        return redirect()->route('borrow_equipment')->with('borrowEquipmentSuccessfully', 'Equipment borrowed successfully!');
+    }
+
+
+    public function validateEquipmentStatus(Request $request)
+    {
+        $equipment = Equipment::where('code', $request->code)->first();
+
+        if ($equipment && $equipment->status === 'Available') {
+            return response()->json(['available' => true]);
+        } else {
+            return response()->json(['available' => false]);
+        }
+    }
+
+=======
         // Update the equipment status to 'Borrowed'
         $equipment->status = 'Borrowed';
         $equipment->save();
@@ -109,6 +142,7 @@ class BorrowerController extends Controller
         if (!$equipment) {
             return back()->withErrors(['message' => 'Equipment not found.']);
         }
+>>>>>>> 668536f218def52b373ebd4c7264c4cca379b78e
 
         if ($equipment->status === "Borrowed") {
             $equipment->status = "Available";

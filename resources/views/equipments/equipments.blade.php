@@ -19,6 +19,7 @@
                 <li class="fw-medium">Equipments</li>
             </ul>
         </div>
+
         @if (session('updateEquipmentSuccessfully'))
             <div
                 class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
@@ -35,52 +36,49 @@
                     {{ session('deleteEquipmentSuccessfully') }}
                 </div>
             </div>
-        @elseif (session('returnEquipmentSuccessful'))
+        @elseif (session('borrowedSuccessfully'))
             <div
                 class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-2">
                     <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
-                    {{ session('returnEquipmentSuccessful') }}
+                    {{ session('borrowedSuccessfully') }}
                 </div>
             </div>
         @endif
-        {{-- <a href="/add-equipment"
-            class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2 mb-3"
-            style="width: 200px">
-            <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
-            Add New Equipment
-        </a> --}}
 
         <div class="card basic-data-table">
             <div class="card-body">
-                <table class="table bordered-table mb-0" data-page-length='10'>
-                    <form action="">
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <input type="text" class="form-control" placeholder="Search" name="q" value="{{ isset($_GET['q']) ? $_GET['q'] : ''}}">
-                            </div>
-                            <div class="col-md-4">
-                                <select name="category" id="" class="form-control">
-                                    <option value="" hidden>Category</option>
-                                    <option {{ isset($_GET['category']) && $_GET['category'] == 'Available' ? 'selected' : ''}}>Available</option>
-                                    <option {{ isset($_GET['category']) && $_GET['category'] == 'Maintenance' ? 'selected' : ''}}>Maintenance</option>
-                                    <option {{ isset($_GET['category']) && $_GET['category'] == 'Borrowed' ? 'selected' : ''}}>Borrowed</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <select name="e" id="" class="form-control">
-                                    <option value="10" hidden>Entries per page</option>
-                                    <option {{ isset($_GET['e']) && $_GET['e'] == 10 ? 'selected' : ''}}>10</option>
-                                    <option {{ isset($_GET['e']) && $_GET['e'] == 25 ? 'selected' : ''}}>25</option>
-                                    <option {{ isset($_GET['e']) && $_GET['e'] == 50 ? 'selected' : ''}}>50</option>
-                                    <option {{ isset($_GET['e']) && $_GET['e'] == 100 ? 'selected' : ''}}>100</option>
-                                </select>
-                            </div>  
-                            <div class="col-md-1">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>                       
+                <form action="" method="GET" class="mb-3">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search"
+                                name="q" value="{{ request('q') }}">
                         </div>
-                    </form>
+                        <div class="col-md-4">
+                            <select name="category" class="form-control">
+                                <option value="" hidden>Category</option>
+                                <option {{ request('category') == 'Available' ? 'selected' : '' }}>Available</option>
+                                <option {{ request('category') == 'Maintenance' ? 'selected' : '' }}>Maintenance
+                                </option>
+                                <option {{ request('category') == 'Borrowed' ? 'selected' : '' }}>Borrowed</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="e" class="form-control">
+                                <option value="10" hidden>Entries per page</option>
+                                <option {{ request('e') == 10 ? 'selected' : '' }}>10</option>
+                                <option {{ request('e') == 25 ? 'selected' : '' }}>25</option>
+                                <option {{ request('e') == 50 ? 'selected' : '' }}>50</option>
+                                <option {{ request('e') == 100 ? 'selected' : '' }}>100</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </form>
+
+                <table class="table bordered-table mb-0" data-page-length='10'>
                     <thead>
                         <tr>
                             <th scope="col">Item No.</th>
@@ -125,7 +123,7 @@
                                         data-description="{{ $equipment->description }}"
                                         data-acquired_date="{{ $equipment->acquired_date }}"
                                         data-status="{{ $equipment->status }}"
-                                        data-facility="{{ $equipment->facility }}">
+                                        data-facility="{{ $equipment->facility->name }}">
                                         <iconify-icon icon="lucide:edit"></iconify-icon>
                                     </a>
                                     <a href="javascript:void(0)"
@@ -143,7 +141,7 @@
                             </tr>
                         @endforeach
                     </tbody>
-                </table> 
+                </table>
                 {{ $equipments->links() }}
             </div>
         </div>
@@ -152,7 +150,6 @@
     @include('templates.footer_inc')
 </main>
 
-<!-- Edit Equipment Modal -->
 <!-- Edit Equipment Modal -->
 <div class="modal fade" id="editEquipmentModal" tabindex="-1" aria-labelledby="editEquipmentModalLabel"
     aria-hidden="true">
@@ -191,7 +188,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="equipmentFacility" class="form-label">Facility</label>
-                        <input type="text" class="form-control" id="equipmentFacility" name="facility">
+                        <input type="text" class="form-control" id="equipmentFacility" name="facility" readonly>
                         @error('facility')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -215,18 +212,28 @@
     </div>
 </div>
 
-@include('templates.footer')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var table = document.querySelector('#dataTable');
+        var table = document.querySelector('table');
 
+        // Search Equipment Functionality
+        var searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function() {
+            var filter = searchInput.value.toLowerCase();
+            var rows = table.getElementsByTagName('tr');
+
+            Array.from(rows).forEach(function(row, index) {
+                if (index === 0) return; // Skip header row
+                var equipmentName = row.querySelector('td:nth-child(2) h6');
+                if (equipmentName) {
+                    var textValue = equipmentName.textContent.toLowerCase();
+                    row.style.display = textValue.includes(filter) ? '' : 'none';
+                }
+            });
+        });
+
+        // Edit Equipment Modal
         table.addEventListener('click', function(e) {
-            // if (e.target.closest('.view-equipment')) {
-            //     var button = e.target.closest('.view-equipment');
-            //     var id = button.dataset.id;
-            //     window.location.href = `/equipment-details/${code}`;
-            // }
-
             if (e.target.closest('.edit-equipment')) {
                 var button = e.target.closest('.edit-equipment');
                 var id = button.dataset.id;
@@ -245,11 +252,11 @@
                 document.getElementById('equipmentStatus').value = status;
                 document.getElementById('equipmentFacility').value = facility;
 
-                var editModal = new bootstrap.Modal(document.getElementById(
-                    'editEquipmentModal'));
+                var editModal = new bootstrap.Modal(document.getElementById('editEquipmentModal'));
                 editModal.show();
             }
 
+            // Delete Equipment Confirmation
             if (e.target.closest('.delete-equipment')) {
                 var button = e.target.closest('.delete-equipment');
                 var id = button.dataset.id;
@@ -271,3 +278,5 @@
         });
     });
 </script>
+
+@include('templates.footer')
