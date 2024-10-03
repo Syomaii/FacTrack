@@ -69,6 +69,7 @@
                                         <div class="d-flex justify-content-center">
                                             <h6 class="text-md text-primary-light mb-16">Equipment Image</h6>
                                         </div>
+                                        <small class="text-danger">{{ $errors->first('image') }}</small>
                                     </div>
                                     <!-- Upload Image End -->
 
@@ -162,24 +163,19 @@
                                     </div> --}}
 
                                     <div class="mb-3" id="owned-by-container">
-                                        <label for="ownedBy"
-                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Owned
-                                            by</label>
+                                        <label for="owned_by" class="form-label fw-semibold text-primary-light text-sm mb-8">Owned by</label>
                                         <select
                                             class="form-control radius-8 {{ $errors->has('owned_by') ? 'is-invalid' : '' }}"
                                             id="owned_by" name="owned_by">
                                             <option value="" hidden>Owned By</option>
                                             <option value="University"
-                                                {{ old('owned_by') == 'University' ? 'selected' : '' }}>University
-                                            </option>
+                                                {{ old('owned_by') == 'University' ? 'selected' : '' }}>University</option>
                                             <option value="Department"
-                                                {{ old('owned_by') == 'Department' ? 'selected' : '' }}>Department
-                                            </option>
+                                                {{ old('owned_by') == 'Department' ? 'selected' : '' }}>Department</option>
                                             <option value="Faculty"
                                                 {{ old('owned_by') == 'Faculty' ? 'selected' : '' }}>Faculty</option>
                                             <option value="Student Organization"
-                                                {{ old('owned_by') == 'Student Organization' ? 'selected' : '' }}>
-                                                Student Organization</option>
+                                                {{ old('owned_by') == 'Student Organization' ? 'selected' : '' }}>Student Organization</option>
                                         </select>
                                         <small class="text-danger">{{ $errors->first('owned_by') }}</small>
                                     </div>
