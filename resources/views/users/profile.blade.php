@@ -18,7 +18,7 @@
                 <img src="{{ asset('assets/images/user-grid/uc.jpg') }}" alt="" class="w-100 object-fit-cover">
                 <div class="pb-24 ms-16 mb-24 me-16 mt--100">
                     <div class="text-center border border-top-0 border-start-0 border-end-0">
-                        <img src="{{ asset('assets/images/users/admin.png') }}" alt=""
+                        <img src="{{ auth()->user()->image }}" alt=""
                             class="border br-white border-width-2-px w-200-px h-200-px rounded-circle object-fit-cover">
                         <h6 class="mb-0 mt-16">{{ $user->firstname }} {{ $user->lastname }}</h6>
                         <span class="text-secondary-light mb-16">{{ $user->email }}</span>
