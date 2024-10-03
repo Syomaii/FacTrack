@@ -66,10 +66,7 @@
         
 
         <!-- No equipment message -->
-        <div id="noEquipmentMessage" class="alert alert-warning {{ $equipments->isEmpty() ? '' : 'd-none' }}">
-            There are no equipments available for this facility.
-        </div>
-
+        
         <!-- Equipment list -->
         <div class="row gy-4" id="equipmentList">
             @if ($equipments->isNotEmpty())
@@ -113,6 +110,12 @@
                         </div>
                     </div>
                 @endforeach
+            @elseif ($equipments->isEmpty())    
+                    <div class="d-flex justify-content-center align-items-center w-100 h-100">
+                        <strong class="text-center">
+                            There are no equipments yet in this facility.
+                        </strong>
+                    </div>
             @endif
         </div>
 
