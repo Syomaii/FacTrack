@@ -68,50 +68,45 @@ class EquipmentController extends Controller
     
     public function updateEquipment(Request $request)
     {
-        // Validate the form data
         $data = $request->validate([
             'name' => 'required',
+            'brand' => 'required',
+            'serial_no' => 'required|unique:equipments,serial_no,' . $request->id, 
             'description' => 'required',
             'acquired_date' => 'required|date|before_or_equal:now',
-            'facility' => 'required|string', // Expect facility as name or id
+            'facility' => 'required|string', 
             'status' => 'required|in:Available,In Maintenance,In Repair,Borrowed',
         ]);
-    
-        $acquiredDate = new \DateTime($data['acquired_date']);
-        $now = new \DateTime();
-    
-        if ($acquiredDate > $now) {
-            return back()->withErrors(['acquired_date' => 'The acquisition date must be a present or past date.']);
-        }
-    
-        // Find the facility by name or ID
+
         $facility = Facility::where('name', $data['facility'])->first();
-    
+
         if (!$facility) {
             return back()->withErrors(['facility' => 'Facility not found.']);
         }
-    
-        // Prepare the data to update the equipment
+
         $updateData = [
             'name' => $data['name'],
+            'brand' => $data['brand'],
+            'serial_no' => $data['serial_no'],
             'description' => $data['description'],
             'acquired_date' => $data['acquired_date'],
-            'facility_id' => $facility->id, // Use facility_id instead of facility name
-            'status' => $data['status']
+            'facility_id' => $facility->id, 
+            'status' => $data['status'],
         ];
-    
+
         $equipment = Equipment::where('id', $request['id'])->first();
         $equipment->update($updateData);
-    
+
         Timeline::create([
             'equipment_id' => $equipment->id,
             'status' => $equipment->status,
             'remarks' => 'The day the equipment is updated in the system',
             'user_id' => auth()->id()
         ]);
-    
+
         return redirect()->route('equipments')->with('updateEquipmentSuccessfully', 'Equipment updated successfully');
-    }    
+    }
+  
 
     public function deleteEquipment($id){
 
