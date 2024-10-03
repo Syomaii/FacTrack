@@ -93,6 +93,7 @@ class PageController extends Controller
     public function error401(){
         return view('errors.401')->with('title', 'Error 401 - Unauthorized');
     }
+
     public function offices(){
         return view('offices/offices')->with('title', 'Offices');
     }
