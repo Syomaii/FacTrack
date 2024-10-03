@@ -107,8 +107,15 @@
                                 <td>{{ $equipment->facility->name }}</td>
                                 <td>{!! QrCode::size(100)->generate($equipment->code) !!}</td>
                                 <td>
-                                    <span
-                                        class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                    @if ($equipment->status === 'Available')
+                                        <span class="bg-success-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                    @elseif($equipment->status === 'In Maintenance')
+                                        <span class="bg-info px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                    @elseif($equipment->status === 'In Repair')
+                                        <span class="bg-danger-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                    @elseif($equipment->status === 'Borrowed')
+                                        <span class="bg-warning-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                    @endif
                                 </td>
                                 <td>{{ $equipment->owned_by }}</td>
                                 <td>
