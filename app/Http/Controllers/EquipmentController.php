@@ -17,10 +17,10 @@ class EquipmentController extends Controller
         $data = $request->validate([
             'brand' => 'required',
             'name' => 'required',
-            'serial_no' => 'required|unique:equipment, serial_no',
+            'serial_no' => 'required|unique:equipments,serial_no',
             'description' => 'required',
             'acquired_date' => 'required|date|before_or_equal:now',
-            'image' => 'required|mimes:jpg,png,jpeg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'status' => 'required|in:Available,In Maintenance,In Repair,Borrowed',
             'owned_by' => 'required',
         ]);
@@ -48,7 +48,7 @@ class EquipmentController extends Controller
         // }
 
         $equipment = Equipment::create($data);
-
+        
         Timeline::create([
             'equipment_id' => $equipment->id,
             'status' => $equipment->status,
