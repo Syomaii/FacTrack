@@ -18,11 +18,8 @@ class EquipmentController extends Controller
         $data = $request->validate([
             'brand' => 'required',
             'name' => 'required',
-<<<<<<< HEAD
             'serial_no' => 'required|unique:equipments,serial_no',
-=======
             'serial_no' => 'required|unique:equipments,serial_no',  // Corrected serial_no validation rule
->>>>>>> ea5f2647bb6a02078085848282a649eaf2acedd8
             'description' => 'required',
             'acquired_date' => 'required|date|before_or_equal:now',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
@@ -54,12 +51,9 @@ class EquipmentController extends Controller
     
         // Create the new equipment
         $equipment = Equipment::create($data);
-<<<<<<< HEAD
         
-=======
     
         // Create a timeline entry for the new equipment
->>>>>>> ea5f2647bb6a02078085848282a649eaf2acedd8
         Timeline::create([
             'equipment_id' => $equipment->id,
             'status' => $equipment->status,
