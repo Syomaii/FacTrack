@@ -11,7 +11,9 @@ class Equipment extends Model
     use HasFactory;
     protected $table = "equipments";
     protected $fillable = [
+        'brand',
         'name',
+        'serial_no',
         'facility_id',
         'description',
         'acquired_date',
