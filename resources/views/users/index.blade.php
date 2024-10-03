@@ -53,8 +53,8 @@
                 <div class="">
                     <div class="d-flex justify-content-between gap-2">
                         <div class="form-check style-check d-flex align-items-center">
-                            <input class="form-check-input border border-neutral-300" type="checkbox" value="" id="remeber">
-                            <label class="form-check-label" for="remeber">Remember me </label>
+                            <input class="form-check-input border border-neutral-300" type="checkbox" value="" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                            <label class="form-check-label" for="remember">Remember me </label>
                         </div>
                         <a href="forgot-password.html" class="text-primary-600 fw-medium">Forgot Password?</a>
                     </div>
