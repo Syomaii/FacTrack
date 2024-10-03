@@ -72,15 +72,30 @@
                                     <!-- Upload Image End -->
 
                                     <!-- Form Fields -->
+                                    
+                                    <!-- Model Name -->
+                                    <div class="mb-3">
+                                        <label for="brand"
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Brand</label>
+                                        <input type="text"
+                                            class="form-control radius-8 {{ $errors->has('brand') ? 'is-invalid' : '' }}"
+                                            id="brand" name="brand" placeholder="Enter Equipment Brand Name"
+                                            value="{{ old('brand') }}">
+                                        <small class="text-danger">{{ $errors->first('brand') }}</small>
+                                    </div>
+
+                                    <!-- Model Name -->
                                     <div class="mb-3">
                                         <label for="name"
                                             class="form-label fw-semibold text-primary-light text-sm mb-8">Name</label>
                                         <input type="text"
                                             class="form-control radius-8 {{ $errors->has('name') ? 'is-invalid' : '' }}"
-                                            id="name" name="name" placeholder="Enter Equipment Name"
+                                            id="name" name="name" placeholder="Enter Equipment Model Name"
                                             value="{{ old('name') }}">
                                         <small class="text-danger">{{ $errors->first('name') }}</small>
                                     </div>
+
+                                    <!-- Description -->
                                     <div class="mb-3">
                                         <label for="description"
                                             class="form-label fw-semibold text-primary-light text-sm mb-8">Description</label>
@@ -88,15 +103,19 @@
                                             name="description" placeholder="Write description...">{{ old('description') }}</textarea>
                                         <small class="text-danger">{{ $errors->first('description') }}</small>
                                     </div>
+
+                                    <!-- Serial Number -->
                                     <div class="mb-3">
                                         <label for="serial_no"
-                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Serial No</label>
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Serial Number</label>
                                         <input type="text"
                                             class="form-control radius-8 {{ $errors->has('serial_no') ? 'is-invalid' : '' }}"
-                                            id="serial_no" serial_no="serial_no" placeholder="Enter Equipment Serial No"
+                                            id="serial_no" name="serial_no" placeholder="Enter Equipment Serial No"
                                             value="{{ old('serial_no') }}">
                                         <small class="text-danger">{{ $errors->first('serial_no') }}</small>
                                     </div>
+
+                                    <!-- Acquired Date -->
                                     <div class="mb-3">
                                         <label for="acquired_date"
                                             class="form-label fw-semibold text-primary-light text-sm mb-8">Acquired
@@ -106,6 +125,8 @@
                                             id="acquired_date" name="acquired_date" value="{{ old('acquired_date') }}">
                                         <small class="text-danger">{{ $errors->first('acquired_date') }}</small>
                                     </div>
+
+
                                     <div class="mb-3">
                                         <label for="status"
                                             class="form-label fw-semibold text-primary-light text-sm mb-8">Status</label>
@@ -114,11 +135,11 @@
                                             id="status" name="status">
                                             <option value="Available"
                                                 {{ old('status') == 'Available' ? 'selected' : '' }}>Available</option>
-                                            <option value="In maintenance"
-                                                {{ old('status') == 'In maintenance' ? 'selected' : '' }}>In
+                                            <option value="In Maintenance"
+                                                {{ old('status') == 'In Maintenance' ? 'selected' : '' }}>In
                                                 maintenance</option>
-                                            <option value="In repair"
-                                                {{ old('status') == 'In repair' ? 'selected' : '' }}>In repair</option>
+                                            <option value="In Repair"
+                                                {{ old('status') == 'In Repair' ? 'selected' : '' }}>In repair</option>
                                             <option value="Borrowed"
                                                 {{ old('status') == 'Borrowed' ? 'selected' : '' }}>Borrowed</option>
                                         </select>
@@ -137,6 +158,7 @@
                                             </div>
                                         </div>
                                     </div> --}}
+
                                     <div class="mb-3" id="owned-by-container">
                                         <label for="ownedBy" class="form-label fw-semibold text-primary-light text-sm mb-8">Owned by</label>
                                         <input type="text" class="form-control radius-8 {{ $errors->has('owned_by') ? 'is-invalid' : '' }}" id="owned_by" owned_by="owned_by" placeholder="Owned by" value="{{ old('owned_by') }}" name="owned_by">
