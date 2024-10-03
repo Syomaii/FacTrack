@@ -31,40 +31,45 @@
                 </div>
                 <div class="details-container col-md-6">
                     <div class="row">
-                        <div class="details-item col-md-4 mt-5">
-                            <div>
-                                <strong>Status:</strong>
-                                <p>{{ $equipments->status }}</p>
-                            </div>
+                        <div class="details-item col-md-6">
+                            <strong>Brand:</strong>
+                            <p>{{ $equipments->brand }}</p>
                         </div>
-                        <div class="details-item col-md-4 mt-5">
-                            <div>
-                                <strong>Facility:</strong>
-                                <p>{{ $equipments->facility->name }}</p>
-                            </div>
+                        <div class="details-item col-md-6">
+                            <strong>Status:</strong>
+                            <p>{{ $equipments->status }}</p>
                         </div>
-                        <div class="details-item col-md-4">
-                            <div>
-                                <strong>QR No:</strong>
-                                <p>{{ $equipments->code }}</p>
-                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="details-item col-md-6">
+                            <strong>Serial Number:</strong>
+                            <p>{{ $equipments->serial_no }}</p>
                         </div>
-                        <div class="details-item col-md-4">
-                            <div>
-                                <strong>QR Code:</strong>
-                                <div>{!! QrCode::size(60)->generate($equipments->code) !!}</div>
-                            </div>
+                        <div class="details-item col-md-6">
+                            <strong>Facility:</strong>
+                            <p>{{ $equipments->facility->name }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="details-item col-md-6">
+                            <strong>QR Code:</strong>
+                            <div>{!! QrCode::size(100)->generate($equipments->code) !!}</div>
+                        </div>
+                        <div class="details-item col-md-6">
+                            <strong>Acquisition Date:</strong>
+                            <p>{{ date('d M Y', strtotime($equipments->acquired_date)) }}</p>
                         </div>
                     </div>
 
-                    <div>
+                    <div class="mt-4">
                         <a href="javascript:void(0)"
                             class="btn btn-success text-base radius-8 px-20 py-11 edit-equipment"
                             data-id="{{ $equipments->id }}" data-name="{{ $equipments->name }}"
                             data-description="{{ $equipments->description }}"
                             data-acquired_date="{{ $equipments->acquired_date }}"
-                            data-status="{{ $equipments->status }}"
-                            data-facility="{{ $equipments->facility->name }}">Edit Equipment
+                            data-status="{{ $equipments->status }}" data-facility="{{ $equipments->facility->name }}"
+                            data-brand="{{ $equipments->brand }}" data-serial_no="{{ $equipments->serial_no }}">Edit
+                            Equipment
                         </a>
                         <a href="javascript:void(0)"
                             class="btn btn-danger text-base radius-8 px-20 py-11 delete-equipment"
@@ -81,8 +86,7 @@
                 <div class="timeline-item {{ $loop->even ? 'below' : 'above' }}">
                     <p>{{ 'The status of the equipment is ' . $entry->status }}</p>
                     <p>{{ $entry->remarks . ' ' . $entry->created_at }}</p>
-                    <p>{{ 'Triggered by ' . $entry->user->firstname . ' ' . $entry->user->lastname }}
-                    </p>
+                    <p>{{ 'Triggered by ' . $entry->user->firstname . ' ' . $entry->user->lastname }}</p>
                 </div>
             @endforeach
         </div>
@@ -104,6 +108,8 @@
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="id" id="equipmentId">
+
+                        <!-- Name -->
                         <div class="mb-3">
                             <label for="equipmentName" class="form-label">Name</label>
                             <input type="text" class="form-control" id="equipmentName" name="name" required>
@@ -111,6 +117,26 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <!-- Brand -->
+                        <div class="mb-3">
+                            <label for="equipmentBrand" class="form-label">Brand</label>
+                            <input type="text" class="form-control" id="equipmentBrand" name="brand" required>
+                            @error('brand')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Serial Number -->
+                        <div class="mb-3">
+                            <label for="equipmentSerialNo" class="form-label">Serial Number</label>
+                            <input type="text" class="form-control" id="equipmentSerialNo" name="serial_no" required>
+                            @error('serial_no')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Description -->
                         <div class="mb-3">
                             <label for="equipmentDescription" class="form-label">Description</label>
                             <textarea class="form-control" id="equipmentDescription" name="description" required></textarea>
@@ -118,6 +144,8 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <!-- Acquired Date -->
                         <div class="mb-3">
                             <label for="equipmentAcquiredDate" class="form-label">Acquired Date</label>
                             <input type="datetime-local" class="form-control" id="equipmentAcquiredDate"
@@ -126,13 +154,18 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <!-- Facility -->
                         <div class="mb-3">
                             <label for="equipmentFacility" class="form-label">Facility</label>
-                            <input type="text" class="form-control" id="equipmentFacility" name="facility" required>
+                            <input type="text" class="form-control" id="equipmentFacility" name="facility"
+                                required>
                             @error('facility')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <!-- Status -->
                         <div class="mb-3">
                             <label for="equipmentStatus" class="form-label">Status</label>
                             <select class="form-control" id="equipmentStatus" name="status" required>
@@ -145,6 +178,7 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
                         <button type="submit" class="btn btn-primary">Save</button>
                     </form>
                 </div>
@@ -158,14 +192,13 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var table = document.querySelector('#dataTable');
-
-        // Handling click events for edit and delete buttons
         document.addEventListener('click', function(e) {
             if (e.target.closest('.edit-equipment')) {
                 var button = e.target.closest('.edit-equipment');
                 var id = button.dataset.id;
                 var name = button.dataset.name;
+                var brand = button.dataset.brand;
+                var serial_no = button.dataset.serial_no;
                 var description = button.dataset.description;
                 var acquired_date = button.dataset.acquired_date;
                 var status = button.dataset.status;
@@ -175,6 +208,8 @@
 
                 document.getElementById('equipmentId').value = id;
                 document.getElementById('equipmentName').value = name;
+                document.getElementById('equipmentBrand').value = brand;
+                document.getElementById('equipmentSerialNo').value = serial_no;
                 document.getElementById('equipmentDescription').value = description;
                 document.getElementById('equipmentAcquiredDate').value = formattedDate;
                 document.getElementById('equipmentStatus').value = status;
