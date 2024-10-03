@@ -133,13 +133,13 @@
                                         <select
                                             class="form-control radius-8 {{ $errors->has('status') ? 'is-invalid' : '' }}"
                                             id="status" name="status">
+                                            <option value="" hidden>Status</option>
                                             <option value="Available"
                                                 {{ old('status') == 'Available' ? 'selected' : '' }}>Available</option>
                                             <option value="In Maintenance"
-                                                {{ old('status') == 'In Maintenance' ? 'selected' : '' }}>In
-                                                maintenance</option>
+                                                {{ old('status') == 'In Maintenance' ? 'selected' : '' }}>In Maintenance</option>
                                             <option value="In Repair"
-                                                {{ old('status') == 'In Repair' ? 'selected' : '' }}>In repair</option>
+                                                {{ old('status') == 'In Repair' ? 'selected' : '' }}>In Repair</option>
                                             <option value="Borrowed"
                                                 {{ old('status') == 'Borrowed' ? 'selected' : '' }}>Borrowed</option>
                                         </select>
@@ -161,7 +161,19 @@
 
                                     <div class="mb-3" id="owned-by-container">
                                         <label for="ownedBy" class="form-label fw-semibold text-primary-light text-sm mb-8">Owned by</label>
-                                        <input type="text" class="form-control radius-8 {{ $errors->has('owned_by') ? 'is-invalid' : '' }}" id="owned_by" owned_by="owned_by" placeholder="Owned by" value="{{ old('owned_by') }}" name="owned_by">
+                                        <select
+                                            class="form-control radius-8 {{ $errors->has('ownedBy') ? 'is-invalid' : '' }}"
+                                            id="ownedBy" name="ownedBy">
+                                            <option value="" hidden>Owned By</option>
+                                            <option value="University"
+                                                {{ old('ownedBy') == 'University' ? 'selected' : '' }}>University</option>
+                                            <option value="Department"
+                                                {{ old('ownedBy') == 'Department' ? 'selected' : '' }}>Department</option>
+                                            <option value="Faculty"
+                                                {{ old('ownedBy') == 'Faculty' ? 'selected' : '' }}>Faculty</option>
+                                            <option value="Student Organization"
+                                                {{ old('ownedBy') == 'Student Organization' ? 'selected' : '' }}>Student Organization</option>
+                                        </select>
                                         <small class="text-danger">{{ $errors->first('owned_by') }}</small>
                                     </div>
 
