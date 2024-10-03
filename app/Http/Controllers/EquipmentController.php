@@ -15,7 +15,9 @@ class EquipmentController extends Controller
     public function addEquipmentPost(Request $request){
         
         $data = $request->validate([
+            'brand' => 'required',
             'name' => 'required',
+            'serial_no' => 'required|unique:equipment, serial_no',
             'description' => 'required',
             'acquired_date' => 'required|date|before_or_equal:now',
             'image' => 'required|mimes:jpg,png,jpeg,gif|max:2048',
@@ -40,6 +42,10 @@ class EquipmentController extends Controller
             $path = $image->move(public_path('images/equipments'), $image->getClientOriginalName());
             $data['image'] = 'images/equipments/' . $image->getClientOriginalName();
         } 
+        // else {
+        //     // Use a default image if none is uploaded
+        //     $data['image'] = 'images/equipments/default-picture.png';  // Path to the default image
+        // }
 
         $equipment = Equipment::create($data);
 
@@ -47,7 +53,7 @@ class EquipmentController extends Controller
             'equipment_id' => $equipment->id,
             'status' => $equipment->status,
             'remarks' => 'The day the equipment is added in the system',
-            'user_id' => auth()->id()
+            'user_id' => auth()->user()->id
         ]);
 
         return redirect()->route('facility_equipment', ['id' => $facility->id])
