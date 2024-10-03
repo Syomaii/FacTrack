@@ -27,7 +27,7 @@ class UserController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'type' => 'required|string|max:255',
         ];
-        
+
         if ($userRole === 'admin') {
             $rules['office_id'] = 'required|integer|exists:offices,id';
         }
@@ -47,8 +47,11 @@ class UserController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $path = $image->move(public_path('images/users'), $image->getClientOriginalName());
-            $userData['image'] = 'images/users/' . $image->getClientOriginalName();
+            $image->store(public_path('images/users/profile_pictures'), $image->getClientOriginalName());
+            $userData['image'] = 'images/users/profile_pictures' . $image->getClientOriginalName();
+        }else {
+            // Use a default image if none is uploaded
+            $userData['image'] = 'images/profile_pictures/default-profile.png';  // Path to the default image
         }
 
         if ($userRole === 'admin') {
@@ -57,7 +60,13 @@ class UserController extends Controller
             $userData['office_id'] = auth()->user()->office_id;
         }
 
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('profile_images', 'public');
+            $userData['image'] = $imagePath;
+        } 
+
         $user = User::create($userData);
+
 
         // Notification::send($user, new SendEmailNotification($details));
 
