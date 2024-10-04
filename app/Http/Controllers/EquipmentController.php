@@ -110,11 +110,14 @@ class EquipmentController extends Controller
     }
   
 
-    public function deleteEquipment($id){
-
-        Equipment::where('id', $id)->delete();
-        return redirect('equipments/equipments')->with('deleteEquipmentSuccessfully', 'Equipment deleted successfully');
+    public function deleteEquipment($id)
+    {
+        $equipment = Equipment::findOrFail($id);
+        $equipment->delete();
+    
+        return redirect()->route('equipments')->with('deleteEquipmentSuccessfully', 'Equipment deleted successfully.');
     }
+    
 
     
 }
