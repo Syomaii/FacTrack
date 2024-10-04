@@ -98,9 +98,10 @@
                     </div>
                 @endforeach
             @else
-                <div class="col-12">
-                    <strong>There is no equipments yet in this facility.</strong>
+                <div class="d-flex justify-content-center align-items-center" style="height: 55vh; width: 100vw;">
+                    <strong class="text-center">There is no equipment yet in this facility.</strong>
                 </div>
+            
             @endif
         </div>
 
