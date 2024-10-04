@@ -74,8 +74,13 @@
                         <a href="javascript:void(0)"
                             class="btn btn-danger text-base radius-8 px-20 py-11 delete-equipment"
                             data-id="{{ $equipments->id }}">Delete Equipment</a>
-                        <a href="/borrower-form/{{ $equipments->id }}"
-                            class="btn btn-neutral-900 text-base radius-8 px-20 py-11 borrow">Borrow Equipment</a>
+
+                        <form id="delete-form-{{ $equipments->id }}"
+                            action="{{ route('delete_equipment', $equipments->id) }}" method="POST"
+                            style="display: none;">
+                            @csrf
+                            @method('DELETE')
+                        </form>
                     </div>
                 </div>
             </div>
