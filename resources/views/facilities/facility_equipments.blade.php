@@ -99,9 +99,7 @@
                 @endforeach
             @else
                 <div class="col-12">
-                    <div class="alert alert-warning text-center">
-                        There are no equipments yet in this facility.
-                    </div>
+                    <strong>There is no equipments yet in this facility.</strong>
                 </div>
             @endif
         </div>
