@@ -171,32 +171,60 @@
                         <!-- Change Password Form -->
                         <div class="tab-pane fade" id="pills-change-password" role="tabpanel"
                             aria-labelledby="pills-change-password-tab" tabindex="0">
-                            <div class="mb-20">
-                                <label for="new-password"
-                                    class="form-label fw-semibold text-primary-light text-sm mb-8">
-                                    New Password <span class="text-danger-600">*</span>
-                                </label>
-                                <div class="position-relative">
-                                    <input type="password" class="form-control radius-8" id="new-password"
-                                        name="password" placeholder="Enter New Password">
-                                    <span
-                                        class="toggle-password ri-eye-line cursor-pointer position-absolute end-0 top-50 translate-middle-y me-16 text-secondary-light"
-                                        data-toggle="#new-password"></span>
+                            <form action="{{ route('change_password', $user->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+
+                                <div class="mb-20">
+                                    <label for="current-password"
+                                        class="form-label fw-semibold text-primary-light text-sm mb-8">
+                                        Current Password <span class="text-danger-600">*</span>
+                                    </label>
+                                    <div class="position-relative">
+                                        <input type="password" class="form-control radius-8" id="current-password"
+                                            name="current_password" required placeholder="Enter Current Password">
+                                        <span
+                                            class="toggle-password ri-eye-line cursor-pointer position-absolute end-0 top-50 translate-middle-y me-16 text-secondary-light"
+                                            data-toggle="#current-password"></span>
+                                    </div>
+                                    @error('current_password')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                            </div>
-                            <div class="mb-20">
-                                <label for="confirm-password"
-                                    class="form-label fw-semibold text-primary-light text-sm mb-8">
-                                    Confirm Password <span class="text-danger-600">*</span>
-                                </label>
-                                <div class="position-relative">
-                                    <input type="password" class="form-control radius-8" id="confirm-password"
-                                        name="password_confirmation" placeholder="Confirm Password">
-                                    <span
-                                        class="toggle-password ri-eye-line cursor-pointer position-absolute end-0 top-50 translate-middle-y me-16 text-secondary-light"
-                                        data-toggle="#confirm-password"></span>
+
+                                <div class="mb-20">
+                                    <label for="new-password"
+                                        class="form-label fw-semibold text-primary-light text-sm mb-8">
+                                        New Password <span class="text-danger-600">*</span>
+                                    </label>
+                                    <div class="position-relative">
+                                        <input type="password" class="form-control radius-8" id="new-password"
+                                            name="password" required placeholder="Enter New Password">
+                                        <span
+                                            class="toggle-password ri-eye-line cursor-pointer position-absolute end-0 top-50 translate-middle-y me-16 text-secondary-light"
+                                            data-toggle="#new-password"></span>
+                                    </div>
+                                    @error('password')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                            </div>
+
+                                <div class="mb-20">
+                                    <label for="confirm-password"
+                                        class="form-label fw-semibold text-primary-light text-sm mb-8">
+                                        Confirm Password <span class="text-danger-600">*</span>
+                                    </label>
+                                    <div class="position-relative">
+                                        <input type="password" class="form-control radius-8" id="confirm-password"
+                                            name="password_confirmation" required placeholder="Confirm Password">
+                                        <span
+                                            class="toggle-password ri-eye-line cursor-pointer position-absolute end-0 top-50 translate-middle-y me-16 text-secondary-light"
+                                            data-toggle="#confirm-password"></span>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Save Password</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -207,3 +235,19 @@
     @include('templates.footer_inc')
     @include('templates.footer')
 </main>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const togglePasswordButtons = document.querySelectorAll('.toggle-password');
+
+        togglePasswordButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const passwordInput = document.querySelector(button.getAttribute(
+                    'data-toggle'));
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' :
+                    'password';
+                passwordInput.setAttribute('type', type);
+                button.classList.toggle('ri-eye-off-line');
+            });
+        });
+    });
+</script>
