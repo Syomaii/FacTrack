@@ -43,6 +43,18 @@
                                     <input type="text" name="borrower_code" id="borrower_code" hidden>
                                     <input type="hidden" name="borrowed_date" value="{{ now()->format('Y-m-d\TH:i') }}">
                                     <input type="hidden" name="borrower_code" id="borrower_code">
+                                    
+                                    <!-- Borrower's Department -->
+                                    <div class="mb-3">
+                                        <label for="borrowers_name"
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Borrower's
+                                            Name</label>
+                                        <input type="text"
+                                            class="form-control radius-8 {{ $errors->has('borrowers_name') ? 'is-invalid' : '' }}"
+                                            id="borrowers_name" name="borrowers_name"
+                                            placeholder="Enter Borrower's Name" value="{{ old('borrowers_name') }}">
+                                        <small class="text-danger">{{ $errors->first('borrowers_name') }}</small>
+                                    </div>
 
                                     <!-- Borrower's Name -->
                                     <div class="mb-3">
