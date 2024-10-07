@@ -41,15 +41,78 @@
           <li class="dropdown">
             <a href="javascript:void(0)">
                 <iconify-icon icon="fe:vector" class="menu-icon"></iconify-icon>
-              <span>Borrow</span> 
+              <span>Transaction</span> 
             </a>
+
+            <!-- Borrow -->
             <ul class="sidebar-submenu">
-              <li>
-                <a href="/borrow-equipment"><iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon></i>Borrow equipments</a>
+              <li class="dropdown">
+                <a href="javascript:void(0)">
+                  <iconify-icon icon="fe:vector" class="menu-icon"></iconify-icon>
+                  <span>Borrow</span> 
+                </a>
+                <ul class="sidebar-submenu">
+                  <li>
+                    <a href="/borrow-equipment"><iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon></i>Borrow equipments</a>
+                  </li>
+                  <li>
+                    <a href="/return-equipment"><iconify-icon icon="mdi:box-check-outline" class="menu-icon"></iconify-icon></i>Return equipments</a>
+                  </li>
+                </ul>
               </li>
-              <li>
-                <a href="/return-equipment"><iconify-icon icon="mdi:box-check-outline" class="menu-icon"></iconify-icon></i>Return equipments</a>
+            </ul>
+
+            <!-- Maintenance -->
+            <ul class="sidebar-submenu">
+              <li class="dropdown">
+                <a href="javascript:void(0)">
+                  <iconify-icon icon="fe:vector" class="menu-icon"></iconify-icon>
+                  <span>Maintenance</span> 
+                </a>
+                <ul class="sidebar-submenu">
+                  <li>
+                    <a href="/borrow-equipment"><iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon></i>Maintenance equipments</a>
+                  </li>
+                  <li>
+                    <a href="/return-equipment"><iconify-icon icon="mdi:box-check-outline" class="menu-icon"></iconify-icon></i>Return equipments</a>
+                  </li>
+                </ul>
               </li>
+            </ul>
+
+            <!-- Repair -->
+            <ul class="sidebar-submenu">
+              <li class="dropdown">
+                <a href="javascript:void(0)">
+                  <iconify-icon icon="fe:vector" class="menu-icon"></iconify-icon>
+                  <span>Maintenance</span> 
+                </a>
+                <ul class="sidebar-submenu">
+                  <li>
+                    <a href="/borrow-equipment"><iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon></i>Maintenance equipments</a>
+                  </li>
+                  <li>
+                    <a href="/return-equipment"><iconify-icon icon="mdi:box-check-outline" class="menu-icon"></iconify-icon></i>Return equipments</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+
+            <!-- Dispose -->
+            <ul class="sidebar-submenu">
+              <li class="dropdown">
+                <a href="javascript:void(0)">
+                  <iconify-icon icon="fe:vector" class="menu-icon"></iconify-icon>
+                  <span>Dispose</span> 
+                </a>
+                <ul class="sidebar-submenu">
+                  <li>
+                    <a href="/borrow-equipment"><iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon></i>Dispose equipments</a>
+                  </li>
+                  <li>
+                    <a href="/borrow-equipment"><iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon></i>Donate equipments</a>
+                  </li>
+                </ul>
               </li>
             </ul>
           </li>

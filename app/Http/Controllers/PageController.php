@@ -95,7 +95,11 @@ class PageController extends Controller
     }
 
     public function offices(){
-        return view('offices/offices')->with('title', 'Offices');
+        $offices = Office::all();
+
+        return view('offices/offices')
+            ->with('title', 'Offices')
+            ->with('offices', $offices);
     }
 
     public function addEquipment($id){

@@ -11,7 +11,7 @@ class FacilityController extends Controller
 {
     public function addFacility(Request $request){
         $data = $request->validate([
-            'name' => 'required',
+            'name' => 'required|unique:facilities,name',
             'description' => 'required',
         ]);
 
@@ -43,6 +43,7 @@ class FacilityController extends Controller
 
         return redirect()->back()->with('updateFacilityError', 'Facility not found!');
     }
+
     public function deleteFacility($id)
     {
         Facility::findOrFail($id)->delete();

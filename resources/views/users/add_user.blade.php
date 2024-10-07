@@ -39,7 +39,7 @@
         @endif
 
 
-        <form action=""{{ route('add-user') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('add-user') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="card h-100 p-0 radius-12">
                 <div class="card-body p-24">

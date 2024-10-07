@@ -21,7 +21,7 @@ class UserController extends Controller
             'designation_id' => 'required|integer|exists:designations,id',
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'mobile_no' => 'required|string|max:15',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',

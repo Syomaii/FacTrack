@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('offices', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 100);
+            $table->string('description', 255)->nullable();
             $table->timestamps();
 
         });
