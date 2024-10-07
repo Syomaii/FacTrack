@@ -129,4 +129,26 @@ class UserController extends Controller
     
         return redirect()->route('profile', ['id' => $id])->with('updateprofilesuccessfully', 'Profile updated successfully');
     }
+    
+    public function changePassword(Request $request, $id)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|confirmed|min:8',
+        ]);
+    
+        $user = User::find($id);
+    
+        // Verify current password with password_verify
+        if (!password_verify($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect']);
+        }
+    
+        // Update the user's password
+        $user->password = bcrypt($request->password);
+        $user->save();
+    
+        return redirect()->route('profile', $id)->with('updateprofilesuccessfully', 'Password changed successfully');
+    }
+    
 }
