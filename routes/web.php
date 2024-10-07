@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users', [PageController::class, 'users']);
         Route::get('/add-user', [PageController::class, 'addUser'])->name('add-user');
         Route::post('/add-user', [UserController::class, 'addUserPost'])->name('addUserPost');
+        Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->name('change_password');
     });
         // Route::get('/users', [PageController::class, 'users']);
     Route::get('/offices', [PageController::class, 'offices'])->middleware(['checkRole:admin']);
