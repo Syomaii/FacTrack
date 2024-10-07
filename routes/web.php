@@ -3,6 +3,7 @@
 use App\Http\Controllers\BorrowerController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\FacilityController;
+use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\ReportController;
@@ -38,12 +39,19 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/add-user', [UserController::class, 'addUserPost'])->name('addUserPost');
         Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->name('change_password');
     });
-        // Route::get('/users', [PageController::class, 'users']);
-    Route::get('/offices', [PageController::class, 'offices'])->middleware(['checkRole:admin']);
 
+    Route::middleware(['checkRole:admin'])->group(function () {
+        Route::get('/offices', [PageController::class, 'offices']);
+        Route::delete('/delete-office/{id}', [FacilityController::class, 'deleteOffice'])->name('deleteOffice');        
+        Route::post('/add-office', [OfficeController::class, 'addOffice'])->name('addOffice');
+        Route::put('/update-office/{id}', [OfficeController::class, 'updateOffice'])->name('updateOffice');
+        Route::get('/office/$id', [OfficeController::class, 'officeFacilities'])->name('officeFacilities');
+    });
+    // Route::get('/users', [PageController::class, 'users']);
 
     //facility manager
     Route::middleware(['checkRole:operator,facility manager'])->group(function () {
+
         //Page Controller
         Route::get('/scan-code', [PageController::class, 'scanCode']);
         Route::get('/equipments', [PageController::class, 'equipments'])->name('equipments');
@@ -88,7 +96,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/equipments/update', [EquipmentController::class, 'updateEquipment'])->name('update_equipment');
         
         Route::delete('/delete-facility/{id}', [FacilityController::class, 'deleteFacility'])->name('deleteFacility');        
-        Route::post('/add-facilities', [FacilityController::class, 'addFacility'])->name('addFacility');
+        Route::post('/add-facility', [FacilityController::class, 'addFacility'])->name('addFacility');
         Route::put('/update-facility/{id}', [FacilityController::class, 'updateFacility'])->name('updateFacility');
     });
     

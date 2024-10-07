@@ -122,44 +122,7 @@
                           </tbody>
                         </table>
                       </div>
-                      <div class="d-flex flex-wrap justify-content-between gap-3">
-                        <div>
-                          <p class="text-sm mb-0"><span class="text-primary-light fw-semibold">Sales By:</span> Jammal</p>
-                          <p class="text-sm mb-0">Thanks for your business</p>
-                        </div>
-                        <div>
-                          <table class="text-sm">
-                            <tbody>
-                              <tr>
-                                <td class="pe-64">Subtotal:</td>
-                                <td class="pe-16">
-                                  <span class="text-primary-light fw-semibold">$4000.00</span>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td class="pe-64">Discount:</td>
-                                <td class="pe-16">
-                                  <span class="text-primary-light fw-semibold">$0.00</span>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td class="pe-64 border-bottom pb-4">Tax:</td>
-                                <td class="pe-16 border-bottom pb-4">
-                                  <span class="text-primary-light fw-semibold">0.00</span>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td class="pe-64 pt-4">
-                                  <span class="text-primary-light fw-semibold">Total:</span>
-                                </td>
-                                <td class="pe-16 pt-4">
-                                  <span class="text-primary-light fw-semibold">$1690</span>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
+                      
                     </div>
     
                     <div class="mt-64">

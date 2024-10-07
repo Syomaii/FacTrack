@@ -164,21 +164,22 @@
 
                                     <div class="mb-3" id="owned-by-container">
                                         <label for="owned_by" class="form-label fw-semibold text-primary-light text-sm mb-8">Owned by</label>
-                                        <select
-                                            class="form-control radius-8 {{ $errors->has('owned_by') ? 'is-invalid' : '' }}"
-                                            id="owned_by" name="owned_by">
+                                        <select class="form-control radius-8 {{ $errors->has('owned_by') ? 'is-invalid' : '' }}" 
+                                                id="owned_by" name="owned_by" onchange="handleOwnedByChange()">
                                             <option value="" hidden>Owned By</option>
-                                            <option value="University"
-                                                {{ old('owned_by') == 'University' ? 'selected' : '' }}>University</option>
-                                            <option value="Department"
-                                                {{ old('owned_by') == 'Department' ? 'selected' : '' }}>Department</option>
-                                            <option value="Faculty"
-                                                {{ old('owned_by') == 'Faculty' ? 'selected' : '' }}>Faculty</option>
-                                            <option value="Student Organization"
-                                                {{ old('owned_by') == 'Student Organization' ? 'selected' : '' }}>Student Organization</option>
+                                            <option value="University" {{ old('owned_by') == 'University' ? 'selected' : '' }}>University</option>
+                                            <option value="Department" {{ old('owned_by') == 'Department' ? 'selected' : '' }}>Department</option>
+                                            <option value="Faculty" {{ old('owned_by') == 'Faculty' ? 'selected' : '' }}>Faculty</option>
+                                            <option value="Student Organization" {{ old('owned_by') == 'Student Organization' ? 'selected' : '' }}>Student Organization</option>
+                                            <option value="Others" {{ old('owned_by') == 'Others' ? 'selected' : '' }}>Others</option>
                                         </select>
+                                        
+                                        <!-- Textbox that will appear when "Others" is selected -->
+                                        <input type="text" class="form-control radius-8 mt-2 d-none" id="owned_by_other" name="owned_by_other" placeholder="Please specify" />
+                                        
                                         <small class="text-danger">{{ $errors->first('owned_by') }}</small>
                                     </div>
+
 
                                     <div class="d-flex align-items-center justify-content-center gap-3 mb-3">
                                         <a href="/facility-equipments/{id}">
@@ -225,20 +226,15 @@
         document.getElementById('upload-file').value = null;
     });
 
-
-    // $(document).ready(function() {
-    //     function toggleOwnedByInput() {
-    //         if ($('#radio1-yes').is(':checked')) {
-    //             $('#owned_by').val('University').css('opacity', 1);
-    //         } else {
-    //             $('#owned_by').val('').css('opacity', 1);
-    //         }
-    //     }
-
-    //     // Attach event listeners to radio buttons
-    //     $('input[name="radio1"]').on('change', toggleOwnedByInput);
-
-    //     toggleOwnedByInput();
-
-    // });
+    function handleOwnedByChange() {
+        var selectElement = document.getElementById('owned_by');
+        var otherInput = document.getElementById('owned_by_other');
+        
+        // Show or hide the textbox based on the selected value
+        if (selectElement.value === 'Others') {
+            otherInput.classList.remove('d-none');
+        } else {
+            otherInput.classList.add('d-none');
+        }
+    }
 </script>
