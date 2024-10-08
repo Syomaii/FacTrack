@@ -50,18 +50,25 @@
                                     <div class="card-body p-24">
                                         <div class="d-flex justify-content-center">
                                             <div class="upload-image-wrapper d-flex align-items-center gap-3">
-                                                <div class="uploaded-img position-relative h-120-px w-120-px border input-form-light radius-8 overflow-hidden border-dashed bg-neutral-50 d-none">
-                                                    <button type="button" class="uploaded-img__remove position-absolute top-0 end-0 z-1 text-2xxl line-height-1 me-8 mt-8 d-flex">
-                                                        <iconify-icon icon="radix-icons:cross-2" class="text-xl text-danger-600"></iconify-icon>
+                                                <div
+                                                    class="uploaded-img position-relative h-120-px w-120-px border input-form-light radius-8 overflow-hidden border-dashed bg-neutral-50 d-none">
+                                                    <button type="button"
+                                                        class="uploaded-img__remove position-absolute top-0 end-0 z-1 text-2xxl line-height-1 me-8 mt-8 d-flex">
+                                                        <iconify-icon icon="radix-icons:cross-2"
+                                                            class="text-xl text-danger-600"></iconify-icon>
                                                     </button>
-                                                    <img id="uploaded-img__preview" class="w-100 h-100 object-fit-cover" src="assets/images/user.png" alt="image">
+                                                    <img id="uploaded-img__preview" class="w-100 h-100 object-fit-cover"
+                                                        src="assets/images/user.png" alt="image">
                                                 </div>
 
-                                                <label class="upload-file h-120-px w-120-px border input-form-light radius-8 overflow-hidden border-dashed bg-neutral-50 bg-hover-neutral-200 d-flex align-items-center flex-column justify-content-center gap-1" for="upload-file">
-                                                    <iconify-icon icon="solar:camera-outline" class="text-xl text-secondary-light"></iconify-icon>
+                                                <label
+                                                    class="upload-file h-120-px w-120-px border input-form-light radius-8 overflow-hidden border-dashed bg-neutral-50 bg-hover-neutral-200 d-flex align-items-center flex-column justify-content-center gap-1"
+                                                    for="upload-file">
+                                                    <iconify-icon icon="solar:camera-outline"
+                                                        class="text-xl text-secondary-light"></iconify-icon>
                                                     <span class="fw-semibold text-secondary-light">Upload</span>
-                                                <input id="upload-file" type="file" name="image" hidden>
-                                                </label> 
+                                                    <input id="upload-file" type="file" name="image" hidden>
+                                                </label>
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-center">
@@ -71,22 +78,30 @@
 
                                     <div class="row">
                                         <div class="form-group icon-field mb-3 col-md-6">
-                                            <label for="firstname" class="form-label fw-semibold text-primary-light text-sm mb-8">Firstname</label>
+                                            <label for="firstname"
+                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Firstname</label>
                                             <div class="icon-field has-validation">
                                                 <span class="icon">
                                                     <iconify-icon icon="f7:person"></iconify-icon>
                                                 </span>
-                                                <input type="text" class="form-control radius-8 {{ $errors->has('firstname') ? 'is-invalid' : '' }}" id="firstname" name="firstname" placeholder="Enter First Name" value="{{ old('firstname') }}">
+                                                <input type="text"
+                                                    class="form-control radius-8 {{ $errors->has('firstname') ? 'is-invalid' : '' }}"
+                                                    id="firstname" name="firstname" placeholder="Enter First Name"
+                                                    value="{{ old('firstname') }}">
                                             </div>
                                             <small class="text-danger">{{ $errors->first('firstname') }}</small>
                                         </div>
                                         <div class="form-group mb-3 col-md-6">
-                                            <label for="lastname" class="form-label fw-semibold text-primary-light text-sm mb-8">Lastname</label>
+                                            <label for="lastname"
+                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Lastname</label>
                                             <div class="icon-field">
                                                 <span class="icon">
                                                     <iconify-icon icon="f7:person"></iconify-icon>
                                                 </span>
-                                                <input type="text" class="form-control radius-8 {{ $errors->has('lastname') ? 'is-invalid' : '' }}" id="lastname" name="lastname" placeholder="Enter Last Name" value="{{ old('lastname') }}">
+                                                <input type="text"
+                                                    class="form-control radius-8 {{ $errors->has('lastname') ? 'is-invalid' : '' }}"
+                                                    id="lastname" name="lastname" placeholder="Enter Last Name"
+                                                    value="{{ old('lastname') }}">
                                             </div>
                                             <small class="text-danger">{{ $errors->first('lastname') }}</small>
                                         </div>
@@ -94,22 +109,31 @@
 
                                     <div class="row">
                                         <div class="form-group mb-3 col-md-6">
-                                            <label for="email" class="form-label fw-semibold text-primary-light text-sm mb-8">Email</label>
+                                            <label for="email"
+                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Email</label>
                                             <div class="icon-field">
                                                 <span class="icon">
                                                     <iconify-icon icon="mage:email"></iconify-icon>
                                                 </span>
-                                                <input id="email" type="email" class="form-control radius-8 {{ $errors->has('email') ? 'is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Enter email">
+                                                <input id="email" type="email"
+                                                    class="form-control radius-8 {{ $errors->has('email') ? 'is-invalid' : '' }}"
+                                                    name="email" value="{{ old('email') }}" required
+                                                    autocomplete="email" placeholder="Enter email">
                                             </div>
                                             <small class="text-danger">{{ $errors->first('email') }}</small>
                                         </div>
                                         <div class="form-group mb-3 col-md-6">
-                                            <label for="mobile_no" class="form-label fw-semibold text-primary-light text-sm mb-8">Phone Number</label>
+                                            <label for="mobile_no"
+                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Phone
+                                                Number</label>
                                             <div class="icon-field">
                                                 <span class="icon">
                                                     <iconify-icon icon="solar:phone-calling-linear"></iconify-icon>
                                                 </span>
-                                                <input id="mobile_no" type="text" class="form-control radius-8 {{ $errors->has('mobile_no') ? 'is-invalid' : '' }}" name="mobile_no" value="{{ old('mobile_no') }}" required autocomplete="phone" placeholder="09xxxxxxxxx">
+                                                <input id="mobile_no" type="text"
+                                                    class="form-control radius-8 {{ $errors->has('mobile_no') ? 'is-invalid' : '' }}"
+                                                    name="mobile_no" value="{{ old('mobile_no') }}" required
+                                                    autocomplete="phone" placeholder="09xxxxxxxxx">
                                             </div>
                                             <small class="text-danger">{{ $errors->first('mobile_no') }}</small>
                                         </div>
@@ -117,39 +141,52 @@
 
                                     <div class="row">
                                         <div class="form-group mb-3 col-md-6">
-                                            <label for="password" class="form-label fw-semibold text-primary-light text-sm mb-8">Password</label>
+                                            <label for="password"
+                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Password</label>
                                             <div class="icon-field">
                                                 <span class="icon">
                                                     <iconify-icon icon="solar:lock-password-outline"></iconify-icon>
                                                 </span>
-                                                <input id="password" type="password" class="form-control radius-8 {{ $errors->has('password') ? 'is-invalid' : '' }}" name="password" required placeholder="********">
+                                                <input id="password" type="password"
+                                                    class="form-control radius-8 {{ $errors->has('password') ? 'is-invalid' : '' }}"
+                                                    name="password" required placeholder="********">
                                             </div>
                                             <small class="text-danger">{{ $errors->first('password') }}</small>
                                         </div>
                                         <div class="form-group mb-3 col-md-6">
-                                            <label for="password_confirmation" class="form-label fw-semibold text-primary-light text-sm mb-8">Confirm Password</label>
+                                            <label for="password_confirmation"
+                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Confirm
+                                                Password</label>
                                             <div class="icon-field">
                                                 <span class="icon">
                                                     <iconify-icon icon="solar:lock-password-outline"></iconify-icon>
                                                 </span>
-                                                <input id="password_confirmation" type="password" class="form-control radius-8 {{ $errors->has('password_confirmation') ? 'is-invalid' : '' }}" name="password_confirmation" required placeholder="********">
+                                                <input id="password_confirmation" type="password"
+                                                    class="form-control radius-8 {{ $errors->has('password_confirmation') ? 'is-invalid' : '' }}"
+                                                    name="password_confirmation" required placeholder="********">
                                             </div>
-                                            <small class="text-danger">{{ $errors->first('password_confirmation') }}</small>
+                                            <small
+                                                class="text-danger">{{ $errors->first('password_confirmation') }}</small>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="form-group mb-3 col-md-6">
-                                            <label for="designation_id" class="form-label fw-semibold text-primary-light text-sm mb-8">Designation</label>
+                                            <label for="designation_id"
+                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Designation</label>
                                             <div class="icon-field">
                                                 <span class="icon">
                                                     <iconify-icon icon="f7:person"></iconify-icon>
                                                 </span>
-                                                <select class="form-control radius-8 {{ $errors->has('designation_id') ? 'is-invalid' : '' }}" id="designation_id" name="designation_id">
-                                                    <option value="" disabled selected>Select a designation</option>
-                                                    @foreach($designations as $designation)
-                                                        @if(($userType == 'admin') || ($userType != 'facility_manager' && $designation->name != 'Dean'))
-                                                            <option value="{{ $designation->id }}" {{ old('designation_id') == $designation->id ? 'selected' : '' }}>
+                                                <select
+                                                    class="form-control radius-8 {{ $errors->has('designation_id') ? 'is-invalid' : '' }}"
+                                                    id="designation_id" name="designation_id">
+                                                    <option value="" disabled selected>Select a designation
+                                                    </option>
+                                                    @foreach ($designations as $designation)
+                                                        @if ($userType == 'admin' || ($userType != 'facility_manager' && $designation->name != 'Dean'))
+                                                            <option value="{{ $designation->id }}"
+                                                                {{ old('designation_id') == $designation->id ? 'selected' : '' }}>
                                                                 {{ $designation->name }}
                                                             </option>
                                                         @endif
@@ -159,18 +196,27 @@
                                             <small class="text-danger">{{ $errors->first('designation') }}</small>
                                         </div>
                                         <div class="form-group mb-3 col-md-6">
-                                            <label for="type" class="form-label fw-semibold text-primary-light text-sm mb-8">Type</label>
+                                            <label for="type"
+                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Type</label>
                                             <div class="icon-field">
                                                 <span class="icon">
                                                     <iconify-icon icon="f7:person"></iconify-icon>
                                                 </span>
-                                                <select class="form-control radius-8 {{ $errors->has('type') ? 'is-invalid' : '' }}" id="type" name="type">
+                                                <select
+                                                    class="form-control radius-8 {{ $errors->has('type') ? 'is-invalid' : '' }}"
+                                                    id="type" name="type">
                                                     <option value="" disabled selected>Select a role</option>
-                                                    @if($userType === 'admin')
-                                                        <option value="facility manager" {{ old('type') == 'Facility manager' ? 'selected' : '' }}>Facility manager</option>
+                                                    @if ($userType === 'admin')
+                                                        <option value="facility manager"
+                                                            {{ old('type') == 'Facility manager' ? 'selected' : '' }}>
+                                                            Facility manager</option>
                                                     @elseif($userType === 'facility manager')
-                                                        <option value="facility manager" {{ old('type') == 'Facility manager' ? 'selected' : '' }}>Facility manager</option>
-                                                        <option value="operator" {{ old('type') == 'Operator' ? 'selected' : '' }}>Operator</option>
+                                                        <option value="facility manager"
+                                                            {{ old('type') == 'Facility manager' ? 'selected' : '' }}>
+                                                            Facility manager</option>
+                                                        <option value="operator"
+                                                            {{ old('type') == 'Operator' ? 'selected' : '' }}>Operator
+                                                        </option>
                                                     @endif
                                                 </select>
                                             </div>
@@ -180,16 +226,20 @@
 
                                     @if ($userType === 'admin')
                                         <div class="form-group mb-3">
-                                            <label for="office" class="form-label fw-semibold text-primary-light text-sm mb-8">Office</label>
+                                            <label for="office"
+                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Office</label>
                                             <div class="icon-field">
                                                 <span class="icon">
                                                     <iconify-icon icon="f7:building"></iconify-icon>
                                                 </span>
-                                                <select class="form-control radius-8 {{ $errors->has('office_id') ? 'is-invalid' : '' }}" id="office" name="office_id">
+                                                <select
+                                                    class="form-control radius-8 {{ $errors->has('office_id') ? 'is-invalid' : '' }}"
+                                                    id="office" name="office_id">
                                                     <option value="" disabled selected>Select an office</option>
-                                                    @foreach($offices as $office)
-                                                        @if(($userType == 'admin') || ($userType != 'facility_manager' && $office->name != 'Dean'))
-                                                            <option value="{{ $office->id }}" {{ old('office') == $office->id ? 'selected' : '' }}>
+                                                    @foreach ($offices as $office)
+                                                        @if ($userType == 'admin' || ($userType != 'facility_manager' && $office->name != 'Dean'))
+                                                            <option value="{{ $office->id }}"
+                                                                {{ old('office') == $office->id ? 'selected' : '' }}>
                                                                 {{ $office->name }}
                                                             </option>
                                                         @endif
@@ -204,9 +254,12 @@
 
                                     <div class="d-flex align-items-center justify-content-center gap-3 mt-5">
                                         <a href="/users">
-                                            <button type="button" class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8">Cancel</button>
+                                            <button type="button"
+                                                class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8">Cancel</button>
                                         </a>
-                                            <button type="submit" class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8">Add User</button>
+                                        <button type="submit"
+                                            class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8">Add
+                                            User</button>
                                     </div>
                                 </div>
                             </div>

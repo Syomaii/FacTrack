@@ -107,16 +107,24 @@ class PageController extends Controller
         return view('equipments/add_equipment', compact('facility'))->with('title', 'Add Equipment');
     }
 
-    public function equipmentDetails($code){
+    public function equipmentDetails($code)
+    {
         $equipments = Equipment::where('code', $code)->first();
+    
+        // Check if equipment exists
+        if (!$equipments) {
+            return redirect()->back()->with('error', 'Equipment not found');
+        }
+    
         $data = [
             'equipments' => $equipments,
             'timeline' => $equipments->timeline,
             'title' => 'Equipment Details'
         ];
-
+    
         return view('equipments/equipment_details', $data);
     }
+    
 
     public function addUser(){
         $designations = Designation::all();

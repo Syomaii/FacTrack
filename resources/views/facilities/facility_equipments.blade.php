@@ -34,22 +34,21 @@
 
         <!-- Search Bar and Buttons -->
         <div class="d-flex justify-content-between align-items-center mb-24">
-            <div class="input-group" style="max-width: 350px;">
+            <div class="input-group" style="max-width: 650px;">
                 <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
                     placeholder="Search equipment...">
-                <button class="btn btn-outline-success-600 radius-8 px-3 py-2">
-                    <iconify-icon icon="ic:baseline-search" class="icon text-xl"></iconify-icon>
-                </button>
+                <button class="btn btn-primary" type="button"><iconify-icon icon="ic:baseline-search"
+                        class="icon"></iconify-icon></button>
             </div>
 
             <div class="d-flex gap-3">
-                <button type="button" class="btn rounded-pill btn-outline-warning-600 radius-8 px-20 py-11"
-                    id="updateFacilityBtn">Update</button>
-                <button type="button" class="btn rounded-pill btn-outline-danger-600 radius-8 px-20 py-11"
-                    id="deleteFacilityBtn">Delete</button>
+                <button type="button" class="btn btn-warning text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                    id="updateFacilityBtn">Update Facility</button>
+                <button type="button" class="btn btn-danger text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                    id="deleteFacilityBtn">Delete Facility</button>
                 <a href="/add-equipment/{{ $facility->id }}">
-                    <button type="button" class="btn rounded-pill btn-outline-success-600 radius-8 px-20 py-11"
-                        id="addEquipmentBtn">+</button>
+                    <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8px-20 py-11"
+                        id="addEquipmentBtn">Add Equipment</button>
                 </a>
             </div>
         </div>
@@ -66,31 +65,11 @@
                                         class="img-fluid rounded mb-3 max-img-size" />
                                     <h6 class="mb-8">{{ $facEquipment->name }}</h6>
                                     <div class="d-flex justify-content-center gap-2">
-                                        <a href="javascript:void(0)"
-                                            class="w-32-px h-32-px bg-primary-light text-primary-600 rounded-circle d-inline-flex align-items-center justify-content-center view-equipment"
-                                            data-id="{{ $facEquipment->id }}">
-                                            <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
+                                        <a href="/equipment-details/{{ $facEquipment->code }}"
+                                            class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
+                                            View Equipment <iconify-icon icon="iconamoon:arrow-right-2"
+                                                class="text-xl"></iconify-icon>
                                         </a>
-                                        <a href="javascript:void(0)"
-                                            class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center edit-equipment"
-                                            data-id="{{ $facEquipment->id }}" data-name="{{ $facEquipment->name }}"
-                                            data-description="{{ $facEquipment->description }}"
-                                            data-acquired_date="{{ $facEquipment->acquired_date }}"
-                                            data-status="{{ $facEquipment->status }}"
-                                            data-facility="{{ $facEquipment->facility }}">
-                                            <iconify-icon icon="lucide:edit"></iconify-icon>
-                                        </a>
-                                        <a href="javascript:void(0)"
-                                            class="w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center delete-equipment"
-                                            data-id="{{ $facEquipment->id }}">
-                                            <iconify-icon icon="mingcute:delete-2-line"></iconify-icon>
-                                        </a>
-                                        <form id="delete-form-{{ $facEquipment->id }}"
-                                            action="{{ route('delete_equipment', $facEquipment->id) }}" method="POST"
-                                            style="display: none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -101,7 +80,7 @@
                 <div class="d-flex justify-content-center align-items-center" style="height: 55vh; width: 100vw;">
                     <strong class="text-center p-3">There are no equipments yet in this facility.</strong>
                 </div>
-            
+
             @endif
         </div>
 
