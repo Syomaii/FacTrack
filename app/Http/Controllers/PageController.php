@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Borrower;
 use App\Models\Designation;
 use App\Models\Equipment;
 use App\Models\Facility;
@@ -147,6 +148,16 @@ class PageController extends Controller
         $equipments = Equipment::where('facility_id', $id)->paginate(5);
 
         return view('facilities/facility_equipments', compact('facility', 'equipments'))->with('title', 'Facility Equipments');
+    }
+
+    public function borrowersLog()
+    {
+        // Fetch the borrow records from the database
+        $borrows = Borrower::with(['equipment', 'user'])
+                           ->orderBy('created_at', 'desc')
+                           ->paginate(10); // Use pagination
+
+        return view('reports.borrowers_log', compact('borrows'))->with('title', 'Borrowers Details');
     }
 
     

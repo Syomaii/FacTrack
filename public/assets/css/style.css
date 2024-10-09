@@ -12985,7 +12985,7 @@ td.fc-header-center {
   .sidebar-menu li.dropdown > a::after {
     font-size: 1.375rem;
   }
-}
+}x
 .sidebar-menu li.dropdown.open > a, .sidebar-menu li.dropdown.dropdown-open > a {
   background-color: var(--brand);
   color: #fff;
