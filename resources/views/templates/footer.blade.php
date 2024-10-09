@@ -68,14 +68,18 @@
             $('#borrower_code').val(result);
 
             // Gather the borrower data (assuming they are input fields in the form)
-            var borrowers_name = $('#borrowers_name').val();
             var borrowers_id_no = $('#borrowers_id_no').val();
+            var borrowers_name = $('#borrowers_name').val();
+            var department = $('#department').val();
+            var purpose = $('#purpose').val();
             var expected_return_date = $('#expected_return_date').val();
 
         if(borrowers_name != " " && borrowers_id_no != " " && expected_return_date != " "){
             window.location.href = "/borrow-details/" + result + 
-                "?borrowers_name=" + encodeURIComponent(borrowers_name) + 
-                "&borrowers_id_no=" + encodeURIComponent(borrowers_id_no) + 
+                "?borrowers_id_no=" + encodeURIComponent(borrowers_id_no) + 
+                "&borrowers_name=" + encodeURIComponent(borrowers_name) + 
+                "&department=" + encodeURIComponent(department) + 
+                "&purpose=" + encodeURIComponent(purpose) + 
                 "&expected_return_date=" + encodeURIComponent(expected_return_date);
         }else{
             window.location.href = "/borrow-equipment";
