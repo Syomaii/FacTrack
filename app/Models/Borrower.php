@@ -12,8 +12,10 @@ class Borrower extends Model
     protected $table = "borrows";
     protected $fillable = [
         'equipment_id',
-        'borrowers_name',
         'borrowers_id_no',
+        'borrowers_name',
+        'department',
+        'purpose',
         'user_id',
         'borrowed_date',
         'expected_returned_date',
