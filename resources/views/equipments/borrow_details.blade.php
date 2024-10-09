@@ -28,8 +28,10 @@
                             <div class="card-body">
                                 <h4>Review Borrow Details</h4>
                                 <ul>
-                                    <li><strong>Borrower's Name:</strong> {{ $borrowers_name }}</li>
                                     <li><strong>Borrower's ID:</strong> {{ $borrowers_id_no }}</li>
+                                    <li><strong>Borrower's Name:</strong> {{ $borrowers_name }}</li>
+                                    <li><strong>Department:</strong> {{ $department }}</li>
+                                    <li><strong>Purpose:</strong> {{ $purpose }}</li>
                                     <li><strong>Expected Return Date:</strong> {{ $expected_return_date }}</li>
                                     <li><strong>Equipment Name:</strong> {{ $equipment->name }}</li>
                                     <li><strong>Equipment Code:</strong> {{ $equipment->code }}</li>
