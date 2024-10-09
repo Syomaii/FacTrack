@@ -17,8 +17,10 @@ class BorrowerController extends Controller
     public function borrowerFormPost(Request $request)
     {
         $data = $request->validate([
-            'borrowers_name' => 'required',
-            'borrowers_id_no' => 'required',
+            'borrowers_id_no' => 'required|string|max:255',
+            'borrowers_name' => 'required|string|max:255',
+            'department' => 'required|string|max:255',
+            'purpose' => 'required|string|max:255',
             'expected_return_date' => 'required|date|after:today',
             'equipment_code' => 'required', 
         ]);
@@ -46,21 +48,28 @@ class BorrowerController extends Controller
     {
         $equipment = Equipment::where('code', $code)->first();
 
-        $borrowers_name = $request->query('borrowers_name');
-        $borrowers_id_no = $request->query('borrowers_id_no');
-        $expected_return_date = $request->query('expected_return_date');
+        $data = [
+            'equipment' => $equipment,
+            'borrowers_id_no' => $borrowers_id_no = $request->query('borrowers_id_no'),
+            'borrowers_name' => $borrowers_name = $request->query('borrowers_name'),
+            'department' => $department = $request->query('department'),
+            'purpose' => $purpose = $request->query('purpose'),
+            'expected_return_date' => $expected_return_date = $request->query('expected_return_date'),
+            'title' => 'Borrow Details',
+        ];
 
 
-        return view('equipments/borrow_details', compact('equipment', 'borrowers_name', 'borrowers_id_no', 'expected_return_date', 'code'))
-            ->with('title', 'Borrow Details');
+        return view('equipments/borrow_details', $data);
     }
 
     public function submitBorrow(Request $request, $id)
     {
         // Validate the incoming data
         $validatedData = $request->validate([
-            'borrowers_name' => 'required|string|max:255',
             'borrowers_id_no' => 'required|string|max:255',
+            'borrowers_name' => 'required|string|max:255',
+            'department' => 'required|string|max:255',
+            'purpose' => 'required|string|max:255',
             'expected_returned_date' => 'required|date',  // Validate expected_returned_date field
         ]);
 
@@ -76,12 +85,13 @@ class BorrowerController extends Controller
 
         // Insert the borrow details into the 'borrows' table
         Borrower::create([
-            'borrowers_name' => $validatedData['borrowers_name'],
             'borrowers_id_no' => $validatedData['borrowers_id_no'],
+            'borrowers_name' => $validatedData['borrowers_name'],
+            'department' => $validatedData['department'],
+            'purpose' => $validatedData['purpose'],
             'user_id' => auth()->user()->id,
             'borrowed_date' => now(),
-            'expected_returned_date' => $validatedData['expected_returned_date'],  
-            'expected_returned_date' => $validatedData['expected_returned_date'],  // Save expected_returned_date
+            'expected_returned_date' => $validatedData['expected_returned_date'],   // Save expected_returned_date
             'equipment_id' => $equipment->id,
             'status' => 'Borrowed',
         ]);

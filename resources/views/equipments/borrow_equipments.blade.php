@@ -45,16 +45,16 @@
                                     <input type="hidden" name="borrowed_date" value="{{ now()->format('Y-m-d\TH:i') }}">
                                     <input type="hidden" name="borrower_code" id="borrower_code">
                                     
-                                    <!-- Borrower's Department -->
+                                    <!-- Borrower's ID Number -->
                                     <div class="mb-3">
-                                        <label for="borrowers_name"
+                                        <label for="borrowers_id_no"
                                             class="form-label fw-semibold text-primary-light text-sm mb-8">Borrower's
-                                            Name</label>
+                                            ID</label>
                                         <input type="text"
-                                            class="form-control radius-8 {{ $errors->has('borrowers_name') ? 'is-invalid' : '' }}"
-                                            id="borrowers_name" name="borrowers_name"
-                                            placeholder="Enter Borrower's Name" value="{{ old('borrowers_name') }}">
-                                        <small class="text-danger">{{ $errors->first('borrowers_name') }}</small>
+                                            class="form-control radius-8 {{ $errors->has('borrowers_id_no') ? 'is-invalid' : '' }}"
+                                            id="borrowers_id_no" name="borrowers_id_no"
+                                            placeholder="Enter Borrower's ID" value="{{ old('borrowers_id_no') }}">
+                                        <small class="text-danger">{{ $errors->first('borrowers_id_no') }}</small>
                                     </div>
 
                                     <!-- Borrower's Name -->
@@ -69,16 +69,26 @@
                                         <small class="text-danger">{{ $errors->first('borrowers_name') }}</small>
                                     </div>
 
-                                    <!-- Borrower's ID Number -->
+                                    <!-- Department -->
                                     <div class="mb-3">
-                                        <label for="borrowers_id_no"
-                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Borrower's
-                                            ID</label>
+                                        <label for="department"
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Course/Department</label>
                                         <input type="text"
-                                            class="form-control radius-8 {{ $errors->has('borrowers_id_no') ? 'is-invalid' : '' }}"
-                                            id="borrowers_id_no" name="borrowers_id_no"
-                                            placeholder="Enter Borrower's ID" value="{{ old('borrowers_id_no') }}">
-                                        <small class="text-danger">{{ $errors->first('borrowers_id_no') }}</small>
+                                            class="form-control radius-8 {{ $errors->has('department') ? 'is-invalid' : '' }}"
+                                            id="department" name="department"
+                                            placeholder="Course/Department" value="{{ old('department') }}">
+                                        <small class="text-danger">{{ $errors->first('department') }}</small>
+                                    </div>
+
+                                    <!-- Purpose of borrowing -->
+                                    <div class="mb-3">
+                                        <label for="purpose"
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Purpose</label>
+                                        <input type="text"
+                                            class="form-control radius-8 {{ $errors->has('purpose') ? 'is-invalid' : '' }}"
+                                            id="purpose" name="purpose"
+                                            placeholder="Purpose of Borrowing" value="{{ old('purpose') }}">
+                                        <small class="text-danger">{{ $errors->first('purpose') }}</small>
                                     </div>
 
                                     <!-- Expected Return Date -->
