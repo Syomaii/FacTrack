@@ -38,8 +38,8 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('designation_id');
-            $table->unsignedInteger('office_id');
+            $table->unsignedInteger('designation_id')->nullable();
+            $table->unsignedInteger('office_id')->nullable();
             $table->index('office_id');
             $table->foreign('designation_id')->references('id')->on('designations')->onDelete('cascade');
             $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
