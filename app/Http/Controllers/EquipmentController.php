@@ -18,8 +18,7 @@ class EquipmentController extends Controller
         $data = $request->validate([
             'brand' => 'required',
             'name' => 'required',
-            'serial_no' => 'required|unique:equipments,serial_no',
-            'serial_no' => 'required|unique:equipments,serial_no',  // Corrected serial_no validation rule
+            'serial_no' => 'required|unique:equipments,serial_no',  
             'description' => 'required',
             'acquired_date' => 'required|date|before_or_equal:now',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',

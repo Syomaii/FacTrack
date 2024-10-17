@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Designation;
 use App\Models\User;
+use App\Models\Office;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\SendEmailNotification;
@@ -14,66 +15,88 @@ use Illuminate\Support\Facades\Notification;
 class UserController extends Controller
 {
     public function addUserPost(Request $request)
-    {
-        $userRole = auth()->user()->type;
+{
+    $userRole = auth()->user()->type;
 
-        $rules = [
-            'designation_id' => 'required|integer|exists:designations,id',
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-            'mobile_no' => 'required|string|max:15',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'type' => 'required|string|max:255',
-        ];
+    // Validation rules
+    $rules = [
+        'designation_id' => 'required|integer|exists:designations,id',
+        'firstname' => 'required|string|max:255',
+        'lastname' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users,email',
+        'password' => 'required|string|min:8|confirmed',
+        'mobile_no' => 'required|string|max:15',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+        'type' => 'required|string|max:255',
+        'select_type' => 'required|string',  // Check if office or department is selected
+        'office_id' => 'nullable|exists:offices,id', // Added validation for office_id
+        'department' => 'nullable|string|max:255', // Added validation for department
+    ];
 
-        if ($userRole === 'admin') {
-            $rules['office_id'] = 'required|integer|exists:offices,id';
+    $validatedData = $request->validate($rules);
+
+    $officeId = null;
+
+    // If the user is an admin and selects office or department
+    if ($userRole === 'admin') {
+        if ($validatedData['select_type'] === 'office') {
+            // Validate that office_id is provided
+            if (!$request->office_id) {
+                return back()->withErrors(['office' => 'Office name cannot be null.']);
+            }
+            $officeId = $request->office_id; // Use the office_id from the dropdown
+
+        } elseif ($validatedData['select_type'] === 'department') {
+            // Validate that department is provided
+            if (!$request->department) {
+                return back()->withErrors(['department' => 'Department name cannot be null.']);
+            }
+            // Find office ID based on department
+            $department = $request->department;
+            $office = Office::where('name', $department)->first();
+            
+            if ($office) {
+                $officeId = $office->id;
+            } else {
+                return back()->withErrors(['department' => 'Selected department does not exist.']);
+            }
         }
-
-        $validatedData = $request->validate($rules);
-
-        $userData = [
-            'firstname' => $validatedData['firstname'],
-            'lastname' => $validatedData['lastname'],
-            'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']), 
-            'mobile_no' => $validatedData['mobile_no'],
-            'type' => $validatedData['type'],
-            'designation_id' => $validatedData['designation_id'],
-            'status' => 'active',
-        ];
-
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $image->store(public_path('images/users/profile_pictures'), $image->getClientOriginalName());
-            $userData['image'] = 'images/users/profile_pictures' . $image->getClientOriginalName();
-        }else {
-            // Use a default image if none is uploaded
-            $userData['image'] = 'images/profile_pictures/default-profile.png';  // Path to the default image
-        }
-
-        if ($userRole === 'admin') {
-            $userData['office_id'] = $validatedData['office_id'];
-        } else {
-            $userData['office_id'] = auth()->user()->office_id;
-        }
-
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('profile_images', 'public');
-            $userData['image'] = $imagePath;
-        } 
-
-        $user = User::create($userData);
-
-
-        // Notification::send($user, new SendEmailNotification($details));
-
-        return redirect('/users')
-                        ->with('title', 'Users')
-                        ->with('success', 'User Added Successfully!');
+    } else {
+        // If not admin, use the authenticated user's office_id
+        $officeId = auth()->user()->office_id;
     }
+
+    // Prepare user data
+    $userData = [
+        'firstname' => $validatedData['firstname'],
+        'lastname' => $validatedData['lastname'],
+        'email' => $validatedData['email'],
+        'password' => bcrypt($validatedData['password']),
+        'mobile_no' => $validatedData['mobile_no'],
+        'type' => $validatedData['type'],
+        'designation_id' => $validatedData['designation_id'],
+        'status' => 'active',
+        'office_id' => $officeId, 
+    ];
+
+    // Handle image upload
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imagePath = $image->store('images/users/profile_pictures', 'public');
+        $userData['image'] = $imagePath;
+    } else {
+        $userData['image'] = 'images/profile_pictures/default-profile.png';  
+    }
+
+    // Create the user
+    $user = User::create($userData);
+
+    return redirect('/users')
+        ->with('title', 'Users')
+        ->with('success', 'User Added Successfully!');
+}
+
+    
 
 
     public function loginUser(Request $request)
