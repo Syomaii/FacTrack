@@ -1,5 +1,6 @@
 @include('templates.header')
 <x-sidebar />
+
 <main class="dashboard-main">
     <x-navbar />
 
@@ -7,18 +8,20 @@
 
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
             <h6 class="fw-semibold mb-0">Offices</h6>
-            
+
             <ul class="d-flex align-items-center gap-2">
                 <li class="fw-medium">
-                    <a href="index.html" class="d-flex align-items-center gap-1 hover-text-primary">
+                    <a href="{{ route('dashboard') }}" class="d-flex align-items-center gap-1 hover-text-primary">
                         <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
                         Dashboard
                     </a>
                 </li>
                 <li>-</li>
-                <li class="fw-medium">Offices</li>
+                <a href="{{ route('offices') }}" class="d-flex align-items-center gap-1 hover-text-primary">
+                    Offices
+                </a>
             </ul>
-            
+
         </div>
 
         @if (session('addOfficeSuccessfully'))
@@ -65,7 +68,8 @@
         </a>
 
         <!-- Add Office Modal -->
-        <div class="modal fade" id="addOfficeModal" tabindex="-1" aria-labelledby="addOfficeModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addOfficeModal" tabindex="-1" aria-labelledby="addOfficeModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form action="{{ route('addOffice') }}" method="post">
@@ -81,8 +85,16 @@
                                 <input type="text" class="form-control" id="officeName" name="name" required>
                             </div>
                             <div class="mb-3">
-                                <label for="OfficeDescription" class="form-label">Office Description</label>
-                                <textarea class="form-control" id="OfficeDescription" name="description" rows="3" required></textarea>
+                                <label for="officeDescription" class="form-label">Office Description</label>
+                                <textarea class="form-control" id="officeDescription" name="description" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="officeType" class="form-label">Type</label>
+                                <select class="form-control" id="officeType" name="type" required>
+                                    <option value="" disabled selected>Select Type</option>
+                                    <option value="office">Office</option>
+                                    <option value="department">Department</option>
+                                </select>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -101,13 +113,12 @@
                         <div class="card-body p-24">
                             <div
                                 class="w-64-px h-64-px d-inline-flex align-items-center justify-content-center bg-info-200 text-primary-600 mb-16 radius-12">
-                                <iconify-icon icon="/{{ auth()->user()->image }}" class="h5 mb-0"></iconify-icon>
+                                <iconify-icon icon="{{ $office->getIconClass() }}" class="h5 mb-0"></iconify-icon>
                             </div>
                             <h6 class="mb-8">{{ $office->name }}</h6>
                             <a href="/office/{{ $office->id }}"
                                 class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
-                                View Office <iconify-icon icon="iconamoon:arrow-right-2"
-                                    class="text-xl"></iconify-icon>
+                                View Office <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
                             </a>
                         </div>
                     </div>
@@ -133,8 +144,8 @@
             });
         });
     </script>
-    
-@include('templates.footer_inc')
+
+    @include('templates.footer_inc')
 
 </main>
 @include('templates.footer')

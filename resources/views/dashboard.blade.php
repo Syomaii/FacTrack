@@ -265,8 +265,6 @@
           </div>
         </div>
         
-
-        
       </div>
     </div>  
 @include('templates.footer_inc')

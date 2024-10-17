@@ -1,6 +1,5 @@
 @include('templates.header')
 <x-sidebar />
-
 <main class="dashboard-main">
     <x-navbar />
 
@@ -12,13 +11,20 @@
             </div>
             <ul class="d-flex align-items-center gap-2">
                 <li class="fw-medium">
-                    <a href="index.html" class="d-flex align-items-center gap-1 hover-text-primary">
+                    <a href="{{ route('dashboard') }}" class="d-flex align-items-center gap-1 hover-text-primary">
                         <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
                         Dashboard
                     </a>
                 </li>
                 <li>-</li>
-                <li class="fw-medium">{{ $office->name }}</li>
+                <a href="{{ route('offices') }}" class="d-flex align-items-center gap-1 hover-text-primary">
+                    Offices
+                </a>
+                <li>-</li>
+                <a href="{{ route('officeFacilities', ['id' => $office->id]) }}"
+                    class="d-flex align-items-center gap-1 hover-text-primary">
+                    {{ $office->name }}
+                </a>
             </ul>
         </div>
 
@@ -34,27 +40,22 @@
 
         <!-- Search Bar and Buttons -->
         <div class="d-flex justify-content-between align-items-center mb-24">
-            <div class="input-group" style="max-width: 350px;">
-                <input type="text" id="facilitiesearch" class="form-control radius-8 border-0 shadow-sm"
-                    placeholder="Search equipment...">
-                <button class="btn btn-outline-success-600 radius-8 px-3 py-2">
-                    <iconify-icon icon="ic:baseline-search" class="icon text-xl"></iconify-icon>
-                </button>
+            <div class="input-group" style="max-width: 650px;">
+                <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
+                    placeholder="Search facilities...">
+                <button class="btn btn-primary" type="button"><iconify-icon icon="ic:baseline-search"
+                        class="icon"></iconify-icon></button>
             </div>
 
             <div class="d-flex gap-3">
-                <button type="button" class="btn rounded-pill btn-outline-warning-600 radius-8 px-20 py-11"
+                <button type="button" class="btn btn-warning text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
                     id="updateOfficeBtn">Edit Office</button>
-                <button type="button" class="btn rounded-pill btn-outline-danger-600 radius-8 px-20 py-11"
+                <button type="button" class="btn btn-danger text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
                     id="deleteOfficeBtn">Delete Office</button>
-                {{-- <a href="/add-equipment/{{ $office->id }}">
-                    <button type="button" class="btn rounded-pill btn-outline-success-600 radius-8 px-20 py-11"
-                        id="addFacilityBtn">Add Office</button>
-                </a> --}}
             </div>
         </div>
 
-        <!-- No equipment message -->
+        <!-- No facilities message -->
         <div class="row gy-4" id="equipmentList">
             @if ($facilities->isNotEmpty())
                 @foreach ($facilities as $facility)
@@ -62,35 +63,18 @@
                         <div class="card h-100 radius-12 text-center">
                             <div class="card-body p-24">
                                 <div class="d-flex flex-column align-items-center">
-                                    <img src="{{ asset($facility->image) }}" alt="{{ $facility->name }}"
-                                        class="img-fluid rounded mb-3 max-img-size" />
+                                    <div
+                                        class="w-64-px h-64-px d-inline-flex align-items-center justify-content-center bg-info-200 text-primary-600 mb-16 radius-12">
+                                        <iconify-icon icon="{{ $office->getIconClass() }}"
+                                            class="h5 mb-0"></iconify-icon>
+                                    </div>
                                     <h6 class="mb-8">{{ $facility->name }}</h6>
                                     <div class="d-flex justify-content-center gap-2">
-                                        <a href="javascript:void(0)"
-                                            class="w-32-px h-32-px bg-primary-light text-primary-600 rounded-circle d-inline-flex align-items-center justify-content-center view-equipment"
-                                            data-id="{{ $facility->id }}">
-                                            <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
+                                        <a href="{{ route('facility_equipment', ['id' => $facility->id]) }}"
+                                            class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
+                                            View Facility <iconify-icon icon="iconamoon:arrow-right-2"
+                                                class="text-xl"></iconify-icon>
                                         </a>
-                                        <a href="javascript:void(0)"
-                                            class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center edit-equipment"
-                                            data-id="{{ $facility->id }}" data-name="{{ $facility->name }}"
-                                            data-description="{{ $facility->description }}"
-                                            data-acquired_date="{{ $facility->acquired_date }}"
-                                            data-status="{{ $facility->status }}"
-                                            data-Office="{{ $facility->Office }}">
-                                            <iconify-icon icon="lucide:edit"></iconify-icon>
-                                        </a>
-                                        <a href="javascript:void(0)"
-                                            class="w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center delete-equipment"
-                                            data-id="{{ $facility->id }}">
-                                            <iconify-icon icon="mingcute:delete-2-line"></iconify-icon>
-                                        </a>
-                                        <form id="delete-form-{{ $facility->id }}"
-                                            action="{{ route('delete_equipment', $facility->id) }}" method="POST"
-                                            style="display: none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -101,18 +85,15 @@
                 <div class="d-flex justify-content-center align-items-center" style="height: 55vh; width: 100vw;">
                     <strong class="text-center p-3">There are no facilities yet in this Office.</strong>
                 </div>
-            
             @endif
         </div>
-
     </div>
 
     @include('templates.footer')
 </main>
 
 <!-- Edit Office Modal -->
-<div class="modal fade" id="editOfficeModal" tabindex="-1" aria-labelledby="editOfficeModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="editOfficeModal" tabindex="-1" aria-labelledby="editOfficeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -120,22 +101,33 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editOfficeForm" action="{{ route('updateOffice', $Office->id) }}" method="POST">
+                <form id="editOfficeForm" action="{{ route('updateOffice', $office->id) }}" method="POST">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="id" value="{{ $Office->id }}">
+                    <input type="hidden" name="id" value="{{ $office->id }}">
                     <div class="mb-3">
                         <label for="OfficeName" class="form-label">Name</label>
                         <input type="text" class="form-control" id="OfficeName" name="name"
-                            value="{{ $Office->name }}" required>
+                            value="{{ $office->name }}" required>
                         @error('name')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
                         <label for="OfficeDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="OfficeDescription" name="description" required>{{ $Office->description }}</textarea>
+                        <textarea class="form-control" id="OfficeDescription" name="description" required>{{ $office->description }}</textarea>
                         @error('description')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="OfficeType" class="form-label">Type</label>
+                        <select class="form-control" id="OfficeType" name="type" required>
+                            <option value="office" {{ $office->type == 'office' ? 'selected' : '' }}>Office</option>
+                            <option value="department" {{ $office->type == 'department' ? 'selected' : '' }}>Department
+                            </option>
+                        </select>
+                        @error('type')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
@@ -147,16 +139,17 @@
 </div>
 
 <!-- Delete Office Form -->
-<form id="deleteOfficeForm" action="{{ route('deleteOffice', $Office->id) }}" method="POST"
+<form id="deleteOfficeForm" action="{{ route('deleteOffice', $office->id) }}" method="POST"
     style="display: none;">
     @csrf
     @method('DELETE')
 </form>
 
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var equipmentList = document.getElementById('equipmentList');
-        var searchInput = document.getElementById('facilitiesearch');
+        var searchInput = document.getElementById('equipmentSearch');
 
         // Search Equipment Functionality
         searchInput.addEventListener('input', function() {
@@ -173,12 +166,13 @@
             });
         });
 
-        // Update and Delete Office Handlers
+        // Update Office Handler
         document.getElementById('updateOfficeBtn').addEventListener('click', function() {
             var editModal = new bootstrap.Modal(document.getElementById('editOfficeModal'));
             editModal.show();
         });
 
+        // Delete Office Handler
         document.getElementById('deleteOfficeBtn').addEventListener('click', function() {
             Swal.fire({
                 title: 'Are you sure?',
@@ -195,26 +189,7 @@
             });
         });
 
-        // Handle click events for the equipment actions
-        equipmentList.addEventListener('click', function(e) {
-            if (e.target.closest('.delete-equipment')) {
-                var button = e.target.closest('.delete-equipment');
-                var id = button.dataset.id;
-
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById(`delete-form-${id}`).submit();
-                    }
-                });
-            }
-        });
     });
 </script>
+
+@include('templates.footer')

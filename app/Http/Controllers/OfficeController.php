@@ -12,27 +12,32 @@ class OfficeController extends Controller
     public function officeFacilities($id){
 
         $office = Office::findorfail($id);
+        
         $facilities = Facility::where('office_id', $id)->paginate(5);
 
-        return view('/offices/facilities_in_offices', compact('office', 'facilities'))->with('title', 'Facility Equipments');
+        return view('/offices/facilities_in_offices', compact('office', 'facilities'))->with('title', 'Facilities in Offices');
 
     }
 
-    public function addOffice(Request $request){
+    public function addOffice(Request $request) {
         $data = $request->validate([
             'name' => 'required|unique:offices,name',
             'description' => 'nullable',
+            'type' => 'required|in:office,department', 
         ]);
-
-        $officeData = ([
+    
+        $officeData = [
             'name' => $data['name'],
             'description' => $data['description'],
-        ]);
-
+            'type' => $data['type'], 
+        ];
+    
+        // Create the office
         Office::create($officeData);
-
+    
         return redirect('/offices')->with('addOfficeSuccessfully', 'Office added successfully.');
     }
+    
     
 
 
@@ -54,7 +59,14 @@ class OfficeController extends Controller
 
     public function deleteOffice($id)
     {
-        Office::findOrFail($id)->delete();
-        return redirect('/offices')->with('deleteOfficeSuccess', 'Office Deleted Successfully!');
+        // Attempt to find the office by ID and delete it
+        $office = Office::findOrFail($id);
+        
+        // Delete the office
+        $office->delete();
+    
+        return redirect('/offices')->with('deleteOfficeSuccess', 'Office deleted successfully.');
     }
+    
+    
 }

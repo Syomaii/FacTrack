@@ -12893,7 +12893,7 @@ td.fc-header-center {
 }
 
 .sidebar.active .sidebar-menu li.dropdown.dropdown-open .sidebar-submenu, .sidebar.active .sidebar-menu li.dropdown.open .sidebar-submenu {
-  display: none !important;
+  display: block !important;
 }
 
 .sidebar.active .sidebar-menu li.dropdown a::after {
@@ -13002,7 +13002,7 @@ td.fc-header-center {
 }
 
 .sidebar-menu li.dropdown.open .sidebar-submenu {
-  display: block;
+  display: block !important;
 }
 
 .sidebar-menu li > a.active-page {

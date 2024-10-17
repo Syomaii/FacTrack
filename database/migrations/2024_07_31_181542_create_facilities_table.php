@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
             $table->string('name', 50);
             $table->string('description', 255)->nullable();
+            $table->string('type', 10);
             $table->timestamps();
         });
     }

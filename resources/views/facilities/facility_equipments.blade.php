@@ -12,14 +12,34 @@
             </div>
             <ul class="d-flex align-items-center gap-2">
                 <li class="fw-medium">
-                    <a href="index.html" class="d-flex align-items-center gap-1 hover-text-primary">
+                    <a href="{{ route('dashboard') }}" class="d-flex align-items-center gap-1 hover-text-primary">
                         <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
                         Dashboard
                     </a>
                 </li>
+                @if (auth()->user()->type === 'facility manager')
+                    <li>-</li>
+                    <a href="{{ route('facilities') }}" class="d-flex align-items-center gap-1 hover-text-primary">
+                        Facilities
+                    </a>
+                @elseif (auth()->user()->type === 'admin')
+                    <li>-</li>
+                    <a href="{{ route('offices') }}" class="d-flex align-items-center gap-1 hover-text-primary">
+                        Offices
+                    </a>
+                    <li>-</li>
+                    <a href="{{ route('officeFacilities', ['id' => $facility->office->id]) }}"
+                        class="d-flex align-items-center gap-1 hover-text-primary">
+                        {{ $facility->office->name }}
+                    </a>
+                @endif
                 <li>-</li>
-                <li class="fw-medium">{{ $facility->name }}</li>
+                <a href="{{ route('facility_equipment', ['id' => $facility->id]) }}"
+                    class="d-flex align-items-center gap-1 hover-text-primary">
+                    {{ $facility->name }}
+                </a>
             </ul>
+
         </div>
 
         @if (session('updateFacilitySuccess'))
@@ -33,37 +53,50 @@
         @endif
 
         <!-- Search Bar and Buttons -->
-        <div class="d-flex justify-content-between align-items-center mb-24">
-            <div class="input-group" style="max-width: 650px;">
-                <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
-                    placeholder="Search equipment...">
-                <button class="btn btn-primary" type="button"><iconify-icon icon="ic:baseline-search"
-                        class="icon"></iconify-icon></button>
-            </div>
+        @if (auth()->user()->type === 'facility manager')
+            <div class="d-flex justify-content-between align-items-center mb-24">
+                <div class="input-group" style="max-width: 650px;">
+                    <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
+                        placeholder="Search equipment...">
+                    <button class="btn btn-primary" type="button"><iconify-icon icon="ic:baseline-search"
+                            class="icon"></iconify-icon></button>
+                </div>
+            @else
+                <div class="d-flex justify-content-between align-items-center mb-24">
+                    <div class="input-group" style="max-width: 1250px;">
+                        <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
+                            placeholder="Search equipment...">
+                        <button class="btn btn-primary" type="button"><iconify-icon icon="ic:baseline-search"
+                                class="icon"></iconify-icon></button>
+                    </div>
+        @endif
 
-            <div class="d-flex gap-3">
+        <div class="d-flex gap-3">
+            @if (auth()->user()->type === 'facility manager')
                 <button type="button" class="btn btn-warning text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
                     id="updateFacilityBtn">Update Facility</button>
                 <button type="button" class="btn btn-danger text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
                     id="deleteFacilityBtn">Delete Facility</button>
                 <a href="/add-equipment/{{ $facility->id }}">
-                    <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8px-20 py-11"
+                    <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
                         id="addEquipmentBtn">Add Equipment</button>
                 </a>
-            </div>
+            @endif
         </div>
+    </div>
 
-        <!-- No equipment message -->
-        <div class="row gy-4" id="equipmentList">
-            @if ($equipments->isNotEmpty())
-                @foreach ($equipments as $facEquipment)
-                    <div class="col-xxl-3 col-sm-6 equipment-card">
-                        <div class="card h-100 radius-12 text-center">
-                            <div class="card-body p-24">
-                                <div class="d-flex flex-column align-items-center">
-                                    <img src="{{ asset($facEquipment->image) }}" alt="{{ $facEquipment->name }}"
-                                        class="img-fluid rounded mb-3 max-img-size" />
-                                    <h6 class="mb-8">{{ $facEquipment->name }}</h6>
+    <!-- No equipment message -->
+    <div class="row gy-4" id="equipmentList">
+        @if ($equipments->isNotEmpty())
+            @foreach ($equipments as $facEquipment)
+                <div class="col-xxl-3 col-sm-6 equipment-card">
+                    <div class="card h-100 radius-12 text-center">
+                        <div class="card-body p-24">
+                            <div class="d-flex flex-column align-items-center">
+                                <img src="{{ asset($facEquipment->image) }}" alt="{{ $facEquipment->name }}"
+                                    class="img-fluid rounded mb-3 max-img-size" />
+                                <h6 class="mb-8">{{ $facEquipment->name }}</h6>
+                                @if (auth()->user()->type === 'facility manager')
                                     <div class="d-flex justify-content-center gap-2">
                                         <a href="/equipment-details/{{ $facEquipment->code }}"
                                             class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
@@ -71,18 +104,19 @@
                                                 class="text-xl"></iconify-icon>
                                         </a>
                                     </div>
-                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
-                @endforeach
-            @else
-                <div class="d-flex justify-content-center align-items-center" style="height: 55vh; width: 100vw;">
-                    <strong class="text-center p-3">There are no equipments yet in this facility.</strong>
                 </div>
+            @endforeach
+        @else
+            <div class="d-flex justify-content-center align-items-center" style="height: 55vh; width: 100vw;">
+                <strong class="text-center p-3">There are no equipments yet in this facility.</strong>
+            </div>
 
-            @endif
-        </div>
+        @endif
+    </div>
 
     </div>
 

@@ -1,11 +1,9 @@
 @include('templates.header')
 <x-sidebar />
-
 <main class="dashboard-main">
     <x-navbar />
 
     <div class="dashboard-main-body">
-
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
             <h6 class="fw-semibold mb-0">Add User</h6>
             <ul class="d-flex align-items-center gap-2">
@@ -20,14 +18,6 @@
             </ul>
         </div>
 
-        {{-- @if (session('addUserSuccessfully'))
-            <div class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-2">
-                    <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
-                    {{ session('addUserSuccessfully') }}
-                </div>
-            </div>
-        @endif --}}
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -38,8 +28,7 @@
             </div>
         @endif
 
-
-        <form action="{{ route('add-user') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('add-user') }}" method="POST" enctype="multipart/form-data" id="userForm">
             @csrf
             <div class="card h-100 p-0 radius-12">
                 <div class="card-body p-24">
@@ -117,8 +106,8 @@
                                                 </span>
                                                 <input id="email" type="email"
                                                     class="form-control radius-8 {{ $errors->has('email') ? 'is-invalid' : '' }}"
-                                                    name="email" value="{{ old('email') }}" required
-                                                    autocomplete="email" placeholder="Enter email">
+                                                    name="email" value="{{ old('email') }}"
+                                                    placeholder="Enter email">
                                             </div>
                                             <small class="text-danger">{{ $errors->first('email') }}</small>
                                         </div>
@@ -133,7 +122,7 @@
                                                 <input id="mobile_no" type="text"
                                                     class="form-control radius-8 {{ $errors->has('mobile_no') ? 'is-invalid' : '' }}"
                                                     name="mobile_no" value="{{ old('mobile_no') }}" required
-                                                    autocomplete="phone" placeholder="09xxxxxxxxx">
+                                                    placeholder="09xxxxxxxxx">
                                             </div>
                                             <small class="text-danger">{{ $errors->first('mobile_no') }}</small>
                                         </div>
@@ -225,31 +214,64 @@
                                     </div>
 
                                     @if ($userType === 'admin')
-                                        <div class="form-group mb-3">
-                                            <label for="office"
-                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Office</label>
-                                            <div class="icon-field">
-                                                <span class="icon">
-                                                    <iconify-icon icon="f7:building"></iconify-icon>
-                                                </span>
-                                                <select
-                                                    class="form-control radius-8 {{ $errors->has('office_id') ? 'is-invalid' : '' }}"
-                                                    id="office" name="office_id">
-                                                    <option value="" disabled selected>Select an office</option>
-                                                    @foreach ($offices as $office)
-                                                        @if ($userType == 'admin' || ($userType != 'facility_manager' && $office->name != 'Dean'))
-                                                            <option value="{{ $office->id }}"
-                                                                {{ old('office') == $office->id ? 'selected' : '' }}>
-                                                                {{ $office->name }}
-                                                            </option>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
+                                        <!-- Office/Department Radio Buttons -->
+                                        <div class="form-group mb-3 col-md-12">
+                                            <label class="fw-semibold text-primary-light text-sm mb-8">Select
+                                                Type</label>
+                                            <div class="form-check">
+                                                <input type="radio" id="office" name="select_type"
+                                                    value="office" class="form-check-input" checked>
+                                                <label for="office" class="form-check-label">
+                                                    <iconify-icon icon="mingcute:tool-fill"
+                                                        class="icon text-lg"></iconify-icon>
+                                                    Office
+                                                </label>
                                             </div>
-                                            <small class="text-danger">{{ $errors->first('office_id') }}</small>
+                                            <div class="form-check">
+                                                <input type="radio" id="department" name="select_type"
+                                                    value="department" class="form-check-input">
+                                                <label for="department" class="form-check-label">
+                                                    <iconify-icon icon="mingcute:home-6-fill"
+                                                        class="icon text-lg"></iconify-icon>
+                                                    Department
+                                                </label>
+                                            </div>
                                         </div>
-                                    @else
-                                        <input type="hidden" name="office_id" value="{{ $officeId }}">
+
+                                        <!-- Office Dropdown -->
+                                        <div class="form-group mb-3 col-md-12" id="office-dropdown">
+                                            <label for="office_id"
+                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Select
+                                                Office</label>
+                                            <select class="form-control radius-8" id="office_id" name="office_id">
+                                                <option value="" disabled selected>Select an Office</option>
+                                                @foreach ($offices as $office)
+                                                    @if ($office->type == 'office')
+                                                        <!-- Adjusted condition -->
+                                                        <option value="{{ $office->id }}">{{ $office->name }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <!-- Department Dropdown -->
+                                        <div class="form-group mb-3 col-md-12" id="department-dropdown"
+                                            style="display: none;">
+                                            <label for="department"
+                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Select
+                                                Department</label>
+                                            <select class="form-control radius-8" id="department" name="department">
+                                                <option value="" disabled selected>Select a Department</option>
+                                                @foreach ($offices as $office)
+                                                    @if ($office->type == 'department')
+                                                        <!-- Adjusted condition -->
+                                                        <option value="{{ $office->id }}">{{ $office->name }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     @endif
 
                                     <div class="d-flex align-items-center justify-content-center gap-3 mt-5">
@@ -291,5 +313,21 @@
         document.querySelector('.uploaded-img').classList.add('d-none');
         document.querySelector('.upload-file').classList.remove('d-none');
         document.getElementById('upload-file').value = null;
+    });
+
+    // Toggle office/department fields based on radio button selection
+    document.querySelectorAll('input[name="select_type"]').forEach(function(elem) {
+        elem.addEventListener('change', function() {
+            const officeDropdown = document.getElementById('office-dropdown');
+            const departmentDropdown = document.getElementById('department-dropdown');
+
+            if (this.value === 'office') {
+                officeDropdown.style.display = 'block';
+                departmentDropdown.style.display = 'none';
+            } else if (this.value === 'department') {
+                departmentDropdown.style.display = 'block';
+                officeDropdown.style.display = 'none';
+            }
+        });
     });
 </script>

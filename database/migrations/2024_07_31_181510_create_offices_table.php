@@ -15,6 +15,7 @@ return new class extends Migration
             $table->increments('id');
             $table->string('name', 100);
             $table->string('description', 255)->nullable();
+            $table->string('type', 10);
             $table->timestamps();
 
         });

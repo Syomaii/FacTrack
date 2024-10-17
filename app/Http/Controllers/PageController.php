@@ -34,7 +34,10 @@ class PageController extends Controller
     }
 
     public function facilities(){
+
         $officeId = auth()->user()->office_id;
+        $office = Office::with('facilities')->find($officeId);
+
         $facilities = Facility::whereHas('office', function ($query) use ($officeId) {
             $query->where('office_id', $officeId);
         })->paginate(5);
@@ -42,10 +45,19 @@ class PageController extends Controller
         return view('facilities/facilities', compact('officeId', 'facilities'))->with('title', 'Facilities');
     }
 
-    public function users(){
-        $users = User::with(['designation', 'office'])->get();
+    public function users(Request $request)
+    {
+        $users = User::with(['designation', 'office'])->where('type', '!=', 'admin')->paginate(10); 
 
-        return view('users/users', compact('users'))->with('title', 'Users');
+        $totalUsers = $users->total();
+        $currentPage = $users->currentPage();
+        $perPage = $users->perPage();
+        $currentCount = $users->count();
+        $start = ($currentPage - 1) * $perPage + 1;
+        $end = $start + $currentCount - 1;
+
+        return view('users.users', compact('users', 'totalUsers', 'start', 'end'))
+            ->with('title', 'Users');
     }
 
     public function equipments(){
@@ -142,13 +154,14 @@ class PageController extends Controller
         return view('equipments/generateqr', compact('equipments'))->with('title', 'Generated Qr');
     }
 
-    public function facilityEquipments($id)
+   public function facilityEquipments($id)
     {
-        $facility = Facility::findOrFail($id);
+        $facility = Facility::with('office')->findOrFail($id); 
         $equipments = Equipment::where('facility_id', $id)->paginate(5);
 
         return view('facilities/facility_equipments', compact('facility', 'equipments'))->with('title', 'Facility Equipments');
     }
+
 
     public function borrowersLog()
     {

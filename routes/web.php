@@ -34,18 +34,19 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
 
     Route::middleware(['checkRole:admin,facility manager'])->group(function () {
-        Route::get('/users', [PageController::class, 'users']);
+        Route::get('/users', [PageController::class, 'users'])->name('users');
         Route::get('/add-user', [PageController::class, 'addUser'])->name('add-user');
         Route::post('/add-user', [UserController::class, 'addUserPost'])->name('addUserPost');
         Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->name('change_password');
+        Route::get('/facility-equipment/{id}', [PageController::class, 'facilityEquipments'])->name('facility_equipment');
     });
 
     Route::middleware(['checkRole:admin'])->group(function () {
-        Route::get('/offices', [PageController::class, 'offices']);
-        Route::delete('/delete-office/{id}', [FacilityController::class, 'deleteOffice'])->name('deleteOffice');        
+        Route::get('/offices', [PageController::class, 'offices'])->name('offices');
+        Route::delete('/delete-office/{id}', [OfficeController::class, 'deleteOffice'])->name('deleteOffice');        
         Route::post('/add-office', [OfficeController::class, 'addOffice'])->name('addOffice');
         Route::put('/update-office/{id}', [OfficeController::class, 'updateOffice'])->name('updateOffice');
-        Route::get('/office/$id', [OfficeController::class, 'officeFacilities'])->name('officeFacilities');
+        Route::get('/office/{id}', [OfficeController::class, 'officeFacilities'])->name('officeFacilities');
     });
     // Route::get('/users', [PageController::class, 'users']);
 
@@ -88,8 +89,7 @@ Route::middleware(['auth'])->group(function () {
     //Operators
     Route::middleware(['checkRole:facility manager'])->group(function () {
         Route::get('/generatedqr', [PageController::class, 'generatedQr']);
-        Route::get('/facility-equipment/{id}', [PageController::class, 'facilityEquipments'])->name('facility_equipment');
-        Route::get('/facilities', [PageController::class, 'facilities']);
+        Route::get('/facilities', [PageController::class, 'facilities'])->name('facilities');
         Route::get('/add-equipment/{id}', [PageController::class, 'addEquipment'])->name('add_equipment');
         Route::post('/add-equipment/{id}', [EquipmentController::class, 'addEquipmentPost'])->name('add_equipment');
         Route::delete('/equipments/{id}', [EquipmentController::class, 'deleteEquipment'])->name('delete_equipment');
