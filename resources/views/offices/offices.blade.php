@@ -116,10 +116,16 @@
                                 <iconify-icon icon="{{ $office->getIconClass() }}" class="h5 mb-0"></iconify-icon>
                             </div>
                             <h6 class="mb-8">{{ $office->name }}</h6>
-                            <a href="/office/{{ $office->id }}"
+                            <a href="{{ url('/office/' . $office->id) }}"
                                 class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
-                                View Office <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
-                            </a>
+                                 @if ($office->type == 'office')
+                                     View Office
+                                 @elseif ($office->type == 'department')
+                                     View Department
+                                 @endif
+                                 <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
+                             </a>
+                             
                         </div>
                     </div>
                 </div>
