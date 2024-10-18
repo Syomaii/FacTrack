@@ -85,7 +85,6 @@
         </div>
     </div>
 
-    <!-- No equipment message -->
     <div class="row gy-4" id="equipmentList">
         @if ($equipments->isNotEmpty())
             @foreach ($equipments as $facEquipment)
@@ -112,7 +111,7 @@
             @endforeach
         @else
             <div class="d-flex justify-content-center align-items-center" style="height: 55vh; width: 100vw;">
-                <strong class="text-center p-3">There are no equipments yet in this facility.</strong>
+                <strong class="text-center p-3" style="font-size: 20px">There are no equipments yet in this facility.</strong>
             </div>
 
         @endif

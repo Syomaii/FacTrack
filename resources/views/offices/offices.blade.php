@@ -107,7 +107,8 @@
 
         <!-- Office List -->
         <div class="row gy-4" id="officeList">
-            @foreach ($offices as $office)
+            @if ($offices->isNotEmpty())
+                @foreach ($offices as $office)
                 <div class="col-xxl-3 col-sm-6 office-item">
                     <div class="card h-100 radius-12 text-center">
                         <div class="card-body p-24">
@@ -118,18 +119,23 @@
                             <h6 class="mb-8">{{ $office->name }}</h6>
                             <a href="{{ url('/office/' . $office->id) }}"
                                 class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
-                                 @if ($office->type == 'office')
-                                     View Office
-                                 @elseif ($office->type == 'department')
-                                     View Department
-                                 @endif
-                                 <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
-                             </a>
-                             
+                                    @if ($office->type == 'office')
+                                        View Office
+                                    @elseif ($office->type == 'department')
+                                        View Department
+                                    @endif
+                                    <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
+                                </a>
+                                
                         </div>
                     </div>
                 </div>
-            @endforeach
+                @endforeach
+            @else
+                <div class="d-flex justify-content-center align-items-center" style="height: 55vh; width: 100vw;">
+                    <strong class="text-center p-3" style="font-size: 20px">There are no offices yet.</strong>
+                </div>
+            @endif
         </div>
 
     </div>
