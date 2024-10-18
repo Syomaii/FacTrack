@@ -87,6 +87,15 @@
                                 <label for="facilityDescription" class="form-label">Facility Description</label>
                                 <textarea class="form-control" id="facilityDescription" name="description" rows="3" required></textarea>
                             </div>
+                            <div class="mb-3">
+                                <label for="facilityType" class="form-label">Facility Type</label>
+                                <select class="form-control" id="facilityType" name="type" required>
+                                    <option value="" disabled selected>Select Facility Type</option>
+                                    <option value="laboratory">Laboratory</option>
+                                    <option value="office">Office</option>
+                                    <option value="room">Room</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Add Facility</button>
@@ -95,6 +104,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Facility List -->
         <div class="row gy-4" id="facilityList">
@@ -109,7 +119,13 @@
                             <h6 class="mb-8">{{ $facility->name }}</h6>
                             <a href="/facility-equipment/{{ $facility->id }}"
                                 class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
-                                View Facility <iconify-icon icon="iconamoon:arrow-right-2"
+                                @if ($facility->type == 'laboratory')
+                                    View Laboratory
+                                @elseif ($facility->type == 'Office')
+                                    View Office
+                                @elseif ($facility->type == 'room')
+                                    View Room
+                                @endif <iconify-icon icon="iconamoon:arrow-right-2"
                                     class="text-xl"></iconify-icon>
                             </a>
                         </div>
