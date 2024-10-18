@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RegisteredUserMail;
 use App\Models\Designation;
 use App\Models\User;
 use App\Models\Office;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\SendEmailNotification;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 
 
 class UserController extends Controller
@@ -24,7 +27,6 @@ class UserController extends Controller
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
             'mobile_no' => 'required|string|max:15',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'type' => 'required|string|max:255',
@@ -75,12 +77,13 @@ class UserController extends Controller
             $officeId = auth()->user()->office_id;
         }
 
+        $randomPassword = Str::random(10);
         // Prepare user data
         $userData = [
             'firstname' => $validatedData['firstname'],
             'lastname' => $validatedData['lastname'],
             'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']),
+            'password' => bcrypt($randomPassword),
             'mobile_no' => $validatedData['mobile_no'],
             'type' => $validatedData['type'],
             'designation_id' => $validatedData['designation_id'],
@@ -99,6 +102,8 @@ class UserController extends Controller
 
         // Create the user
         $user = User::create($userData);
+
+        Mail::to($validatedData['email'])->send(new RegisteredUserMail($randomPassword, $user));
 
         return redirect('/users')
             ->with('title', 'Users')
