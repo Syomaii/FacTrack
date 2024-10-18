@@ -9,22 +9,26 @@ use Illuminate\Http\Request;
 
 class FacilityController extends Controller
 {
-    public function addFacility(Request $request){
+    public function addFacility(Request $request)
+    {
         $data = $request->validate([
             'name' => 'required|unique:facilities,name',
             'description' => 'required',
+            'type' => 'required|in:laboratory,office,room',
         ]);
-
-        $facilityData = ([
+    
+        $facilityData = [
             'name' => $data['name'],
             'description' => $data['description'],
+            'type' => $data['type'], 
             'office_id' => auth()->user()->office_id,
-        ]);
-
+        ];
+    
         Facility::create($facilityData);
-
+    
         return redirect('/facilities')->with('addFacilitySuccessfully', 'Facility added successfully.');
     }
+    
     
 
 

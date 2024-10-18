@@ -111,7 +111,8 @@
             @endforeach
         @else
             <div class="d-flex justify-content-center align-items-center" style="height: 55vh; width: 100vw;">
-                <strong class="text-center p-3" style="font-size: 20px">There are no equipments yet in this facility.</strong>
+                <strong class="text-center p-3" style="font-size: 20px">There are no equipments yet in this
+                    facility.</strong>
             </div>
 
         @endif
@@ -136,6 +137,8 @@
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="id" value="{{ $facility->id }}">
+
+                    <!-- Facility Name -->
                     <div class="mb-3">
                         <label for="facilityName" class="form-label">Name</label>
                         <input type="text" class="form-control" id="facilityName" name="name"
@@ -144,6 +147,8 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    <!-- Facility Description -->
                     <div class="mb-3">
                         <label for="facilityDescription" class="form-label">Description</label>
                         <textarea class="form-control" id="facilityDescription" name="description" required>{{ $facility->description }}</textarea>
@@ -151,12 +156,29 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    <!-- Facility Type -->
+                    <div class="mb-3">
+                        <label for="facilityType" class="form-label">Type</label>
+                        <select class="form-control" id="facilityType" name="type" required>
+                            <option value="Laboratory" {{ $facility->type == 'Laboratory' ? 'selected' : '' }}>
+                                Laboratory</option>
+                            <option value="Office" {{ $facility->type == 'Office' ? 'selected' : '' }}>Office</option>
+                            <option value="Room" {{ $facility->type == 'Room' ? 'selected' : '' }}>Room</option>
+                        </select>
+                        @error('type')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Submit Button -->
                     <button type="submit" class="btn btn-primary">Save</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 
 <!-- Delete Facility Form -->
 <form id="deleteFacilityForm" action="{{ route('deleteFacility', $facility->id) }}" method="POST"
