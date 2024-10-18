@@ -19,19 +19,26 @@ class PageController extends Controller
         return view('users/index')->with('title', 'Login');
     }
 
-    public function dashboard(){
-        $userCount = User::count();
-        $equipmentCount = Equipment::count();
+    public function dashboard()
+    {
+        $users = User::with('designation')->get(); 
+        
+        $recentUsers = User::where('type', '!=', 'admin')->orderBy('created_at', 'desc') 
+                           ->take(5) 
+                           ->get();
     
-        $data = [
-            'userCount' => $userCount,
-            'equipmentCount' => $equipmentCount,
-            'title' => 'Dashboard'
-        ];
+        // Pass data to the view
+        return view('dashboard', [
+            'title' => 'Dashboard',
+            'users' => $users,
+            'recentUsers' => $recentUsers, 
+            'userCount' => User::count(), 
+            'equipmentCount' => Equipment::count(),
+        ]);
+    }
     
 
-        return view('dashboard')->with($data);
-    }
+    
 
     public function facilities(){
 
