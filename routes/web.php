@@ -9,6 +9,11 @@ use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
+
+Auth::routes(['reset' => true]);
+
 
 Route::fallback(function () {
     return redirect('/error404');
