@@ -128,7 +128,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row">
+                                    {{-- <div class="row">
                                         <div class="form-group mb-3 col-md-6">
                                             <label for="password"
                                                 class="form-label fw-semibold text-primary-light text-sm mb-8">Password</label>
@@ -157,7 +157,7 @@
                                             <small
                                                 class="text-danger">{{ $errors->first('password_confirmation') }}</small>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="row">
                                         <div class="form-group mb-3 col-md-6">
