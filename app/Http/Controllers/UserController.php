@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Notifications\SendEmailNotification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
 
 
@@ -110,30 +111,29 @@ class UserController extends Controller
             ->with('success', 'User Added Successfully!');
     }
 
-    
-
-
     public function loginUser(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
-
         $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember'); // Check if "Remember Me" was selected
 
-        if (Auth::attempt($credentials, $request->filled('remember'))) {
-            $request->session()->regenerate();
+        if (Auth::attempt($credentials, $remember)) {
+            // If the login is successful, set cookies if "Remember Me" was checked
+            if ($remember) {
+                Cookie::queue('email', $request->email, 43200); // Store for 30 days (43200 minutes)
+                Cookie::queue('password', $request->password, 43200); // Store for 30 days
+            } else {
+                // Forget cookies if "Remember Me" wasn't selected
+                Cookie::queue(Cookie::forget('email'));
+                Cookie::queue(Cookie::forget('password'));
+            }
 
-            $user = Auth::user();
-
-            return redirect()->intended('/dashboard')->with('loginUserSuccessfully', 'You have successfully loged-in!');
+            return redirect()->intended('dashboard')
+                ->with('loginUserSuccessfully', 'You are logged in!');
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+        return back()->with('status', 'Invalid login credentials')->withInput();
     }
+
 
     public function logout(Request $request){
         Auth::logout();
