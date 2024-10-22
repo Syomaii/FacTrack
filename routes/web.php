@@ -3,6 +3,7 @@
 use App\Http\Controllers\BorrowerController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\FacilityController;
+use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\QRCodeController;
@@ -24,7 +25,7 @@ Route::get('/error401', [PageController::class, 'error401']);
 Route::get('/error404', [PageController::class, 'error404']);
 
 
-//PageController
+
 Route::middleware(['guest'])->group(function () {
     Route::post('/', [UserController::class, 'loginUser'])->name('login.post');
     Route::get('/', [PageController::class,'login'])->name('login');     
@@ -33,10 +34,13 @@ Route::middleware(['guest'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+
     Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     Route::get('/profile/{id}', [PageController::class, 'profile'])->name('profile');
     Route::put('/profile/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
+
+    //---------------------------------------Facility Manager and Admin -----------------------------------------------
 
     Route::middleware(['checkRole:admin,facility manager'])->group(function () {
         Route::get('/users', [PageController::class, 'users'])->name('users');
@@ -44,7 +48,17 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/add-user', [UserController::class, 'addUserPost'])->name('addUserPost');
         Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->name('change_password');
         Route::get('/facility-equipment/{id}', [PageController::class, 'facilityEquipments'])->name('facility_equipment');
+        
+        //example only
+        Route::get('/students', [PageController::class, 'students']);
+        Route::post('/students', [FileUploadController::class, 'importStudents'])->name('import.file');
     });
+    
+    //----------------------------------------------------------------------------------------------------------------
+
+
+    //-------------------------------------------------- Admin -------------------------------------------------------
+
 
     Route::middleware(['checkRole:admin'])->group(function () {
         Route::get('/offices', [PageController::class, 'offices'])->name('offices');
@@ -55,7 +69,11 @@ Route::middleware(['auth'])->group(function () {
     });
     // Route::get('/users', [PageController::class, 'users']);
 
-    //facility manager
+    //----------------------------------------------------------------------------------------------------------------
+
+
+    //---------------------------------------Facility Manager and Operator -----------------------------------------------
+    
     Route::middleware(['checkRole:operator,facility manager'])->group(function () {
 
         //Page Controller
@@ -90,8 +108,10 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/return-equipment', [BorrowerController::class, 'returnEquipment'])->name('return.equipment');
     });
 
+    //----------------------------------------------------------------------------------------------------------------
 
-    //Operators
+    //---------------------------------------Facility Manager---------------------------------------------------------
+
     Route::middleware(['checkRole:facility manager'])->group(function () {
         Route::get('/generatedqr', [PageController::class, 'generatedQr']);
         Route::get('/facilities', [PageController::class, 'facilities'])->name('facilities');
@@ -105,6 +125,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/add-facility', [FacilityController::class, 'addFacility'])->name('addFacility');
         Route::put('/update-facility/{id}', [FacilityController::class, 'updateFacility'])->name('updateFacility');
     });
+
+    //-----------------------------------------------------------------------------------------------------------------
     
 });
 
