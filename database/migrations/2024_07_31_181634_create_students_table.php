@@ -16,7 +16,9 @@ return new class extends Migration
             // $table->string('student_profile', 100);
             $table->string('firstname', 50);
             $table->string('lastname', 50);
+            $table->string('gender', 1);
             $table->string('email', 50)->unique()->nullable();
+            $table->string('course', 50);
             $table->string('department', 100);
             $table->timestamps();
         });
