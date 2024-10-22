@@ -169,7 +169,6 @@ class PageController extends Controller
         return view('facilities/facility_equipments', compact('facility', 'equipments'))->with('title', 'Facility Equipments');
     }
 
-
     public function borrowersLog()
     {
         // Fetch the borrow records from the database
@@ -180,5 +179,7 @@ class PageController extends Controller
         return view('reports.borrowers_log', compact('borrows'))->with('title', 'Borrowers Details');
     }
 
-    
+    public function students(){
+        return view('imports/students')->with('title', 'Import');
+    }
 }
