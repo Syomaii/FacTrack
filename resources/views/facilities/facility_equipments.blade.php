@@ -53,36 +53,39 @@
         @endif
 
         <!-- Search Bar and Buttons -->
-        @if (auth()->user()->type === 'facility manager')
-            <div class="d-flex justify-content-between align-items-center mb-24">
+        <div class="d-flex justify-content-between align-items-center mb-24">
+            @if (auth()->user()->type === 'facility manager')
                 <div class="input-group" style="max-width: 650px;">
                     <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
                         placeholder="Search equipment...">
-                    <button class="btn btn-primary" type="button"><iconify-icon icon="ic:baseline-search"
-                            class="icon"></iconify-icon></button>
+                    <button class="btn btn-primary" type="button">
+                        <iconify-icon icon="ic:baseline-search" class="icon"></iconify-icon>
+                    </button>
                 </div>
             @else
-                <div class="d-flex justify-content-between align-items-center mb-24">
-                    <div class="input-group" style="max-width: 1250px;">
-                        <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
-                            placeholder="Search equipment...">
-                        <button class="btn btn-primary" type="button"><iconify-icon icon="ic:baseline-search"
-                                class="icon"></iconify-icon></button>
-                    </div>
-        @endif
-
-        <div class="d-flex gap-3">
-            @if (auth()->user()->type === 'facility manager')
-                <button type="button" class="btn btn-warning text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
-                    id="updateFacilityBtn">Update Facility</button>
-                <button type="button" class="btn btn-danger text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
-                    id="deleteFacilityBtn">Delete Facility</button>
-                <a href="/add-equipment/{{ $facility->id }}">
-                    <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
-                        id="addEquipmentBtn">Add Equipment</button>
-                </a>
+                <div class="input-group" style="max-width: 1250px;">
+                    <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
+                        placeholder="Search equipment...">
+                    <button class="btn btn-primary" type="button">
+                        <iconify-icon icon="ic:baseline-search" class="icon"></iconify-icon>
+                    </button>
+                </div>
             @endif
+
+            <div class="d-flex gap-3 ms-3"> <!-- Added ms-3 for left margin -->
+                @if (auth()->user()->type === 'facility manager')
+                    <button type="button" class="btn btn-warning text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                        id="updateFacilityBtn">Update Facility</button>
+                    <button type="button" class="btn btn-danger text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                        id="deleteFacilityBtn">Delete Facility</button>
+                    <a href="/add-equipment/{{ $facility->id }}">
+                        <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                            id="addEquipmentBtn">Add Equipment</button>
+                    </a>
+                @endif
+            </div>
         </div>
+
     </div>
 
     <div class="row gy-4" id="equipmentList">
