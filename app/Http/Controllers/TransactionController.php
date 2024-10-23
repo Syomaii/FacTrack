@@ -7,11 +7,13 @@ use App\Models\Borrower;
 use App\Models\Equipment;
 use Illuminate\Http\Request;
 
-class BorrowerController extends Controller
+class TransactionController extends Controller
 {
+    // ----------------------------- BORROW TRANSACTION --------------------------------------
+
     public function borrowEquipment()
     {
-        return view('equipments/borrow_equipments')->with('title', 'Borrow Equipment');
+        return view('transaction/borrow_equipments')->with('title', 'Borrow Equipment');
     }
 
     public function borrowerFormPost(Request $request)
@@ -102,7 +104,6 @@ class BorrowerController extends Controller
         return redirect()->route('borrow_equipment')->with('borrowEquipmentSuccessfully', 'Equipment borrowed successfully!');
     }
 
-
     public function validateEquipmentStatus(Request $request)
     {
         $equipment = Equipment::where('code', $request->code)->first();
@@ -153,5 +154,10 @@ class BorrowerController extends Controller
 
         return back()->withErrors(['message' => 'Invalid equipment status.']);
     }
+
+    
+    // ---------------------------------------------------------------------------------------------
+
+    // ----------------------------- MAINTENANCE TRANSACTION ---------------------------------------
 
 }
