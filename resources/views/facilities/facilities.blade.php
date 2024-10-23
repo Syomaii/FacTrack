@@ -51,20 +51,26 @@
             </div>
         @endif
 
+    
         <!-- Search Bar -->
-        <div class="input-group mb-3">
-            <input type="text" id="facilitySearch" class="form-control" placeholder="Search Facilities"
-                aria-label="Search Facilities">
-            <button class="btn btn-primary" type="button"><iconify-icon icon="ic:baseline-search"
-                    class="icon"></iconify-icon></button>
-        </div>
 
-        <a href="#"
-            class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2 mb-3"
-            style="width: 170px" data-bs-toggle="modal" data-bs-target="#addFacilityModal">
-            <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
-            Add New Facility
-        </a>
+        <div class="d-flex justify-content-between align-items-center mb-24">
+            <div class="input-group" style="max-width: 650px;">
+                <input type="text" id="facilitySearch" class="form-control" placeholder="Search Facilities" aria-label="Search Facilities">
+                <button class="btn btn-primary" type="button">
+                    <iconify-icon icon="ic:baseline-search" class="icon"></iconify-icon>
+                </button>
+            </div>
+        
+            <div class="d-flex gap-3 ms-3"> <!-- Added ms-3 for left margin -->
+                <a href="#" style="width: 170px" data-bs-toggle="modal" data-bs-target="#addFacilityModal">
+                    <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11">Add Equipment</button>
+                </a>
+            </div>
+        </div>
+        
+
+        
 
         <!-- Add Facility Modal -->
         <div class="modal fade" id="addFacilityModal" tabindex="-1" aria-labelledby="addFacilityModalLabel"
@@ -108,30 +114,36 @@
 
         <!-- Facility List -->
         <div class="row gy-4" id="facilityList">
-            @foreach ($facilities as $facility)
-                <div class="col-xxl-3 col-sm-6 facility-item">
-                    <div class="card h-100 radius-12 text-center">
-                        <div class="card-body p-24">
-                            <div
-                                class="w-64-px h-64-px d-inline-flex align-items-center justify-content-center bg-info-200 text-primary-600 mb-16 radius-12">
-                                <iconify-icon icon="{{ $facility->getIconClass() }}" class="h5 mb-0"></iconify-icon>
+            @if ($facilities->isNotEmpty())
+                @foreach ($facilities as $facility)
+                    <div class="col-xxl-3 col-sm-6 facility-item">
+                        <div class="card h-100 radius-12 text-center">
+                            <div class="card-body p-24">
+                                <div
+                                    class="w-64-px h-64-px d-inline-flex align-items-center justify-content-center bg-info-200 text-primary-600 mb-16 radius-12">
+                                    <iconify-icon icon="{{ $facility->getIconClass() }}" class="h5 mb-0"></iconify-icon>
+                                </div>
+                                <h6 class="mb-8">{{ $facility->name }}</h6>
+                                <a href="/facility-equipment/{{ $facility->id }}"
+                                    class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
+                                    @if ($facility->type == 'laboratory')
+                                        View Laboratory
+                                    @elseif ($facility->type == 'Office')
+                                        View Office
+                                    @elseif ($facility->type == 'room')
+                                        View Room
+                                    @endif <iconify-icon icon="iconamoon:arrow-right-2"
+                                        class="text-xl"></iconify-icon>
+                                </a>
                             </div>
-                            <h6 class="mb-8">{{ $facility->name }}</h6>
-                            <a href="/facility-equipment/{{ $facility->id }}"
-                                class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
-                                @if ($facility->type == 'laboratory')
-                                    View Laboratory
-                                @elseif ($facility->type == 'Office')
-                                    View Office
-                                @elseif ($facility->type == 'room')
-                                    View Room
-                                @endif <iconify-icon icon="iconamoon:arrow-right-2"
-                                    class="text-xl"></iconify-icon>
-                            </a>
                         </div>
                     </div>
+                @endforeach
+            @else
+                <div class="d-flex justify-content-center align-items-center" style="height: 55vh; width: 100vw;">
+                    <strong class="text-center p-3" style="font-size: 20px">There are no facilities yet.</strong>
                 </div>
-            @endforeach
+            @endif
         </div>
 
     </div>
