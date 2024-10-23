@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\BorrowerController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\FileUploadController;
@@ -93,19 +93,19 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/qr-code/{code}', [QRCodeController::class, 'index'])->name('qr_code');
         
         //BorrowerController
-        // Route::get('/borrow-equipment', [BorrowerController::class, 'borrowEquipment'])->name('borrow-equipment');
-        // Route::post('/borrow-equipment', [BorrowerController::class, 'borrowerFormPost']);
-        // Route::post('/borrow-submit/{id}', [BorrowerController::class, 'submitBorrow'])->name('borrow.submit');
-        // Route::get('/borrow-details/{code}', [BorrowerController::class, 'showDetails'])->name('borrow_details');
+        // Route::get('/borrow-equipment', [TransactionController::class, 'borrowEquipment'])->name('borrow-equipment');
+        // Route::post('/borrow-equipment', [TransactionController::class, 'borrowerFormPost']);
+        // Route::post('/borrow-submit/{id}', [TransactionController::class, 'submitBorrow'])->name('borrow.submit');
+        // Route::get('/borrow-details/{code}', [TransactionController::class, 'showDetails'])->name('borrow_details');
 
-        Route::get('/borrow-equipment', [BorrowerController::class, 'borrowEquipment'])->name('borrow_equipment');
-        Route::post('/borrow-equipment', [BorrowerController::class, 'borrowerFormPost']);
-        Route::get('/borrow-details/{code}', [BorrowerController::class, 'showBorrowDetails'])->name('borrow_details');
-        Route::post('/borrow-equipment/{id}', [BorrowerController::class, 'submitBorrow'])->name('borrow-equipment-post');
-        Route::post('/validate-equipment-status', [BorrowerController::class, 'validateEquipmentStatus']);
+        Route::get('/borrow-equipment', [TransactionController::class, 'borrowEquipment'])->name('borrow_equipment');
+        Route::post('/borrow-equipment', [TransactionController::class, 'borrowerFormPost']);
+        Route::get('/borrow-details/{code}', [TransactionController::class, 'showBorrowDetails'])->name('borrow_details');
+        Route::post('/borrow-equipment/{id}', [TransactionController::class, 'submitBorrow'])->name('borrow-equipment-post');
+        Route::post('/validate-equipment-status', [TransactionController::class, 'validateEquipmentStatus']);
 
         Route::get('/return-equipment', [PageController::class, 'returnEquipment']);
-        Route::post('/return-equipment', [BorrowerController::class, 'returnEquipment'])->name('return.equipment');
+        Route::post('/return-equipment', [TransactionController::class, 'returnEquipment'])->name('return.equipment');
     });
 
     //----------------------------------------------------------------------------------------------------------------
