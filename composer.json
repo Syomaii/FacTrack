@@ -9,7 +9,11 @@
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.5",
+<<<<<<< HEAD
         "maatwebsite/excel": "^1.1",
+=======
+        "maatwebsite/excel": "^3.1",
+>>>>>>> e45afc819a0225225b9fb6611cf9750f79645f00
         "simplesoftwareio/simple-qrcode": "^4.2"
     },
     "require-dev": {

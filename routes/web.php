@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\BorrowerController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\FacilityController;
+use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\QRCodeController;
@@ -24,7 +25,7 @@ Route::get('/error401', [PageController::class, 'error401']);
 Route::get('/error404', [PageController::class, 'error404']);
 
 
-//PageController
+
 Route::middleware(['guest'])->group(function () {
     Route::post('/', [UserController::class, 'loginUser'])->name('login.post');
     Route::get('/', [PageController::class,'login'])->name('login');     
@@ -33,10 +34,13 @@ Route::middleware(['guest'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+
     Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     Route::get('/profile/{id}', [PageController::class, 'profile'])->name('profile');
     Route::put('/profile/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
+
+    //---------------------------------------Facility Manager and Admin -----------------------------------------------
 
     Route::middleware(['checkRole:admin,facility manager'])->group(function () {
         Route::get('/users', [PageController::class, 'users'])->name('users');
@@ -44,7 +48,17 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/add-user', [UserController::class, 'addUserPost'])->name('addUserPost');
         Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->name('change_password');
         Route::get('/facility-equipment/{id}', [PageController::class, 'facilityEquipments'])->name('facility_equipment');
+        
+        //example only
+        Route::get('/students', [PageController::class, 'students']);
+        Route::post('/students', [FileUploadController::class, 'importStudents'])->name('import.file');
     });
+    
+    //----------------------------------------------------------------------------------------------------------------
+
+
+    //-------------------------------------------------- Admin -------------------------------------------------------
+
 
     Route::middleware(['checkRole:admin'])->group(function () {
         Route::get('/offices', [PageController::class, 'offices'])->name('offices');
@@ -55,7 +69,11 @@ Route::middleware(['auth'])->group(function () {
     });
     // Route::get('/users', [PageController::class, 'users']);
 
-    //facility manager
+    //----------------------------------------------------------------------------------------------------------------
+
+
+    //---------------------------------------Facility Manager and Operator -----------------------------------------------
+    
     Route::middleware(['checkRole:operator,facility manager'])->group(function () {
 
         //Page Controller
@@ -75,11 +93,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/qr-code/{code}', [QRCodeController::class, 'index'])->name('qr_code');
         
         //BorrowerController
-        // Route::get('/borrow-equipment', [BorrowerController::class, 'borrowEquipment'])->name('borrow-equipment');
-        // Route::post('/borrow-equipment', [BorrowerController::class, 'borrowerFormPost']);
-        // Route::post('/borrow-submit/{id}', [BorrowerController::class, 'submitBorrow'])->name('borrow.submit');
-        // Route::get('/borrow-details/{code}', [BorrowerController::class, 'showDetails'])->name('borrow_details');
+        // Route::get('/borrow-equipment', [TransactionController::class, 'borrowEquipment'])->name('borrow-equipment');
+        // Route::post('/borrow-equipment', [TransactionController::class, 'borrowerFormPost']);
+        // Route::post('/borrow-submit/{id}', [TransactionController::class, 'submitBorrow'])->name('borrow.submit');
+        // Route::get('/borrow-details/{code}', [TransactionController::class, 'showDetails'])->name('borrow_details');
 
+<<<<<<< HEAD
         Route::get('/borrow-equipment', [BorrowerController::class, 'borrowEquipment'])->name('borrow_equipment');
         Route::post('/borrow-equipment', [BorrowerController::class, 'borrowerFormPost']);
         Route::get('/borrow-details/{code}', [BorrowerController::class, 'showBorrowDetails'])->name('borrow_details');
@@ -90,13 +109,22 @@ Route::middleware(['auth'])->group(function () {
         // Route::post('/maintenance-equipment-post/{id}', [PageController::class, 'maintenancePost'])->name('maintenance-equipment-post');
 
         Route::post('/validate-equipment-status', [BorrowerController::class, 'validateEquipmentStatus']);
+=======
+        Route::get('/borrow-equipment', [TransactionController::class, 'borrowEquipment'])->name('borrow_equipment');
+        Route::post('/borrow-equipment', [TransactionController::class, 'borrowerFormPost']);
+        Route::get('/borrow-details/{code}', [TransactionController::class, 'showBorrowDetails'])->name('borrow_details');
+        Route::post('/borrow-equipment/{id}', [TransactionController::class, 'submitBorrow'])->name('borrow-equipment-post');
+        Route::post('/validate-equipment-status', [TransactionController::class, 'validateEquipmentStatus']);
+>>>>>>> e45afc819a0225225b9fb6611cf9750f79645f00
 
         Route::get('/return-equipment', [PageController::class, 'returnEquipment']);
-        Route::post('/return-equipment', [BorrowerController::class, 'returnEquipment'])->name('return.equipment');
+        Route::post('/return-equipment', [TransactionController::class, 'returnEquipment'])->name('return.equipment');
     });
 
+    //----------------------------------------------------------------------------------------------------------------
 
-    //Operators
+    //---------------------------------------Facility Manager---------------------------------------------------------
+
     Route::middleware(['checkRole:facility manager'])->group(function () {
         Route::get('/generatedqr', [PageController::class, 'generatedQr']);
         Route::get('/facilities', [PageController::class, 'facilities'])->name('facilities');
@@ -110,6 +138,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/add-facility', [FacilityController::class, 'addFacility'])->name('addFacility');
         Route::put('/update-facility/{id}', [FacilityController::class, 'updateFacility'])->name('updateFacility');
     });
+
+    //-----------------------------------------------------------------------------------------------------------------
     
 });
 

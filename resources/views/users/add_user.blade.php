@@ -184,6 +184,7 @@
                                             </div>
                                             <small class="text-danger">{{ $errors->first('designation') }}</small>
                                         </div>
+
                                         <div class="form-group mb-3 col-md-6">
                                             <label for="type"
                                                 class="form-label fw-semibold text-primary-light text-sm mb-8">Type</label>
@@ -197,12 +198,12 @@
                                                     <option value="" disabled selected>Select a role</option>
                                                     @if ($userType === 'admin')
                                                         <option value="facility manager"
-                                                            {{ old('type') == 'Facility manager' ? 'selected' : '' }}>
-                                                            Facility manager</option>
+                                                            {{ old('type') == 'Facility manager' ? 'selected' : '' }}>Facility Manager
+                                                        </option>
                                                     @elseif($userType === 'facility manager')
                                                         <option value="facility manager"
-                                                            {{ old('type') == 'Facility manager' ? 'selected' : '' }}>
-                                                            Facility manager</option>
+                                                            {{ old('type') == 'Facility manager' ? 'selected' : '' }}>Facility Manager
+                                                        </option>
                                                         <option value="operator"
                                                             {{ old('type') == 'Operator' ? 'selected' : '' }}>Operator
                                                         </option>
@@ -215,29 +216,30 @@
 
                                     @if ($userType === 'admin')
                                         <!-- Office/Department Radio Buttons -->
-                                        <div class="form-group mb-3 col-md-12">
-                                            <label class="fw-semibold text-primary-light text-sm mb-8">Select
-                                                Type</label>
-                                            <div class="form-check">
-                                                <input type="radio" id="office" name="select_type"
-                                                    value="office" class="form-check-input" checked>
-                                                <label for="office" class="form-check-label">
-                                                    <iconify-icon icon="mingcute:tool-fill"
-                                                        class="icon text-lg"></iconify-icon>
-                                                    Office
-                                                </label>
+                                        <div class="form-group mb-3 col-md-6">
+                                            <label class="fw-semibold text-primary-light text-sm mb-2">Select Type</label>
+                                            <div class="row g-6">
+                                                <div class="col-md-6 gap-10">
+                                                    <div class="form-check d-flex align-items-center gap-2">
+                                                        <input type="radio" id="office" name="select_type" value="office" class="form-check-input" checked>
+                                                        <label for="office" class="form-check-label d-flex align-items-center gap-2">
+                                                            <iconify-icon icon="mingcute:tool-fill" class="icon text-lg"></iconify-icon>
+                                                            Office
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-check d-flex align-items-center gap-2">
+                                                        <input type="radio" id="department" name="select_type" value="department" class="form-check-input">
+                                                        <label for="department" class="form-check-label d-flex align-items-center gap-2">
+                                                            <iconify-icon icon="mingcute:home-6-fill" class="icon text-lg"></iconify-icon>
+                                                            Department
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="form-check">
-                                                <input type="radio" id="department" name="select_type"
-                                                    value="department" class="form-check-input">
-                                                <label for="department" class="form-check-label">
-                                                    <iconify-icon icon="mingcute:home-6-fill"
-                                                        class="icon text-lg"></iconify-icon>
-                                                    Department
-                                                </label>
-                                            </div>
-                                        </div>
-
+                                        </div>              
+                                        
                                         <!-- Office Dropdown -->
                                         <div class="form-group mb-3 col-md-12" id="office-dropdown">
                                             <label for="office_id"

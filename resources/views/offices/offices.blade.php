@@ -53,19 +53,36 @@
         @endif
 
         <!-- Search Bar -->
-        <div class="input-group mb-3">
-            <input type="text" id="officeSearch" class="form-control" placeholder="Search Offices"
-                aria-label="Search Offices">
-            <button class="btn btn-primary" type="button"><iconify-icon icon="ic:baseline-search"
-                    class="icon"></iconify-icon></button>
-        </div>
+       
+        <div class="d-flex justify-content-between align-items-center mb-24">
+            <div class="input-group" style="max-width: 650px;">
+                <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
+                    placeholder="Search equipment...">
+                <button class="btn btn-primary" type="button"><iconify-icon icon="ic:baseline-search"
+                        class="icon"></iconify-icon></button>
+            </div>
+        @else
+            <div class="d-flex justify-content-between align-items-center mb-24">
+                <div class="input-group" style="max-width: 1250px;">
+                    <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
+                        placeholder="Search equipment...">
+                    <button class="btn btn-primary" type="button"><iconify-icon icon="ic:baseline-search"
+                            class="icon"></iconify-icon></button>
+                </div>
 
-        <a href="#"
-            class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2 mb-3"
-            style="width: 170px" data-bs-toggle="modal" data-bs-target="#addOfficeModal">
-            <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
-            Add New Office
-        </a>
+
+        <div class="d-flex gap-3">
+            @if (auth()->user()->type === 'facility manager')
+                <button type="button" class="btn btn-warning text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                    id="updateFacilityBtn">Update Facility</button>
+                <button type="button" class="btn btn-danger text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                    id="deleteFacilityBtn">Delete Facility</button>
+                <a href="/add-equipment/{{ $facility->id }}">
+                    <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                        id="addEquipmentBtn">Add Equipment</button>
+                </a>
+            @endif
+        </div>
 
         <!-- Add Office Modal -->
         <div class="modal fade" id="addOfficeModal" tabindex="-1" aria-labelledby="addOfficeModalLabel"
