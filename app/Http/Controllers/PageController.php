@@ -21,24 +21,19 @@ class PageController extends Controller
 
     public function dashboard()
     {
-        $users = User::with('designation')->get(); 
-        
-        $recentUsers = User::where('type', '!=', 'admin')->orderBy('created_at', 'desc') 
-                           ->take(5) 
-                           ->get();
-    
-        // Pass data to the view
+        // Get recent users excluding admin
+        $recentUsers = User::where('type', '!=', 'admin')
+                        ->orderBy('created_at', 'desc') 
+                        ->take(5) 
+                        ->get();
+
         return view('dashboard', [
             'title' => 'Dashboard',
-            'users' => $users,
             'recentUsers' => $recentUsers, 
             'userCount' => User::count(), 
             'equipmentCount' => Equipment::count(),
         ]);
     }
-    
-
-    
 
     public function facilities(){
 
@@ -54,7 +49,14 @@ class PageController extends Controller
 
     public function users(Request $request)
     {
-        $users = User::with(['designation', 'office'])->where('type', '!=', 'admin')->paginate(10); 
+        // Get the currently logged-in user
+        $loggedInUser = Auth::user();
+
+        // Load users from the same office/department as the logged-in user
+        $users = User::with(['designation', 'office']) // Load relationships
+                    ->where('type', '!=', 'admin') // Exclude admin users
+                    ->where('office_id', $loggedInUser->office_id) // Filter by office ID
+                    ->paginate(10); 
 
         $totalUsers = $users->total();
         $currentPage = $users->currentPage();
