@@ -84,6 +84,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/borrow-equipment', [BorrowerController::class, 'borrowerFormPost']);
         Route::get('/borrow-details/{code}', [BorrowerController::class, 'showBorrowDetails'])->name('borrow_details');
         Route::post('/borrow-equipment/{id}', [BorrowerController::class, 'submitBorrow'])->name('borrow-equipment-post');
+        Route::get('/maintenance-equipment', [PageController::class, 'maintenance'])->name('maintenance-equipment');
+        Route::get('/maintenance-equipment-details/{code}', [PageController::class, 'maintenanceDetails'])->name('maintenance-equipment-details');
+
+        // Route::post('/maintenance-equipment-post/{id}', [PageController::class, 'maintenancePost'])->name('maintenance-equipment-post');
+
         Route::post('/validate-equipment-status', [BorrowerController::class, 'validateEquipmentStatus']);
 
         Route::get('/return-equipment', [PageController::class, 'returnEquipment']);

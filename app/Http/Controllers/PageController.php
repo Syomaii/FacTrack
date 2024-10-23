@@ -180,5 +180,9 @@ class PageController extends Controller
         return view('reports.borrowers_log', compact('borrows'))->with('title', 'Borrowers Details');
     }
 
-    
+    public function maintenance()
+    {
+        // Logic for scanning or displaying equipment in maintenance
+        return view('equipments/maintenance')->with('title', 'Maintenance'); // Load the maintenance view
+    }    
 }

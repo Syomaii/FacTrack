@@ -54,7 +54,6 @@
                         <span>Users</span>
                     </a>
                 </li>
-                <li>
             @endif
 
             @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
@@ -73,18 +72,23 @@
                             </a>
                             <ul class="sidebar-submenu">
                                 <li>
-                                    <a href="/borrow-equipment"><iconify-icon icon="icon-park-outline:hold-interface"
-                                            class="menu-icon"></iconify-icon></i>Borrow equipments</a>
+                                    <a href="/borrow-equipment">
+                                        <iconify-icon icon="icon-park-outline:hold-interface"
+                                            class="menu-icon"></iconify-icon>
+                                        Borrow Equipments
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="/return-equipment"><iconify-icon icon="mdi:box-check-outline"
-                                            class="menu-icon"></iconify-icon></i>Return equipments</a>
+                                    <a href="/return-equipment">
+                                        <iconify-icon icon="mdi:box-check-outline" class="menu-icon"></iconify-icon>
+                                        Return Equipments
+                                    </a>
                                 </li>
                             </ul>
                         </li>
                     </ul>
 
-                    <!-- Maintenance -->
+                    <!-- Maintenance in Sidebar -->
                     <ul class="sidebar-submenu">
                         <li class="dropdown">
                             <a href="javascript:void(0)">
@@ -93,32 +97,30 @@
                             </a>
                             <ul class="sidebar-submenu">
                                 <li>
-                                    <a href="/borrow-equipment"><iconify-icon icon="icon-park-outline:hold-interface"
-                                            class="menu-icon"></iconify-icon></i>Maintenance equipments</a>
-                                </li>
-                                <li>
-                                    <a href="/return-equipment"><iconify-icon icon="mdi:box-check-outline"
-                                            class="menu-icon"></iconify-icon></i>Return equipments</a>
+                                    <a href="{{ route('maintenance-equipment') }}">
+                                        <iconify-icon icon="icon-park-outline:hold-interface"
+                                            class="menu-icon"></iconify-icon>
+                                        Maintenance Equipments
+                                    </a>
                                 </li>
                             </ul>
                         </li>
                     </ul>
+
 
                     <!-- Repair -->
                     <ul class="sidebar-submenu">
                         <li class="dropdown">
                             <a href="javascript:void(0)">
                                 <iconify-icon icon="fe:vector" class="menu-icon"></iconify-icon>
-                                <span>Maintenance</span>
+                                <span>Repair</span>
                             </a>
                             <ul class="sidebar-submenu">
                                 <li>
-                                    <a href="/borrow-equipment"><iconify-icon icon="icon-park-outline:hold-interface"
-                                            class="menu-icon"></iconify-icon></i>Maintenance equipments</a>
-                                </li>
-                                <li>
-                                    <a href="/return-equipment"><iconify-icon icon="mdi:box-check-outline"
-                                            class="menu-icon"></iconify-icon></i>Return equipments</a>
+                                    <a href="/repair-equipment">
+                                        <iconify-icon icon="mdi:box-check-outline" class="menu-icon"></iconify-icon>
+                                        Repair Equipments
+                                    </a>
                                 </li>
                             </ul>
                         </li>
@@ -133,12 +135,18 @@
                             </a>
                             <ul class="sidebar-submenu">
                                 <li>
-                                    <a href="/borrow-equipment"><iconify-icon icon="icon-park-outline:hold-interface"
-                                            class="menu-icon"></iconify-icon></i>Dispose equipments</a>
+                                    <a href="/dispose-equipment">
+                                        <iconify-icon icon="icon-park-outline:hold-interface"
+                                            class="menu-icon"></iconify-icon>
+                                        Dispose Equipments
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="/borrow-equipment"><iconify-icon icon="icon-park-outline:hold-interface"
-                                            class="menu-icon"></iconify-icon></i>Donate equipments</a>
+                                    <a href="/donate-equipment">
+                                        <iconify-icon icon="icon-park-outline:hold-interface"
+                                            class="menu-icon"></iconify-icon>
+                                        Donate Equipments
+                                    </a>
                                 </li>
                             </ul>
                         </li>
@@ -153,16 +161,22 @@
                 </a>
                 <ul class="sidebar-submenu">
                     <li>
-                        <a href="/borrowed-equipments"><iconify-icon icon="mdi:box-clock-outline"
-                                class="menu-icon"></iconify-icon></iconify-icon></i>Borrowed equipments</a>
+                        <a href="/borrowed-equipments">
+                            <iconify-icon icon="mdi:box-clock-outline" class="menu-icon"></iconify-icon>
+                            Borrowed Equipments
+                        </a>
                     </li>
                     <li>
-                        <a href="/maintainanced-equipments"><iconify-icon icon="carbon:calendar-tools"
-                                class="menu-icon"></iconify-icon></i>In maintenance equipments</a>
+                        <a href="/maintainanced-equipments">
+                            <iconify-icon icon="carbon:calendar-tools" class="menu-icon"></iconify-icon>
+                            In Maintenance Equipments
+                        </a>
                     </li>
                     <li>
-                        <a href="/repaired-equipments"><iconify-icon icon="mdi:scheduled-maintenance"
-                                class="menu-icon"></iconify-icon></i>In repair equipments</a>
+                        <a href="/repaired-equipments">
+                            <iconify-icon icon="mdi:scheduled-maintenance" class="menu-icon"></iconify-icon>
+                            In Repair Equipments
+                        </a>
                     </li>
                 </ul>
             </li>
