@@ -68,7 +68,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($borrows as $borrow)
+                            @forelse ($borrows as $borrow)
                                 <tr>
                                     <td>{{ $borrow->user->name }}</td>
                                     <td>{{ $borrow->equipment->name }}</td>
@@ -91,7 +91,11 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="10" class="text-center">No borrows at the moment</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
