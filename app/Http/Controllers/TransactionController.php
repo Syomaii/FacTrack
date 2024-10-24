@@ -154,10 +154,29 @@ class TransactionController extends Controller
 
         return back()->withErrors(['message' => 'Invalid equipment status.']);
     }
+    
 
     
     // ---------------------------------------------------------------------------------------------
 
     // ----------------------------- MAINTENANCE TRANSACTION ---------------------------------------
+
+    public function maintenanceDetails(Request $request, $code)
+    {
+        // Fetch equipment details based on scanned code
+        $equipment = Equipment::where('code', $code)->first();
+
+        // Check if equipment exists
+        if (!$equipment) {
+            return redirect()->back()->withErrors(['error' => 'Equipment not found.']);
+        }
+
+        return view('maintenance_equipment_details', [
+            'equipment' => $equipment,
+            'maintenance_id_no' => $request->maintenance_id_no, 
+            'maintenance_description' => $request->maintenance_description,
+            'maintenance_date' => $request->maintenance_date,
+        ]);
+    }
 
 }

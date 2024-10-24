@@ -54,15 +54,6 @@
                         <span>Users</span>
                     </a>
                 </li>
-<<<<<<< HEAD
-=======
-                <li>
-                    <a href="/students">
-                        <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
-                        <span>Students</span>
-                    </a>
-                </li>
->>>>>>> e45afc819a0225225b9fb6611cf9750f79645f00
             @endif
 
             @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')

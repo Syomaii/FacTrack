@@ -106,12 +106,10 @@
     function success(result) {
         console.log(result);
 
-        // Assuming you pass the maintenance details to the new page
         var maintenance_id_no = $('#maintenance_id_no').val();
         var maintenance_description = $('#maintenance_description').val();
         var maintenance_date = $('#maintenance_date').val();
 
-        // Redirect to the maintenance details page with the equipment code and maintenance data
         window.location.href = "/maintenance-equipment-details/" + result +
             "?maintenance_id_no=" + encodeURIComponent(maintenance_id_no) +
             "&maintenance_description=" + encodeURIComponent(maintenance_description) +
