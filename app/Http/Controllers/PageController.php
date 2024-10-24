@@ -27,7 +27,7 @@ class PageController extends Controller
                         ->take(5) 
                         ->get();
 
-        $users = User::get();
+        $users = User::all(); 
 
         return view('dashboard', [
             'title' => 'Dashboard',
@@ -35,8 +35,10 @@ class PageController extends Controller
             'recentUsers' => $recentUsers, 
             'userCount' => User::count(), 
             'equipmentCount' => Equipment::count(),
+            'users' => $users, // Pass the users variable to the view
         ]);
     }
+
 
     public function facilities(){
 
@@ -184,13 +186,12 @@ class PageController extends Controller
         return view('reports.borrowers_log', compact('borrows'))->with('title', 'Borrowers Details');
     }
 
-    public function students(){
-        return view('imports/students')->with('title', 'Import');
-    }
-
     public function maintenance()
     {
         // Logic for scanning or displaying equipment in maintenance
         return view('equipments/maintenance')->with('title', 'Maintenance'); // Load the maintenance view
-    }  
+    }    
+    public function students(){
+        return view('imports/students')->with('title', 'Import');
+    }
 }

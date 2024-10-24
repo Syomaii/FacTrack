@@ -104,6 +104,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/borrow-equipment', [TransactionController::class, 'borrowerFormPost']);
         Route::get('/borrow-details/{code}', [TransactionController::class, 'showBorrowDetails'])->name('borrow_details');
         Route::post('/borrow-equipment/{id}', [TransactionController::class, 'submitBorrow'])->name('borrow-equipment-post');
+        Route::get('/maintenance-equipment', [PageController::class, 'maintenance'])->name('maintenance-equipment');
+        Route::get('/maintenance-equipment-details/{code}', [TransactionController::class, 'maintenanceDetails'])->name('maintenance-equipment-details');
+
+        // Route::post('/maintenance-equipment-post/{id}', [PageController::class, 'maintenancePost'])->name('maintenance-equipment-post');
+
         Route::post('/validate-equipment-status', [TransactionController::class, 'validateEquipmentStatus']);
 
         Route::get('/return-equipment', [PageController::class, 'returnEquipment']);
