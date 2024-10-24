@@ -54,15 +54,12 @@
                         <span>Users</span>
                     </a>
                 </li>
-<<<<<<< HEAD
-=======
                 <li>
                     <a href="/students">
                         <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
                         <span>Students</span>
                     </a>
                 </li>
->>>>>>> e45afc819a0225225b9fb6611cf9750f79645f00
             @endif
 
             @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
@@ -106,7 +103,7 @@
                             </a>
                             <ul class="sidebar-submenu">
                                 <li>
-                                    <a href="{{ route('maintenance-equipment') }}">
+                                    <a href="#">
                                         <iconify-icon icon="icon-park-outline:hold-interface"
                                             class="menu-icon"></iconify-icon>
                                         Maintenance Equipments
@@ -171,20 +168,32 @@
                 <ul class="sidebar-submenu">
                     <li>
                         <a href="/borrowed-equipments">
-                            <iconify-icon icon="mdi:box-clock-outline" class="menu-icon"></iconify-icon>
+                            <i class="ri-circle-fill circle-icon text-lilac-600 w-auto"></i>
                             Borrowed Equipments
                         </a>
                     </li>
                     <li>
-                        <a href="/maintainanced-equipments">
-                            <iconify-icon icon="carbon:calendar-tools" class="menu-icon"></iconify-icon>
+                        <a href="/maintenanced-equipments">
+                            <i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>
                             In Maintenance Equipments
                         </a>
                     </li>
                     <li>
                         <a href="/repaired-equipments">
-                            <iconify-icon icon="mdi:scheduled-maintenance" class="menu-icon"></iconify-icon>
+                            <i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i>
                             In Repair Equipments
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/donated-equipments">
+                            <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
+                            Donated Equipments
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/disposed-equipments">
+                            <i class="ri-circle-fill circle-icon text-danger-main w-auto"></i>
+                            Disposed Equipments
                         </a>
                     </li>
                 </ul>
