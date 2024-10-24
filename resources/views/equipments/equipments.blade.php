@@ -94,7 +94,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($equipments as $equipment)
+                        @forelse ($equipments as $equipment)
                             <tr>
                                 <td><a href="javascript:void(0)" class="text-primary-600">#{{ $equipment->id }}</a>
                                 </td>
@@ -144,7 +144,11 @@
                                     </form>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="10" class="text-center"><strong>No equipments found from your office/department.</strong></td>
+                            </tr>
+                        @endforelse
 
                     </tbody>
                 </table>
