@@ -86,40 +86,40 @@
             </div>
         </div>
 
-    </div>
 
-    <div class="row gy-4" id="equipmentList">
-        @if ($equipments->isNotEmpty())
-            @foreach ($equipments as $facEquipment)
-                <div class="col-xxl-3 col-sm-6 equipment-card">
-                    <div class="card h-100 radius-12 text-center">
-                        <div class="card-body p-24">
-                            <div class="d-flex flex-column align-items-center">
-                                <img src="{{ asset($facEquipment->image) }}" alt="{{ $facEquipment->name }}"
-                                    class="img-fluid rounded mb-3 max-img-size" />
-                                <h6 class="mb-8">{{ $facEquipment->name }}</h6>
-                                @if (auth()->user()->type === 'facility manager')
-                                    <div class="d-flex justify-content-center gap-2">
-                                        <a href="/equipment-details/{{ $facEquipment->code }}"
-                                            class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
-                                            View Equipment <iconify-icon icon="iconamoon:arrow-right-2"
-                                                class="text-xl"></iconify-icon>
-                                        </a>
-                                    </div>
-                                @endif
+
+        <div class="row gy-4" id="equipmentList">
+            @if ($equipments->isNotEmpty())
+                @foreach ($equipments as $facEquipment)
+                    <div class="col-xxl-3 col-sm-6 equipment-card">
+                        <div class="card h-100 radius-12 text-center">
+                            <div class="card-body p-24">
+                                <div class="d-flex flex-column align-items-center">
+                                    <img src="{{ asset($facEquipment->image) }}" alt="{{ $facEquipment->name }}"
+                                        class="img-fluid rounded mb-3 max-img-size" />
+                                    <h6 class="mb-8">{{ $facEquipment->name }}</h6>
+                                    @if (auth()->user()->type === 'facility manager')
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <a href="/equipment-details/{{ $facEquipment->code }}"
+                                                class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
+                                                View Equipment <iconify-icon icon="iconamoon:arrow-right-2"
+                                                    class="text-xl"></iconify-icon>
+                                            </a>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
+                @endforeach
+            @else
+                <div class="d-flex justify-content-center align-items-center" style="height: 55vh; width: 100vw;">
+                    <strong class="text-center p-3" style="font-size: 20px">There are no equipments yet in this
+                        facility.</strong>
                 </div>
-            @endforeach
-        @else
-            <div class="d-flex justify-content-center align-items-center" style="height: 55vh; width: 100vw;">
-                <strong class="text-center p-3" style="font-size: 20px">There are no equipments yet in this
-                    facility.</strong>
-            </div>
 
-        @endif
-    </div>
+            @endif
+        </div>
 
     </div>
 
