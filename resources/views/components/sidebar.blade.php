@@ -168,31 +168,31 @@
                 <ul class="sidebar-submenu">
                     <li>
                         <a href="/borrowed-equipments">
-                            <i class="ri-circle-fill circle-icon text-lilac-600 w-auto"></i>
+                            <i class="ri-circle-fill circle-icon text-lilac-600 w-auto" class="menu-icon"></i> 
                             Borrowed Equipments
                         </a>
                     </li>
                     <li>
                         <a href="/maintenanced-equipments">
-                            <i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>
+                            <i class="ri-circle-fill circle-icon text-warning-main w-auto" class="menu-icon"></i>
                             In Maintenance Equipments
                         </a>
                     </li>
                     <li>
                         <a href="/repaired-equipments">
-                            <i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i>
+                            <i class="ri-circle-fill circle-icon text-primary-600 w-auto" class="menu-icon"></i>
                             In Repair Equipments
                         </a>
                     </li>
                     <li>
                         <a href="/donated-equipments">
-                            <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
+                            <i class="ri-circle-fill circle-icon text-info-main w-auto" class="menu-icon"></i>
                             Donated Equipments
                         </a>
                     </li>
                     <li>
                         <a href="/disposed-equipments">
-                            <i class="ri-circle-fill circle-icon text-danger-main w-auto"></i>
+                            <i class="ri-circle-fill circle-icon text-danger-main w-auto" class="menu-icon"></i>
                             Disposed Equipments
                         </a>
                     </li>
