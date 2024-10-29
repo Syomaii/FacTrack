@@ -65,14 +65,17 @@
                                 <th scope="col">Borrow Date</th>
                                 <th scope="col">Return Date</th>
                                 <th scope="col">Status</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($borrows as $borrow)
                                 <tr>
-                                    <td>{{ $borrow->user->name }}</td>
-                                    <td>{{ $borrow->equipment->name }}</td>
-                                    <td>{{ $borrow->borrow_date->format('Y-m-d') }}</td>
+                                    <td>{{ $borrow->borrowers_id_no }}</td>
+                                    <td>{{ Str::title($borrow->borrowers_name) }}</td>
+                                    <td>{{ Str::title($borrow->department) }}</td>
+                                    <td>{{ Str::title($borrow->equipment->name) }}</td>
+                                    <td>{{ $borrow->borrowed_date }}</td>
                                     <td>{{ $borrow->return_date ? $borrow->return_date->format('Y-m-d') : 'Not Returned' }}
                                     </td>
                                     <td>{{ $borrow->status }}</td>
