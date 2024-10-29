@@ -93,6 +93,7 @@ class TransactionController extends Controller
             'purpose' => $validatedData['purpose'],
             'user_id' => auth()->user()->id,
             'borrowed_date' => now(),
+            'remarks' => 'Borrowed',
             'expected_returned_date' => $validatedData['expected_returned_date'],   // Save expected_returned_date
             'equipment_id' => $equipment->id,
             'status' => 'Borrowed',
