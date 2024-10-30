@@ -79,7 +79,7 @@ Route::middleware(['auth'])->group(function () {
         //Page Controller
         Route::get('/scan-code', [PageController::class, 'scanCode']);
         Route::get('/equipments', [PageController::class, 'equipments'])->name('equipments');
-        Route::get('/borrowed-equipments', [ReportController::class, 'borrowedEquipmentReports']);
+        Route::get('/borrowed-equipments', [ReportController::class, 'borrowedEquipmentReports'])->name('borrowed_equipments');
         Route::get('/maintenanced-equipments', [ReportController::class, 'maintenancedEquipmentReports']);
         Route::get('/repaired-equipments', [ReportController::class, 'repairedEquipmentReports']);
         Route::get('/donated-equipments', [ReportController::class, 'donatedEquipmentReports']);

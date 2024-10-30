@@ -52,4 +52,11 @@ class Equipment extends Model
     {
         return $this->hasMany(Timeline::class);
     }
+
+    // Equipment.php
+    public function borrows()
+    {
+        return $this->hasMany(Borrower::class, 'equipment_id');
+    }
+
 }
