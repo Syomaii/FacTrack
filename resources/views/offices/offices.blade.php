@@ -56,20 +56,18 @@
        
         <div class="d-flex justify-content-between align-items-center mb-24">
             <div class="input-group" style="max-width: 650px;">
-                <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
-                    placeholder="Search equipment...">
-                <button class="btn btn-primary" type="button"><iconify-icon icon="ic:baseline-search"
-                        class="icon"></iconify-icon></button>
+                <input type="text" id="officeSearch" class="form-control" placeholder="Search Facilities" aria-label="Search Facilities">
+                <button class="btn btn-primary" type="button">
+                    <iconify-icon icon="ic:baseline-search" class="icon"></iconify-icon>
+                </button>
             </div>
-        @else
-            <div class="d-flex justify-content-between align-items-center mb-24">
-                <div class="input-group" style="max-width: 1250px;">
-                    <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
-                        placeholder="Search equipment...">
-                    <button class="btn btn-primary" type="button"><iconify-icon icon="ic:baseline-search"
-                            class="icon"></iconify-icon></button>
-                </div>
-
+        
+            <div class="d-flex gap-3 ms-3"> <!-- Added ms-3 for left margin -->
+                <a href="#" style="width: 170px" data-bs-toggle="modal" data-bs-target="#addOfficeModal">
+                    <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11">Add Office</button>
+                </a>
+            </div>
+        </div>
 
         <div class="d-flex gap-3">
             @if (auth()->user()->type === 'facility manager')

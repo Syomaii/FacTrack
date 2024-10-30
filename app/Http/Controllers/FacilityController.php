@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Equipment;
 use App\Models\Facility;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Facade;
 
 class FacilityController extends Controller
 {
@@ -34,10 +35,16 @@ class FacilityController extends Controller
 
     public function updateFacility(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required',
-            'description' => 'required',
-        ]);
+        $facility = Facility::find($request->id);
+        if($facility->name === $request->name){
+            $data = $request->validate([
+                'name' => 'required',
+            ]);
+        }else{
+            $data = $request->validate([
+                'name' => 'required|unique:offices,name',
+            ]);
+        }
 
         $facility = Facility::find($request->id);
         if ($facility) {

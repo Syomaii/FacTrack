@@ -46,7 +46,7 @@
                             <iconify-icon icon="solar:lock-password-outline"></iconify-icon>
                         </span>
                         <input type="password" class="form-control h-56-px bg-neutral-50 radius-12" id="your-password"
-                            name="password" placeholder="Password" value="{{ Cookie::get('password') }}" required
+                            name="password" placeholder="Password" required
                             autocomplete="current-password">
                     </div>
                     @error('password')

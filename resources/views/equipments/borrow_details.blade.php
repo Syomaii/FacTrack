@@ -43,6 +43,8 @@
                                     @csrf
                                     <input type="hidden" name="borrowers_name" value="{{ $borrowers_name }}">
                                     <input type="hidden" name="borrowers_id_no" value="{{ $borrowers_id_no }}">
+                                    <input type="hidden" name="department" value="{{ $department }}">
+                                    <input type="hidden" name="purpose" value="{{ $purpose }}">
                                     <input type="hidden" name="expected_returned_date"
                                         value="{{ $expected_return_date }}">
                                     <button type="submit" class="btn btn-primary px-5 py-2">Submit</button>

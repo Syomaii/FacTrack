@@ -38,17 +38,20 @@ class OfficeController extends Controller
         return redirect('/offices')->with('addOfficeSuccessfully', 'Office added successfully.');
     }
     
-    
-
-
     public function updateOffice(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|unique:offices,name',
-            'description' => 'nullable',
-        ]);
-
         $office = Office::find($request->id);
+        if($office->name === $request->name){
+            $data = $request->validate([
+                'name' => 'required',
+            ]);
+        }else{
+            $data = $request->validate([
+                'name' => 'required|unique:offices,name',
+            ]);
+        }
+        
+
         if ($office) {
             $office->update($data);
             return redirect()->back()->with('updateOfficeSuccess', 'Office updated successfully!');

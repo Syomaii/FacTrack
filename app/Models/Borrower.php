@@ -20,6 +20,17 @@ class Borrower extends Model
         'borrowed_date',
         'expected_returned_date',
         'returned_date',
+        'remarks',
         'status',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function equipment()
+    {
+        return $this->belongsTo(Equipment::class);
+    }
 }

@@ -57,11 +57,17 @@ class PageController extends Controller
         // Get the currently logged-in user
         $loggedInUser = Auth::user();
 
-        // Load users from the same office/department as the logged-in user
-        $users = User::with(['designation', 'office']) // Load relationships
+
+        if($loggedInUser->type === 'admin'){
+            $users = User::with(['designation', 'office']) // Load relationships
+                    ->where('type', '!=', 'admin') // Filter by office ID
+                    ->paginate(10); 
+        }else{
+            $users = User::with(['designation', 'office']) // Load relationships
                     ->where('type', '!=', 'admin') // Exclude admin users
                     ->where('office_id', $loggedInUser->office_id) // Filter by office ID
                     ->paginate(10); 
+        }
 
         $totalUsers = $users->total();
         $currentPage = $users->currentPage();

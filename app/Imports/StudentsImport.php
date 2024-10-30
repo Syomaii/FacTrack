@@ -14,9 +14,9 @@ class StudentsImport implements ToModel
     * @return \Illuminate\Database\Eloquent\Model|null
     */
     public function model(array $row)
-    {
+    {   
         $this->current++;
-        if($this->current > 5){
+        if($this->current > 1){
             $count = Students::where('email', '=', $row[7])->count();
             if(empty($count)){
                 $student = new Students;

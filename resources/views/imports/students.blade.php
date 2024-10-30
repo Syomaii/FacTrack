@@ -6,7 +6,7 @@
     <div class="dashboard-main-body">
 
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
-            <h6 class="fw-semibold mb-0">Import File for Students</h6>
+            <h6 class="fw-semibold mb-0">Students</h6>
             <ul class="d-flex align-items-center gap-2">
                 <li class="fw-medium">
                     <a href="{{ route('dashboard') }}" class="d-flex align-items-center gap-1 hover-text-primary">
