@@ -74,26 +74,27 @@
             var purpose = $('#purpose').val();
             var expected_return_date = $('#expected_return_date').val();
 
-        if(borrowers_name != " " && borrowers_id_no != " " && expected_return_date != " "){
-            window.location.href = "/borrow-details/" + result + 
-                "?borrowers_id_no=" + encodeURIComponent(borrowers_id_no) + 
-                "&borrowers_name=" + encodeURIComponent(borrowers_name) + 
-                "&department=" + encodeURIComponent(department) + 
-                "&purpose=" + encodeURIComponent(purpose) + 
-                "&expected_return_date=" + encodeURIComponent(expected_return_date);
-        }else{
-            window.location.href = "/borrow-equipment";
-        }    
+            if (borrowers_name != " " && borrowers_id_no != " " && expected_return_date != " ") {
+                window.location.href = "/borrow-details/" + result +
+                    "?borrowers_id_no=" + encodeURIComponent(borrowers_id_no) +
+                    "&borrowers_name=" + encodeURIComponent(borrowers_name) +
+                    "&department=" + encodeURIComponent(department) +
+                    "&purpose=" + encodeURIComponent(purpose) +
+                    "&expected_return_date=" + encodeURIComponent(expected_return_date);
+            } else {
+                window.location.href = "/borrow-equipment";
+            }
             scanner.clear();
             $('#scanModal').modal('close');
         }
+
         function error(err) {
             console.log(err);
         }
     </script>
 @endif
 
-@if(url()->current() == url('return-equipment'))
+@if (url()->current() == url('return-equipment'))
     <script src="/assets/js/lib/html5-qrcode.min.js"></script>
     <script>
         const scanner = new Html5QrcodeScanner('return', {
@@ -113,6 +114,7 @@
             $('#scanId').submit();
             scanner.clear();
         }
+
         function error(err) {
             console.log(err);
         }
@@ -133,6 +135,8 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
 </body>
 
 </html>
