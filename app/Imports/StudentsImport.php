@@ -3,11 +3,27 @@
 namespace App\Imports;
 
 use App\Models\Students;
+use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\SkipsErrors;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\SkipsOnError;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
-class StudentsImport implements ToModel
+class StudentsImport implements 
+    ToModel, 
+    WithHeadingRow, 
+    SkipsOnError, 
+    WithValidation, 
+    WithBatchInserts, 
+    WithChunkReading+
 {
-    private $current = 0;
+    use Importable, 
+        SkipsErrors;
     /**
     * @param array $row
     *
@@ -15,20 +31,31 @@ class StudentsImport implements ToModel
     */
     public function model(array $row)
     {   
-        $this->current++;
-        if($this->current > 1){
-            $count = Students::where('email', '=', $row[7])->count();
-            if(empty($count)){
-                $student = new Students;
-                $student->id_no = $row[1];
-                $student->firstname = $row[3];
-                $student->lastname = $row[2];
-                $student->gender = $row[5];
-                $student->email = $row[7];
-                $student->course = $row[4];
-                $student->department = "College of Computer Studies";
-                $student->save();
-            }
-        }
+        return new Students([
+            'id_no' => $row[trim("ID No.")] ?? null,
+            'firstname' => $row[trim("First Name")] ?? null,
+            'lastname' => $row[trim("Last Name")] ?? null,
+            'gender' => $row[trim("Gender")] ?? null,
+            'email' => $row[trim("Email")] ?? null,
+            'course' => $row[trim("Course / Year")] ?? null,
+            'department' => "College of Computer Studies",
+        ]);
+    }
+    
+    public function rules(): array
+    {
+        return [
+            '*.email' => ['email', 'unique:students,email']
+        ];
+    }
+
+    public function batchSize(): int
+    {
+        return 1000;
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;    
     }
 }
