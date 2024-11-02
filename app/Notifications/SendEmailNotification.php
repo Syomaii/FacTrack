@@ -36,12 +36,26 @@ class SendEmailNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        if ($this->details['type'] === 'reset') {
+            return $this->toResetPasswordMail($notifiable);
+        }
+        
         return (new MailMessage)
                     ->subject('New User Verification')
                     ->greeting('Good Day!')
                     ->line('Please click the link to change your password')
                     ->action('Change my password', 'http://localhost:8000')
                     ->line('Thank You! ');
+    }
+
+    public function toResetPasswordMail(object $notifiable): MailMessage
+    {
+        return (new MailMessage)
+                    ->subject('Password Reset Request')
+                    ->greeting('Hello!')
+                    ->line('An admin has reset your password. Click the link below to set a new password.')
+                    ->action('Reset My Password', url('/password/reset'))
+                    ->line('Thank you for using our application!');
     }
 
     /**

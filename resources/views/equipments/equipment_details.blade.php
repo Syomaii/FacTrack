@@ -9,15 +9,22 @@
             <h6 class="fw-semibold mb-0">Equipment Details</h6>
             <ul class="d-flex align-items-center gap-2">
                 <li class="fw-medium">
-                    <a href="index.html" class="d-flex align-items-center gap-1 hover-text-primary">
+                    <a href="/dashboard" class="d-flex align-items-center gap-1 hover-text-primary">
                         <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
                         Dashboard
                     </a>
                 </li>
                 <li>-</li>
-                <li class="fw-medium">Equipment</li>
-                <li>-</li>
-                <li class="fw-medium">Equipment Detail</li>
+                @if (auth()->user()->type != 'admin')
+                    <li class="fw-medium">
+                        <a href="/equipments" class="d-flex align-items-center gap-1 hover-text-primary">
+                            <iconify-icon class="icon text-lg"></iconify-icon>
+                            Equipments
+                        </a>
+                    </li>
+                    <li>-</li>
+                @endif
+                <li class="fw-medium">Equipment Details</li>
                 <li>-</li>
                 <li class="fw-medium">{{ $equipments->name }}</li>
             </ul>
@@ -61,27 +68,31 @@
                         </div>
                     </div>
 
-                    <div class="mt-4">
-                        <a href="javascript:void(0)"
-                            class="btn btn-success text-base radius-8 px-20 py-11 edit-equipment"
-                            data-id="{{ $equipments->id }}" data-name="{{ $equipments->name }}"
-                            data-description="{{ $equipments->description }}"
-                            data-acquired_date="{{ $equipments->acquired_date }}"
-                            data-status="{{ $equipments->status }}" data-facility="{{ $equipments->facility->name }}"
-                            data-brand="{{ $equipments->brand }}" data-serial_no="{{ $equipments->serial_no }}">Edit
-                            Equipment
-                        </a>
-                        <a href="javascript:void(0)"
-                            class="btn btn-danger text-base radius-8 px-20 py-11 delete-equipment"
-                            data-id="{{ $equipments->id }}">Delete Equipment</a>
+                    @if (auth()->user()->type === 'facility manager')
+                        <div class="mt-4">
+                            <a href="javascript:void(0)"
+                                class="btn btn-success text-base radius-8 px-20 py-11 edit-equipment"
+                                data-id="{{ $equipments->id }}" data-name="{{ $equipments->name }}"
+                                data-description="{{ $equipments->description }}"
+                                data-acquired_date="{{ $equipments->acquired_date }}"
+                                data-status="{{ $equipments->status }}"
+                                data-facility="{{ $equipments->facility->name }}"
+                                data-brand="{{ $equipments->brand }}"
+                                data-serial_no="{{ $equipments->serial_no }}">Edit
+                                Equipment
+                            </a>
+                            <a href="javascript:void(0)"
+                                class="btn btn-danger text-base radius-8 px-20 py-11 delete-equipment"
+                                data-id="{{ $equipments->id }}">Delete Equipment</a>
 
-                        <form id="delete-form-{{ $equipments->id }}"
-                            action="{{ route('delete_equipment', $equipments->id) }}" method="POST"
-                            style="display: none;">
-                            @csrf
-                            @method('DELETE')
-                        </form>
-                    </div>
+                            <form id="delete-form-{{ $equipments->id }}"
+                                action="{{ route('delete_equipment', $equipments->id) }}" method="POST"
+                                style="display: none;">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

@@ -40,11 +40,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/{id}', [PageController::class, 'profile'])->name('profile');
     Route::put('/profile/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
 
+ //---------------------------------------Operator, Facility Manager and Admin -----------------------------------------------
+
+    Route::middleware(['checkRole:admin,facility manager, operator'])->group(function (){
+        Route::get('/equipment-details/{code}', [PageController::class, 'equipmentDetails']);
+
+    });
+
+
     //---------------------------------------Facility Manager and Admin -----------------------------------------------
 
     Route::middleware(['checkRole:admin,facility manager'])->group(function () {
         Route::get('/users', [PageController::class, 'users'])->name('users');
         Route::get('/add-user', [PageController::class, 'addUser'])->name('add-user');
+        Route::get('/search-user', [UserController::class, 'searchUser'])->name('search-user');
         Route::post('/add-user', [UserController::class, 'addUserPost'])->name('addUserPost');
         Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->name('change_password');
         Route::get('/facility-equipment/{id}', [PageController::class, 'facilityEquipments'])->name('facility_equipment');
@@ -66,6 +75,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/add-office', [OfficeController::class, 'addOffice'])->name('addOffice');
         Route::put('/update-office/{id}', [OfficeController::class, 'updateOffice'])->name('updateOffice');
         Route::get('/office/{id}', [OfficeController::class, 'officeFacilities'])->name('officeFacilities');
+        Route::post('/users/{user}/reset-password', [UserController::class, 'resetUserPassword'])->name('users.reset_password');
     });
     // Route::get('/users', [PageController::class, 'users']);
 
@@ -85,7 +95,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/repaired-equipments', [ReportController::class, 'repairedEquipmentReports']);
         Route::get('/donated-equipments', [ReportController::class, 'donatedEquipmentReports']);
         Route::get('/disposed-equipments', [ReportController::class, 'disposedEquipmentReports']);
-        Route::get('/equipment-details/{code}', [PageController::class, 'equipmentDetails']);
         Route::get('/borrowers-log', [PageController::class, 'borrowersLog'])->name('borrowersLog');
         // Route::get('/product-details/{id}', [PageController::class, 'productDetails'])->name('product.details');
         

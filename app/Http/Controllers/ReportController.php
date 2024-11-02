@@ -74,9 +74,6 @@ class ReportController extends Controller
         }
     }
     
-
-     
-
     public function maintenancedEquipmentReports(){
         return view('reports/maintenanced_equipments')->with('title', 'Maintained Equipments');
     }

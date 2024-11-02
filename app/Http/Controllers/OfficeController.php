@@ -41,13 +41,18 @@ class OfficeController extends Controller
     public function updateOffice(Request $request)
     {
         $office = Office::find($request->id);
+        
         if($office->name === $request->name){
             $data = $request->validate([
                 'name' => 'required',
+                'description' => '',
+                'type' => ''
             ]);
         }else{
             $data = $request->validate([
                 'name' => 'required|unique:offices,name',
+                'description' => '',
+                'type' => ''
             ]);
         }
         
