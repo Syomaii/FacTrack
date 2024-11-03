@@ -20,6 +20,7 @@ return new class extends Migration
             $table->dateTime('maintained_date');
             $table->dateTime('returned_date')->nullable();
             $table->string('remarks', 255);
+            $table->string('issue', 255);
             $table->string('status', 50);
             $table->timestamps();
 

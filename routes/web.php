@@ -60,6 +60,9 @@ Route::middleware(['auth'])->group(function () {
         
         //example only
         Route::get('/students', [PageController::class, 'students']);
+        Route::get('/view-department', [UserController::class, 'viewDepartment'])->name('view-department');
+        Route::get('/department/{department}/students', [UserController::class, 'viewDepartmentStudents'])->name('view-department-students');
+        Route::get('/search-student', [UserController::class, 'search'])->name('search-student');
         Route::post('/students', [FileUploadController::class, 'importStudents'])->name('import.file');
     });
     
