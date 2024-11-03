@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Borrower;
 use App\Models\Equipment;
+use App\Models\Students;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -14,6 +15,16 @@ class TransactionController extends Controller
     public function borrowEquipment()
     {
         return view('transaction/borrow_equipments')->with('title', 'Borrow Equipment');
+    }
+
+    public function searchStudents(Request $request)
+    {
+        $search = $request->input('search');
+        $students = Students::where('id_no', 'like', "%{$search}%")
+                            ->orWhere('firstname', 'like', "%{$search}%")
+                            ->get(['id_no', 'firstname', 'lastname', 'department']); // Select specific columns
+
+        return response()->json($students);
     }
 
     public function borrowerFormPost(Request $request)
