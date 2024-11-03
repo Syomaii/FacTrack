@@ -1,4 +1,23 @@
 @include('templates.header')
+<style>
+    .suggestions-list {
+        position: absolute;
+        border: 1px solid #ddd;
+        background: #fff;
+        width: 100%;
+        max-height: 150px;
+        overflow-y: auto;
+        z-index: 1000;
+    }
+    .suggestion-item {
+        padding: 8px;
+        cursor: pointer;
+    }
+    .suggestion-item:hover {
+        background-color: #f0f0f0;
+    }
+
+</style>
 <x-sidebar />
 
 <main class="dashboard-main">
@@ -46,15 +65,13 @@
                                     <input type="hidden" name="borrower_code" id="borrower_code">
                                     
                                     <!-- Borrower's ID Number -->
-                                    <div class="mb-3">
-                                        <label for="borrowers_id_no"
-                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Borrower's
-                                            ID</label>
-                                        <input type="text"
-                                            class="form-control radius-8 {{ $errors->has('borrowers_id_no') ? 'is-invalid' : '' }}"
-                                            id="borrowers_id_no" name="borrowers_id_no"
-                                            placeholder="Enter Borrower's ID" value="{{ old('borrowers_id_no') }}">
-                                        <small class="text-danger">{{ $errors->first('borrowers_id_no') }}</small>
+                                    <div class="mb-3 position-relative">
+                                        <label for="borrowers_id_no" class="form-label fw-semibold text-primary-light text-sm mb-8">
+                                            Borrower's ID
+                                        </label>
+                                        <input type="text" class="form-control radius-8" id="borrowers_id_no" name="borrowers_id_no"
+                                               placeholder="Enter Borrower's ID" autocomplete="off">
+                                        <div id="idSuggestions" class="position-absolute bg-white border rounded mt-1" style="z-index: 1000;"></div>
                                     </div>
 
                                     <!-- Borrower's Name -->
@@ -202,7 +219,41 @@
         $(window).on('beforeunload', function() {
             if (scanner) {
                 scanner.stop();
+            }   
+        });
+    });
+
+    $(document).ready(function() {
+        $('#borrowers_id_no').on('keyup', function() {
+            let query = $(this).val();
+            
+            if (query.length > 1) {
+                $.ajax({
+                    url: "{{ route('search.students') }}",
+                    type: "GET",
+                    data: { search: query },
+                    success: function(data) {
+                        let suggestions = '';
+                        $.each(data, function(index, student) {
+                            suggestions += `<div class="suggestion-item" data-id="${student.id_no}" data-name="${student.firstname} ${student.lastname}" data-department="${student.department}">${student.id_no} - ${student.firstname} ${student.lastname}</div>`;
+                        });
+                        $('#suggestions').html(suggestions).show();
+                    }
+                });
+            } else {
+                $('#suggestions').hide();
             }
+        });
+
+        $(document).on('click', '.suggestion-item', function() {
+            let id = $(this).data('id');
+            let name = $(this).data('name');
+            let department = $(this).data('department');
+
+            $('#borrowers_id_no').val(id);
+            $('#borrowers_name').val(name);
+            $('#department').val(department);
+            $('#suggestions').hide();
         });
     });
 </script>
