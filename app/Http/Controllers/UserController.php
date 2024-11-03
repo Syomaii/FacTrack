@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Notifications\SendEmailNotification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
 
@@ -31,7 +32,7 @@ class UserController extends Controller
             'mobile_no' => 'required|string|max:15',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'type' => 'required|string|max:255',
-            'select_type' => 'required|string',  // Check if office or department is selected
+            // 'select_type' => 'required|string',  // Check if office or department is selected
             'office_id' => 'nullable|exists:offices,id', // Added validation for office_id
             'department' => 'nullable|string|max:255', // Added validation for department
         ];
@@ -157,7 +158,7 @@ class UserController extends Controller
         $data = $request->validate([
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
             'mobile_no' => 'required|string|max:15',
             'designation_id' => 'required|exists:designations,id',
         ]);
@@ -187,5 +188,49 @@ class UserController extends Controller
     
         return redirect()->route('profile', $id)->with('updateprofilesuccessfully', 'Password changed successfully');
     }
+
+    public function resetUserPassword(User $user)
+    {
+        // Generate a password reset token
+        $token = $user->createToken('ResetPasswordToken')->plainTextToken;
+    
+        // Define the reset URL including the token and user's email
+        $resetUrl = url("/password/reset/{$token}?email=" . urlencode($user->email));
+    
+        // Send the reset password notification with the reset URL
+        Notification::send($user, new SendEmailNotification([
+            'type' => 'reset',
+            'resetUrl' => $resetUrl
+        ]));
+    
+        return back()->with('status', 'Password reset email sent successfully.');
+    }
+    
+    public function searchUser(Request $request)
+    {
+        $query = User::query();
+    
+        // Handle search
+        if ($request->has('search') && $request->input('search') !== '') {
+            $searchTerm = $request->input('search');
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('firstname', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('lastname', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('email', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('mobile_no', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+    
+        // Paginate the results
+        $users = $query->paginate(10);
+        $totalUsers = $query->count(); // Total users in the database
+    
+        // Calculate start and end for display
+        $start = ($users->currentPage() - 1) * $users->perPage() + 1;
+        $end = min($start + $totalUsers - 1, $totalUsers);
+    
+        return view('users/users', compact('users', 'totalUsers', 'start', 'end'))->with('title', 'Users');
+    }
+
     
 }

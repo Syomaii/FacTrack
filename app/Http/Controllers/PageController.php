@@ -116,7 +116,7 @@ class PageController extends Controller
     }
 
     public function returnEquipment(){
-        return view('equipments/return_equipment')->with('title', 'Return Equipment');
+        return view('transaction/return_equipment')->with('title', 'Return Equipment');
     }
     
     public function error404(){
@@ -148,10 +148,13 @@ class PageController extends Controller
         if (!$equipments) {
             return redirect()->back()->with('error', 'Equipment not found');
         }
+
+        $offices = $equipments->offices;
     
         $data = [
             'equipments' => $equipments,
             'timeline' => $equipments->timeline,
+            'offices' => $offices,
             'title' => 'Equipment Details'
         ];
     

@@ -98,15 +98,13 @@
                                     <img src="{{ asset($facEquipment->image) }}" alt="{{ $facEquipment->name }}"
                                         class="img-fluid rounded mb-3 max-img-size" />
                                     <h6 class="mb-8">{{ $facEquipment->name }}</h6>
-                                    @if (auth()->user()->type === 'facility manager')
-                                        <div class="d-flex justify-content-center gap-2">
-                                            <a href="/equipment-details/{{ $facEquipment->code }}"
-                                                class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
-                                                View Equipment <iconify-icon icon="iconamoon:arrow-right-2"
-                                                    class="text-xl"></iconify-icon>
-                                            </a>
-                                        </div>
-                                    @endif
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="/equipment-details/{{ $facEquipment->code }}"
+                                            class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
+                                            View Equipment <iconify-icon icon="iconamoon:arrow-right-2"
+                                                class="text-xl"></iconify-icon>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

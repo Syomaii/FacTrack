@@ -51,8 +51,9 @@
                             <option>{{ $i }}</option>
                         @endfor
                     </select>
-                    <form class="navbar-search">
-                        <input type="text" class="bg-base h-40-px w-auto" name="search" placeholder="Search">
+                    <form class="navbar-search" method="GET" action="{{ route('search-user') }}">
+                        <input type="text" class="bg-base h-40-px w-auto" name="search" placeholder="Search"
+                            value="{{ request('search') }}">
                         <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
                     </form>
                     <select class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
@@ -94,16 +95,20 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ Str::title($user->firstname) }}</h6>
+                                        <h6 class="text-md mb-0 fw-medium flex-grow-1">
+                                            {{ Str::title($user->firstname) }}</h6>
                                     </td>
                                     <td>
-                                        <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ Str::title($user->lastname) }}</h6>
+                                        <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ Str::title($user->lastname) }}
+                                        </h6>
                                     </td>
                                     <td>
-                                        <span class="text-md mb-0 fw-normal text-secondary-light">{{ $user->email }}</span>
+                                        <span
+                                            class="text-md mb-0 fw-normal text-secondary-light">{{ $user->email }}</span>
                                     </td>
                                     <td>
-                                        <span class="text-md mb-0 fw-normal text-secondary-light">{{ $user->mobile_no }}</span>
+                                        <span
+                                            class="text-md mb-0 fw-normal text-secondary-light">{{ $user->mobile_no }}</span>
                                     </td>
                                     <td>
                                         {{ Str::title($user->office) ? Str::title($user->office->name) : 'N/A' }}
@@ -113,15 +118,16 @@
                                     </td>
                                     <td>{{ Str::title($user->type) }}</td>
                                     <td class="text-center">
-                                        <span class="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">Active</span>
+                                        <span
+                                            class="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">Active</span>
                                     </td>
                                     <td class="text-center">
                                         <div class="d-flex align-items-center gap-10 justify-content-center">
                                             <a href="{{ route('profile', ['id' => $user->id]) }}">
                                                 <button type="button"
-                                                        class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle">
+                                                    class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle">
                                                     <iconify-icon icon="majesticons:eye-line"
-                                                                class="icon text-xl"></iconify-icon>
+                                                        class="icon text-xl"></iconify-icon>
                                                 </button>
                                             </a>
                                         </div>
@@ -129,7 +135,8 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="10" class="text-center">No users found from your office/department.</td>
+                                    <td colspan="10" class="text-center">No users found from your office/department.
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>

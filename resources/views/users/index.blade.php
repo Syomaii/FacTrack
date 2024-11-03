@@ -46,8 +46,7 @@
                             <iconify-icon icon="solar:lock-password-outline"></iconify-icon>
                         </span>
                         <input type="password" class="form-control h-56-px bg-neutral-50 radius-12" id="your-password"
-                            name="password" placeholder="Password" required
-                            autocomplete="current-password">
+                            name="password" placeholder="Password" required>
                     </div>
                     @error('password')
                         <span class="invalid-feedback" role="alert">
