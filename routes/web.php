@@ -99,6 +99,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/donated-equipments', [ReportController::class, 'donatedEquipmentReports']);
         Route::get('/disposed-equipments', [ReportController::class, 'disposedEquipmentReports']);
         Route::get('/borrowers-log', [PageController::class, 'borrowersLog'])->name('borrowersLog');
+        
         // Route::get('/product-details/{id}', [PageController::class, 'productDetails'])->name('product.details');
         
         //Equipment Controller
@@ -117,6 +118,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/borrow-equipment', [TransactionController::class, 'borrowerFormPost']);
         Route::get('/borrow-details/{code}', [TransactionController::class, 'showBorrowDetails'])->name('borrow_details');
         Route::post('/borrow-equipment/{id}', [TransactionController::class, 'submitBorrow'])->name('borrow-equipment-post');
+        Route::get('/search-students', [TransactionController::class, 'searchStudents'])->name('search.students');
+
+
         Route::get('/maintenance-equipment', [PageController::class, 'maintenance'])->name('maintenance-equipment');
         Route::get('/maintenance-equipment-details/{code}', [TransactionController::class, 'maintenanceDetails'])->name('maintenance-equipment-details');
 
