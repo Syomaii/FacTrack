@@ -35,17 +35,17 @@
                     <div class="col-xxl-6 col-xl-8 col-lg-10">
                         <div class="card border shadow-sm">
                             <div class="card-body">
-                                <form action="{{ route('maintenance-equipment') }}" method="post"
+                                <form action="{{ route('maintenance_equipment') }}" method="post"
                                     id="maintenanceEquipmentForm">
                                     @csrf
 
-                                    <input type="hidden" name="maintenance_date"
-                                        value="{{ now()->format('Y-m-d\TH:i') }}">
-                                    <input type="text" name="maintenance_code" id="maintenance_code" hidden>
+                                    <input type="hidden" name="maintenance_date" id="maintenance_date"
+                                        value="{{ now()->format('Y-m-d') }}">
 
-                                    <div class="text-center mb-4">
-                                        <h5 class="text-primary">Do you want your equipment to be maintained? Just SCAN!
-                                        </h5>
+                                    <div class="mb-3">
+                                        <label for="issue_note" class="form-label">Issue Note</label>
+                                        <textarea name="issue_note" id="issue_note" class="form-control" rows="3"
+                                            placeholder="Describe the issue here..."></textarea>
                                     </div>
 
                                     <!-- Scan Button Triggering Modal -->
@@ -107,12 +107,12 @@
         console.log(result);
 
         var maintenance_id_no = $('#maintenance_id_no').val();
-        var maintenance_description = $('#maintenance_description').val();
+        var issue_note = $('#issue_note').val();
         var maintenance_date = $('#maintenance_date').val();
 
         window.location.href = "/maintenance-equipment-details/" + result +
             "?maintenance_id_no=" + encodeURIComponent(maintenance_id_no) +
-            "&maintenance_description=" + encodeURIComponent(maintenance_description) +
+            "&issue_note=" + encodeURIComponent(issue_note) +
             "&maintenance_date=" + encodeURIComponent(maintenance_date);
     }
 

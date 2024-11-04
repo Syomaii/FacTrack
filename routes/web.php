@@ -121,8 +121,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/search-students', [TransactionController::class, 'searchStudents'])->name('search.students');
 
 
-        Route::get('/maintenance-equipment', [PageController::class, 'maintenance'])->name('maintenance-equipment');
+        Route::get('/maintenance-equipment', [PageController::class, 'maintenance'])->name('maintenance_equipment');
         Route::get('/maintenance-equipment-details/{code}', [TransactionController::class, 'maintenanceDetails'])->name('maintenance-equipment-details');
+        Route::post('equipments/{code}/maintenance', [TransactionController::class, 'submitMaintenance'])->name('maintenance-equipment-post');;
 
         // Route::post('/maintenance-equipment-post/{id}', [PageController::class, 'maintenancePost'])->name('maintenance-equipment-post');
 

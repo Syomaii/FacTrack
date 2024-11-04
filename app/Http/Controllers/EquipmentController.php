@@ -21,7 +21,7 @@ class EquipmentController extends Controller
             'serial_no' => 'required|unique:equipments,serial_no',  
             'description' => 'required',
             'acquired_date' => 'required|date|before_or_equal:now',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
             'status' => 'required|in:Available,In Maintenance,In Repair,Borrowed',
             'owned_by' => 'required',
         ]);

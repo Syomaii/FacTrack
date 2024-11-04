@@ -105,13 +105,17 @@
                                 <td>{!! QrCode::size(100)->generate($equipment->code) !!}</td>
                                 <td>
                                     @if ($equipment->status === 'Available')
-                                        <span class="bg-success-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                        <span
+                                            class="bg-success-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
                                     @elseif($equipment->status === 'In Maintenance')
-                                        <span class="bg-info px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                        <span
+                                            class="bg-info px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
                                     @elseif($equipment->status === 'In Repair')
-                                        <span class="bg-danger-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                        <span
+                                            class="bg-danger-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
                                     @elseif($equipment->status === 'Borrowed')
-                                        <span class="bg-warning-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                        <span
+                                            class="bg-warning-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
                                     @endif
                                 </td>
                                 <td>
@@ -146,7 +150,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="text-center"><strong>No equipments found from your office/department.</strong></td>
+                                <td colspan="10" class="text-center"><strong>No equipments found from your
+                                        office/department.</strong></td>
                             </tr>
                         @endforelse
 
