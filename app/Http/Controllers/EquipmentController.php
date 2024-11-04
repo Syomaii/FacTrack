@@ -61,8 +61,8 @@ class EquipmentController extends Controller
         ]);
     
         // Redirect to the facility's equipment page with a success message
-        return redirect()->route('facility_equipment', ['id' => $facility->id])
-                     ->with('title', 'Facility Equipment')
+        return redirect()->route('equipment-details', ['code' => $equipment->code])
+                     ->with('title', 'Equipment Details')
                      ->with('addEquipmentSuccessfully', 'Equipment Added Successfully!');
     }
     

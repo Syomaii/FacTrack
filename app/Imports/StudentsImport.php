@@ -13,17 +13,19 @@ use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Illuminate\Support\Facades\Log;
 
 class StudentsImport implements 
     ToModel, 
     WithHeadingRow, 
     SkipsOnError, 
-    WithValidation, 
     WithBatchInserts, 
-    WithChunkReading+
+    WithChunkReading
 {
     use Importable, 
-        SkipsErrors;
+        SkipsErrors,
+        SkipsFailures;
+
     /**
     * @param array $row
     *
@@ -31,13 +33,15 @@ class StudentsImport implements
     */
     public function model(array $row)
     {   
+        Log::info('Row data:', $row);  // Log each row's data for debugging
+
         return new Students([
-            'id_no' => $row[trim("ID No.")] ?? null,
-            'firstname' => $row[trim("First Name")] ?? null,
-            'lastname' => $row[trim("Last Name")] ?? null,
-            'gender' => $row[trim("Gender")] ?? null,
-            'email' => $row[trim("Email")] ?? null,
-            'course' => $row[trim("Course / Year")] ?? null,
+            'id_no' => $row["ID No."] ?? null,
+            'firstname' => $row["First Name"] ?? null,
+            'lastname' => $row["Last Name"] ?? null,
+            'gender' => $row["Gender"] ?? null,
+            'email' => $row["Email"] ?? null,
+            'course' => $row["Course / Year"] ?? null,
             'department' => "College of Computer Studies",
         ]);
     }

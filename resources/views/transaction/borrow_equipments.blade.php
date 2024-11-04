@@ -60,7 +60,6 @@
                                     
                                     <input type="hidden" name="borrowed_date"
                                         value="{{ now()->format('Y-m-d\TH:i') }}">
-                                    <input type="text" name="borrower_code" id="borrower_code" hidden>
                                     <input type="hidden" name="borrowed_date" value="{{ now()->format('Y-m-d\TH:i') }}">
                                     <input type="hidden" name="borrower_code" id="borrower_code">
                                     
@@ -71,9 +70,10 @@
                                         </label>
                                         <input type="text" class="form-control radius-8" id="borrowers_id_no" name="borrowers_id_no"
                                                placeholder="Enter Borrower's ID" autocomplete="off">
-                                        <div id="idSuggestions" class="position-absolute bg-white border rounded mt-1" style="z-index: 1000;"></div>
+                                        <!-- Suggestions dropdown -->
+                                        <div id="idSuggestions" class="position-absolute bg-white border rounded mt-1 w-100" style="z-index: 1000; display: none; max-height: 200px; overflow-y: auto;"></div>
                                     </div>
-
+                                    
                                     <!-- Borrower's Name -->
                                     <div class="mb-3">
                                         <label for="borrowers_name"
@@ -167,93 +167,126 @@
     let scanner;
 
     function startScanner() {
-        const previewElement = document.getElementById('preview'); // Correctly targets the 'preview' div
+        const previewElement = document.getElementById('preview'); 
         scanner = new QrScanner(previewElement, result => {
-            // Stop the scanner once the QR code is scanned
             scanner.stop();
 
-            // Send the scanned result (equipment code) to backend for validation
             $.ajax({
-                url: '/validate-equipment-status', // Backend route to validate equipment status
+                url: '/validate-equipment-status',
                 type: 'POST',
                 data: {
-                    _token: "{{ csrf_token() }}", // CSRF token for security
-                    code: result // Pass the scanned code to backend
+                    _token: "{{ csrf_token() }}", 
+                    code: result 
                 },
                 success: function(response) {
                     if (response.available) {
                         document.getElementById('borrower_code').value =
-                            result; // Set the scanned result to hidden input
-                        $('#scanModal').modal('hide'); // Hide the modal
+                            result; 
+                        $('#scanModal').modal('hide'); 
                     } else {
                         alert('Error: This equipment is not available for borrowing.');
-                        $('#scanModal').modal('hide'); // Hide the modal
-                        startScanner(); // Restart the scanner if needed
+                        $('#scanModal').modal('hide'); 
+                        startScanner(); 
                     }
                 },
                 error: function() {
                     alert('Error: Could not validate equipment status.');
-                    startScanner(); // Restart the scanner if there's an error
+                    startScanner(); 
                 }
             });
         });
-        scanner.start(); // Start scanning
+        scanner.start(); 
     }
 
     $(document).ready(function() {
-        // Start scanner when modal is opened
         $('#scanModal').on('show.bs.modal', function() {
             startScanner();
         });
 
-        // Stop scanner when modal is closed
         $('#scanModal').on('hidden.bs.modal', function() {
             if (scanner) {
                 scanner.stop();
-                scanner.destroy(); // Release the resources (optional but recommended)
-                scanner = null; // Reset the scanner variable
+                scanner.destroy(); 
+                scanner = null; 
             }
         });
 
-        // Reset the scanner and permissions when page is unloaded
         $(window).on('beforeunload', function() {
             if (scanner) {
                 scanner.stop();
             }   
         });
     });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+<script>
+    function capitalizeFirstLetters(name) {
+        return name
+            .toLowerCase() // Convert the whole string to lowercase
+            .split(' ') // Split the string into an array of words
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+            .join(' '); // Join the words back into a string
+    }
 
     $(document).ready(function() {
-        $('#borrowers_id_no').on('keyup', function() {
-            let query = $(this).val();
-            
+        var route = "{{ route('search.students') }}"; 
+
+        $('#borrowers_id_no').on('input', function() {
+            var query = $(this).val();
+
+            if (query.length === 0) {
+                $('#borrowers_name').val('').prop('readonly', false);
+                $('#department').val('').prop('readonly', false);
+            }
+
+            $('#idSuggestions').empty().hide();
+
             if (query.length > 1) {
-                $.ajax({
-                    url: "{{ route('search.students') }}",
-                    type: "GET",
-                    data: { search: query },
-                    success: function(data) {
-                        let suggestions = '';
-                        $.each(data, function(index, student) {
-                            suggestions += `<div class="suggestion-item" data-id="${student.id_no}" data-name="${student.firstname} ${student.lastname}" data-department="${student.department}">${student.id_no} - ${student.firstname} ${student.lastname}</div>`;
+                $.get(route, { id: query }, function(data) {
+                    if (data.length) {
+                        data.forEach(function(item) {
+                            $('#idSuggestions').append('<div class="suggestion-item">' + item + '</div>');
                         });
-                        $('#suggestions').html(suggestions).show();
+                        $('#idSuggestions').show();
                     }
                 });
-            } else {
-                $('#suggestions').hide();
             }
         });
 
         $(document).on('click', '.suggestion-item', function() {
-            let id = $(this).data('id');
-            let name = $(this).data('name');
-            let department = $(this).data('department');
+            var selectedId = $(this).text();
+            $('#borrowers_id_no').val(selectedId); 
 
-            $('#borrowers_id_no').val(id);
-            $('#borrowers_name').val(name);
-            $('#department').val(department);
-            $('#suggestions').hide();
+            $.ajax({
+                url: '/get-student-details/' + selectedId,
+                type: 'GET',
+                success: function(data) {
+                    if (data.error) {
+                        alert(data.error); 
+                    } else {
+                        var fullName = data.firstname + ' ' + data.lastname; 
+                        var formattedName = capitalizeFirstLetters(fullName); 
+                        $('#borrowers_name').val(formattedName).prop('readonly', true);
+                        $('#department').val(data.department).prop('readonly', true); 
+                    }
+                },
+                error: function() {
+                    alert('Error fetching student details.'); 
+                }
+            });
+
+            $('#idSuggestions').empty().hide(); 
+        });
+
+        $(document).on('click', function(event) {
+            if (!$(event.target).closest('#idSuggestions, #borrowers_id_no').length) {
+                $('#idSuggestions').hide(); 
+            }
         });
     });
+
+
+
+
 </script>

@@ -12,21 +12,21 @@ use Maatwebsite\Excel\Jobs\ProxyFailures;
 class FileUploadController extends Controller
 {
     public function importStudents(Request $request)
-{
-    $request->validate(['file' => 'required|mimes:xlsx,csv|max:2048']);
+    {
+        $request->validate(['file' => 'required|mimes:xlsx,csv|max:2048']);
 
-    $import = new StudentsImport();
-    try {
-        $import->import($request->file('file'));
-    } catch (\Exception $e) {
-        return redirect()->back()->withErrors(['error' => 'Error importing the file: ' . $e->getMessage()]);
+        $import = new StudentsImport();
+        try {
+            $import->import($request->file('file'));
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Error importing the file: ' . $e->getMessage()]);
+        }
+
+        if ($import->failures()->isNotEmpty()) {
+            return redirect()->back()->withErrors($import->failures());
+        }
+
+        return redirect()->back()->with('success', 'Successfully uploaded and imported the file.');
     }
-
-    if ($import->failures()->isNotEmpty()) {
-        return redirect()->back()->withErrors($import->failures());
-    }
-
-    return redirect()->back()->with('success', 'Successfully uploaded and imported the file.');
-}
 
 }
