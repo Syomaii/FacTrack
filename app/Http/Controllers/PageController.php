@@ -28,6 +28,10 @@ class PageController extends Controller
                         ->get();
 
         $users = User::all(); 
+        if (Auth::user()->created_at->eq(Auth::user()->updated_at)) {
+            
+            session(['newUser' => "Looks like you haven't changed your password yet. Change it now"]);
+        }
 
         return view('dashboard', [
             'title' => 'Dashboard',
