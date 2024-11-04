@@ -80,7 +80,7 @@
                                 <th scope="col">Lastname</th>
                                 <th scope="col">Firstname</th>
                                 <th scope="col">Course/Year</th>
-                                <th scope="col">Gender</th>
+                                <th scope="col">Gender</th>x
                                 <th scope="col">Mobile</th>
                                 <th scope="col">Email</th>
                             </tr>
