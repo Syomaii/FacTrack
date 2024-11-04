@@ -29,6 +29,14 @@
                 <li class="fw-medium">{{ $equipments->name }}</li>
             </ul>
         </div>
+        @if (session('addEquipmentSuccessfully'))
+            <div class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                    <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
+                    {{ session('addEquipmentSuccessfully') }}
+                </div>
+            </div>
+        @endif
 
         <div class="card bg-white shadow rounded-3 p-3 border-0 edetails">
             <div class="row g-0">
@@ -60,7 +68,7 @@
                     <div class="row">
                         <div class="details-item col-md-6">
                             <strong>QR Code:</strong>
-                            <div>{!! QrCode::size(100)->generate($equipments->code) !!}</div>
+                            <div id="qrCode">{!! QrCode::size(100)->generate($equipments->code) !!}</div>
                         </div>
                         <div class="details-item col-md-6">
                             <strong>Acquisition Date:</strong>
@@ -83,7 +91,14 @@
                             </a>
                             <a href="javascript:void(0)"
                                 class="btn btn-danger text-base radius-8 px-20 py-11 delete-equipment"
-                                data-id="{{ $equipments->id }}">Delete Equipment</a>
+                                data-id="{{ $equipments->id }}">Delete Equipment
+                            </a>
+
+                            <button type="button"
+                                class="btn btn-primary text-base radius-8 px-20 py-11"
+                                onclick="printInvoice()">
+                                Print QR Code
+                            </button>
 
                             <form id="delete-form-{{ $equipments->id }}"
                                 action="{{ route('delete_equipment', $equipments->id) }}" method="POST"
@@ -255,6 +270,17 @@
             }
         });
     });
+
+    function printInvoice() {
+        var printContents = document.getElementById('qrCode').innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+    }
 </script>
 
 @include('templates.footer')
