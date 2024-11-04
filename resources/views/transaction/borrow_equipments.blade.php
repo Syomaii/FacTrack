@@ -76,14 +76,25 @@
                                     
                                     <!-- Borrower's Name -->
                                     <div class="mb-3">
-                                        <label for="borrowers_name" class="form-label fw-semibold text-primary-light text-sm mb-8">Borrower's Name</label>
-                                        <input type="text" class="form-control radius-8" id="borrowers_name" name="borrowers_name" placeholder="Enter Borrower's Name" readonly>
+                                        <label for="borrowers_name"
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Borrower's
+                                            Name</label>
+                                        <input type="text"
+                                            class="form-control radius-8 {{ $errors->has('borrowers_name') ? 'is-invalid' : '' }}"
+                                            id="borrowers_name" name="borrowers_name"
+                                            placeholder="Enter Borrower's Name" value="{{ old('borrowers_name') }}">
+                                        <small class="text-danger">{{ $errors->first('borrowers_name') }}</small>
                                     </div>
 
                                     <!-- Department -->
                                     <div class="mb-3">
-                                        <label for="department" class="form-label fw-semibold text-primary-light text-sm mb-8">Course/Department</label>
-                                        <input type="text" class="form-control radius-8" id="department" name="department" placeholder="Course/Department" readonly>
+                                        <label for="department"
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Course/Department</label>
+                                        <input type="text"
+                                            class="form-control radius-8 {{ $errors->has('department') ? 'is-invalid' : '' }}"
+                                            id="department" name="department"
+                                            placeholder="Course/Department" value="{{ old('department') }}">
+                                        <small class="text-danger">{{ $errors->first('department') }}</small>
                                     </div>
 
                                     <!-- Purpose of borrowing -->
@@ -156,55 +167,50 @@
     let scanner;
 
     function startScanner() {
-        const previewElement = document.getElementById('preview'); // Correctly targets the 'preview' div
+        const previewElement = document.getElementById('preview'); 
         scanner = new QrScanner(previewElement, result => {
-            // Stop the scanner once the QR code is scanned
             scanner.stop();
 
-            // Send the scanned result (equipment code) to backend for validation
             $.ajax({
-                url: '/validate-equipment-status', // Backend route to validate equipment status
+                url: '/validate-equipment-status',
                 type: 'POST',
                 data: {
-                    _token: "{{ csrf_token() }}", // CSRF token for security
-                    code: result // Pass the scanned code to backend
+                    _token: "{{ csrf_token() }}", 
+                    code: result 
                 },
                 success: function(response) {
                     if (response.available) {
                         document.getElementById('borrower_code').value =
-                            result; // Set the scanned result to hidden input
-                        $('#scanModal').modal('hide'); // Hide the modal
+                            result; 
+                        $('#scanModal').modal('hide'); 
                     } else {
                         alert('Error: This equipment is not available for borrowing.');
-                        $('#scanModal').modal('hide'); // Hide the modal
-                        startScanner(); // Restart the scanner if needed
+                        $('#scanModal').modal('hide'); 
+                        startScanner(); 
                     }
                 },
                 error: function() {
                     alert('Error: Could not validate equipment status.');
-                    startScanner(); // Restart the scanner if there's an error
+                    startScanner(); 
                 }
             });
         });
-        scanner.start(); // Start scanning
+        scanner.start(); 
     }
 
     $(document).ready(function() {
-        // Start scanner when modal is opened
         $('#scanModal').on('show.bs.modal', function() {
             startScanner();
         });
 
-        // Stop scanner when modal is closed
         $('#scanModal').on('hidden.bs.modal', function() {
             if (scanner) {
                 scanner.stop();
-                scanner.destroy(); // Release the resources (optional but recommended)
-                scanner = null; // Reset the scanner variable
+                scanner.destroy(); 
+                scanner = null; 
             }
         });
 
-        // Reset the scanner and permissions when page is unloaded
         $(window).on('beforeunload', function() {
             if (scanner) {
                 scanner.stop();
@@ -228,6 +234,11 @@
 
         $('#borrowers_id_no').on('input', function() {
             var query = $(this).val();
+
+            if (query.length === 0) {
+                $('#borrowers_name').val('').prop('readonly', false);
+                $('#department').val('').prop('readonly', false);
+            }
 
             $('#idSuggestions').empty().hide();
 
@@ -256,8 +267,8 @@
                     } else {
                         var fullName = data.firstname + ' ' + data.lastname; 
                         var formattedName = capitalizeFirstLetters(fullName); 
-                        $('#borrowers_name').val(formattedName); 
-                        $('#department').val(data.department); 
+                        $('#borrowers_name').val(formattedName).prop('readonly', true);
+                        $('#department').val(data.department).prop('readonly', true); 
                     }
                 },
                 error: function() {
