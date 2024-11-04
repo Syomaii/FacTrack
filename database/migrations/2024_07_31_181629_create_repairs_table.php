@@ -20,6 +20,9 @@ return new class extends Migration
             $table->dateTime('repaired_date');
             $table->dateTime('returned_date')->nullable();
             $table->string('remarks', 255);
+            $table->text('issue');
+            $table->string('action_taken', 255)->nullable();
+            $table->string('recommendations', 255)->nullable();
             $table->string('status', 50);
             $table->timestamps();
 

@@ -123,14 +123,16 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/maintenance-equipment', [PageController::class, 'maintenance'])->name('maintenance_equipment');
         Route::get('/maintenance-equipment-details/{code}', [TransactionController::class, 'maintenanceDetails'])->name('maintenance-equipment-details');
-        Route::post('equipments/{code}/maintenance', [TransactionController::class, 'submitMaintenance'])->name('maintenance-equipment-post');;
-
+        Route::post('equipments/{code}/maintenance', action: [TransactionController::class, 'submitMaintenance'])->name('maintenance-equipment-post');
+        Route::get('/repair-equipment', [PageController::class, 'repairEquipment'])->name('repair_equipment');
+        Route::get('/repair-equipment-details/{code}', [TransactionController::class, 'repairDetails'])->name('repair-equipment-details');
+        Route::post('equipments/{code}/repair', action: [TransactionController::class, 'submitRepair'])->name('repair-equipment-post');
         // Route::post('/maintenance-equipment-post/{id}', [PageController::class, 'maintenancePost'])->name('maintenance-equipment-post');
 
         Route::post('/validate-equipment-status', [TransactionController::class, 'validateEquipmentStatus']);
 
         Route::get('/return-equipment', [PageController::class, 'returnEquipment']);
-        Route::post('/return-equipment', [TransactionController::class, 'returnEquipment'])->name('return.equipment');
+        Route::post('/return-equipment/{code}', [TransactionController::class, 'returnEquipment'])->name('equipment.return');
     });
 
     //----------------------------------------------------------------------------------------------------------------

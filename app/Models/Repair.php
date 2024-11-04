@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Maintenance extends Model
+class Repair extends Model
 {
-    protected $table = "maintenance";
+    protected $table = "repairs";
     protected $fillable = [
         'equipment_id',
         'user_id',
-        'maintained_date',
+        'repaired_date',
         'returned_date',
         'remarks',
         'issue',
