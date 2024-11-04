@@ -60,7 +60,6 @@
                                     
                                     <input type="hidden" name="borrowed_date"
                                         value="{{ now()->format('Y-m-d\TH:i') }}">
-                                    <input type="text" name="borrower_code" id="borrower_code" hidden>
                                     <input type="hidden" name="borrowed_date" value="{{ now()->format('Y-m-d\TH:i') }}">
                                     <input type="hidden" name="borrower_code" id="borrower_code">
                                     
@@ -71,30 +70,20 @@
                                         </label>
                                         <input type="text" class="form-control radius-8" id="borrowers_id_no" name="borrowers_id_no"
                                                placeholder="Enter Borrower's ID" autocomplete="off">
-                                        <div id="idSuggestions" class="position-absolute bg-white border rounded mt-1" style="z-index: 1000;"></div>
+                                        <!-- Suggestions dropdown -->
+                                        <div id="idSuggestions" class="position-absolute bg-white border rounded mt-1 w-100" style="z-index: 1000; display: none; max-height: 200px; overflow-y: auto;"></div>
                                     </div>
-
+                                    
                                     <!-- Borrower's Name -->
                                     <div class="mb-3">
-                                        <label for="borrowers_name"
-                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Borrower's
-                                            Name</label>
-                                        <input type="text"
-                                            class="form-control radius-8 {{ $errors->has('borrowers_name') ? 'is-invalid' : '' }}"
-                                            id="borrowers_name" name="borrowers_name"
-                                            placeholder="Enter Borrower's Name" value="{{ old('borrowers_name') }}">
-                                        <small class="text-danger">{{ $errors->first('borrowers_name') }}</small>
+                                        <label for="borrowers_name" class="form-label fw-semibold text-primary-light text-sm mb-8">Borrower's Name</label>
+                                        <input type="text" class="form-control radius-8" id="borrowers_name" name="borrowers_name" placeholder="Enter Borrower's Name" readonly>
                                     </div>
 
                                     <!-- Department -->
                                     <div class="mb-3">
-                                        <label for="department"
-                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Course/Department</label>
-                                        <input type="text"
-                                            class="form-control radius-8 {{ $errors->has('department') ? 'is-invalid' : '' }}"
-                                            id="department" name="department"
-                                            placeholder="Course/Department" value="{{ old('department') }}">
-                                        <small class="text-danger">{{ $errors->first('department') }}</small>
+                                        <label for="department" class="form-label fw-semibold text-primary-light text-sm mb-8">Course/Department</label>
+                                        <input type="text" class="form-control radius-8" id="department" name="department" placeholder="Course/Department" readonly>
                                     </div>
 
                                     <!-- Purpose of borrowing -->
@@ -222,38 +211,71 @@
             }   
         });
     });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+<script>
+    function capitalizeFirstLetters(name) {
+        return name
+            .toLowerCase() // Convert the whole string to lowercase
+            .split(' ') // Split the string into an array of words
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+            .join(' '); // Join the words back into a string
+    }
 
     $(document).ready(function() {
-        $('#borrowers_id_no').on('keyup', function() {
-            let query = $(this).val();
-            
+        var route = "{{ route('search.students') }}"; 
+
+        $('#borrowers_id_no').on('input', function() {
+            var query = $(this).val();
+
+            $('#idSuggestions').empty().hide();
+
             if (query.length > 1) {
-                $.ajax({
-                    url: "{{ route('search.students') }}",
-                    type: "GET",
-                    data: { search: query },
-                    success: function(data) {
-                        let suggestions = '';
-                        $.each(data, function(index, student) {
-                            suggestions += `<div class="suggestion-item" data-id="${student.id_no}" data-name="${student.firstname} ${student.lastname}" data-department="${student.department}">${student.id_no} - ${student.firstname} ${student.lastname}</div>`;
+                $.get(route, { id: query }, function(data) {
+                    if (data.length) {
+                        data.forEach(function(item) {
+                            $('#idSuggestions').append('<div class="suggestion-item">' + item + '</div>');
                         });
-                        $('#suggestions').html(suggestions).show();
+                        $('#idSuggestions').show();
                     }
                 });
-            } else {
-                $('#suggestions').hide();
             }
         });
 
         $(document).on('click', '.suggestion-item', function() {
-            let id = $(this).data('id');
-            let name = $(this).data('name');
-            let department = $(this).data('department');
+            var selectedId = $(this).text();
+            $('#borrowers_id_no').val(selectedId); 
 
-            $('#borrowers_id_no').val(id);
-            $('#borrowers_name').val(name);
-            $('#department').val(department);
-            $('#suggestions').hide();
+            $.ajax({
+                url: '/get-student-details/' + selectedId,
+                type: 'GET',
+                success: function(data) {
+                    if (data.error) {
+                        alert(data.error); 
+                    } else {
+                        var fullName = data.firstname + ' ' + data.lastname; 
+                        var formattedName = capitalizeFirstLetters(fullName); 
+                        $('#borrowers_name').val(formattedName); 
+                        $('#department').val(data.department); 
+                    }
+                },
+                error: function() {
+                    alert('Error fetching student details.'); 
+                }
+            });
+
+            $('#idSuggestions').empty().hide(); 
+        });
+
+        $(document).on('click', function(event) {
+            if (!$(event.target).closest('#idSuggestions, #borrowers_id_no').length) {
+                $('#idSuggestions').hide(); 
+            }
         });
     });
+
+
+
+
 </script>
