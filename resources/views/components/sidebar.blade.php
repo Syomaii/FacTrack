@@ -55,9 +55,15 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/students">
+                    <a href="/view-department">
                         <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
                         <span>Students</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/students">
+                        <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
+                        <span>Uplaod Students File</span>
                     </a>
                 </li>
             @endif
@@ -81,7 +87,7 @@
 
                         <!-- Maintenance Equipments -->
                         <li>
-                            <a href="#">
+                            <a href="/maintenance-equipment">
                                 <iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon>
                                 Maintenance Equipments
                             </a>

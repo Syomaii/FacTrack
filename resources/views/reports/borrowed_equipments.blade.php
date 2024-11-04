@@ -30,13 +30,6 @@
                             <iconify-icon icon="uil:edit" class="text-xl"></iconify-icon> Edit Date Range
                         </button>
 
-                        <a href="javascript:void(0)" onclick="downloadInvoice()"
-                            class="btn btn-sm btn-warning radius-8 d-inline-flex align-items-center gap-1">
-                            <iconify-icon icon="solar:download-linear" class="text-xl"></iconify-icon>
-                            Download
-                        </a>
-
-
                         <button type="button"
                             class="btn btn-sm btn-danger radius-8 d-inline-flex align-items-center gap-1"
                             onclick="printInvoice()">
@@ -274,29 +267,8 @@
             var originalContents = document.body.innerHTML;
 
             document.body.innerHTML = printContents;
-
             window.print();
 
             document.body.innerHTML = originalContents;
-        }
-
-        function downloadInvoice() {
-            var element = document.getElementById('invoice');
-
-            var opt = {
-                margin: 0.2,
-                filename: 'Borrowed_Equipment_Report.pdf',
-                html2canvas: {
-                    scale: 2,
-                    useCORS: true
-                },
-                jsPDF: {
-                    unit: 'in',
-                    format: 'a4',
-                    orientation: 'landscape'
-                }
-            };
-            // Convert and download the PDF directly from HTML
-            html2pdf().set(opt).from(element).save();
         }
     </script>

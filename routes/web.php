@@ -60,6 +60,9 @@ Route::middleware(['auth'])->group(function () {
         
         //example only
         Route::get('/students', [PageController::class, 'students']);
+        Route::get('/view-department', [UserController::class, 'viewDepartment'])->name('view-department');
+        Route::get('/department/{department}/students', [UserController::class, 'viewDepartmentStudents'])->name('view-department-students');
+        Route::get('/search-student', [UserController::class, 'search'])->name('search-student');
         Route::post('/students', [FileUploadController::class, 'importStudents'])->name('import.file');
     });
     
@@ -118,8 +121,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/search-students', [TransactionController::class, 'searchStudents'])->name('search.students');
         Route::get('/get-student-details/{id}', [TransactionController::class, 'getStudentDetails']);
 
-        Route::get('/maintenance-equipment', [PageController::class, 'maintenance'])->name('maintenance-equipment');
+        Route::get('/maintenance-equipment', [PageController::class, 'maintenance'])->name('maintenance_equipment');
         Route::get('/maintenance-equipment-details/{code}', [TransactionController::class, 'maintenanceDetails'])->name('maintenance-equipment-details');
+        Route::post('equipments/{code}/maintenance', [TransactionController::class, 'submitMaintenance'])->name('maintenance-equipment-post');;
 
         // Route::post('/maintenance-equipment-post/{id}', [PageController::class, 'maintenancePost'])->name('maintenance-equipment-post');
 

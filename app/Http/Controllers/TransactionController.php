@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Borrower;
 use App\Models\Equipment;
 use App\Models\Students;
+use App\Models\Maintenance  ;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -101,7 +102,7 @@ class TransactionController extends Controller
             'purpose' => $validatedData['purpose'],
             'user_id' => auth()->user()->id,
             'borrowed_date' => now(),
-            'remarks' => 'Borrowed',
+            'remarks' => 'The day the equipment is Borrowed',
             'expected_returned_date' => $validatedData['expected_returned_date'],   // Save expected_returned_date
             'equipment_id' => $equipment->id,
             'status' => 'Borrowed',
@@ -174,18 +175,56 @@ class TransactionController extends Controller
     {
         // Fetch equipment details based on scanned code
         $equipment = Equipment::where('code', $code)->first();
-
+    
         // Check if equipment exists
         if (!$equipment) {
             return redirect()->back()->withErrors(['error' => 'Equipment not found.']);
         }
-
-        return view('maintenance_equipment_details', [
+    
+        // Fallback values if not provided in the request
+        $maintenanceDate = $request->input('maintenance_date') ?: now()->format('Y-m-d');
+        $issueNote = $request->input('issue_note') ?: 'No issue provided';
+    
+        return view('equipments.maintenance_equipment_details', [
             'equipment' => $equipment,
-            'maintenance_id_no' => $request->maintenance_id_no, 
-            'maintenance_description' => $request->maintenance_description,
-            'maintenance_date' => $request->maintenance_date,
-        ]);
+            'maintenance_id_no' => $equipment->id, 
+            'issue_note' => $issueNote,
+            'maintenance_date' => $maintenanceDate,
+        ])->with('title', 'Maintenance Details');
     }
+
+    public function submitMaintenance(Request $request, $code)
+    {
+        $validatedData = $request->validate([
+            'issue_note' => 'required|string|max:255',
+            'maintenance_date' => 'required|date',
+        ]);
+    
+        // Find the equipment by code
+        $equipment = Equipment::findOrFail($code);
+    
+        // Check if the equipment is available for maintenance
+        if ($equipment->status !== 'Available') {
+            return back()->withErrors(['equipment' => 'This equipment is not available for maintenance.']);
+        }
+    
+        // Create the maintenance record
+        Maintenance::create([
+            'equipment_id' => $equipment->id, // Use the ID of the equipment
+            'remarks' => 'The day the equipment is Borrowed', // Make sure this is the intended field
+            'issue' => $validatedData['issue_note'],
+            'maintained_date' => $validatedData['maintenance_date'], // Use the date from the input
+            'user_id' => auth()->user()->id,
+            'status' => 'In Maintenance',
+        ]);
+    
+        // Update equipment status
+        $equipment->status = 'In Maintenance';
+        $equipment->save();
+    
+        return redirect()->route('maintenance_equipment') // Redirect to the equipments index page
+                         ->with('maintenanceSuccessfully', 'Maintenance record submitted successfully.');
+    }
+    
 
 }

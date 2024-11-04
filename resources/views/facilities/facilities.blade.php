@@ -51,26 +51,28 @@
             </div>
         @endif
 
-    
+
         <!-- Search Bar -->
 
         <div class="d-flex justify-content-between align-items-center mb-24">
             <div class="input-group" style="max-width: 650px;">
-                <input type="text" id="facilitySearch" class="form-control" placeholder="Search Facilities" aria-label="Search Facilities">
+                <input type="text" id="facilitySearch" class="form-control" placeholder="Search Facilities"
+                    aria-label="Search Facilities">
                 <button class="btn btn-primary" type="button">
                     <iconify-icon icon="ic:baseline-search" class="icon"></iconify-icon>
                 </button>
             </div>
-        
+
             <div class="d-flex gap-3 ms-3"> <!-- Added ms-3 for left margin -->
                 <a href="#" style="width: 170px" data-bs-toggle="modal" data-bs-target="#addFacilityModal">
-                    <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11">Add Facility</button>
+                    <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11">Add
+                        Facility</button>
                 </a>
             </div>
         </div>
-        
 
-        
+
+
 
         <!-- Add Facility Modal -->
         <div class="modal fade" id="addFacilityModal" tabindex="-1" aria-labelledby="addFacilityModalLabel"
