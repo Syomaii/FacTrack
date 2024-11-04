@@ -19,13 +19,28 @@ class TransactionController extends Controller
 
     public function searchStudents(Request $request)
     {
-        $search = $request->input('search');
-        $students = Students::where('id_no', 'like', "%{$search}%")
-                            ->orWhere('firstname', 'like', "%{$search}%")
-                            ->get(['id_no', 'firstname', 'lastname', 'department']); // Select specific columns
-
-        return response()->json($students);
+        $search = $request->get('id');
+     
+        $result = Students::where('id_no', 'LIKE', '%' . $search . '%')->pluck('id_no');
+          
+        return response()->json($result);
     }
+
+    public function getStudentDetails($id)
+    {
+        // Log the ID without any curly braces
+        $id = trim($id, '{}'); // Remove curly braces if they exist
+        \Log::info("Fetching details for cleaned ID: " . $id);
+        
+        $student = Students::where('id_no', $id)->first(['firstname', 'lastname', 'department']);
+        
+        if ($student) {
+            return response()->json($student);
+        }
+        
+        return response()->json(['error' => 'Student not found'], 404);
+    }
+
 
     public function borrowerFormPost(Request $request)
     {
@@ -55,24 +70,6 @@ class TransactionController extends Controller
                              'expected_return_date' => $data['expected_return_date'],
                              'equipment' => $equipment,
                          ]);
-    }
-
-    public function showBorrowDetails(Request $request, $code)
-    {
-        $equipment = Equipment::where('code', $code)->first();
-
-        $data = [
-            'equipment' => $equipment,
-            'borrowers_id_no' => $borrowers_id_no = $request->query('borrowers_id_no'),
-            'borrowers_name' => $borrowers_name = $request->query('borrowers_name'),
-            'department' => $department = $request->query('department'),
-            'purpose' => $purpose = $request->query('purpose'),
-            'expected_return_date' => $expected_return_date = $request->query('expected_return_date'),
-            'title' => 'Borrow Details',
-        ];
-
-
-        return view('equipments/borrow_details', $data);
     }
 
     public function submitBorrow(Request $request, $id)
