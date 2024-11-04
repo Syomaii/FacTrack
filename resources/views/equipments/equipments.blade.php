@@ -84,6 +84,7 @@
                     <thead>
                         <tr>
                             <th scope="col">Item No.</th>
+                            <th class="col"></th>
                             <th scope="col">Brand</th> <!-- Brand First -->
                             <th scope="col">Name</th>
                             <th scope="col">Serial No.</th> <!-- Serial Number Column -->
@@ -96,7 +97,12 @@
                     <tbody>
                         @forelse ($equipments as $equipment)
                             <tr>
-                                <td><a href="javascript:void(0)" class="text-primary-600">#{{ $equipment->id }}</a>
+                                <td><a href="javascript:void(0)" class="text-primary-600">#{{ $equipment->id }}</a></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ $equipment->image }}" alt=""
+                                            class="flex-shrink-0 me-12 radius-8" width="50">
+                                    </div>
                                 </td>
                                 <td>{{ $equipment->brand }}</td> <!-- Brand Data -->
                                 <td>{{ $equipment->name }}</td>
