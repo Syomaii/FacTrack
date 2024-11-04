@@ -65,7 +65,8 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Upload</button>
+                    <button type="button" class="btn btn-primary w-100" id="previewBtn">Preview</button>
+                    <button type="submit" class="btn btn-success w-100 mt-3" id="submitBtn" style="display: none;" disabled>Confirm and Submit</button>
                 </form>
             </div>
 
@@ -74,53 +75,17 @@
                     <table class="table bordered-table sm-table mb-0">
                         <thead>
                             <tr>
-                                <th scope="col">FirstName</th>
-                                <th scope="col">LastName</th>
+                                <th scope="col">No.</th>
+                                <th scope="col">ID No.</th>
+                                <th scope="col">Lastname</th>
+                                <th scope="col">Firstname</th>
+                                <th scope="col">Course/Year</th>
+                                <th scope="col">Gender</th>
+                                <th scope="col">Mobile</th>
                                 <th scope="col">Email</th>
-                                <th scope="col">Phone Number</th>
-                                <th scope="col">Office</th>
-                                <th scope="col">Designation</th>
-                                <th scope="col">Role</th>
-                                <th scope="col" class="text-center">Status</th>
-                                <th scope="col" class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                                <tr>
-                                    <td>
-                                        <h6 class="text-md mb-0 fw-medium flex-grow-1"></h6>
-                                    </td>
-                                    <td>
-                                        <h6 class="text-md mb-0 fw-medium flex-grow-1"></h6>
-                                    </td>
-                                    <td>
-                                        <span class="text-md mb-0 fw-normal text-secondary-light"></span>
-                                    </td>
-                                    <td>
-                                        <span class="text-md mb-0 fw-normal text-secondary-light"></span>
-                                    </td>
-                                    <td>
-                                        
-                                    </td>
-                                    <td>
-                                        
-                                    </td>
-                                    <td></td>
-                                    <td class="text-center">
-                                        <span class="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">Active</span>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="d-flex align-items-center gap-10 justify-content-center">
-                                            <a href="#">
-                                                <button type="button"
-                                                        class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle">
-                                                    <iconify-icon icon="majesticons:eye-line"
-                                                                class="icon text-xl"></iconify-icon>
-                                                </button>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
                             {{-- @empty
                                 <tr>
                                     <td colspan="10" class="text-center">No students found from your office/department.</td>
@@ -136,3 +101,52 @@
     @include('templates.footer_inc')
 </main>
 @include('templates.footer')
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+    document.getElementById('previewBtn').addEventListener('click', function() {
+        var fileInput = document.getElementById('file');
+        var file = fileInput.files[0];
+        
+        if (file && (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'application/vnd.ms-excel')) {
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+                var data = new Uint8Array(e.target.result);
+                var workbook = XLSX.read(data, { type: 'array' });
+                var firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                var sheetData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+                
+                // Clear previous table content
+                var tableBody = document.querySelector('table tbody');
+                tableBody.innerHTML = ""; 
+                
+                // Process headers and rows for display
+                var headers = sheetData[0];
+                sheetData.slice(1).forEach(function(row) {
+                    var newRow = document.createElement('tr');
+                    
+                    headers.forEach((header, index) => {
+                        var cell = document.createElement('td');
+                        cell.textContent = row[index] || ''; // Fallback to empty if cell data is missing
+                        newRow.appendChild(cell);
+                    });
+                    
+                    tableBody.appendChild(newRow);
+                });
+                
+                // Enable and display the submit button after preview
+                var submitBtn = document.getElementById('submitBtn');
+                submitBtn.style.display = 'block';
+                submitBtn.disabled = false;
+            };
+            
+            reader.readAsArrayBuffer(file);
+        } else {
+            alert('Please upload a valid Excel file (XLSX or XLS).');
+        }
+    });
+
+
+
+</script>
