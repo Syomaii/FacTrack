@@ -116,7 +116,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/borrow-details/{code}', [TransactionController::class, 'showBorrowDetails'])->name('borrow_details');
         Route::post('/borrow-equipment/{id}', [TransactionController::class, 'submitBorrow'])->name('borrow-equipment-post');
         Route::get('/search-students', [TransactionController::class, 'searchStudents'])->name('search.students');
-
+        Route::get('/get-student-details/{id}', [TransactionController::class, 'getStudentDetails']);
 
         Route::get('/maintenance-equipment', [PageController::class, 'maintenance'])->name('maintenance-equipment');
         Route::get('/maintenance-equipment-details/{code}', [TransactionController::class, 'maintenanceDetails'])->name('maintenance-equipment-details');
@@ -138,6 +138,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/facilities', [PageController::class, 'facilities'])->name('facilities');
         Route::get('/add-equipment/{id}', [PageController::class, 'addEquipment'])->name('add_equipment');
         Route::post('/add-equipment/{id}', [EquipmentController::class, 'addEquipmentPost'])->name('add_equipment');
+        Route::get('/equipment-code/{code}', [EquipmentController::class, 'equipmentCode'])->name('added-equipment');
+        
         Route::delete('/equipments/{id}', [EquipmentController::class, 'deleteEquipment'])->name('delete_equipment');
 
         Route::put('/equipments/update', [EquipmentController::class, 'updateEquipment'])->name('update_equipment');
