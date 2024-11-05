@@ -94,32 +94,7 @@
     </script>
 @endif
 
-@if (url()->current() == url('return-equipment'))
-    <script src="/assets/js/lib/html5-qrcode.min.js"></script>
-    <script>
-        const scanner = new Html5QrcodeScanner('return', {
-            qrbox: {
-                width: 300,
-                height: 300,
-            },
-            fps: 20,
-        });
 
-        scanner.render(success, error);
-
-        function success(result) {
-            console.log(result);
-
-            $('#code').val(result);
-            $('#scanId').submit();
-            scanner.clear();
-        }
-
-        function error(err) {
-            console.log(err);
-        }
-    </script>
-@endif
 
 
 
