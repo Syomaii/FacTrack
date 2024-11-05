@@ -31,7 +31,9 @@
                     {{ session('success') }}
                 </div>
             </div>
-        @elseif (session('error'))
+        @endif
+        
+        @if (session('error'))
             <div
                 class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-2">
@@ -39,7 +41,9 @@
                     {{ session('error') }}
                 </div>
             </div>
-        @elseif (isset($errors) && $errors->any())
+        @endif
+
+        @if (isset($errors) && $errors->any())
             <div
                 class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-2">
@@ -51,6 +55,35 @@
             </div>
         @endif
 
+        @if (session()->has('failures'))
+            <pre>{{ print_r(session('failures'), true) }}</pre> <!-- Debug output -->
+            <table class="table table-danger">
+                <thead>
+                    <tr>
+                        <th>Row</th>
+                        <th>Attribute</th>
+                        <th>Errors</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (session('failures') as $failure)
+                        <tr>
+                            <td>{{ $failure->row() }}</td>
+                            <td>{{ $failure->attribute() }}</td>
+                            <td>
+                                <ul>
+                                    @foreach ($failure->errors() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </td>
+                            <td>{{ $failure->values()[$failure->attribute()] ?? '' }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
         <div class="card h-100 p-0 radius-12">
             <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                 <h5 class="mb-0">Upload Student File</h5>
