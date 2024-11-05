@@ -275,7 +275,6 @@ class TransactionController extends Controller
                 //     'equipment_id' => $equipment->id,
                 //     'returned_date' => $returnedDate,
                 // ]);
-                return redirect()->back()->with('success', 'Equipment returned successfully.');
             break;
 
             case "In Maintenance":
@@ -287,21 +286,21 @@ class TransactionController extends Controller
                     'recommendations' => 'nullable|string',
                 ]);
             
-                // Retrieve the equipment using the scanned code
                 $equipment = Equipment::where('code', $code)->first();
             
                 if (!$equipment) {
                     return redirect()->back()->withErrors(['msg' => 'Equipment not found.']);
                 }
-            
-                // Retrieve the existing maintenance record
-                $maintenance = Maintenance::where('equipment_id', $equipment->id)->first();
+
+                $maintenance = Maintenance::where('equipment_id', $equipment->id)
+                    ->whereNull('returned_date')
+                    ->latest() 
+                    ->first();
             
                 if (!$maintenance) {
-                    return redirect()->back()->withErrors(['msg' => 'Maintenance record not found.']);
+                    return redirect()->back()->withErrors(['msg' => 'Maintenance record not found or already returned.']);
                 }
-            
-                // Update the maintenance record
+
                 $maintenance->update([
                     'returned_date' => $validatedData['returned_date'],
                     'status' => 'okay',
@@ -311,14 +310,13 @@ class TransactionController extends Controller
                     'recommendations' => $validatedData['recommendations'],
                 ]);
 
-                
-            
-                // Update the equipment status
                 $equipment->status = 'Available';
                 $equipment->save();
+                $maintenance->save();
             
                 return redirect()->back()->with('success', 'Equipment returned successfully.');
             break;
+            
 
             case 'In Repair':
                 // Handle repair return
@@ -339,7 +337,6 @@ class TransactionController extends Controller
                 ]);
                 $equipment->status = 'Available'; // Update status
                 $equipment->save();
-                return redirect()->back()->with('success', 'Equipment returned successfully.');
             break;
 
             default:
@@ -347,6 +344,7 @@ class TransactionController extends Controller
                 
             
         }
+
 
         // Save the equipment status change
         
