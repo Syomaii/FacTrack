@@ -24,7 +24,8 @@ class TransactionController extends Controller
     {
         $search = $request->get('id');
      
-        $result = Students::where('id_no', 'LIKE', '%' . $search . '%')->pluck('id_no');
+        $result = Students::where('id_no', 'LIKE',  $search . '%')->orderBy('id_no')
+        ->pluck('id_no');
           
         return response()->json($result);
     }
@@ -73,6 +74,24 @@ class TransactionController extends Controller
                              'expected_return_date' => $data['expected_return_date'],
                              'equipment' => $equipment,
                          ]);
+    }
+
+    public function showBorrowDetails(Request $request, $code)
+    {
+        $equipment = Equipment::where('code', $code)->first();
+
+        $data = [
+            'equipment' => $equipment,
+            'borrowers_id_no' => $borrowers_id_no = $request->query('borrowers_id_no'),
+            'borrowers_name' => $borrowers_name = $request->query('borrowers_name'),
+            'department' => $department = $request->query('department'),
+            'purpose' => $purpose = $request->query('purpose'),
+            'expected_return_date' => $expected_return_date = $request->query('expected_return_date'),
+            'title' => 'Borrow Details',
+        ];
+
+
+        return view('equipments/borrow_details', $data);
     }
 
     public function submitBorrow(Request $request, $id)
