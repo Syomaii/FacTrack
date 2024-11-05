@@ -267,9 +267,36 @@ class TransactionController extends Controller
         switch ($status) {
             case 'Borrowed':
                 // Handle returning borrowed equipment
-                $returnedDate = $request->input('returned_date');
-                $equipment->status = 'Available';
+                $validatedData = $request->validate([
+                    'returned_date' => 'required|date',
+                    'remarks' => 'nullable|string',
+                ]);
 
+                $equipment = Equipment::where('code', $code)->first();
+            
+                if (!$equipment) {
+                    return redirect()->back()->withErrors(['msg' => 'Equipment not found.']);
+                }
+
+                $borrow = Borrower::where('equipment_id', $equipment->id)
+                    ->whereNull('returned_date')
+                    ->latest() 
+                    ->first();
+
+                    if (!$borrow) {
+                        return redirect()->back()->withErrors(['msg' => 'Borrow record not found or already returned.']);
+                    }
+    
+                    $borrow->update([
+                        'returned_date' => $validatedData['returned_date'],
+                        'remarks' => $validatedData['remarks'],
+                    ]);
+
+                    $equipment->status = 'Available';
+                    $equipment->save();
+                    $borrow->save();
+                
+                    return redirect()->back()->with('success', 'Equipment returned successfully.');
             break;
 
             case "In Maintenance":
