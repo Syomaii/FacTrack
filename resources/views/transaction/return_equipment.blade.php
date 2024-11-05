@@ -80,12 +80,13 @@
                 </div>
 
                 <!-- Maintenance Tab -->
-                <form enctype="multipart/form-data" method="POST" id="maintenanceForm">               
-                    @csrf 
-                    <input type="hidden" name="code" id="code" />
-                    <input type="hidden" name="returned_date" id="returned_date" value="{{ now()->format('Y-m-d\TH:i') }}">
-                    <div class="tab-pane fade" id="maintenance" role="tabpanel" aria-labelledby="maintenance-tab">
-                        <div class="card p-3">
+                <div class="tab-pane fade" id="maintenance" role="tabpanel" aria-labelledby="maintenance-tab">
+                    <div class="card p-3">
+                        <form enctype="multipart/form-data" method="POST" id="maintenanceForm">
+                            @csrf
+                            <input type="hidden" name="code" id="maintenance_code" />
+                            <input type="hidden" name="returned_date" id="maintenance_returned_date"
+                                value="{{ now()->format('Y-m-d\TH:i') }}">
                             <div id="preview-maintenance" style="width: 300px; height: 50px;"></div>
                             <select class="form-control mb-3" id="maintenance_issue" name="issue_note">
                                 <option value="" selected disabled>Problems Encountered</option>
@@ -97,89 +98,102 @@
                             </select>
                             <textarea class="form-control mb-3" placeholder="Action Taken" id="maintenance_action_taken" name="action_taken"></textarea>
                             <textarea class="form-control mb-3" placeholder="Remarks" id="maintenance_remarks" name="remarks"></textarea>
-                            <textarea class="form-control mb-3" placeholder="Recommendations" id="maintenance_recommendations" name="recommendations"></textarea>
-                    
+                            <textarea class="form-control mb-3" placeholder="Recommendations" id="maintenance_recommendations"
+                                name="recommendations"></textarea>
+
                             <div class="d-flex justify-content-center gap-3 mt-3">
-                                <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal" data-bs-target="#scanModalMaintenance">
+                                <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
+                                    data-bs-target="#scanModalMaintenance">
                                     Scan QR Code
                                 </button>
                                 <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
                             </div>
-                        </div>
+                        </form>
                     </div>
-                </form>
-            
+                </div>
+
                 <!-- Repair Tab -->
                 <div class="tab-pane fade" id="repair" role="tabpanel" aria-labelledby="repair-tab">
                     <div class="card p-3">
-                        <div id="preview-repair" style="width: 300px; height: 50px;"></div>
-                        <select class="form-control mb-3" id="repair_issue">
-                            <option value="" selected disabled>Problems Encountered</option>
-                            <option value="System Failure">System Failure</option>
-                            <option value="HDD Failure">HDD Failure</option>
-                            <option value="FDD Failure">FDD Failure</option>
-                            <option value="Memory error">Memory error</option>
-                            <option value="Other">Other</option>
-                        </select>
-                        <textarea class="form-control mb-3" placeholder="Action Taken" id="repair_action_taken"></textarea>
-                        <textarea class="form-control mb-3" placeholder="Remarks" id="repair_remarks"></textarea>
-                        <textarea class="form-control mb-3" placeholder="Recommendations" id="repair_recommendations"></textarea>
-                        <div class="d-flex justify-content-center gap-3 mt-3">
-                            <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
-                                data-bs-target="#scanModalRepair">
-                                Scan QR Code
-                            </button>
-                            <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
-                        </div>
+                        <form enctype="multipart/form-data" method="POST" id="repairForm">
+                            @csrf
+                            <input type="hidden" name="code" id="repair_code" />
+                            <input type="hidden" name="returned_date" id="repair_returned_date"
+                                value="{{ now()->format('Y-m-d\TH:i') }}">
+                            <div id="preview-repair" style="width: 300px; height: 50px;"></div>
+                            <select class="form-control mb-3" id="repair_issue" name="issue_note">
+                                <option value="" selected disabled>Problems Encountered</option>
+                                <option value="System Failure">System Failure</option>
+                                <option value="HDD Failure">HDD Failure</option>
+                                <option value="FDD Failure">FDD Failure</option>
+                                <option value="Memory error">Memory error</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <textarea class="form-control mb-3" placeholder="Action Taken" id="repair_action_taken" name="action_taken"></textarea>
+                            <textarea class="form-control mb-3" placeholder="Remarks" id="repair_remarks" name="remarks"></textarea>
+                            <textarea class="form-control mb-3" placeholder="Recommendations" id="repair_recommendations"
+                                name="recommendations"></textarea>
+
+                            <div class="d-flex justify-content-center gap-3 mt-3">
+                                <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
+                                    data-bs-target="#scanModalRepair">
+                                    Scan QR Code
+                                </button>
+                                <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
+                            </div>
+                        </form>
                     </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals for Each QR Scanner -->
+    <div class="modal fade" id="scanModalBorrow" tabindex="-1" aria-labelledby="scanModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Scan QR Code (Borrow)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="preview-borrow-scan" style="width: 100%; height: 300px;"></div>
                 </div>
             </div>
         </div>
     </div>
-    
-        <!-- Modals for Each QR Scanner -->
-        <div class="modal fade" id="scanModalBorrow" tabindex="-1" aria-labelledby="scanModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Scan QR Code (Borrow)</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="preview-borrow-scan" style="width: 100%; height: 300px;"></div>
-                    </div>
+
+    <div class="modal fade" id="scanModalMaintenance" tabindex="-1" aria-labelledby="scanModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Scan QR Code (Maintenance)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="preview-maintenance-scan" style="width: 100%; height: 300px;"></div>
                 </div>
             </div>
         </div>
-    
-        <div class="modal fade" id="scanModalMaintenance" tabindex="-1" aria-labelledby="scanModalLabel"
-                aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Scan QR Code (Maintenance)</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="preview-maintenance-scan" style="width: 100%; height: 300px;"></div>
-                    </div>
+    </div>
+
+    <div class="modal fade" id="scanModalRepair" tabindex="-1" aria-labelledby="scanModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Scan QR Code (Repair)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="preview-repair-scan" style="width: 100%; height: 300px;"></div>
                 </div>
             </div>
         </div>
-    
-        <div class="modal fade" id="scanModalRepair" tabindex="-1" aria-labelledby="scanModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Scan QR Code (Repair)</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="preview-repair-scan" style="width: 100%; height: 300px;"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
     @include('templates.footer_inc')
 </main>
 @include('templates.footer')
@@ -245,32 +259,28 @@
         });
     });
 
-
-
-
     // Repair scanner
     $('#scanModalRepair').on('shown.bs.modal', function() {
         initScanner("preview-repair-scan", function(result) {
-            console.log(result);
-            var repairIssue = $('#repair_issue').val();
-            var actionTaken = $('#repair_action_taken').val();
-            var remarks = $('#repair_remarks').val();
-            var recommendations = $('#repair_recommendations').val();
+            console.log("Scanned Result:", result); // Log the scanned result
 
-            // Get current date and time for the repair date
-            var now = new Date();
-            var returnedDate = now.toISOString();
+            // Set the scanned code in the hidden input
+            $('#code').val(result); // Assuming result is the scanned code
 
-            const additionalParams = {
-                repair_issue_note: repairIssue,
-                returned_date: returnedDate,
-                action_taken: actionTaken,
-                remarks: remarks,
-                recommendations: recommendations
-            };
+            // Construct the action URL by using the scanned result
+            var actionUrl = "{{ url('/return-equipment/') }}/" + result;
 
-            handleReturnEquipment(result, 'In Repair', additionalParams);
-            $('#scanModalRepair').modal('hide');
+            console.log("Action URL:", actionUrl); // Log the constructed URL
+
+            $('#repairForm').attr('action', actionUrl);
+
+            // Confirm before submitting
+            if (confirm("Do you want to submit the form with scanned code: " + result + "?")) {
+                $('#repairForm').submit(); // Submit the form
+                $('#scanModalRepair').modal('hide'); // Close the modal after submission
+            } else {
+                $('#code').val(''); // Clear the scanned code if not submitting
+            }
         });
     });
 </script>

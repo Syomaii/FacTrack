@@ -270,11 +270,6 @@ class TransactionController extends Controller
                 $returnedDate = $request->input('returned_date');
                 $equipment->status = 'Available';
 
-                // Optionally log the borrowing return
-                // BorrowLog::create([
-                //     'equipment_id' => $equipment->id,
-                //     'returned_date' => $returnedDate,
-                // ]);
             break;
 
             case "In Maintenance":
@@ -316,27 +311,44 @@ class TransactionController extends Controller
             
                 return redirect()->back()->with('success', 'Equipment returned successfully.');
             break;
-            
 
             case 'In Repair':
-                // Handle repair return
-                $repairIssueNote = $request->input('repair_issue_note'); // Ensure this matches your form field name
-                $returnedDate = $request->input('returned_date'); // Use the returned date
-                $actionTaken = $request->input('action_taken');
-                $remarks = $request->input('remarks');
-                $recommendations = $request->input('recommendations');
-
-                // Process the repair return (e.g., logging the repair)
-                Repair::create([
-                    'equipment_id' => $equipment->id,
-                    'repair_issue_note' => $repairIssueNote,
-                    'repair_date' => $returnedDate,
-                    'action_taken' => $actionTaken,
-                    'remarks' => $remarks,
-                    'recommendations' => $recommendations,
+                $validatedData = $request->validate([
+                    'returned_date' => 'required|date',
+                    'issue_note' => 'required_if:status,In Repair|string',
+                    'action_taken' => 'required_if:status,In Repair|string',
+                    'remarks' => 'nullable|string',
+                    'recommendations' => 'nullable|string',
                 ]);
-                $equipment->status = 'Available'; // Update status
+
+                $equipment = Equipment::where('code', $code)->first();
+            
+                if (!$equipment) {
+                    return redirect()->back()->withErrors(['msg' => 'Equipment not found.']);
+                }
+
+                $repair = Repair::where('equipment_id', $equipment->id)
+                ->whereNull('returned_date')
+                ->latest() 
+                ->first();
+
+                if (!$repair) {
+                    return redirect()->back()->withErrors(['msg' => 'Repair record not found or already returned.']);
+                }
+
+                $repair->update([
+                    'returned_date' => $validatedData['returned_date'],
+                    'status' => 'already repaired',
+                    'issue_note' => $validatedData['issue_note'],
+                    'action_taken' => $validatedData['action_taken'],
+                    'remarks' => $validatedData['remarks'],
+                    'recommendations' => $validatedData['recommendations'],
+                ]);
+
+                $equipment->status = 'Available';
                 $equipment->save();
+                $repair->save();
+                return redirect()->back()->with('success', 'Equipment returned successfully.');
             break;
 
             default:
