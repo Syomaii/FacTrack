@@ -14,14 +14,19 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Concerns\WithSkipDuplicates;
+use Maatwebsite\Excel\Imports\HeadingRowFormatter;
+use Maatwebsite\Excel\Validators\Failure;
 
 class StudentsImport implements 
     ToModel, 
     WithHeadingRow, 
     SkipsOnError, 
+    SkipsOnFailure,
     WithBatchInserts, 
     WithChunkReading,
     WithValidation
+
 {
     use Importable, 
         SkipsErrors,
@@ -32,6 +37,12 @@ class StudentsImport implements
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
+
+    public function __construct()
+    {
+        HeadingRowFormatter::default('none');
+    }
+
     public function model(array $row)
     {   
         Log::info('Row data:', $row);  // Log each row's data for debugging
@@ -50,7 +61,7 @@ class StudentsImport implements
     public function rules(): array
     {
         return [
-            '*.email' => ['email', 'unique:students,email']
+            '*.Email' => ['email', 'unique:students,email']
         ];
     }
 
