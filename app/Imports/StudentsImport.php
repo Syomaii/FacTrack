@@ -20,7 +20,8 @@ class StudentsImport implements
     WithHeadingRow, 
     SkipsOnError, 
     WithBatchInserts, 
-    WithChunkReading
+    WithChunkReading,
+    WithValidation
 {
     use Importable, 
         SkipsErrors,
