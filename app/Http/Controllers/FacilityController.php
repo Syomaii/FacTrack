@@ -39,10 +39,14 @@ class FacilityController extends Controller
         if($facility->name === $request->name){
             $data = $request->validate([
                 'name' => 'required',
+                'description'=> 'required',
+                'type'=> 'required',
             ]);
         }else{
             $data = $request->validate([
                 'name' => 'required|unique:offices,name',
+                'description'=> 'required',
+                'type'=> 'required',
             ]);
         }
 
