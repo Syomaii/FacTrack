@@ -80,7 +80,7 @@
                                 <th scope="col">Lastname</th>
                                 <th scope="col">Firstname</th>
                                 <th scope="col">Course/Year</th>
-                                <th scope="col">Gender</th>x
+                                <th scope="col">Gender</th>
                                 <th scope="col">Mobile</th>
                                 <th scope="col">Email</th>
                             </tr>
@@ -139,6 +139,10 @@
                 var submitBtn = document.getElementById('submitBtn');
                 submitBtn.style.display = 'block';
                 submitBtn.disabled = false;
+
+                var previewBtn = document.getElementById('previewBtn');
+                previewBtn.style.display = 'none';
+                previewBtn.disabled = true;
             };
             
             reader.readAsArrayBuffer(file);
