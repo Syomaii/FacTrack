@@ -211,4 +211,16 @@ class PageController extends Controller
     public function students(){
         return view('imports/students')->with('title', 'Import');
     }
+
+    public function disposeEquipment()
+    {
+        // Logic for scanning or displaying equipment in maintenance
+        return view('transaction/disposed')->with('title', 'Dispose Equipment'); // Load the maintenance view
+    }
+    
+    public function donateEquipment()
+    {
+        // Logic for scanning or displaying equipment in maintenance
+        return view('transaction/donate')->with('title', 'Donate Equipment'); // Load the maintenance view
+    }
 }

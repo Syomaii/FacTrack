@@ -30,7 +30,8 @@
             </ul>
         </div>
         @if (session('addEquipmentSuccessfully'))
-            <div class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
+            <div
+                class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-2">
                     <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
                     {{ session('addEquipmentSuccessfully') }}
@@ -78,27 +79,29 @@
 
                     @if (auth()->user()->type === 'facility manager')
                         <div class="mt-4">
-                            <a href="javascript:void(0)"
-                                class="btn btn-success text-base radius-8 px-20 py-11 edit-equipment"
-                                data-id="{{ $equipments->id }}" data-name="{{ $equipments->name }}"
-                                data-description="{{ $equipments->description }}"
-                                data-acquired_date="{{ $equipments->acquired_date }}"
-                                data-status="{{ $equipments->status }}"
-                                data-facility="{{ $equipments->facility->name }}"
-                                data-brand="{{ $equipments->brand }}"
-                                data-serial_no="{{ $equipments->serial_no }}">Edit
-                                Equipment
-                            </a>
+                            @if ($equipments->status !== 'Donated' && $equipments->status !== 'Disposed')
+                                <a href="javascript:void(0)"
+                                    class="btn btn-success text-base radius-8 px-20 py-11 edit-equipment"
+                                    data-id="{{ $equipments->id }}" data-name="{{ $equipments->name }}"
+                                    data-description="{{ $equipments->description }}"
+                                    data-acquired_date="{{ $equipments->acquired_date }}"
+                                    data-status="{{ $equipments->status }}"
+                                    data-facility="{{ $equipments->facility->name }}"
+                                    data-brand="{{ $equipments->brand }}"
+                                    data-serial_no="{{ $equipments->serial_no }}">Edit
+                                    Equipment
+                                </a>
+                            @endif
                             <a href="javascript:void(0)"
                                 class="btn btn-danger text-base radius-8 px-20 py-11 delete-equipment"
                                 data-id="{{ $equipments->id }}">Delete Equipment
                             </a>
-
-                            <button type="button"
-                                class="btn btn-primary text-base radius-8 px-20 py-11"
-                                onclick="printInvoice()">
-                                Print QR Code
-                            </button>
+                            @if ($equipments->status !== 'Donated' && $equipments->status !== 'Disposed')
+                                <button type="button" class="btn btn-primary text-base radius-8 px-20 py-11"
+                                    onclick="printInvoice()">
+                                    Print QR Code
+                                </button>
+                            @endif
 
                             <form id="delete-form-{{ $equipments->id }}"
                                 action="{{ route('delete_equipment', $equipments->id) }}" method="POST"
@@ -161,7 +164,8 @@
                         <!-- Serial Number -->
                         <div class="mb-3">
                             <label for="equipmentSerialNo" class="form-label">Serial Number</label>
-                            <input type="text" class="form-control" id="equipmentSerialNo" name="serial_no" required>
+                            <input type="text" class="form-control" id="equipmentSerialNo" name="serial_no"
+                                required>
                             @error('serial_no')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror

@@ -67,15 +67,21 @@
                 <!-- Borrow Tab -->
                 <div class="tab-pane fade show active" id="borrow" role="tabpanel" aria-labelledby="borrow-tab">
                     <div class="card p-3">
-                        <div id="preview-borrow" style="width: 300px; height: 50px;"></div>
-                        <textarea class="form-control mt-3" placeholder="Remarks" id="borrow_remarks"></textarea>
-                        <div class="d-flex justify-content-center gap-3 mt-3">
-                            <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
-                                data-bs-target="#scanModalBorrow">
-                                Scan QR Code
-                            </button>
-                            <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
-                        </div>
+                        <form enctype="multipart/form-data" method="POST" id="borrowForm">
+                            @csrf
+                            <input type="hidden" name="code" id="borrow_code" />
+                            <input type="hidden" name="returned_date" id="borrow_returned_date"
+                                value="{{ now()->format('Y-m-d\TH:i') }}">
+                            <div id="preview-borrow" style="width: 300px; height: 50px;"></div>
+                            <textarea class="form-control mt-3" placeholder="Remarks" id="borrow_remarks" name="remarks"></textarea>
+                            <div class="d-flex justify-content-center gap-3 mt-3">
+                                <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
+                                    data-bs-target="#scanModalBorrow">
+                                    Scan QR Code
+                                </button>
+                                <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
@@ -217,20 +223,25 @@
     // Borrow scanner
     $('#scanModalBorrow').on('shown.bs.modal', function() {
         initScanner("preview-borrow-scan", function(result) {
-            console.log(result);
-            $('#borrow_remarks').val(result);
+            console.log("Scanned Result:", result); // Log the scanned result
 
-            // Get current date and time for the returned date
-            var now = new Date();
-            var returnedDate = now.toISOString();
+            // Set the scanned code in the hidden input
+            $('#code').val(result); // Assuming result is the scanned code
 
-            // Construct additional parameters for borrow
-            const additionalParams = {
-                returned_date: returnedDate
-            };
+            // Construct the action URL by using the scanned result
+            var actionUrl = "{{ url('/return-equipment/') }}/" + result;
 
-            handleReturnEquipment(result, 'Borrowed', additionalParams);
-            $('#scanModalBorrow').modal('hide');
+            console.log("Action URL:", actionUrl); // Log the constructed URL
+
+            $('#borrowForm').attr('action', actionUrl);
+
+            // Confirm before submitting
+            if (confirm("Do you want to submit the form with scanned code: " + result + "?")) {
+                $('#borrowForm').submit(); // Submit the form
+                $('#scanModalBorrow').modal('hide'); // Close the modal after submission
+            } else {
+                $('#code').val(''); // Clear the scanned code if not submitting
+            }
         });
     });
 

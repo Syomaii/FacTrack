@@ -97,7 +97,8 @@
                     <tbody>
                         @forelse ($equipments as $equipment)
                             <tr>
-                                <td><a href="javascript:void(0)" class="text-primary-600">#{{ $equipment->id }}</a></td>
+                                <td><a href="javascript:void(0)" class="text-primary-600">#{{ $equipment->id }}</a>
+                                </td>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <img src="{{ $equipment->image }}" alt=""
@@ -122,6 +123,12 @@
                                     @elseif($equipment->status === 'Borrowed')
                                         <span
                                             class="bg-warning-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                    @elseif($equipment->status === 'Disposed')
+                                        <span
+                                            class="bg-danger-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                    @elseif($equipment->status === 'Donated')
+                                        <span
+                                            class="bg-danger-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
                                     @endif
                                 </td>
                                 <td>
@@ -130,17 +137,19 @@
                                         data-id="{{ $equipment->id }}">
                                         <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
                                     </a>
-                                    <a href="javascript:void(0)"
-                                        class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center edit-equipment"
-                                        data-id="{{ $equipment->id }}" data-name="{{ $equipment->name }}"
-                                        data-brand="{{ $equipment->brand }}"
-                                        data-serial_no="{{ $equipment->serial_no }}"
-                                        data-description="{{ $equipment->description }}"
-                                        data-acquired_date="{{ $equipment->acquired_date }}"
-                                        data-status="{{ $equipment->status }}"
-                                        data-facility="{{ $equipment->facility->name }}">
-                                        <iconify-icon icon="lucide:edit"></iconify-icon>
-                                    </a>
+                                    @if ($equipment->status !== 'Donated' && $equipment->status !== 'Disposed')
+                                        <a href="javascript:void(0)"
+                                            class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center edit-equipment"
+                                            data-id="{{ $equipment->id }}" data-name="{{ $equipment->name }}"
+                                            data-brand="{{ $equipment->brand }}"
+                                            data-serial_no="{{ $equipment->serial_no }}"
+                                            data-description="{{ $equipment->description }}"
+                                            data-acquired_date="{{ $equipment->acquired_date }}"
+                                            data-status="{{ $equipment->status }}"
+                                            data-facility="{{ $equipment->facility->name }}">
+                                            <iconify-icon icon="lucide:edit"></iconify-icon>
+                                        </a>
+                                    @endif
                                     <a href="javascript:void(0)"
                                         class="w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center delete-equipment"
                                         data-id="{{ $equipment->id }}">

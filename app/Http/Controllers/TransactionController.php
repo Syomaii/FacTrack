@@ -8,6 +8,8 @@ use App\Models\Equipment;
 use App\Models\Students;
 use App\Models\Maintenance;
 use App\Models\Repair;
+use App\Models\Disposed;
+use App\Models\Donated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -224,15 +226,14 @@ class TransactionController extends Controller
             return redirect()->back()->withErrors(['error' => 'Equipment not found.']);
         }
     
-        // Fallback values if not provided in the request
-        $maintenanceDate = $request->input('repair_date') ?: now()->format('Y-m-d');
+        $repairedDate = $request->input('repair_date') ?: now()->format('Y-m-d');
         $issueNote = $request->input('issue_note') ?: 'No issue provided';
     
         return view('equipments.repair_equipment_details', [
             'equipment' => $equipment,
             'repair_id_no' => $equipment->id, 
             'issue_note' => $issueNote,
-            'repair_date' => $maintenanceDate,
+            'repair_date' => $repairedDate,
         ])->with('title', 'Repair Details');
     }
     
@@ -269,6 +270,110 @@ class TransactionController extends Controller
                          ->with('repairSuccessfully', 'Repair record submitted successfully.');
     }
 
+    public function disposedDetails(Request $request, $code)
+    {
+        $equipment = Equipment::where('code', $code)->first();
+    
+        // Check if equipment exists
+        if (!$equipment) {
+            return redirect()->back()->withErrors(['error' => 'Equipment not found.']);
+        }
+    
+        $disposedDate = $request->input('disposed_date') ?: now()->format('Y-m-d');
+        $issueNote = $request->input('remarks') ?: 'No issue provided';
+    
+        return view('transaction.disposed_equipment_details', [
+            'equipment' => $equipment,
+            'disposed_id_no' => $equipment->id, 
+            'remarks' => $issueNote,
+            'disposed_date' => $disposedDate,
+        ])->with('title', 'Repair Details');
+    }
+
+    public function submitDisposed(Request $request, $code)
+    {
+        $validatedData = $request->validate([
+            'remarks' => 'required|string|max:255',
+            'disposed_date' => 'required|date',
+        ]);
+    
+        // Find the equipment by code
+        $equipment = Equipment::findOrFail($code);
+    
+        // Check if the equipment is available for maintenance
+        if ($equipment->status !== 'Available') {
+            return back()->withErrors(['equipment' => 'This equipment is not available for repair.']);
+        }
+    
+        // Create the maintenance record
+        Disposed::create([
+            'equipment_id' => $equipment->id, // Use the ID of the equipment
+            'remarks' => 'The day the equipment is Disposed', // Make sure this is the intended field
+            'disposed_date' => $validatedData['disposed_date'], // Use the date from the input
+            'user_id' => auth()->user()->id,
+            'status' => 'Disposed',
+        ]);
+    
+        // Update equipment status
+        $equipment->status = 'Disposed';
+        $equipment->save();
+    
+        return redirect()->route('disposed_equipment') // Redirect to the equipments index page
+                         ->with('disposedSuccessfully', 'Disposed record submitted successfully.');
+    }
+
+    public function donateDetails(Request $request, $code)
+    {
+        $equipment = Equipment::where('code', $code)->first();
+    
+        // Check if equipment exists
+        if (!$equipment) {
+            return redirect()->back()->withErrors(['error' => 'Equipment not found.']);
+        }
+    
+        $donatedDate = $request->input('donated_date') ?: now()->format('Y-m-d');
+        $issueNote = $request->input('remarks') ?: 'No issue provided';
+    
+        return view('transaction.donated_equipment_details', [
+            'equipment' => $equipment,
+            'donated_id_no' => $equipment->id, 
+            'remarks' => $issueNote,
+            'donated_date' => $donatedDate,
+        ])->with('title', 'Repair Details');
+    }
+
+    public function submitDonated(Request $request, $code)
+    {
+        $validatedData = $request->validate([
+            'remarks' => 'required|string|max:255',
+            'donated_date' => 'required|date',
+        ]);
+    
+        // Find the equipment by code
+        $equipment = Equipment::findOrFail($code);
+    
+        // Check if the equipment is available for maintenance
+        if ($equipment->status !== 'Available') {
+            return back()->withErrors(['equipment' => 'This equipment is not available for repair.']);
+        }
+    
+        // Create the maintenance record
+        Donated::create([
+            'equipment_id' => $equipment->id, // Use the ID of the equipment
+            'remarks' => 'The day the equipment is Donated', // Make sure this is the intended field
+            'donated_date' => $validatedData['donated_date'], // Use the date from the input
+            'user_id' => auth()->user()->id,
+            'status' => 'Donated',
+        ]);
+    
+        // Update equipment status
+        $equipment->status = 'Donated';
+        $equipment->save();
+    
+        return redirect()->route('donated_equipment') // Redirect to the equipments index page
+                         ->with('donatedSuccessfully', 'Donated record submitted successfully.');
+    }
+
     public function returnEquipment($code, Request $request)
     {
         
@@ -286,9 +391,36 @@ class TransactionController extends Controller
         switch ($status) {
             case 'Borrowed':
                 // Handle returning borrowed equipment
-                $returnedDate = $request->input('returned_date');
-                $equipment->status = 'Available';
+                $validatedData = $request->validate([
+                    'returned_date' => 'required|date',
+                    'remarks' => 'nullable|string',
+                ]);
 
+                $equipment = Equipment::where('code', $code)->first();
+            
+                if (!$equipment) {
+                    return redirect()->back()->withErrors(['msg' => 'Equipment not found.']);
+                }
+
+                $borrow = Borrower::where('equipment_id', $equipment->id)
+                    ->whereNull('returned_date')
+                    ->latest() 
+                    ->first();
+
+                    if (!$borrow) {
+                        return redirect()->back()->withErrors(['msg' => 'Borrow record not found or already returned.']);
+                    }
+    
+                    $borrow->update([
+                        'returned_date' => $validatedData['returned_date'],
+                        'remarks' => $validatedData['remarks'],
+                    ]);
+
+                    $equipment->status = 'Available';
+                    $equipment->save();
+                    $borrow->save();
+                
+                    return redirect()->back()->with('success', 'Equipment returned successfully.');
             break;
 
             case "In Maintenance":

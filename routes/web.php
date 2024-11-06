@@ -126,7 +126,13 @@ Route::middleware(['auth'])->group(function () {
         Route::post('equipments/{code}/maintenance', action: [TransactionController::class, 'submitMaintenance'])->name('maintenance-equipment-post');
         Route::get('/repair-equipment', [PageController::class, 'repairEquipment'])->name('repair_equipment');
         Route::get('/repair-equipment-details/{code}', [TransactionController::class, 'repairDetails'])->name('repair-equipment-details');
-        Route::post('equipments/{code}/repair', action: [TransactionController::class, 'submitRepair'])->name('repair-equipment-post');
+        Route::post('equipments/{code}/repair', [TransactionController::class, 'submitRepair'])->name('repair-equipment-post');
+        Route::get('/dispose-equipment', [PageController::class, 'disposeEquipment'])->name('disposed_equipment');
+        Route::get('/disposed-equipment-details/{code}', [TransactionController::class, 'disposedDetails'])->name('disposed-equipment-details');
+        Route::post('equipments/{code}/disposed', [TransactionController::class, 'submitDisposed'])->name('disposed-equipment-post');
+        Route::get('/donate-equipment', [PageController::class, 'donateEquipment'])->name('donated_equipment');
+        Route::get('/donated-equipment-details/{code}', [TransactionController::class, 'donateDetails'])->name('donated-equipment-details');
+        Route::post('equipments/{code}/donated', [TransactionController::class, 'submitDonated'])->name('donated-equipment-post');
         // Route::post('/maintenance-equipment-post/{id}', [PageController::class, 'maintenancePost'])->name('maintenance-equipment-post');
 
         Route::post('/validate-equipment-status', [TransactionController::class, 'validateEquipmentStatus']);

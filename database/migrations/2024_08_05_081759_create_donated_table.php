@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('donated', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('equipment_id');
+            $table->unsignedInteger('user_id');
+            $table->foreign('equipment_id')->references('id')->on('equipments')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->dateTime('donated_date');
+            $table->string('remarks', 255);
             $table->timestamps();
         });
     }
