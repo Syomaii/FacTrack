@@ -65,13 +65,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/department/{department}/students', [StudentController::class, 'viewStudentsByDepartment'])->name('view-department-students');
         Route::get('/search-student', [StudentController::class, 'search'])->name('search-student');
         Route::post('/students', [FileUploadController::class, 'importStudents'])->name('import.file');
-<<<<<<< HEAD
         Route::get('/student/{id}', [StudentController::class, 'studentProfile'])->name('student.show_profile');
 
-=======
         Route::get('/add-student', [PageController::class, 'addStudent'])->name('add-student');
         Route::post('/add-studentPost', [UserController::class, 'addStudentPost'])->name('add-studentPost');
->>>>>>> 01737c344f2a60f2fc8b35eb0fc0e587d20c8967
     });
     
     //----------------------------------------------------------------------------------------------------------------
