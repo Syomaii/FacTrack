@@ -102,6 +102,8 @@
                                 <option value="Memory error">Memory error</option>
                                 <option value="Other">Other</option>
                             </select>
+                            <input class="form-control mb-3" placeholder="Technician" id="maintenance_technician"
+                                name="technician"></input>
                             <textarea class="form-control mb-3" placeholder="Action Taken" id="maintenance_action_taken" name="action_taken"></textarea>
                             <textarea class="form-control mb-3" placeholder="Remarks" id="maintenance_remarks" name="remarks"></textarea>
                             <textarea class="form-control mb-3" placeholder="Recommendations" id="maintenance_recommendations"
@@ -135,6 +137,8 @@
                                 <option value="Memory error">Memory error</option>
                                 <option value="Other">Other</option>
                             </select>
+                            <input class="form-control mb-3" placeholder="Technician" id="repair_technician"
+                                name="technician"></input>
                             <textarea class="form-control mb-3" placeholder="Action Taken" id="repair_action_taken" name="action_taken"></textarea>
                             <textarea class="form-control mb-3" placeholder="Remarks" id="repair_remarks" name="remarks"></textarea>
                             <textarea class="form-control mb-3" placeholder="Recommendations" id="repair_recommendations"

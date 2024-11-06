@@ -223,4 +223,10 @@ class PageController extends Controller
         // Logic for scanning or displaying equipment in maintenance
         return view('transaction/donate')->with('title', 'Donate Equipment'); // Load the maintenance view
     }
+
+    public function addStudent()
+{
+    return view('imports/addStudent')->with('title', 'Add Student');
+}
+
 }

@@ -65,8 +65,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/department/{department}/students', [StudentController::class, 'viewStudentsByDepartment'])->name('view-department-students');
         Route::get('/search-student', [StudentController::class, 'search'])->name('search-student');
         Route::post('/students', [FileUploadController::class, 'importStudents'])->name('import.file');
+<<<<<<< HEAD
         Route::get('/student/{id}', [StudentController::class, 'studentProfile'])->name('student.show_profile');
 
+=======
+        Route::get('/add-student', [PageController::class, 'addStudent'])->name('add-student');
+        Route::post('/add-studentPost', [UserController::class, 'addStudentPost'])->name('add-studentPost');
+>>>>>>> 01737c344f2a60f2fc8b35eb0fc0e587d20c8967
     });
     
     //----------------------------------------------------------------------------------------------------------------
@@ -99,6 +104,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/borrowed-equipment-reports', [ReportController::class, 'getBorrowedEquipmentReports'])->name('borrowed.equipment.reports');
         Route::get('/maintenanced-equipments', [ReportController::class, 'maintenancedEquipmentReports']);
         Route::get('/repaired-equipments', [ReportController::class, 'repairedEquipmentReports']);
+        Route::get('/repaired-equipment-reports', [ReportController::class, 'setDateRepairedEquipmentReports'])->name('repaired.equipment.reports');
         Route::get('/donated-equipments', [ReportController::class, 'donatedEquipmentReports']);
         Route::get('/disposed-equipments', [ReportController::class, 'disposedEquipmentReports']);
         Route::get('/borrowers-log', [PageController::class, 'borrowersLog'])->name('borrowersLog');

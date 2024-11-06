@@ -234,6 +234,59 @@ class UserController extends Controller
     }
 
     
+<<<<<<< HEAD
+=======
+        return view('imports.viewDepartmentStudents', compact('students', 'department', 'totalStudents', 'start', 'end'))
+            ->with('title', 'Students in ' . $department);
+    }
+    
+    public function search(Request $request)
+    {
+        $query = $request->input('search');
+        $students = Students::where('firstname', 'like', "%$query%")
+                            ->orWhere('lastname', 'like', "%$query%")
+                            ->orWhere('email', 'like', "%$query%")
+                            ->orWhere('course', 'like', "%$query%")
+                            ->paginate(10);
+
+        $department = $students->isNotEmpty() ? $students->first()->department : null;
+
+
+                            return view('imports.viewDepartmentStudents', [
+                                'students' => $students,
+                                'department' => $department, 
+                                'totalStudents' => $students->total(), 
+                                'start' => ($students->currentPage() - 1) * $students->perPage() + 1,
+                                'end' => min(($students->currentPage() - 1) * $students->perPage() + $students->perPage(), $students->total())
+                            ])->with('title', 'Search Results');
+    }
+>>>>>>> 01737c344f2a60f2fc8b35eb0fc0e587d20c8967
+
+    public function addStudentPost(Request $request)
+{
+    $request->validate([
+        'id_no' => 'required|integer|digits:8|unique:students,id_no', 
+        'firstname' => 'required|string|max:255',
+        'lastname' => 'required|string|max:255',
+        'gender' => 'required|in:M,F',
+        'email' => 'required|email|unique:students,email',
+        'course' => 'required|string|max:255',
+        'department' => 'required|string|max:255',
+    ]);
+
+    // Create a new student record
+    Students::create([
+        'id_no' => $request->id_no,
+        'firstname' => $request->firstname,
+        'lastname' => $request->lastname,
+        'gender' => $request->gender,
+        'email' => $request->email,
+        'course' => $request->course,
+        'department' => $request->department,
+    ]);
+
+    return redirect('/add-student')->with('success', 'Student added successfully.');
+}
 
     
 }

@@ -1,5 +1,6 @@
 @include('templates.header')
 <x-sidebar />
+
 <main class="dashboard-main">
     <x-navbar />
 
@@ -23,16 +24,8 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex flex-wrap align-items-center justify-content-end gap-2">
-                    <a href="javascript:void(0)" class="btn btn-sm btn-primary-600 radius-8 d-inline-flex align-items-center gap-1">
-                        <iconify-icon icon="pepicons-pencil:paper-plane" class="text-xl"></iconify-icon>
-                        Send
-                    </a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-warning radius-8 d-inline-flex align-items-center gap-1">
-                        <iconify-icon icon="solar:download-linear" class="text-xl"></iconify-icon>
-                        Download
-                    </a>
-                    <button type="button" class="btn btn-sm btn-danger radius-8 d-inline-flex align-items-center gap-1" 
-                            onclick="printInvoice()">
+                    <button type="button" class="btn btn-sm btn-danger radius-8 d-inline-flex align-items-center gap-1"
+                        onclick="printInvoice()">
                         <iconify-icon icon="basil:printer-outline" class="text-xl"></iconify-icon>
                         Print
                     </button>
@@ -52,7 +45,9 @@
                                     <img src="assets/images/logo1.png" alt="University Logo" class="mb-8">
                                     <p class="mb-1 text-sm">University of Cebu Lapu-lapu and Mandaue</p>
                                     <p class="mb-1 text-sm">A.C. Cortes Ave., Mandaue City, Cebu, 6014</p>
-                                    <p class="mb-0 text-sm">{{ auth()->user()->email }}, {{ auth()->user()->mobile_no }}</p>
+                                    <p class="mb-0 text-sm">{{ auth()->user()->email }},
+                                        {{ auth()->user()->mobile_no }}
+                                    </p>
                                 </div>
                             </div>
 
@@ -64,7 +59,8 @@
                                             <tbody>
                                                 <tr>
                                                     <td>Name</td>
-                                                    <td class="ps-8">: {{ ucwords(auth()->user()->firstname) }} {{ ucwords(auth()->user()->lastname) }}</td>
+                                                    <td class="ps-8">: {{ ucwords(auth()->user()->firstname) }}
+                                                        {{ ucwords(auth()->user()->lastname) }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Address</td>
@@ -95,46 +91,68 @@
 
                                 <div class="mt-24">
                                     <div class="table-responsive scroll-sm">
-                                        <table class="table bordered-table text-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col" class="text-sm">Equipment ID</th>
-                                                    <th scope="col" class="text-sm">Equipment Name</th>
-                                                    <th scope="col" class="text-sm">Maintenance Date</th>
-                                                    <th scope="col" class="text-sm">Technician</th>
-                                                    <th scope="col" class="text-sm">Status</th>
-                                                    <th scope="col" class="text-sm">Notes</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>01</td>
-                                                    <td>Projector</td>
-                                                    <td>2024-10-10</td>
-                                                    <td>John Doe</td>
-                                                    <td>Completed</td>
-                                                    <td>Replaced bulb</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>02</td>
-                                                    <td>Laptop</td>
-                                                    <td>2024-10-18</td>
-                                                    <td>Jane Smith</td>
-                                                    <td>In Progress</td>
-                                                    <td>Battery replacement pending</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        @if ($reportData->isNotEmpty())
+                                            <table class="table bordered-table text-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col" class="text-sm">Equipment ID</th>
+                                                        <th scope="col" class="text-sm">Equipment Name</th>
+                                                        <th scope="col" class="text-sm">Technician</th>
+                                                        <th scope="col" class="text-sm">Maintenanced Date</th>
+                                                        <th scope="col" class="text-sm">Returned Date</th>
+                                                        <th scope="col" class="text-sm">Status</th>
+                                                        <th scope="col" class="text-end text-sm">Notes
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="maintainedEquipmentsTable">
+                                                    @foreach ($reportData as $model => $equipments)
+                                                        @foreach ($equipments as $data)
+                                                            <tr>
+                                                                <!-- Equipment ID -->
+                                                                <td>{{ $data['equipment_id'] }}</td>
+
+                                                                <!-- Equipment Name -->
+                                                                <td>{{ strtoupper($data['equipment_name']) }}</td>
+
+                                                                <!-- Technician's Name -->
+                                                                <td>{{ $data['technician'] }}</td>
+
+                                                                <!-- Date Maintained-->
+                                                                <td>{{ $data['maintained_date'] }}</td>
+
+                                                                <!-- Date Returned -->
+                                                                <td>{{ $data['returned_date'] }}</td>
+
+                                                                <!-- Status -->
+                                                                <td>{{ $data['status'] }}</td>
+
+                                                                <!-- Recommendations -->
+                                                                <td>{{ $data['recommendations'] }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    @endforeach
+
+                                                </tbody>
+
+                                            </table>
+                                        @else
+                                            <p class="text-center text-secondary-light text-sm fw-semibold">No
+                                                maintained
+                                                equipment found.</p>
+                                        @endif
                                     </div>
                                 </div>
 
                                 <div class="mt-64">
-                                    <p class="text-center text-secondary-light text-sm fw-semibold">End of Report</p>
+                                    <p class="text-center text-secondary-light text-sm fw-semibold">End of Report
+                                    </p>
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-between align-items-end mt-64">
                                     <div class="text-sm border-top d-inline-block px-12">Signature of Technician</div>
-                                    <div class="text-sm border-top d-inline-block px-12">Signature of Supervisor</div>
+                                    <div class="text-sm border-top d-inline-block px-12">Signature of Supervisor
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -143,7 +161,18 @@
             </div>
         </div>
     </div>
-
     @include('templates.footer_inc')
 </main>
 @include('templates.footer')
+
+<script>
+    function printInvoice() {
+        var printContents = document.getElementById('invoice').innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+        window.print();
+
+        document.body.innerHTML = originalContents;
+    }
+</script>
