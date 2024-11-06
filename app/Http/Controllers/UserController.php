@@ -22,7 +22,7 @@ class UserController extends Controller
 {
     public function addUserPost(Request $request)
     {
-        $userRole = auth()->user()->type;
+        $userRole = Auth::user()->type;
 
         // Validation rules
         $rules = [
@@ -77,7 +77,7 @@ class UserController extends Controller
             }   
         } else {
             // If not admin, use the authenticated user's office_id
-            $officeId = auth()->user()->office_id;
+            $officeId = Auth::user()->office_id;
         }
 
         $randomPassword = Str::random(10);
@@ -233,44 +233,7 @@ class UserController extends Controller
         return view('users/users', compact('users', 'totalUsers', 'start', 'end'))->with('title', 'Users');
     }
 
-    public function viewDepartment(){
-
-        $students = Students::all()->groupBy('department');
-
-        return view('imports/viewDepartment', compact('students'))->with('title', 'Students Department');
-    }
-
-    public function viewDepartmentStudents($department)
-    {
-        $students = Students::where('department', $department)->paginate(10);
-        $totalStudents = Students::where('department', $department)->count();
-        $start = ($students->currentPage() - 1) * $students->perPage() + 1;
-        $end = min($start + $students->perPage() - 1, $totalStudents);
     
-        return view('imports.viewDepartmentStudents', compact('students', 'department', 'totalStudents', 'start', 'end'))
-            ->with('title', 'Students in ' . $department);
-    }
-    
-    public function search(Request $request)
-    {
-        $query = $request->input('search');
-        $students = Students::where('firstname', 'like', "%$query%")
-                            ->orWhere('lastname', 'like', "%$query%")
-                            ->orWhere('email', 'like', "%$query%")
-                            ->orWhere('course', 'like', "%$query%")
-                            ->paginate(10);
-
-        $department = $students->isNotEmpty() ? $students->first()->department : null;
-
-
-                            return view('imports.viewDepartmentStudents', [
-                                'students' => $students,
-                                'department' => $department, // Pass the department variable
-                                'totalStudents' => $students->total(), // You may want to update this
-                                'start' => ($students->currentPage() - 1) * $students->perPage() + 1,
-                                'end' => min(($students->currentPage() - 1) * $students->perPage() + $students->perPage(), $students->total())
-                            ])->with('title', 'Search Results');
-    }
 
     
 }

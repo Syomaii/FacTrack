@@ -14,28 +14,26 @@ class FileUploadController extends Controller
 {
     public function importStudents(Request $request)
     {
-        $request->validate(['file' => 'required|file|mimes:xlsx,xls|max:2048', ]);
+        $request->validate(['file' => 'required|file|mimes:xlsx,xls|max:2048']);
         $file = $request->file("file")->store('import');
 
         $import = new StudentsImport();
         $import->import($file);
-        
-        // Check if there are any failures
-        if ($import->failures()->isNotEmpty()) {
-            FacadesLog::info('Import Failures: ', $import->failures()->toArray());
 
-            $failure = $import->failures();
-            // dd($failure);
-            session()->flash('abc', $failure);
-            session()->keep(['abc']);
+        $totalRows = $import->getRowCount();
+        $failureCount = $import->failures()->count();
 
-            // dd(session('failure'));
-            // return redirect()->route('import.file');
-            return view('imports.students', ['abc' => $failure, 'title' => 'Import']);
-
+        FacadesLog::info('Import Failures: ', $import->failures()->toArray());
+        if ($failureCount === $totalRows) {
+            return redirect()->back()->with('error', 'All the IDs are taken.');
+        } elseif ($failureCount > 0 && $failureCount < $totalRows) {
+            dd($failureCount);
+            return redirect()->back()->with('success', 'Successfully uploaded and imported the file with some duplicates skipped.');
+        }elseif($failureCount === 0){
+            return redirect()->back()->with('success', 'Successfully uploaded and imported the file.');
         }
-        
-        return redirect()->back()->with('success','Successfully uploaded and imported the file.');
+
+        // If no rows failed, show a full success message
     }
 
 

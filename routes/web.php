@@ -8,6 +8,7 @@ use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -58,12 +59,14 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->name('change_password');
         Route::get('/facility-equipment/{id}', [PageController::class, 'facilityEquipments'])->name('facility_equipment');
         
-        //example only
+        //for student routes
         Route::get('/students', [PageController::class, 'students']);
-        Route::get('/view-department', [UserController::class, 'viewDepartment'])->name('view-department');
-        Route::get('/department/{department}/students', [UserController::class, 'viewDepartmentStudents'])->name('view-department-students');
-        Route::get('/search-student', [UserController::class, 'search'])->name('search-student');
+        Route::get('/view-department', [StudentController::class, 'viewDepartment'])->name('view-department');
+        Route::get('/department/{department}/students', [StudentController::class, 'viewStudentsByDepartment'])->name('view-department-students');
+        Route::get('/search-student', [StudentController::class, 'search'])->name('search-student');
         Route::post('/students', [FileUploadController::class, 'importStudents'])->name('import.file');
+        Route::get('/student/{id}', [StudentController::class, 'studentProfile'])->name('student.show_profile');
+
     });
     
     //----------------------------------------------------------------------------------------------------------------

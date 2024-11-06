@@ -60,12 +60,7 @@
                         <span>Students</span>
                     </a>
                 </li>
-                <li>
-                    <a href="/students">
-                        <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
-                        <span>Uplaod Students File</span>
-                    </a>
-                </li>
+                
             @endif
 
             @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')

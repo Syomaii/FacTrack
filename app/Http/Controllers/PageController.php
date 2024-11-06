@@ -45,7 +45,7 @@ class PageController extends Controller
 
     public function facilities(){
 
-        $officeId = auth()->user()->office_id;
+        $officeId = Auth::user()->office_id;
         $office = Office::with('facilities')->find($officeId);
 
         $facilities = Facility::whereHas('office', function ($query) use ($officeId) {
@@ -84,7 +84,7 @@ class PageController extends Controller
     }
 
     public function equipments(){
-        $officeId = auth()->user()->office_id;
+        $officeId = Auth::user()->office_id;
 
         if (isset($_GET['q'])){
             $q = $_GET['q'];
@@ -168,8 +168,8 @@ class PageController extends Controller
     public function addUser(){
         $designations = Designation::all();
         $offices = Office::all();
-        $userType = auth()->user()->type;
-        $officeId = auth()->user()->office_id;
+        $userType = Auth::user()->type;
+        $officeId = Auth::user()->office_id;
 
         return view('users/add_user', compact('designations', 'offices', 'userType', 'officeId'))->with('title', 'Add User');
     }
@@ -209,7 +209,7 @@ class PageController extends Controller
         return view('equipments/repair')->with('title', 'Repair Equipment'); // Load the maintenance view
     }    
     public function students(){
-        return view('imports/students')->with('title', 'Import');
+        return view('students.students')->with('title', 'Import');
     }
 
     public function disposeEquipment()

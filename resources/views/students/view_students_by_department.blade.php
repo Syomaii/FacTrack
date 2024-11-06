@@ -54,6 +54,7 @@
                                 <th scope="col">Gender</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Course</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -82,6 +83,12 @@
                                     <td>
                                         <span
                                             class="text-md mb-0 fw-normal text-secondary-light">{{ $student->course }}</span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('student.show_profile', $student->id_no) }}"
+                                            class="w-32-px h-32-px bg-primary-light text-primary-600 rounded-circle d-inline-flex align-items-center justify-content-center view-equipment">
+                                            <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
+                                        </a>
                                     </td>
                                 </tr>
                             @empty

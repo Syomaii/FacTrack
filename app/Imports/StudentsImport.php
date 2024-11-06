@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Students;
+use Illuminate\Support\Facades\Auth; 
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
@@ -14,7 +15,9 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithSkipDuplicates;
+use Maatwebsite\Excel\Events\BeforeImport;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 use Maatwebsite\Excel\Validators\Failure;
 
@@ -23,7 +26,8 @@ class StudentsImport implements
     WithHeadingRow, 
     SkipsOnError, 
     SkipsOnFailure,
-    WithValidation
+    WithValidation,
+    WithEvents
 
 {
     use Importable, 
@@ -36,6 +40,8 @@ class StudentsImport implements
     * @return \Illuminate\Database\Eloquent\Model|null
     */
 
+
+    public $totalRows = -1;
     public function __construct()
     {
         HeadingRowFormatter::default('none');
@@ -43,28 +49,68 @@ class StudentsImport implements
 
     public function model(array $row)
     {   
+        
         Log::info('Row data:', $row);  // Log each row's data for debugging
 
-        
-        return new Students([
-            'id_no' => $row["ID No."] ?? null,
-            'firstname' => $row["First Name"] ?? null,
-            'lastname' => $row["Last Name"] ?? null,
-            'gender' => $row["Gender"] ?? null,
-            'email' => $row["Email"] ?? null,
-            'course' => $row["Course / Year"] ?? null,
-            'department' => "College of Computer Studies",
-        ]);
+        $this->totalRows++;
+
+        $userType = Auth::user()->type;
+        if($userType == 'admin'){
+
+            return new Students([
+                'id_no' => $row["ID No."] ?? null,
+                'firstname' => ucwords(strtolower($row["First Name"] ?? '')),
+                'lastname' => ucwords(strtolower($row["Last Name"] ?? '')),
+                'gender' => $row["Gender"] ?? null,
+                'email' => $row["Email"] ?? null,
+                'course' => $row["Course / Year"] ?? null,
+                'department' => ["Department"] ?? null,
+                
+            ]);
+        } elseif($userType == 'facility manager'){
+            $department = Auth::user()->office->name;
+
+            return new Students([
+                'id_no' => $row["ID No."] ?? null,
+                'firstname' => ucwords(strtolower($row["First Name"] ?? '')),
+                'lastname' => ucwords(strtolower($row["Last Name"] ?? '')),
+                'gender' => $row["Gender"] ?? null,
+                'email' => $row["Email"] ?? null,
+                'course' => $row["Course / Year"] ?? null,
+                'department' => $department,
+                
+            ]);
+        }
     }
     
     public function rules(): array
     {
         return [
-            '*.ID No\.' => ['unique:students,id_no'],
-            '*.ID No\..unique' => 'The id number has already been taken'
-            
+            '*.ID No\.' => ['unique:students,id_no'], // Target the exact header format
         ];
     }
+
+    public function customValidationMessages(): array
+    {
+        return [
+            '*.ID No..unique' => 'The ID number has already been taken.', // Customized message
+        ];
+    }
+    
+    public function registerEvents(): array
+    {
+        return [
+            BeforeImport::class => function(BeforeImport $count) {
+                $this->totalRows = $count->getReader()->getTotalRows();
+            },
+        ];
+    }
+
+    public function getRowCount()
+    {
+        return $this->totalRows;
+    }
+
 
     public function batchSize(): int
     {

@@ -30,7 +30,9 @@
                 </ul>
             </div>
         @endif
-
+        <button type="button" class="btn btn-primary text-base radius-8 px-20 py-11 mb-3" onclick="printInvoice()">
+            <a href="/students">Import Excel File</a>
+        </button>
         <!-- Students List Grouped by Department -->
         <div class="row gy-4" id="studentList">
             @if ($students->isNotEmpty())
