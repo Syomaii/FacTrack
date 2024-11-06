@@ -265,12 +265,38 @@ class UserController extends Controller
 
                             return view('imports.viewDepartmentStudents', [
                                 'students' => $students,
-                                'department' => $department, // Pass the department variable
-                                'totalStudents' => $students->total(), // You may want to update this
+                                'department' => $department, 
+                                'totalStudents' => $students->total(), 
                                 'start' => ($students->currentPage() - 1) * $students->perPage() + 1,
                                 'end' => min(($students->currentPage() - 1) * $students->perPage() + $students->perPage(), $students->total())
                             ])->with('title', 'Search Results');
     }
+
+    public function addStudentPost(Request $request)
+{
+    $request->validate([
+        'id_no' => 'required|integer|digits:8|unique:students,id_no', 
+        'firstname' => 'required|string|max:255',
+        'lastname' => 'required|string|max:255',
+        'gender' => 'required|in:M,F',
+        'email' => 'required|email|unique:students,email',
+        'course' => 'required|string|max:255',
+        'department' => 'required|string|max:255',
+    ]);
+
+    // Create a new student record
+    Students::create([
+        'id_no' => $request->id_no,
+        'firstname' => $request->firstname,
+        'lastname' => $request->lastname,
+        'gender' => $request->gender,
+        'email' => $request->email,
+        'course' => $request->course,
+        'department' => $request->department,
+    ]);
+
+    return redirect('/add-student')->with('success', 'Student added successfully.');
+}
 
     
 }

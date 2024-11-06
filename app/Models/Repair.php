@@ -16,6 +16,7 @@ class Repair extends Model
         'issue',
         'action_taken',
         'recommendations',
+        'technician',
         'status',
     ];
 
@@ -28,4 +29,9 @@ class Repair extends Model
     {
         return $this->belongsTo(Equipment::class);
     }
+
+    protected $casts = [
+        'repaired_date' => 'datetime',
+        'returned_date' => 'datetime',
+    ];
 }

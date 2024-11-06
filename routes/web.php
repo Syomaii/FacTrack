@@ -64,6 +64,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/department/{department}/students', [UserController::class, 'viewDepartmentStudents'])->name('view-department-students');
         Route::get('/search-student', [UserController::class, 'search'])->name('search-student');
         Route::post('/students', [FileUploadController::class, 'importStudents'])->name('import.file');
+        Route::get('/add-student', [PageController::class, 'addStudent'])->name('add-student');
+        Route::post('/add-studentPost', [UserController::class, 'addStudentPost'])->name('add-studentPost');
     });
     
     //----------------------------------------------------------------------------------------------------------------
@@ -96,6 +98,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/borrowed-equipment-reports', [ReportController::class, 'getBorrowedEquipmentReports'])->name('borrowed.equipment.reports');
         Route::get('/maintenanced-equipments', [ReportController::class, 'maintenancedEquipmentReports']);
         Route::get('/repaired-equipments', [ReportController::class, 'repairedEquipmentReports']);
+        Route::get('/repaired-equipment-reports', [ReportController::class, 'setDateRepairedEquipmentReports'])->name('repaired.equipment.reports');
         Route::get('/donated-equipments', [ReportController::class, 'donatedEquipmentReports']);
         Route::get('/disposed-equipments', [ReportController::class, 'disposedEquipmentReports']);
         Route::get('/borrowers-log', [PageController::class, 'borrowersLog'])->name('borrowersLog');

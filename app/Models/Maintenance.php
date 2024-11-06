@@ -16,6 +16,7 @@ class Maintenance extends Model
         'issue',
         'action_taken',
         'recommendations',
+        'technician',
         'status',
     ];
 
@@ -28,4 +29,10 @@ class Maintenance extends Model
     {
         return $this->belongsTo(Equipment::class);
     }
+
+    protected $casts = [
+        'maintained_date' => 'datetime',
+        'returned_date' => 'datetime',
+    ];
+    
 }

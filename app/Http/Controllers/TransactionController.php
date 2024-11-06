@@ -77,6 +77,24 @@ class TransactionController extends Controller
                          ]);
     }
 
+    public function showBorrowDetails(Request $request, $code)
+    {
+        $equipment = Equipment::where('code', $code)->first();
+
+        $data = [
+            'equipment' => $equipment,
+            'borrowers_id_no' => $borrowers_id_no = $request->query('borrowers_id_no'),
+            'borrowers_name' => $borrowers_name = $request->query('borrowers_name'),
+            'department' => $department = $request->query('department'),
+            'purpose' => $purpose = $request->query('purpose'),
+            'expected_return_date' => $expected_return_date = $request->query('expected_return_date'),
+            'title' => 'Borrow Details',
+        ];
+
+
+        return view('equipments/borrow_details', $data);
+    }
+
     public function submitBorrow(Request $request, $id)
     {
         // Validate the incoming data
@@ -407,6 +425,7 @@ class TransactionController extends Controller
             case "In Maintenance":
                 $validatedData = $request->validate([
                     'returned_date' => 'required|date',
+                    'technician' => 'required|string',
                     'issue_note' => 'required_if:status,In Maintenance|string',
                     'action_taken' => 'required_if:status,In Maintenance|string',
                     'remarks' => 'nullable|string',
@@ -431,6 +450,7 @@ class TransactionController extends Controller
                 $maintenance->update([
                     'returned_date' => $validatedData['returned_date'],
                     'status' => 'okay',
+                    'technician' => $validatedData['technician'],
                     'issue_note' => $validatedData['issue_note'],
                     'action_taken' => $validatedData['action_taken'],
                     'remarks' => $validatedData['remarks'],
@@ -447,6 +467,7 @@ class TransactionController extends Controller
             case 'In Repair':
                 $validatedData = $request->validate([
                     'returned_date' => 'required|date',
+                    'technician' => 'required|string',
                     'issue_note' => 'required_if:status,In Repair|string',
                     'action_taken' => 'required_if:status,In Repair|string',
                     'remarks' => 'nullable|string',
@@ -471,6 +492,7 @@ class TransactionController extends Controller
                 $repair->update([
                     'returned_date' => $validatedData['returned_date'],
                     'status' => 'already repaired',
+                    'technician' => $validatedData['technician'],
                     'issue_note' => $validatedData['issue_note'],
                     'action_taken' => $validatedData['action_taken'],
                     'remarks' => $validatedData['remarks'],

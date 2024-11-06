@@ -58,6 +58,5 @@ class Equipment extends Model
     {
         return $this->hasMany(Borrower::class, 'equipment_id');
     }
-    
 
 }

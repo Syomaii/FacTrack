@@ -104,7 +104,7 @@
                                                         <tr>
                                                             <th scope="col" class="text-sm">Equipment ID</th>
                                                             <th scope="col" class="text-sm">Equipment Name</th>
-                                                            <th scope="col" class="text-sm">Quantity</th>
+                                                            <th scope="col" class="text-sm">Borrower's Name</th>
                                                             <th scope="col" class="text-sm">Date Borrowed</th>
                                                             <th scope="col" class="text-sm">Date Returned</th>
                                                             <th scope="col" class="text-end text-sm">Times Borrowed
@@ -121,8 +121,8 @@
                                                                     <!-- Equipment Name -->
                                                                     <td>{{ strtoupper($data['equipment']->name) }}</td>
 
-                                                                    <!-- Total Quantity base on brand -->
-                                                                    <td>{{ $data['brand_count'] }}</td>
+                                                                    <!-- Borrower's Name -->
+                                                                    <td>{{ $data['borrowers_name'] }}</td>
 
                                                                     <!-- Date Borrowed -->
                                                                     <td>{{ $data['last_borrowed'] }}</td>
@@ -179,12 +179,11 @@
                             <form id="dateRangeForm">
                                 <div class="mb-3">
                                     <label for="startDate" class="form-label">Start Date</label>
-                                    <input type="datetime-local" class="form-control" id="startDate" name="startDate"
-                                        required>
+                                    <input type="date" class="form-control" id="startDate" name="startDate" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="endDate" class="form-label">End Date</label>
-                                    <input type="datetime-local" class="form-control" id="endDate" name="endDate"
+                                    <input type="date" class="form-control" id="endDate" name="endDate"
                                         required>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -235,21 +234,20 @@
                         var equipmentId = item.equipment_id || 'N/A';
                         var equipmentName = item.equipment_name ? item.equipment_name.toUpperCase() :
                             'N/A';
-                        var quantity = item.quantity !== null && item.quantity !== undefined ? item.quantity :
-                            0;
+                        var borrowersName = item.borrowers_name || 'N/A';
                         var lastBorrowed = item.last_borrowed || 'N/A';
                         var lastReturned = item.last_returned || 'N/A';
                         var timesBorrowed = item.times_borrowed !== null && item.times_borrowed !== undefined ? item
                             .times_borrowed : 0;
 
                         var row = `<tr>
-                    <td>${equipmentId}</td>
-                    <td>${equipmentName}</td>
-                    <td>${quantity}</td>
-                    <td>${lastBorrowed}</td>
-                    <td>${lastReturned}</td>
-                    <td>${timesBorrowed}</td>
-                </tr>`;
+                <td>${equipmentId}</td>
+                <td>${equipmentName}</td>
+                <td>${borrowersName}</td>
+                <td>${lastBorrowed}</td>
+                <td>${lastReturned}</td>
+                <td>${timesBorrowed}</td>
+            </tr>`;
 
                         tableBody.innerHTML += row;
                     } else {
