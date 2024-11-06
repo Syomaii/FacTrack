@@ -74,14 +74,15 @@
 
             <div class="d-flex gap-3 ms-3"> <!-- Added ms-3 for left margin -->
                 @if (auth()->user()->type === 'facility manager')
-                    <button type="button" class="btn btn-warning text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
-                        id="updateFacilityBtn">Update Facility</button>
-                    <button type="button" class="btn btn-danger text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
-                        id="deleteFacilityBtn">Delete Facility</button>
                     <a href="/add-equipment/{{ $facility->id }}">
                         <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
                             id="addEquipmentBtn">Add Equipment</button>
                     </a>
+                    <button type="button" class="btn btn-warning text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                        id="updateFacilityBtn">Edit Facility</button>
+                    <button type="button" class="btn btn-danger text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                        id="deleteFacilityBtn">Delete Facility</button>
+                    
                 @endif
             </div>
         </div>

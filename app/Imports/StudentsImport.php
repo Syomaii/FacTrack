@@ -23,8 +23,6 @@ class StudentsImport implements
     WithHeadingRow, 
     SkipsOnError, 
     SkipsOnFailure,
-    WithBatchInserts, 
-    WithChunkReading,
     WithValidation
 
 {
@@ -47,6 +45,7 @@ class StudentsImport implements
     {   
         Log::info('Row data:', $row);  // Log each row's data for debugging
 
+        
         return new Students([
             'id_no' => $row["ID No."] ?? null,
             'firstname' => $row["First Name"] ?? null,
@@ -61,7 +60,9 @@ class StudentsImport implements
     public function rules(): array
     {
         return [
-            '*.Email' => ['email', 'unique:students,email']
+            '*.ID No\.' => ['unique:students,id_no'],
+            '*.ID No\..unique' => 'The id number has already been taken'
+            
         ];
     }
 

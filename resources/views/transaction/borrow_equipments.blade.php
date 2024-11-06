@@ -232,26 +232,36 @@
     $(document).ready(function() {
         var route = "{{ route('search.students') }}"; 
 
-        $('#borrowers_id_no').on('input', function() {
-            var query = $(this).val();
+        let typingTimer; // Timer identifier
+        const typingDelay = 500; // half second delay
 
+        $('#borrowers_id_no').on('input', function() {
+            clearTimeout(typingTimer); // Clear the timer on every input
+            const query = $(this).val();
+
+            // Reset input fields when no query
             if (query.length === 0) {
                 $('#borrowers_name').val('').prop('readonly', false);
                 $('#department').val('').prop('readonly', false);
+                $('#idSuggestions').empty().hide();
+                return; // Exit early
             }
 
-            $('#idSuggestions').empty().hide();
+            // Set a new timer to trigger the search after 2 seconds
+            typingTimer = setTimeout(function() {
+                if (query.length > 1) { // Check if the query is long enough
+                    $.get(route, { id: query }, function(data) {
+                        $('#idSuggestions').empty().hide(); // Reset suggestions
 
-            if (query.length > 1) {
-                $.get(route, { id: query }, function(data) {
-                    if (data.length) {
-                        data.forEach(function(item) {
-                            $('#idSuggestions').append('<div class="suggestion-item">' + item + '</div>');
-                        });
-                        $('#idSuggestions').show();
-                    }
-                });
-            }
+                        if (data.length) {
+                            data.forEach(function(item) {
+                                $('#idSuggestions').append('<div class="suggestion-item">' + item + '</div>');
+                            });
+                            $('#idSuggestions').show();
+                        }
+                    });
+                }
+            }, typingDelay);
         });
 
         $(document).on('click', '.suggestion-item', function() {

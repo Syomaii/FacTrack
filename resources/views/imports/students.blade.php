@@ -32,16 +32,6 @@
                 </div>
             </div>
         @endif
-        
-        @if (session('error'))
-            <div
-                class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-2">
-                    <iconify-icon icon="akar-icons:warning" class="icon text-xl"></iconify-icon>
-                    {{ session('error') }}
-                </div>
-            </div>
-        @endif
 
         @if (isset($errors) && $errors->any())
             <div
@@ -55,35 +45,45 @@
             </div>
         @endif
 
-        @if (session()->has('failures'))
-            <pre>{{ print_r(session('failures'), true) }}</pre> <!-- Debug output -->
-            <table class="table table-danger">
-                <thead>
-                    <tr>
-                        <th>Row</th>
-                        <th>Attribute</th>
-                        <th>Errors</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (session('failures') as $failure)
+        {{-- @dd(session('abc')) --}}
+        
+        @if (isset($abc))
+            <div>
+                <table class="table table-danger">
+                    <thead>
                         <tr>
-                            <td>{{ $failure->row() }}</td>
-                            <td>{{ $failure->attribute() }}</td>
-                            <td>
-                                <ul>
-                                    @foreach ($failure->errors() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </td>
-                            <td>{{ $failure->values()[$failure->attribute()] ?? '' }}</td>
+                            <th>Row</th>
+                            <th>Attribute</th>
+                            <th>Errors</th>
+                            <th>Value</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($abc as $failure)
+                            <tr>
+                                <td>{{ $failure->row() }}</td>
+                                <td>{{ $failure->attribute() }}</td>
+                                <td>
+                                    <ul>
+                                        @foreach ($failure->errors() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </td>
+                                <td>{{ $failure->values()[$failure->attribute()] ?? '' }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            
         @endif
+        
+        {{-- @if (session()->has('failures'))
+            <!-- Debug output -->
+            
+        @endif --}}
+
         <div class="card h-100 p-0 radius-12">
             <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                 <h5 class="mb-0">Upload Student File</h5>
@@ -92,7 +92,7 @@
                 <form action="{{ route('import.file') }}" method="POST" enctype="multipart/form-data" class="p-3">
                     @csrf
                     <div class="mb-3">
-                        <label for="file" class="form-label fw-semibold">Select File (CSV/XLSX)</label>
+                        <label for="file" class="form-label fw-semibold">Select File (XLSX/XLS)</label>
                         <input type="file" name="file" id="file" class="form-control @error('file') is-invalid @enderror" required>
                         @error('file')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -103,7 +103,7 @@
                 </form>
             </div>
 
-            <div class="dashboard-main-body pt-4">
+            <div class="dashboard-main-body pt-4" style="display: none" id="previewTable">
                 <div class="table-responsive scroll-sm">
                     <table class="table bordered-table sm-table mb-0">
                         <thead>
@@ -170,8 +170,11 @@
                 
                 // Enable and display the submit button after preview
                 var submitBtn = document.getElementById('submitBtn');
+                var previewTable = document.getElementById('previewTable');
                 submitBtn.style.display = 'block';
+                previewTable.style.display = 'block';
                 submitBtn.disabled = false;
+
 
                 var previewBtn = document.getElementById('previewBtn');
                 previewBtn.style.display = 'none';

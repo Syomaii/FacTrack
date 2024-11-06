@@ -15,4 +15,13 @@ class Students extends Model
         'course',
         'department',
     ];
+    protected $table = "students";
+
+    protected $primaryKey = 'id_no';
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
+    
 }

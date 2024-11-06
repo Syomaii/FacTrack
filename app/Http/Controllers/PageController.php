@@ -38,8 +38,7 @@ class PageController extends Controller
             'users' => $users,
             'recentUsers' => $recentUsers, 
             'userCount' => User::count(), 
-            'equipmentCount' => Equipment::count(),
-            'users' => $users, // Pass the users variable to the view
+            'equipmentCount' => Equipment::count(), // Pass the users variable to the view
         ]);
     }
 

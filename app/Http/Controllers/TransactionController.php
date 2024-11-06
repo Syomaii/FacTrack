@@ -26,7 +26,8 @@ class TransactionController extends Controller
     {
         $search = $request->get('id');
      
-        $result = Students::where('id_no', 'LIKE', '%' . $search . '%')->pluck('id_no');
+        $result = Students::where('id_no', 'LIKE',  $search . '%')->orderBy('id_no')
+        ->pluck('id_no');
           
         return response()->json($result);
     }
