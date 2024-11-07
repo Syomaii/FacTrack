@@ -42,6 +42,23 @@
                                     <input type="hidden" name="donated_date" id="donated_date"
                                         value="{{ now()->format('Y-m-d') }}">
 
+                                    <!-- Condition Dropdown -->
+                                    <div class="mb-3">
+                                        <label for="condition" class="form-label">Condition</label>
+                                        <select name="condition" id="condition" class="form-select">
+                                            <option value="Good">Good</option>
+                                            <option value="Fair">Fair</option>
+                                            <option value="Poor">Poor</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Recipient Input -->
+                                    <div class="mb-3">
+                                        <label for="recipient" class="form-label">Recipient</label>
+                                        <input type="text" name="recipient" id="recipient" class="form-control"
+                                            placeholder="Enter recipient's name" required>
+                                    </div>
+
                                     <div class="mb-3">
                                         <label for="remarks" class="form-label">Remarks</label>
                                         <textarea name="remarks" id="remarks" class="form-control" rows="3" placeholder="Add some remarks here..."></textarea>
@@ -106,11 +123,15 @@
         console.log(result);
 
         var donated_id_no = $('#donated_id_no').val();
+        var condition = $('#condition').val();
+        var recipient = $('#recipient').val();
         var remarks = $('#remarks').val();
         var donated_date = $('#donated_date').val();
 
         window.location.href = "/donated-equipment-details/" + result +
             "?donated_id_no=" + encodeURIComponent(donated_id_no) +
+            "&condition=" + encodeURIComponent(condition) +
+            "&recipient=" + encodeURIComponent(recipient) +
             "&remarks=" + encodeURIComponent(remarks) +
             "&donated_date=" + encodeURIComponent(donated_date);
     }

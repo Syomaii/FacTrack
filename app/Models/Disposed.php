@@ -23,5 +23,10 @@ class Disposed extends Model
     {
         return $this->belongsTo(Equipment::class);
     }
+
+    protected $casts = [
+        'disposed_date' => 'datetime',
+        'returned_date' => 'datetime',
+    ];
 }
 

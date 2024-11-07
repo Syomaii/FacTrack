@@ -102,9 +102,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/maintenanced-equipments', [ReportController::class, 'maintenancedEquipmentReports']);
         Route::get('/repaired-equipments', [ReportController::class, 'repairedEquipmentReports']);
         Route::get('/repaired-equipment-reports', [ReportController::class, 'setDateRepairedEquipmentReports'])->name('repaired.equipment.reports');
-        Route::get('/donated-equipments', [ReportController::class, 'donatedEquipmentReports']);
+        Route::get('/donated-equipments', [ReportController::class, 'donatedEquipmentReports'])->name('donated_equipments');
+        Route::get('/donated-equipment-reports', [ReportController::class, 'setDateDonatedEquipmentReports'])->name('donated.equipment.reports');
         Route::get('/disposed-equipments', [ReportController::class, 'disposedEquipmentReports']);
+        Route::get('/disposed-equipment-reports', [ReportController::class, 'setDateDisposedEquipmentReports'])->name('disposed.equipment.reports');
         Route::get('/borrowers-log', [PageController::class, 'borrowersLog'])->name('borrowersLog');
+
         
         // Route::get('/product-details/{id}', [PageController::class, 'productDetails'])->name('product.details');
         
