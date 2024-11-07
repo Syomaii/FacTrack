@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedInteger('borrowers_id_no');
             $table->foreign('borrowers_id_no')->references('id_no')->on('students')->onDelete('cascade');
             $table->string('borrowers_name', 100);
+            $table->string('department', 50);
             $table->dateTime('borrowed_date');
             $table->date('expected_returned_date');
             $table->dateTime('returned_date')->nullable();
