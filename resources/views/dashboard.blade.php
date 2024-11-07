@@ -223,23 +223,23 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
-                            <h6 class="mb-2 fw-bold text-lg mb-0">Recently Registered Users</h6>
+                            <h6 class="mb-2 fw-bold text-lg mb-0">Last login</h6>
                         </div>
 
                         <div class="mt-32">
-                            @foreach ($recentUsers as $recentUser)
+                            @foreach ($recentLoggedIn as $lastLoggedIn)
                                 <div class="d-flex align-items-center justify-content-between gap-3 mb-24">
                                     <div class="d-flex align-items-center">
                                         <div class="flex-grow-1">
-                                            <h6 class="text-md mb-0 fw-medium">{{ $recentUser->firstname }}
-                                                {{ $recentUser->lastname }}</h6>
+                                            @if (!is_null($lastLoggedIn->last_login_at))
+                                                <h6 class="text-md mb-0 fw-medium">{{ $lastLoggedIn->firstname }}
+                                                    {{ $lastLoggedIn->lastname }}</h6>
+                                            @endif
                                         </div>
                                     </div>
                                     <span class="text-sm text-secondary-light fw-medium">
-                                        @if ($recentUser->created_at)
-                                            {{ $recentUser->created_at->diffForHumans() }}
-                                        @else
-                                            N/A
+                                        @if (!is_null($lastLoggedIn->last_login_at))
+                                            {{ $lastLoggedIn->last_login_at->diffForHumans() }}
                                         @endif
                                     </span>
                                 </div>
