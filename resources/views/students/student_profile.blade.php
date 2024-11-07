@@ -52,10 +52,6 @@
                                     <span class="w-70 text-secondary-light fw-medium">: {{ $student->id_no }}</span>
                                 </li>
                                 <li class="d-flex align-items-center gap-1 mb-12">
-                                    <span class="w-30 text-md fw-semibold text-primary-light">Email</span>
-                                    <span class="w-70 text-secondary-light fw-medium">: {{ $student->email }}</span>
-                                </li>
-                                <li class="d-flex align-items-center gap-1 mb-12">
                                     <span class="w-30 text-md fw-semibold text-primary-light">Course / Year</span>
                                     <span class="w-70 text-secondary-light fw-medium">: {{ $student->course }}</span>
                                 </li>
