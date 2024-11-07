@@ -22,23 +22,32 @@ class PageController extends Controller
     public function dashboard()
     {
         // Get recent users excluding admin
-        $recentUsers = User::where('type', '!=', 'admin')
-                        ->orderBy('created_at', 'desc') 
+        $recentLoggedIn = User::where('type', '!=', 'admin')
+                        ->orderBy('last_login_at', 'desc') 
                         ->take(5) 
                         ->get();
 
         $users = User::all(); 
-        if (Auth::user()->created_at->eq(Auth::user()->updated_at)) {
+        
+        $equipmentCount = Equipment::all()->count();
+        
+        $userNotAdmin = Auth::user()->type != 'admin';
+
+        if ($userNotAdmin) {
+
+            $equipmentCount = Equipment::whereHas('facility', function ($query) {
+                $query->where('office_id', Auth::user()->office_id);
+            })->count();
+
             
-            session(['newUser' => "Looks like you haven't changed your password yet. Change it now"]);
         }
 
         return view('dashboard', [
             'title' => 'Dashboard',
             'users' => $users,
-            'recentUsers' => $recentUsers, 
+            'recentLoggedIn' => $recentLoggedIn, 
             'userCount' => User::count(), 
-            'equipmentCount' => Equipment::count(), // Pass the users variable to the view
+            'equipmentCount' => $equipmentCount // Pass the users variable to the view
         ]);
     }
 
