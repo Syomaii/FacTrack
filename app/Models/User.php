@@ -52,6 +52,11 @@ class User extends Authenticatable implements MustVerifyEmail
     // }
 
     // User.php
+
+    protected $casts = [
+        'last_login_at' => 'datetime',
+    ];
+
     public function designation()
     {
         return $this->belongsTo(Designation::class);
