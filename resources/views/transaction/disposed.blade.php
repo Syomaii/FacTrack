@@ -44,7 +44,7 @@
 
                                     <div class="mb-3">
                                         <label for="remarks" class="form-label">Remarks</label>
-                                        <textarea name="remarks" id="remarks" class="form-control" rows="3" placeholder="Add some remarks here..."></textarea>
+                                        <textarea name="remarks" id="remarks" class="form-control" rows="3" placeholder="Reason for disposal..."></textarea>
                                     </div>
 
                                     <!-- Scan Button Triggering Modal -->

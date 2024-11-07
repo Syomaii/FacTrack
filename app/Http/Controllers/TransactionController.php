@@ -324,55 +324,70 @@ class TransactionController extends Controller
 
     public function donateDetails(Request $request, $code)
     {
+        // Validate required fields
+        $request->validate([
+            'condition' => 'required|string',
+            'recipient' => 'required|string',
+        ]);
+
         $equipment = Equipment::where('code', $code)->first();
-    
+
         // Check if equipment exists
         if (!$equipment) {
             return redirect()->back()->withErrors(['error' => 'Equipment not found.']);
         }
-    
+
         $donatedDate = $request->input('donated_date') ?: now()->format('Y-m-d');
         $issueNote = $request->input('remarks') ?: 'No issue provided';
-    
+        $condition = $request->input('condition');
+        $recipient = $request->input('recipient');
+
         return view('transaction.donated_equipment_details', [
             'equipment' => $equipment,
-            'donated_id_no' => $equipment->id, 
+            'donated_id_no' => $equipment->id,
             'remarks' => $issueNote,
             'donated_date' => $donatedDate,
+            'condition' => $condition,
+            'recipient' => $recipient,
         ])->with('title', 'Repair Details');
     }
 
+
     public function submitDonated(Request $request, $code)
-    {
-        $validatedData = $request->validate([
-            'remarks' => 'required|string|max:255',
-            'donated_date' => 'required|date',
-        ]);
-    
-        // Find the equipment by code
-        $equipment = Equipment::findOrFail($code);
-    
-        // Check if the equipment is available for maintenance
-        if ($equipment->status !== 'Available') {
-            return back()->withErrors(['equipment' => 'This equipment is not available for repair.']);
-        }
-    
-        // Create the maintenance record
-        Donated::create([
-            'equipment_id' => $equipment->id, // Use the ID of the equipment
-            'remarks' => 'The day the equipment is Donated', // Make sure this is the intended field
-            'donated_date' => $validatedData['donated_date'], // Use the date from the input
-            'user_id' => auth()->user()->id,
-            'status' => 'Donated',
-        ]);
-    
-        // Update equipment status
-        $equipment->status = 'Donated';
-        $equipment->save();
-    
-        return redirect()->route('donated_equipment') // Redirect to the equipments index page
-                         ->with('donatedSuccessfully', 'Donated record submitted successfully.');
+{
+    $validatedData = $request->validate([
+        'remarks' => 'required|string|max:255',
+        'donated_date' => 'required|date',
+        'condition' => 'required|string', 
+        'recipient' => 'required|string|max:255', 
+    ]);
+
+    // Find the equipment by code
+    $equipment = Equipment::findOrFail($code);
+
+    // Check if the equipment is available for donation
+    if ($equipment->status !== 'Available') {
+        return back()->withErrors(['equipment' => 'This equipment is not available for donation.']);
     }
+
+    Donated::create([
+        'equipment_id' => $equipment->id,
+        'remarks' => $validatedData['remarks'],
+        'donated_date' => $validatedData['donated_date'],
+        'user_id' => auth()->user()->id,
+        'status' => 'Donated',
+        'condition' => $validatedData['condition'], 
+        'recipient' => $validatedData['recipient'], 
+    ]);
+
+    // Update equipment status
+    $equipment->status = 'Donated';
+    $equipment->save();
+
+    return redirect()->route('donated_equipment')
+                     ->with('donatedSuccessfully', 'Donation record submitted successfully.');
+}
+
 
     public function returnEquipment($code, Request $request)
     {

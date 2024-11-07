@@ -11,6 +11,8 @@ class Donated extends Model
         'equipment_id',
         'user_id',
         'donated_date',
+        'condition',
+        'recipient',
         'remarks',
     ];
 
@@ -23,4 +25,9 @@ class Donated extends Model
     {
         return $this->belongsTo(Equipment::class);
     }
+    
+    protected $casts = [
+        'donated_date' => 'datetime',
+        'returned_date' => 'datetime',
+    ];
 }
