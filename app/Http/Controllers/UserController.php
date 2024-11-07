@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 
 class UserController extends Controller
@@ -33,7 +34,7 @@ class UserController extends Controller
             'mobile_no' => 'required|string|max:15',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'type' => 'required|string|max:255',
-            // 'select_type' => 'required|string',  // Check if office or department is selected
+            'select_type' => 'required|string',  // Check if office or department is selected
             'office_id' => 'nullable|exists:offices,id', // Added validation for office_id
             'department' => 'nullable|string|max:255', // Added validation for department
         ];
@@ -119,23 +120,38 @@ class UserController extends Controller
         $remember = $request->has('remember'); // Check if "Remember Me" was selected
 
         if (Auth::attempt($credentials, $remember)) {
-            // If the login is successful, set cookies if "Remember Me" was checked
+
+            $user = Auth::user();
+
+            if ($user) {
+                $user->timestamps = false;
+            
+                $user->last_login_at = Carbon::now();
+                $user->save();
+            
+                $user->timestamps = true;
+            }
+
             if ($remember) {
-                Cookie::queue('email', $request->email, 43200); // Store for 30 days (43200 minutes)
-                Cookie::queue('password', $request->password, 43200); // Store for 30 days
+                Cookie::queue('email', $request->email, 43200); 
             } else {
                 // Forget cookies if "Remember Me" wasn't selected
                 Cookie::queue(Cookie::forget('email'));
                 Cookie::queue(Cookie::forget('password'));
             }
-
-            return redirect()->intended('dashboard')
-                ->with('loginUserSuccessfully', 'You are logged in!');
+            if(Auth::user()->type != 'admin'){
+                if(Auth::user()->created_at->eq(Auth::user()->updated_at)){
+                    return redirect()->intended('dashboard')->with('newUser', "Looks like you haven't changed your password yet. Change it now");
+                }else{
+                    return redirect()->intended('dashboard')->with('loginUserSuccessfully', 'You are logged in!');
+                }
+            }
+            
+            
         }
 
         return back()->with('status', 'Invalid login credentials')->withInput();
     }
-
 
     public function logout(Request $request){
         Auth::logout();
@@ -234,59 +250,32 @@ class UserController extends Controller
     }
 
     
-<<<<<<< HEAD
-=======
-        return view('imports.viewDepartmentStudents', compact('students', 'department', 'totalStudents', 'start', 'end'))
-            ->with('title', 'Students in ' . $department);
-    }
-    
-    public function search(Request $request)
-    {
-        $query = $request->input('search');
-        $students = Students::where('firstname', 'like', "%$query%")
-                            ->orWhere('lastname', 'like', "%$query%")
-                            ->orWhere('email', 'like', "%$query%")
-                            ->orWhere('course', 'like', "%$query%")
-                            ->paginate(10);
-
-        $department = $students->isNotEmpty() ? $students->first()->department : null;
-
-
-                            return view('imports.viewDepartmentStudents', [
-                                'students' => $students,
-                                'department' => $department, 
-                                'totalStudents' => $students->total(), 
-                                'start' => ($students->currentPage() - 1) * $students->perPage() + 1,
-                                'end' => min(($students->currentPage() - 1) * $students->perPage() + $students->perPage(), $students->total())
-                            ])->with('title', 'Search Results');
-    }
->>>>>>> 01737c344f2a60f2fc8b35eb0fc0e587d20c8967
 
     public function addStudentPost(Request $request)
-{
-    $request->validate([
-        'id_no' => 'required|integer|digits:8|unique:students,id_no', 
-        'firstname' => 'required|string|max:255',
-        'lastname' => 'required|string|max:255',
-        'gender' => 'required|in:M,F',
-        'email' => 'required|email|unique:students,email',
-        'course' => 'required|string|max:255',
-        'department' => 'required|string|max:255',
-    ]);
+    {
+        $request->validate([
+            'id_no' => 'required|integer|digits:8|unique:students,id_no', 
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'gender' => 'required|in:M,F',
+            'email' => 'required|email|unique:students,email',
+            'course' => 'required|string|max:255',
+            'department' => 'required|string|max:255',
+        ]);
 
-    // Create a new student record
-    Students::create([
-        'id_no' => $request->id_no,
-        'firstname' => $request->firstname,
-        'lastname' => $request->lastname,
-        'gender' => $request->gender,
-        'email' => $request->email,
-        'course' => $request->course,
-        'department' => $request->department,
-    ]);
+        // Create a new student record
+        Students::create([
+            'id_no' => $request->id_no,
+            'firstname' => $request->firstname,
+            'lastname' => $request->lastname,
+            'gender' => $request->gender,
+            'email' => $request->email,
+            'course' => $request->course,
+            'department' => $request->department,
+        ]);
 
-    return redirect('/add-student')->with('success', 'Student added successfully.');
-}
+        return redirect('/add-student')->with('success', 'Student added successfully.');
+    }
 
     
 }
