@@ -429,6 +429,7 @@ class TransactionController extends Controller
                     $borrow->update([
                         'returned_date' => $validatedData['returned_date'],
                         'remarks' => $validatedData['remarks'],
+                        'status' => 'Returned'
                     ]);
 
                     $equipment->status = 'Available';
@@ -465,7 +466,7 @@ class TransactionController extends Controller
 
                 $maintenance->update([
                     'returned_date' => $validatedData['returned_date'],
-                    'status' => 'okay',
+                    'status' => 'Returned',
                     'technician' => $validatedData['technician'],
                     'issue_note' => $validatedData['issue_note'],
                     'action_taken' => $validatedData['action_taken'],
@@ -507,7 +508,7 @@ class TransactionController extends Controller
 
                 $repair->update([
                     'returned_date' => $validatedData['returned_date'],
-                    'status' => 'already repaired',
+                    'status' => 'Returned',
                     'technician' => $validatedData['technician'],
                     'issue_note' => $validatedData['issue_note'],
                     'action_taken' => $validatedData['action_taken'],
