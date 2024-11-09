@@ -130,7 +130,7 @@
                                     class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
                                     @if ($facility->type == 'laboratory')
                                         View Laboratory
-                                    @elseif ($facility->type == 'Office')
+                                    @elseif ($facility->type == 'office')
                                         View Office
                                     @elseif ($facility->type == 'room')
                                         View Room
