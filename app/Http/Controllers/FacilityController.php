@@ -40,13 +40,15 @@ class FacilityController extends Controller
             $data = $request->validate([
                 'name' => 'required',
                 'description'=> 'required',
-                'type'=> 'required',
+                'type' => 'required',
+                
             ]);
         }else{
             $data = $request->validate([
                 'name' => 'required|unique:offices,name',
                 'description'=> 'required',
-                'type'=> 'required',
+                'type' => 'required',
+
             ]);
         }
 
