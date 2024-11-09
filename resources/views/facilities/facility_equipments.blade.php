@@ -163,10 +163,10 @@
                     <div class="mb-3">
                         <label for="facilityType" class="form-label">Type</label>
                         <select class="form-control" id="facilityType" name="type" required>
-                            <option value="Laboratory" {{ $facility->type == 'Laboratory' ? 'selected' : '' }}>
+                            <option value="laboratory" {{ $facility->type == 'laboratory' ? 'selected' : '' }}>
                                 Laboratory</option>
-                            <option value="Office" {{ $facility->type == 'Office' ? 'selected' : '' }}>Office</option>
-                            <option value="Room" {{ $facility->type == 'Room' ? 'selected' : '' }}>Room</option>
+                            <option value="office" {{ $facility->type == 'office' ? 'selected' : '' }}>Office</option>
+                            <option value="room" {{ $facility->type == 'room' ? 'selected' : '' }}>Room</option>
                         </select>
                         @error('type')
                             <div class="text-danger">{{ $message }}</div>
