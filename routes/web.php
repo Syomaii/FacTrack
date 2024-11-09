@@ -34,6 +34,8 @@ Route::middleware(['guest'])->group(function () {
     // Route::get('/', function () { return view('index'); })->name('login');
 });
 
+
+
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
@@ -43,7 +45,7 @@ Route::middleware(['auth'])->group(function () {
 
  //---------------------------------------Operator, Facility Manager and Admin -----------------------------------------------
 
-    Route::middleware(['checkRole:admin,facility manager, operator'])->group(function (){
+    Route::middleware(['checkRole:admin,facility manager,operator'])->group(function (){
         Route::get('/equipment-details/{code}', [PageController::class, 'equipmentDetails'])->name('equipment-details');
 
     });
