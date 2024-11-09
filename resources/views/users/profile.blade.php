@@ -11,6 +11,18 @@
                 {{ session('updateprofilesuccessfully') }}
             </div>
         </div>
+    @elseif($errors->any())
+        <div
+            class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-2">
+                <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
     @endif
     <div class="row gy-4">
         <div class="col-lg-4">
@@ -123,8 +135,8 @@
                                                 class="form-label fw-semibold text-primary-light text-sm mb-8">
                                                 Email <span class="text-danger-600">*</span>
                                             </label>
-                                            <input type="email" class="form-control radius-8" id="email"
-                                                name="email" value="{{ $user->email }}" required>
+                                            <input type="text" class="form-control radius-8" id="email"
+                                                name="email" value="{{ old('email', $user->email) }}" required>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">

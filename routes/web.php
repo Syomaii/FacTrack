@@ -167,7 +167,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::put('/equipments/update', [EquipmentController::class, 'updateEquipment'])->name('update_equipment');
         
-        Route::delete('/delete-facility/{id}', [FacilityController::class, 'deleteFacility'])->name('deleteFacility');        
+        Route::delete('/delete-facility/{id}', [FacilityController::class, 'deleteFacility'])->name('deleteFacility'); 
+        Route::get('/check-equipment/{id}', [FacilityController::class, 'checkEquipment'])->name('facility.checkEquipment');
         Route::post('/add-facility', [FacilityController::class, 'addFacility'])->name('addFacility');
         Route::put('/update-facility/{id}', [FacilityController::class, 'updateFacility'])->name('updateFacility');
     });

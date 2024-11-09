@@ -74,7 +74,9 @@
                                     <td>{{ $borrow->borrowers_id_no }}</td>
                                     <td>{{ Str::title($borrow->borrowers_name) }}</td>
                                     <td>{{ Str::title($borrow->department) }}</td>
-                                    <td>{{ strtoUpper($borrow->equipment->name) }}</td>
+                                    <td>{{ strtoupper($borrow->equipment->name) }}
+                                        ({{ strtoupper($borrow->equipment->brand) }})
+                                    </td>
                                     <td>{{ $borrow->borrowed_date }}</td>
                                     <td>{{ $borrow->return_date ? $borrow->return_date->format('Y-m-d') : 'Not Returned' }}
                                     </td>

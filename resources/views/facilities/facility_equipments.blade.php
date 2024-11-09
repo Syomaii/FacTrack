@@ -82,7 +82,6 @@
                         id="updateFacilityBtn">Edit Facility</button>
                     <button type="button" class="btn btn-danger text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
                         id="deleteFacilityBtn">Delete Facility</button>
-                    
                 @endif
             </div>
         </div>
@@ -216,20 +215,47 @@
         });
 
         document.getElementById('deleteFacilityBtn').addEventListener('click', function() {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('deleteFacilityForm').submit();
-                }
-            });
+            // Check if the facility has any equipment
+            fetch("{{ route('facility.checkEquipment', ['id' => $facility->id]) }}")
+                .then(response => response.json())
+                .then(data => {
+                    if (data.hasEquipment) {
+                        // Display warning if there is equipment in the facility
+                        Swal.fire({
+                            title: 'Cannot delete facility',
+                            text: 'Please transfer the equipments to another facility before deleting this facility.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        // Proceed with deletion confirmation if no equipment is found
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "This action cannot be undone!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Submit delete form if confirmed
+                                document.getElementById('deleteFacilityForm').submit();
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Unable to check the equipment status. Please try again later.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                });
         });
+
+
 
         // Handle click events for the equipment actions
         equipmentList.addEventListener('click', function(e) {

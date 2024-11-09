@@ -67,5 +67,21 @@ class FacilityController extends Controller
         return redirect('/facilities')->with('deleteFacilitySuccess', 'Facility Deleted Successfully!');
     }
 
+    public function checkEquipment($id)
+    {
+        try {
+            $facility = Facility::findOrFail($id);
+
+            $hasEquipment = $facility->equipment()->exists();
+
+            return response()->json(['hasEquipment' => $hasEquipment], 200);
+        } catch (\Exception $e) {
+            \Log::error('Error checking equipment: ' . $e->getMessage());
+            return response()->json(['error' => 'Unable to check the equipment status. Please try again later.'], 500);
+        }
+    }
+
+
+
     
 }
