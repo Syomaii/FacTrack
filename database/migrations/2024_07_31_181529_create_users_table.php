@@ -49,7 +49,7 @@ return new class extends Migration
             $table->string("password", 255);
             $table->string("mobile_no", 50);
             $table->string("image", 255)->nullable();
-            $table->string("status", 50);
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->string("type", 50);
             $table->timestamps();
         });
