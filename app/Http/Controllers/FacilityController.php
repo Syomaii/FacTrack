@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Equipment;
 use App\Models\Facility;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\Facades\Log;
 
 class FacilityController extends Controller
 {
@@ -19,10 +21,10 @@ class FacilityController extends Controller
         ]);
     
         $facilityData = [
-            'name' => $data['name'],
+            'name' => ucwords($data['name']),
             'description' => $data['description'],
             'type' => $data['type'], 
-            'office_id' => auth()->user()->office_id,
+            'office_id' => Auth::user()->office_id,
         ];
     
         Facility::create($facilityData);
@@ -76,7 +78,7 @@ class FacilityController extends Controller
 
             return response()->json(['hasEquipment' => $hasEquipment], 200);
         } catch (\Exception $e) {
-            \Log::error('Error checking equipment: ' . $e->getMessage());
+            Log::error('Error checking equipment: ' . $e->getMessage());
             return response()->json(['error' => 'Unable to check the equipment status. Please try again later.'], 500);
         }
     }
