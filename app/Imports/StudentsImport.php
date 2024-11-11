@@ -42,9 +42,12 @@ class StudentsImport implements
 
 
     public $totalRows = -1;
-    public function __construct()
+    protected $department;
+
+    public function __construct($department = null)
     {
         HeadingRowFormatter::default('none');
+        $this->department = $department;
     }
 
     public function model(array $row)
@@ -52,7 +55,6 @@ class StudentsImport implements
         
         Log::info('Row data:', $row);  // Log each row's data for debugging
 
-        $this->totalRows++;
 
         $userType = Auth::user()->type;
         if($userType == 'admin'){
@@ -64,7 +66,7 @@ class StudentsImport implements
                 'gender' => $row["Gender"] ?? null,
                 'email' => $row["Email"] ?? null,
                 'course' => $row["Course / Year"] ?? null,
-                'department' => ["Department"] ?? null,
+                'department' => ucwords($this->department)
                 
             ]);
         } elseif($userType == 'facility manager'){
