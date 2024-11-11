@@ -30,8 +30,11 @@
                 </ul>
             </div>
         @endif
-        <button type="button" class="btn btn-primary text-base radius-8 px-20 py-11 mb-3" onclick="printInvoice()">
+        <button type="button" class="btn btn-primary text-base radius-8 px-20 py-11 mb-3">
             <a href="/students">Import Excel File</a>
+        </button>
+        <button type="button" class="btn btn-primary text-base radius-8 px-20 py-11 mb-3">
+            <a href="{{ route('add-student') }}">Add New Student</a>
         </button>
         <!-- Students List Grouped by Department -->
         <div class="row gy-4" id="studentList">
