@@ -172,8 +172,8 @@
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-grow-1">
                                                         <span
-                                                            class="text-md mb-0 fw-normal text-secondary-light">{{ $user->firstname }}
-                                                            {{ $user->lastname }}</span>
+                                                            class="text-md mb-0 fw-normal text-secondary-light">{{ ucwords($user->firstname) }}
+                                                            {{ ucwords($user->lastname) }}</span>
                                                     </div>
                                                 </div>
                                             </td>
@@ -232,8 +232,8 @@
                                     <div class="d-flex align-items-center">
                                         <div class="flex-grow-1">
                                             @if (!is_null($lastLoggedIn->last_login_at))
-                                                <h6 class="text-md mb-0 fw-medium">{{ $lastLoggedIn->firstname }}
-                                                    {{ $lastLoggedIn->lastname }}</h6>
+                                                <h6 class="text-md mb-0 fw-medium">{{ ucwords($lastLoggedIn->firstname) }}
+                                                    {{ ucwords($lastLoggedIn->lastname) }}</h6>
                                             @endif
                                         </div>
                                     </div>
