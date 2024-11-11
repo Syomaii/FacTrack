@@ -69,7 +69,7 @@
 
                                     <!-- Form Fields -->
 
-                                    <!-- Model Name -->
+                                    <!-- Brand Name -->
                                     <div class="mb-3">
                                         <label for="brand"
                                             class="form-label fw-semibold text-primary-light text-sm mb-8">Brand</label>
@@ -188,7 +188,7 @@
                                     </div>
 
 
-                                    <div class="d-flex align-items-center justify-content-center gap-3 mb-3">
+                                    <div class="d-flex align-items-center justify-content-center gap-3 mb-4 mt-4">
                                         <a href="/facility-equipments/{id}">
                                             <button type="button"
                                                 class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8">
@@ -206,8 +206,9 @@
                         </div>
                     </div>
                 </div>
+            </div>
         </form>
-
+    </div>
         @include('templates.footer_inc')
 </main>
 @include('templates.footer')
