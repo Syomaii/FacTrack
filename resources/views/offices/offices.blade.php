@@ -56,7 +56,7 @@
        
         <div class="d-flex justify-content-between align-items-center mb-24">
             <div class="input-group" style="max-width: 650px;">
-                <input type="text" id="officeSearch" class="form-control" placeholder="Search Facilities" aria-label="Search Facilities">
+                <input type="text" id="officeSearch" class="form-control" placeholder="Search Facilities" aria-label="Search Office">
                 <button class="btn btn-primary" type="button">
                     <iconify-icon icon="ic:baseline-search" class="icon"></iconify-icon>
                 </button>
