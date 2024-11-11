@@ -40,29 +40,26 @@
 
         <form action="{{ route('add-studentPost') }}" method="POST" enctype="multipart/form-data" id="userForm">
             @csrf
-            <div class="card h-100 p-0 radius-12">
+            <div class="card h-100 p-0 radius-12 pb-5 pt-5">
                 <div class="card-body p-24">
                     <div class="row justify-content-center">
                         <div class="col-xxl-6 col-xl-8 col-lg-10">
                             <div class="card border">
-                                <div class="card-body">
+                                <div class="card-body pb-5">
                                     <div class="card-body p-24">
                                         <div class="d-flex justify-content-center">
-                                            <h6 class="text-md text-primary-light mb-16">Student Profile</h6>
+                                            <h4 class="text-ld text-primary-light mb-16">Student Profile</h4>
                                         </div>
                                     </div>
 
-                                    <div class="row">
-                                        <div class="form-group icon-field mb-3 col-md-12">
-                                            <label for="id_no"
-                                                class="form-label fw-semibold text-primary-light text-sm mb-8">ID
-                                                Number</label>
-                                            <input type="text"
-                                                class="form-control radius-8 {{ $errors->has('id_no') ? 'is-invalid' : '' }}"
-                                                id="id_no" name="id_no" placeholder="Enter ID Number"
-                                                value="{{ old('id_no') }}">
-                                            <small class="text-danger">{{ $errors->first('id_no') }}</small>
-                                        </div>
+                                    <div class="mb-3">
+                                        <label for="id_no"
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">ID Number</label>
+                                        <input type="text"
+                                            class="form-control radius-8 {{ $errors->has('id_no') ? 'is-invalid' : '' }}"
+                                            id="id_no" name="id_no" placeholder="Enter ID Number"
+                                            value="{{ old('id_no') }}">
+                                        <small class="text-danger">{{ $errors->first('id_no') }}</small>
                                     </div>
 
                                     <div class="row">
@@ -141,21 +138,23 @@
                                     </div>
 
                                     <div class="d-flex align-items-center justify-content-center gap-3 mt-5">
+                                        <button type="submit"
+                                            class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8">Add
+                                            Student</button>
                                         <a href="/students">
                                             <button type="button"
                                                 class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8">Cancel</button>
                                         </a>
-                                        <button type="submit"
-                                            class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8">Add
-                                            Student</button>
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </form>
-
+    </div>
         @include('templates.footer_inc')
 </main>
 @include('templates.footer')
