@@ -235,7 +235,7 @@ class PageController extends Controller
 
     public function addStudent()
 {
-    return view('imports/addStudent')->with('title', 'Add Student');
+    return view('students/add_student')->with('title', 'Add Student');
 }
 
 }
