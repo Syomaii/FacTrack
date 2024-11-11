@@ -50,7 +50,7 @@
 
                                 <a href="{{ route('view-department-students', $department) }}"
                                     class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
-                                    View Department Students <iconify-icon icon="iconamoon:arrow-right-2"
+                                    View students in this department <iconify-icon icon="iconamoon:arrow-right-2"
                                         class="text-xl"></iconify-icon>
                                 </a>
 
