@@ -54,14 +54,15 @@
                         <span>Users</span>
                     </a>
                 </li>
-                <li>
-                    <a href="/view-department">
-                        <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
-                        <span>Students</span>
-                    </a>
-                </li>
+                
+                
             @endif
-
+            <li>
+                <a href="/view-department">
+                    <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
+                    <span>Students</span>
+                </a>
+            </li>
             @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
                 <li class="dropdown">
                     <a href="javascript:void(0)">

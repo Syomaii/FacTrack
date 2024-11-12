@@ -47,7 +47,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['checkRole:admin,facility manager,operator'])->group(function (){
         Route::get('/equipment-details/{code}', [PageController::class, 'equipmentDetails'])->name('equipment-details');
-
+        Route::get('/add-student', [PageController::class, 'addStudent'])->name('add-student');
+        Route::post('/add-studentPost', [UserController::class, 'addStudentPost'])->name('add-studentPost');
+        
+        Route::get('/view-department', [StudentController::class, 'viewDepartment'])->name('view-department');
+        Route::get('/department/{department}/students', [StudentController::class, 'viewStudentsByDepartment'])->name('view-department-students');
+        Route::get('/search-student', [StudentController::class, 'search'])->name('search-student');
+        Route::get('/student/{id}', [StudentController::class, 'studentProfile'])->name('student.show_profile');
     });
 
 
@@ -63,14 +69,8 @@ Route::middleware(['auth'])->group(function () {
         
         //for student routes
         Route::get('/students', [PageController::class, 'students']);
-        Route::get('/view-department', [StudentController::class, 'viewDepartment'])->name('view-department');
-        Route::get('/department/{department}/students', [StudentController::class, 'viewStudentsByDepartment'])->name('view-department-students');
-        Route::get('/search-student', [StudentController::class, 'search'])->name('search-student');
         Route::post('/students', [FileUploadController::class, 'importStudents'])->name('import.file');
-        Route::get('/student/{id}', [StudentController::class, 'studentProfile'])->name('student.show_profile');
-
-        Route::get('/add-student', [PageController::class, 'addStudent'])->name('add-student');
-        Route::post('/add-studentPost', [UserController::class, 'addStudentPost'])->name('add-studentPost');
+        
     });
     
     //----------------------------------------------------------------------------------------------------------------

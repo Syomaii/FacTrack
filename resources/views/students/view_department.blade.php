@@ -30,12 +30,16 @@
                 </ul>
             </div>
         @endif
-        <button type="button" class="btn btn-primary text-base radius-8 px-20 py-11 mb-3">
-            <a href="/students">Import Excel File</a>
-        </button>
-        <button type="button" class="btn btn-primary text-base radius-8 px-20 py-11 mb-3">
-            <a href="{{ route('add-student') }}">Add New Student</a>
-        </button>
+        <div class="d-flex justify-content-end gap-2">
+            @if (Auth::user()->type != 'operator')
+                <a href="/students" class="btn btn-primary text-base radius-8 px-20 py-11 mb-3">
+                    Import Excel File
+                </a>
+            @endif
+            <a href="{{ route('add-student') }}" class="btn btn-primary text-base radius-8 px-20 py-11 mb-3">
+                Add New Student
+            </a>
+        </div>
         <!-- Students List Grouped by Department -->
         <div class="row gy-4" id="studentList">
             @if ($students->isNotEmpty())

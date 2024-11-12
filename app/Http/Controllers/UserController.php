@@ -82,8 +82,8 @@ class UserController extends Controller
         $randomPassword = Str::random(10);
         // Prepare user data
         $userData = [
-            'firstname' => $validatedData['firstname'],
-            'lastname' => $validatedData['lastname'],
+            'firstname' => ucwords($validatedData['firstname']),
+            'lastname' => ucwords($validatedData['lastname']),
             'email' => $validatedData['email'],
             'password' => bcrypt($randomPassword),
             'mobile_no' => $validatedData['mobile_no'],
