@@ -65,36 +65,21 @@
                                 <th scope="col">Borrow Date</th>
                                 <th scope="col">Return Date</th>
                                 <th scope="col">Status</th>
-                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($borrows as $borrow)
                                 <tr>
                                     <td>{{ $borrow->borrowers_id_no }}</td>
-                                    <td>{{ Str::title($borrow->borrowers_name) }}</td>
-                                    <td>{{ Str::title($borrow->department) }}</td>
-                                    <td>{{ strtoupper($borrow->equipment->name) }}
-                                        ({{ strtoupper($borrow->equipment->brand) }})
+                                    <td>{{ ucwords($borrow->borrowers_name) }}</td>
+                                    <td>{{ ucwords($borrow->department) }}</td>
+                                    <td>{{ ucwords($borrow->equipment->name) }}
+                                        ({{ ucwords($borrow->equipment->brand) }})
                                     </td>
                                     <td>{{ $borrow->borrowed_date }}</td>
                                     <td>{{ $borrow->return_date ? $borrow->return_date->format('Y-m-d') : 'Not Returned' }}
                                     </td>
                                     <td>{{ $borrow->status }}</td>
-                                    <td class="text-center">
-                                        <div class="d-flex align-items-center gap-10 justify-content-center">
-                                            <button type="button"
-                                                class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle">
-                                                <iconify-icon icon="majesticons:eye-line"
-                                                    class="icon text-xl"></iconify-icon>
-                                            </button>
-                                            <button type="button"
-                                                class="bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle">
-                                                <iconify-icon icon="fluent:delete-24-regular"
-                                                    class="menu-icon"></iconify-icon>
-                                            </button>
-                                        </div>
-                                    </td>
                                 </tr>
                             @empty
                                 <tr>
