@@ -33,21 +33,9 @@
             <div
                 class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                 <div class="d-flex align-items-center flex-wrap gap-3">
-                    <span class="text-md fw-medium text-secondary-light mb-0">Show</span>
-                    <select class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                        <option>10</option>
-                    </select>
                     <form class="navbar-search">
-                        <input type="text" class="bg-base h-40-px w-auto" name="search" placeholder="Search">
+                        <input type="text" class="bg-base h-40-px w-auto" name="search" id="borrowerSearch"
+                            placeholder="Search">
                         <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
                     </form>
                 </div>
@@ -65,12 +53,11 @@
                                 <th scope="col">Borrow Date</th>
                                 <th scope="col">Return Date</th>
                                 <th scope="col">Status</th>
-                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($borrows as $borrow)
-                                <tr>
+                                <tr class="borrower-row">
                                     <td>{{ $borrow->borrowers_id_no }}</td>
                                     <td>{{ Str::title($borrow->borrowers_name) }}</td>
                                     <td>{{ Str::title($borrow->department) }}</td>
@@ -81,20 +68,6 @@
                                     <td>{{ $borrow->return_date ? $borrow->return_date->format('Y-m-d') : 'Not Returned' }}
                                     </td>
                                     <td>{{ $borrow->status }}</td>
-                                    <td class="text-center">
-                                        <div class="d-flex align-items-center gap-10 justify-content-center">
-                                            <button type="button"
-                                                class="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle">
-                                                <iconify-icon icon="majesticons:eye-line"
-                                                    class="icon text-xl"></iconify-icon>
-                                            </button>
-                                            <button type="button"
-                                                class="bg-danger-focus bg-hover-danger-200 text-danger-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle">
-                                                <iconify-icon icon="fluent:delete-24-regular"
-                                                    class="menu-icon"></iconify-icon>
-                                            </button>
-                                        </div>
-                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -116,3 +89,24 @@
     @include('templates.footer_inc')
 </main>
 @include('templates.footer')
+<script>
+    document.getElementById('borrowerSearch').addEventListener('input', function() {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll('.borrower-row'); // Select all borrower rows
+
+        rows.forEach(function(row) {
+            // Get the text content of the relevant columns (borrower's name, department, and equipment name)
+            let name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            let department = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+            let equipmentName = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+
+            // Check if the filter matches any of the fields
+            if (name.includes(filter) || department.includes(filter) || equipmentName.includes(
+                    filter)) {
+                row.style.display = ''; // Show the row
+            } else {
+                row.style.display = 'none'; // Hide the row
+            }
+        });
+    });
+</script>

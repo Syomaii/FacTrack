@@ -161,7 +161,7 @@
             )
             .then(response => response.json())
             .then(data => {
-                updateEquipmentTable(data);
+                updateUserReportsTable(data);
                 var modal = bootstrap.Modal.getInstance(document.getElementById('editDateRangeModal'));
                 modal.hide();
             })
@@ -174,38 +174,40 @@
         var tableBody = document.getElementById('userReportsTable');
         tableBody.innerHTML = '';
 
-        if (Array.isArray(data) && data.length) {
-            data.forEach(user => {
-                // Ensure user is valid
-                if (user) {
-                    var name = user.name || 'N/A';
-                    var office = user.office || 'N/A';
-                    var designation = user.designation || 'N/A';
-                    var email = user.email || 'N/A';
-                    var mobileNo = user.mobile_no || 'N/A';
-                    var status = user.status || 'N/A';
-                    var createdAt = user.created_at || 'N/A';
+        // Check if the data is in an expected format (object with office groups)
+        if (data && typeof data === 'object') {
+            Object.keys(data).forEach(office => {
+                data[office].forEach(user => {
+                    if (user) {
+                        var name = user.name || 'N/A';
+                        var office = user.office || 'N/A';
+                        var designation = user.designation || 'N/A';
+                        var email = user.email || 'N/A';
+                        var mobileNo = user.mobile_no || 'N/A';
+                        var status = user.status || 'N/A';
+                        var createdAt = user.created_at || 'N/A';
 
-                    var row = `<tr>
-                    <td>${name}</td>
-                    <td>${office}</td>
-                    <td>${designation}</td>
-                    <td>${email}</td>
-                    <td>${mobileNo}</td>
-                    <td>${status}</td>
-                    <td>${createdAt}</td>
-                </tr>`;
+                        var row = `<tr>
+                        <td>${name}</td>
+                        <td>${office}</td>
+                        <td>${designation}</td>
+                        <td>${email}</td>
+                        <td>${mobileNo}</td>
+                        <td>${status}</td>
+                        <td>${createdAt}</td>
+                    </tr>`;
 
-                    tableBody.innerHTML += row;
-                } else {
-                    console.warn("User data is missing:", user);
-                }
+                        tableBody.innerHTML += row;
+                    }
+                });
             });
         } else {
+            // Display a message if no data is found
             tableBody.innerHTML =
                 `<tr><td colspan="7" class="text-center text-secondary-light text-sm fw-semibold">No user data found.</td></tr>`;
         }
     }
+
 
     function printInvoice() {
         var printContents = document.getElementById('invoice').innerHTML;

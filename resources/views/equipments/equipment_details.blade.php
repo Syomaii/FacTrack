@@ -116,7 +116,7 @@
         </div>
 
         <div class="timeline-horizontal">
-            @foreach ($timeline as $entry)
+            @foreach ($timeline->sortByDesc('created_at') as $entry)
                 <div class="timeline-item {{ $loop->even ? 'below' : 'above' }}">
                     <p>{{ 'The status of the equipment is ' . $entry->status }}</p>
                     <p>{{ $entry->remarks . ' ' . $entry->created_at }}</p>
@@ -124,6 +124,7 @@
                 </div>
             @endforeach
         </div>
+
 
     </div>
     @include('templates.footer_inc')

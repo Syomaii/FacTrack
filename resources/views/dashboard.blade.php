@@ -127,28 +127,12 @@
                         class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                         <div class="d-flex align-items-center flex-wrap gap-3">
                             <span class="text-md fw-medium text-secondary-light mb-0">Show</span>
-                            <select class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                                <option>10</option>
-                            </select>
+
                             <form class="navbar-search">
-                                <input type="text" class="bg-base h-40-px w-auto" name="search"
+                                <input type="text" class="bg-base h-40-px w-auto" id="userSearch"
                                     placeholder="Search">
                                 <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
                             </form>
-                            <select class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
-                                <option>Status</option>
-                                <option>Active</option>
-                                <option>Inactive</option>
-                            </select>
                         </div>
                     </div>
                     <div class="card-body p-24">
@@ -164,20 +148,21 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($users as $user)
-                                        <tr>
+                                        <tr class="user-row">
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-grow-1">
                                                         <span
-                                                            class="text-md mb-0 fw-normal text-secondary-light">{{ ucwords($user->firstname) }}
-                                                            {{ ucwords($user->lastname) }}</span>
+                                                            class="text-md mb-0 fw-normal text-secondary-light user-name">{{ $user->firstname }}
+                                                            {{ $user->lastname }}</span>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td><span
-                                                    class="text-md mb-0 fw-normal text-secondary-light">{{ $user->email }}</span>
+                                                    class="text-md mb-0 fw-normal text-secondary-light user-email">{{ $user->email }}</span>
                                             </td>
-                                            <td>{{ $user->designation ? $user->designation->name : 'N/A' }}</td>
+                                            <td class="user-designation">
+                                                {{ $user->designation ? $user->designation->name : 'N/A' }}</td>
                                             <td class="text-center">
                                                 <span
                                                     class="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">Active</span>
@@ -189,38 +174,45 @@
                         </div>
 
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
-                            <span>Showing 1 to 10 of {{ $users->count() }} entries</span>
+                            <span>
+                                Showing {{ $users->firstItem() }} to {{ $users->lastItem() }} of
+                                {{ $users->total() }}
+                                entries
+                            </span>
                             <ul class="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
                                 <li class="page-item">
                                     <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
-                                        href="javascript:void(0)">
-                                        <iconify-icon icon="ep:d-arrow-left" class=""></iconify-icon>
+                                        href="{{ $users->previousPageUrl() }}"
+                                        @if ($users->onFirstPage()) style="pointer-events: none; opacity: 0.5;" @endif>
+                                        <iconify-icon icon="ep:d-arrow-left"></iconify-icon>
                                     </a>
                                 </li>
+                                @for ($i = 1; $i <= $users->lastPage(); $i++)
+                                    <li class="page-item">
+                                        <a class="page-link {{ $i === $users->currentPage() ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-secondary-light' }} fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                            href="{{ $users->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
                                 <li class="page-item">
-                                    <a class="page-link text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md bg-primary-600 text-white"
-                                        href="javascript:void(0)">1</a>
+                                    <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
+                                        href="{{ $users->nextPageUrl() }}"
+                                        @if (!$users->hasMorePages()) style="pointer-events: none; opacity: 0.5;" @endif>
+                                        <iconify-icon icon="ep:d-arrow-right"></iconify-icon>
+                                    </a>
                                 </li>
-                                <li class="page-item">
-                                    <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
-                                        href="javascript:void(0)">2</a>
-                                </li>
-                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
-                                    href="javascript:void(0)">
-                                    <iconify-icon icon="ep:d-arrow-right" class=""></iconify-icon>
-                                </a>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
 
+
             <!-- Recent Users Section -->
             <div class="col-xxl-3 col-xl-12">
                 <div class="card h-100">
                     <div class="card-body">
                         <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
-                            <h6 class="mb-2 fw-bold text-lg mb-0">Last login</h6>
+                            <h6 class="mb-2 fw-bold text-lg mb-0">Recent Logged-in Users</h6>
                         </div>
 
                         <div class="mt-32">
@@ -250,121 +242,6 @@
         </div>
 
 
-        <!-- Users Data Section -->
-        <div class="col-xxl-9 col-xl-12">
-            <div class="card h-100 p-0 radius-12">
-                <div
-                    class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
-                    <div class="d-flex align-items-center flex-wrap gap-3">
-                        <span class="text-md fw-medium text-secondary-light mb-0">Show</span>
-
-                        <form class="navbar-search">
-                            <input type="text" class="bg-base h-40-px w-auto" id="userSearch"
-                                placeholder="Search">
-                            <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
-                        </form>
-                    </div>
-                </div>
-                <div class="card-body p-24">
-                    <div class="table-responsive scroll-sm">
-                        <table class="table bordered-table sm-table mb-0">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Designation</th>
-                                    <th scope="col" class="text-center">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($users as $user)
-                                    <tr class="user-row">
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-grow-1">
-                                                    <span
-                                                        class="text-md mb-0 fw-normal text-secondary-light user-name">{{ $user->firstname }}
-                                                        {{ $user->lastname }}</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td><span
-                                                class="text-md mb-0 fw-normal text-secondary-light user-email">{{ $user->email }}</span>
-                                        </td>
-                                        <td class="user-designation">
-                                            {{ $user->designation ? $user->designation->name : 'N/A' }}</td>
-                                        <td class="text-center">
-                                            <span
-                                                class="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">Active</span>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
-                        <span>
-                            Showing {{ $users->firstItem() }} to {{ $users->lastItem() }} of {{ $users->total() }}
-                            entries
-                        </span>
-                        <ul class="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
-                                    href="{{ $users->previousPageUrl() }}"
-                                    @if ($users->onFirstPage()) style="pointer-events: none; opacity: 0.5;" @endif>
-                                    <iconify-icon icon="ep:d-arrow-left"></iconify-icon>
-                                </a>
-                            </li>
-                            @for ($i = 1; $i <= $users->lastPage(); $i++)
-                                <li class="page-item">
-                                    <a class="page-link {{ $i === $users->currentPage() ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-secondary-light' }} fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
-                                        href="{{ $users->url($i) }}">{{ $i }}</a>
-                                </li>
-                            @endfor
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
-                                    href="{{ $users->nextPageUrl() }}"
-                                    @if (!$users->hasMorePages()) style="pointer-events: none; opacity: 0.5;" @endif>
-                                    <iconify-icon icon="ep:d-arrow-right"></iconify-icon>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Recent Users Section (Last Login) -->
-        <div class="col-xxl-3 col-xl-12">
-            <div class="card h-100">
-                <div class="card-body">
-                    <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
-                        <h6 class="mb-2 fw-bold text-lg mb-0">Last Login</h6>
-                    </div>
-
-                    <div class="mt-32">
-                        @foreach ($recentLoggedIn as $lastLoggedIn)
-                            <div class="d-flex align-items-center justify-content-between gap-3 mb-24">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-grow-1">
-                                        @if (!is_null($lastLoggedIn->last_login_at))
-                                            <h6 class="text-md mb-0 fw-medium">{{ $lastLoggedIn->firstname }}
-                                                {{ $lastLoggedIn->lastname }}</h6>
-                                        @endif
-                                    </div>
-                                </div>
-                                <span class="text-sm text-secondary-light fw-medium">
-                                    @if (!is_null($lastLoggedIn->last_login_at))
-                                        {{ $lastLoggedIn->last_login_at->diffForHumans() }}
-                                    @endif
-                                </span>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </div>
     </div>

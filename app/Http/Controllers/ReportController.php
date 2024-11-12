@@ -324,42 +324,39 @@ class ReportController extends Controller
     
     public function setDateRangeUsers(Request $request)
     {
-        try {
-            $startDate = Carbon::parse($request->query('start'))->startOfDay();
-            $endDate = Carbon::parse($request->query('end'))->endOfDay();
-
-            // Validate the date range
-            if (!$startDate || !$endDate || $startDate->greaterThan($endDate)) {
-                return response()->json(['error' => 'Invalid or missing date range'], 400);
-            }
-
-            // Retrieve user data within the date range
-            $users = User::whereBetween('created_at', [$startDate, $endDate])
-                ->get();
-
-            // Group the results by office
-            $reportData = $users->groupBy('office')->map(function ($group) {
-                return $group->map(function ($user) {
-                    return [
-                        'name' => $user->name,
-                        'office' => $user->office,
-                        'designation' => $user->designation,
-                        'email' => $user->email,
-                        'mobile_no' => $user->mobile_no,
-                        'status' => $user->status,
-                        'created_at' => Carbon::parse($user->created_at)->format('Y-m-d'),
-                    ];
-                });
-            });
-
-            return response()->json($reportData);
-
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Server error: ' . $e->getMessage()], 500);
-        }
+        $start = $request->input('start');
+        $end = $request->input('end');
+    
+        // Fetch users within the specified date range
+        $users = User::with(['office:id,name', 'designation:id,name'])
+            ->select('id', 'firstname', 'lastname', 'office_id', 'designation_id', 'email', 'mobile_no', 'status', 'created_at')
+            ->whereBetween('created_at', [$start, $end])
+            ->orderBy('created_at', 'desc')
+            ->get();
+    
+        // Group users by office name
+        $usersGroupedByOffice = $users->groupBy(function ($user) {
+            return $user->office->name ?? 'No Office';
+        });
+    
+        // Prepare report data in the same format as `userReports`
+        $reportData = $usersGroupedByOffice->map(function ($usersByOffice) {
+            return $usersByOffice->map(function ($user) {
+                return [
+                    'name' => ucfirst($user->firstname) . ' ' . ucfirst($user->lastname),
+                    'office' => $user->office->name ?? 'N/A',
+                    'designation' => $user->designation->name ?? 'N/A',
+                    'email' => $user->email ?? 'N/A',
+                    'mobile_no' => $user->mobile_no ?? 'N/A',
+                    'status' => $user->status ?? 'N/A',
+                    'created_at' => $user->created_at ? $user->created_at->format('Y-m-d') : 'N/A',
+                ];
+            })->values();
+    });
+    
+        // Return the grouped and formatted data as JSON
+        return response()->json($reportData);
     }
-
     
 
- 
 }
