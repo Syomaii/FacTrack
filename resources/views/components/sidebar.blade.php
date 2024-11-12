@@ -60,7 +60,6 @@
                         <span>Students</span>
                     </a>
                 </li>
-                
             @endif
 
             @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
@@ -129,36 +128,45 @@
                     <span>Reports</span>
                 </a>
                 <ul class="sidebar-submenu">
-                    <li>
-                        <a href="/borrowed-equipments">
-                            <i class="ri-circle-fill circle-icon text-lilac-600 w-auto" class="menu-icon"></i>
-                            Borrowed Equipments
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/maintenanced-equipments">
-                            <i class="ri-circle-fill circle-icon text-warning-main w-auto" class="menu-icon"></i>
-                            In Maintenance Equipments
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/repaired-equipments">
-                            <i class="ri-circle-fill circle-icon text-primary-600 w-auto" class="menu-icon"></i>
-                            In Repair Equipments
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/donated-equipments">
-                            <i class="ri-circle-fill circle-icon text-info-main w-auto" class="menu-icon"></i>
-                            Donated Equipments
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/disposed-equipments">
-                            <i class="ri-circle-fill circle-icon text-danger-main w-auto" class="menu-icon"></i>
-                            Disposed Equipments
-                        </a>
-                    </li>
+                    @if (auth()->user()->type === 'admin')
+                        <li>
+                            <a href="/user-reports">
+                                <i class="ri-circle-fill circle-icon text-lilac-600 w-auto" class="menu-icon"></i>
+                                Users
+                            </a>
+                        </li>
+                    @elseif (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
+                        <li>
+                            <a href="/borrowed-equipments">
+                                <i class="ri-circle-fill circle-icon text-lilac-600 w-auto" class="menu-icon"></i>
+                                Borrowed Equipments
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/maintenanced-equipments">
+                                <i class="ri-circle-fill circle-icon text-warning-main w-auto" class="menu-icon"></i>
+                                In Maintenance Equipments
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/repaired-equipments">
+                                <i class="ri-circle-fill circle-icon text-primary-600 w-auto" class="menu-icon"></i>
+                                In Repair Equipments
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/donated-equipments">
+                                <i class="ri-circle-fill circle-icon text-info-main w-auto" class="menu-icon"></i>
+                                Donated Equipments
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/disposed-equipments">
+                                <i class="ri-circle-fill circle-icon text-danger-main w-auto" class="menu-icon"></i>
+                                Disposed Equipments
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </li>
         </ul>

@@ -21,36 +21,37 @@ class PageController extends Controller
 
     public function dashboard()
     {
-        // Get recent users excluding admin
+        // Fetch recent logged-in users, paginated users, and equipment data
         $recentLoggedIn = User::where('type', '!=', 'admin')
-                        ->orderBy('last_login_at', 'desc') 
-                        ->take(5) 
-                        ->get();
-
-        $users = User::all(); 
-        
-        $equipmentCount = Equipment::all()->count();
-        
-        $userNotAdmin = Auth::user()->type != 'admin';
-
-        if ($userNotAdmin) {
-
-            $equipmentCount = Equipment::whereHas('facility', function ($query) {
-                $query->where('office_id', Auth::user()->office_id);
-            })->count();
-
-            
-        }
-
-        return view('dashboard', [
-            'title' => 'Dashboard',
-            'users' => $users,
-            'recentLoggedIn' => $recentLoggedIn, 
-            'userCount' => User::count(), 
-            'equipmentCount' => $equipmentCount // Pass the users variable to the view
-        ]);
+            ->orderBy('last_login_at', 'desc')
+            ->take(5)
+            ->get();
+    
+        $users = User::where('type', '!=', 'admin')->paginate(10);
+        $userCount = User::where('type', '!=', 'admin')->count();
+        $equipmentCount = Equipment::count();
+        $totalBorrowedEquipments = Borrower::whereNull('returned_date')->count();
+        $totalInRepairEquipments = Equipment::where('status', 'in_repair')->count();
+    
+        // Fetch all data from the borrows table
+        $borrows = Borrower::all(); // Fetch all records from the borrows table
+    
+        // Calculate borrowed equipment per month (you can modify this query as needed)
+        $borrowedPerMonth = Borrower::selectRaw('YEAR(borrowed_date) as year, MONTH(borrowed_date) as month, COUNT(*) as total')
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'desc')
+            ->orderBy('month', 'desc')
+            ->get();
+    
+        // Pass all data to the view
+        return view('dashboard', compact(
+            'userCount', 'equipmentCount', 'totalBorrowedEquipments',
+            'totalInRepairEquipments', 'borrows', 'users', 'recentLoggedIn', 'borrowedPerMonth'
+        ))->with('title', 'Dashboard');
     }
-
+    
+    
+    
 
     public function facilities(){
 
@@ -234,8 +235,8 @@ class PageController extends Controller
     }
 
     public function addStudent()
-{
-    return view('imports/addStudent')->with('title', 'Add Student');
-}
+    {
+        return view('imports/addStudent')->with('title', 'Add Student');
+    }
 
 }

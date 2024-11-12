@@ -5,14 +5,16 @@
     <x-navbar />
 
     @if (session('newUser'))
-        <div class="alert alert-warning bg-warning-100 text-warning-600 border-warning-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
+        <div
+            class="alert alert-warning bg-warning-100 text-warning-600 border-warning-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center gap-2">
                 <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
                 {{ session('newUser') }}
             </div>
         </div>
     @elseif (session('loginUserSuccessfully'))
-        <div class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
+        <div
+            class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center gap-2">
                 <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
                 {{ session('loginUserSuccessfully') }}
@@ -21,7 +23,7 @@
     @endif
 
 
-    
+
 
     <div class="dashboard-main-body">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
@@ -79,8 +81,7 @@
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
                             <div>
                                 <p class="fw-medium text-primary-light mb-1">Total Borrowed Equipments</p>
-                                <h6 class="mb-0">28</h6>
-                                <!-- Change if you have the actual borrowed equipment count -->
+                                <h6 class="mb-0">{{ $totalBorrowedEquipments }}</h6>
                             </div>
                             <div
                                 class="w-50-px h-50-px bg-info rounded-circle d-flex justify-content-center align-items-center">
@@ -98,8 +99,7 @@
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
                             <div>
                                 <p class="fw-medium text-primary-light mb-1">Total In Repair Equipments</p>
-                                <h6 class="mb-0">42</h6>
-                                <!-- Change if you have the actual in-repair equipment count -->
+                                <h6 class="mb-0">{{ $totalInRepairEquipments }}</h6>
                             </div>
                             <div
                                 class="w-50-px h-50-px bg-success-main rounded-circle d-flex justify-content-center align-items-center">
@@ -111,145 +111,206 @@
             </div>
         </div>
 
-        <div class="row gy-4 mt-1">
+        <div class="row gy-4 mt-1 mb-3">
             <div class="col-xxl-12 col-xl-12">
                 <div class="card h-100">
                     <div class="card-body">
-                        <div class="d-flex flex-wrap align-items-center justify-content-between">
-                            <h6 class="text-lg mb-0">Borrowed Equipments Per Month</h6>
-                        </div>
-                        <div id="chart" class="pt-28 apexcharts-tooltip-style-1"></div>
-                        <!-- Add actual chart here if needed -->
+                        <h6>Borrowed Equipments Per Month</h6>
+                        <canvas id="borrowedEquipmentsChart" class="pt-28"></canvas>
                     </div>
                 </div>
             </div>
-
-            <div class="col-xxl-9 col-xl-12">
-                <div class="card h-100 p-0 radius-12">
-                    <div
-                        class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
-                        <div class="d-flex align-items-center flex-wrap gap-3">
-                            <span class="text-md fw-medium text-secondary-light mb-0">Show</span>
-                            <select class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                                <option>10</option>
-                            </select>
-                            <form class="navbar-search">
-                                <input type="text" class="bg-base h-40-px w-auto" name="search"
-                                    placeholder="Search">
-                                <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
-                            </form>
-                            <select class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
-                                <option>Status</option>
-                                <option>Active</option>
-                                <option>Inactive</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="card-body p-24">
-                        <div class="table-responsive scroll-sm">
-                            <table class="table bordered-table sm-table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Email</th>
-                                        <th scope="col">Designation</th>
-                                        <th scope="col" class="text-center">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($users as $user)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-grow-1">
-                                                        <span
-                                                            class="text-md mb-0 fw-normal text-secondary-light">{{ $user->firstname }}
-                                                            {{ $user->lastname }}</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><span
-                                                    class="text-md mb-0 fw-normal text-secondary-light">{{ $user->email }}</span>
-                                            </td>
-                                            <td>{{ $user->designation ? $user->designation->name : 'N/A' }}</td>
-                                            <td class="text-center">
-                                                <span
-                                                    class="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">Active</span>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
-                            <span>Showing 1 to 10 of {{ $users->count() }} entries</span>
-                            <ul class="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
-                                <li class="page-item">
-                                    <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
-                                        href="javascript:void(0)">
-                                        <iconify-icon icon="ep:d-arrow-left" class=""></iconify-icon>
-                                    </a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md bg-primary-600 text-white"
-                                        href="javascript:void(0)">1</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
-                                        href="javascript:void(0)">2</a>
-                                </li>
-                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
-                                    href="javascript:void(0)">
-                                    <iconify-icon icon="ep:d-arrow-right" class=""></iconify-icon>
-                                </a>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Users Section -->
-            <div class="col-xxl-3 col-xl-12">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
-                            <h6 class="mb-2 fw-bold text-lg mb-0">Last login</h6>
-                        </div>
-
-                        <div class="mt-32">
-                            @foreach ($recentLoggedIn as $lastLoggedIn)
-                                <div class="d-flex align-items-center justify-content-between gap-3 mb-24">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-grow-1">
-                                            @if (!is_null($lastLoggedIn->last_login_at))
-                                                <h6 class="text-md mb-0 fw-medium">{{ $lastLoggedIn->firstname }}
-                                                    {{ $lastLoggedIn->lastname }}</h6>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <span class="text-sm text-secondary-light fw-medium">
-                                        @if (!is_null($lastLoggedIn->last_login_at))
-                                            {{ $lastLoggedIn->last_login_at->diffForHumans() }}
-                                        @endif
-                                    </span>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
+
+
+        <!-- Users Data Section -->
+        <div class="col-xxl-9 col-xl-12">
+            <div class="card h-100 p-0 radius-12">
+                <div
+                    class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
+                    <div class="d-flex align-items-center flex-wrap gap-3">
+                        <span class="text-md fw-medium text-secondary-light mb-0">Show</span>
+
+                        <form class="navbar-search">
+                            <input type="text" class="bg-base h-40-px w-auto" id="userSearch" placeholder="Search">
+                            <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-body p-24">
+                    <div class="table-responsive scroll-sm">
+                        <table class="table bordered-table sm-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Designation</th>
+                                    <th scope="col" class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($users as $user)
+                                    <tr class="user-row">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <span
+                                                        class="text-md mb-0 fw-normal text-secondary-light user-name">{{ $user->firstname }}
+                                                        {{ $user->lastname }}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><span
+                                                class="text-md mb-0 fw-normal text-secondary-light user-email">{{ $user->email }}</span>
+                                        </td>
+                                        <td class="user-designation">
+                                            {{ $user->designation ? $user->designation->name : 'N/A' }}</td>
+                                        <td class="text-center">
+                                            <span
+                                                class="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">Active</span>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
+                        <span>
+                            Showing {{ $users->firstItem() }} to {{ $users->lastItem() }} of {{ $users->total() }}
+                            entries
+                        </span>
+                        <ul class="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
+                            <li class="page-item">
+                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
+                                    href="{{ $users->previousPageUrl() }}"
+                                    @if ($users->onFirstPage()) style="pointer-events: none; opacity: 0.5;" @endif>
+                                    <iconify-icon icon="ep:d-arrow-left"></iconify-icon>
+                                </a>
+                            </li>
+                            @for ($i = 1; $i <= $users->lastPage(); $i++)
+                                <li class="page-item">
+                                    <a class="page-link {{ $i === $users->currentPage() ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-secondary-light' }} fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                        href="{{ $users->url($i) }}">{{ $i }}</a>
+                                </li>
+                            @endfor
+                            <li class="page-item">
+                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
+                                    href="{{ $users->nextPageUrl() }}"
+                                    @if (!$users->hasMorePages()) style="pointer-events: none; opacity: 0.5;" @endif>
+                                    <iconify-icon icon="ep:d-arrow-right"></iconify-icon>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Users Section (Last Login) -->
+        <div class="col-xxl-3 col-xl-12">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
+                        <h6 class="mb-2 fw-bold text-lg mb-0">Last Login</h6>
+                    </div>
+
+                    <div class="mt-32">
+                        @foreach ($recentLoggedIn as $lastLoggedIn)
+                            <div class="d-flex align-items-center justify-content-between gap-3 mb-24">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        @if (!is_null($lastLoggedIn->last_login_at))
+                                            <h6 class="text-md mb-0 fw-medium">{{ $lastLoggedIn->firstname }}
+                                                {{ $lastLoggedIn->lastname }}</h6>
+                                        @endif
+                                    </div>
+                                </div>
+                                <span class="text-sm text-secondary-light fw-medium">
+                                    @if (!is_null($lastLoggedIn->last_login_at))
+                                        {{ $lastLoggedIn->last_login_at->diffForHumans() }}
+                                    @endif
+                                </span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
     </div>
     @include('templates.footer_inc')
     @include('templates.footer')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('borrowedEquipmentsChart').getContext('2d');
+
+            // Fetch the borrowed data from PHP to JavaScript
+            const borrowedPerMonthData = @json($borrowedPerMonth);
+
+            // Prepare labels and data points
+            const labels = borrowedPerMonthData.map(data => {
+                const date = new Date(data.year, data.month - 1);
+                return date.toLocaleString('default', {
+                    month: 'short',
+                    year: 'numeric'
+                }); // Get "Month Year"
+            });
+
+            const dataPoints = borrowedPerMonthData.map(data => data.total);
+
+            // Initialize the chart
+            new Chart(ctx, {
+                type: 'bar', // You can change this to 'bar', 'pie', etc.
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Borrowed Equipments',
+                        data: dataPoints,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+
+        document.getElementById('userSearch').addEventListener('input', function() {
+            let filter = this.value.toLowerCase();
+            let rows = document.querySelectorAll('.user-row'); // Select all user rows
+
+            rows.forEach(function(row) {
+                // Get the text content of the user name, email, and designation
+                let name = row.querySelector('.user-name').textContent.toLowerCase();
+                let email = row.querySelector('.user-email').textContent.toLowerCase();
+                let designation = row.querySelector('.user-designation').textContent.toLowerCase();
+
+                // Check if the filter matches any user field (name, email, designation)
+                if (name.includes(filter) || email.includes(filter) || designation.includes(filter)) {
+                    row.style.display = ''; // Show the row
+                } else {
+                    row.style.display = 'none'; // Hide the row
+                }
+            });
+        });
+    </script>

@@ -53,18 +53,20 @@
         @endif
 
         <!-- Search Bar -->
-       
+
         <div class="d-flex justify-content-between align-items-center mb-24">
             <div class="input-group" style="max-width: 650px;">
-                <input type="text" id="officeSearch" class="form-control" placeholder="Search Facilities" aria-label="Search Facilities">
+                <input type="text" id="officeSearch" class="form-control" placeholder="Search Facilities"
+                    aria-label="Search Facilities">
                 <button class="btn btn-primary" type="button">
                     <iconify-icon icon="ic:baseline-search" class="icon"></iconify-icon>
                 </button>
             </div>
-        
+
             <div class="d-flex gap-3 ms-3"> <!-- Added ms-3 for left margin -->
                 <a href="#" style="width: 170px" data-bs-toggle="modal" data-bs-target="#addOfficeModal">
-                    <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11">Add Office</button>
+                    <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11">Add
+                        Office</button>
                 </a>
             </div>
         </div>
@@ -97,18 +99,21 @@
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="officeName" class="form-label">Office Name</label>
-                                <input type="text" class="form-control" id="officeName" name="name" required>
+                                <input type="text" class="form-control" id="officeName" name="name"
+                                    value="{{ old('name') }}" required>
                             </div>
                             <div class="mb-3">
                                 <label for="officeDescription" class="form-label">Office Description</label>
-                                <textarea class="form-control" id="officeDescription" name="description" rows="3" required></textarea>
+                                <textarea class="form-control" id="officeDescription" name="description" rows="3" required>{{ old('description') }}</textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="officeType" class="form-label">Type</label>
                                 <select class="form-control" id="officeType" name="type" required>
                                     <option value="" disabled selected>Select Type</option>
-                                    <option value="office">Office</option>
-                                    <option value="department">Department</option>
+                                    <option value="office" {{ old('type') == 'office' ? 'selected' : '' }}>Office
+                                    </option>
+                                    <option value="department" {{ old('type') == 'department' ? 'selected' : '' }}>
+                                        Department</option>
                                 </select>
                             </div>
                         </div>
@@ -124,16 +129,17 @@
         <div class="row gy-4" id="officeList">
             @if ($offices->isNotEmpty())
                 @foreach ($offices as $office)
-                <div class="col-xxl-3 col-sm-6 office-item">
-                    <div class="card h-100 radius-12 text-center">
-                        <div class="card-body p-24">
-                            <div
-                                class="w-64-px h-64-px d-inline-flex align-items-center justify-content-center bg-info-200 text-primary-600 mb-16 radius-12">
-                                <iconify-icon icon="{{ $office->getIconClass() }}" class="h5 mb-0"></iconify-icon>
-                            </div>
-                            <h6 class="mb-8">{{ $office->name }}</h6>
-                            <a href="{{ url('/office/' . $office->id) }}"
-                                class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
+                    <div class="col-xxl-3 col-sm-6 office-item">
+                        <div class="card h-100 radius-12 text-center">
+                            <div class="card-body p-24">
+                                <div
+                                    class="w-64-px h-64-px d-inline-flex align-items-center justify-content-center bg-info-200 text-primary-600 mb-16 radius-12">
+                                    <iconify-icon icon="{{ $office->getIconClass() }}"
+                                        class="h5 mb-0"></iconify-icon>
+                                </div>
+                                <h6 class="mb-8">{{ $office->name }}</h6>
+                                <a href="{{ url('/office/' . $office->id) }}"
+                                    class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
                                     @if ($office->type == 'office')
                                         View Office
                                     @elseif ($office->type == 'department')
@@ -141,10 +147,10 @@
                                     @endif
                                     <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
                                 </a>
-                                
+
+                            </div>
                         </div>
                     </div>
-                </div>
                 @endforeach
             @else
                 <div class="d-flex justify-content-center align-items-center" style="height: 55vh; width: 100vw;">

@@ -28,7 +28,7 @@
             </div>
         @endif
 
-        <form action="{{ route('add-user') }}" method="POST" enctype="multipart/form-data" id="userForm">
+        <form action="{{ route('addUserPost') }}" method="POST" enctype="multipart/form-data" id="userForm">
             @csrf
             <div class="card h-100 p-0 radius-12">
                 <div class="card-body p-24">
