@@ -69,7 +69,7 @@
                                             Borrower's ID
                                         </label>
                                         <input type="text" class="form-control radius-8" id="borrowers_id_no" name="borrowers_id_no"
-                                               placeholder="Enter Borrower's ID" autocomplete="off">
+                                               placeholder="Enter Borrower's ID" autocomplete="off" autofocus>
                                         <!-- Suggestions dropdown -->
                                         <div id="idSuggestions" class="position-absolute bg-white border rounded mt-1 w-100" style="z-index: 1000; display: none; max-height: 200px; overflow-y: auto;"></div>
                                     </div>

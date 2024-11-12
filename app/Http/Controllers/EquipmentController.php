@@ -9,6 +9,7 @@ use App\Models\Timeline;
 use App\Models\Office;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EquipmentController extends Controller
 {
@@ -35,7 +36,7 @@ class EquipmentController extends Controller
     
         // Add facility_id and user_id to the data array
         $data['facility_id'] = $facility->id;
-        $data['user_id'] = auth()->user()->id;
+        $data['user_id'] = Auth::user()->id;
     
         // Generate a unique equipment code
         $code = date('y') . $officeId . date('m') . date('d') . $facilityId . date('H') . $data['user_id'] . date('is');
@@ -57,7 +58,7 @@ class EquipmentController extends Controller
             'equipment_id' => $equipment->id,
             'status' => $equipment->status,
             'remarks' => 'The day the equipment is added in the system',
-            'user_id' => auth()->user()->id
+            'user_id' => Auth::user()->id
         ]);
     
         // Redirect to the facility's equipment page with a success message
@@ -102,7 +103,7 @@ class EquipmentController extends Controller
             'equipment_id' => $equipment->id,
             'status' => $equipment->status,
             'remarks' => 'The day the equipment is updated in the system',
-            'user_id' => auth()->id()
+            'user_id' => Auth::user()->id
         ]);
 
         return redirect()->route('equipments')->with('updateEquipmentSuccessfully', 'Equipment updated successfully');

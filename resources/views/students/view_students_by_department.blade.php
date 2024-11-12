@@ -37,11 +37,6 @@
                         <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
                     </form>
                 </div>
-                <a href="{{ route('add-student') }}"
-                    class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
-                    <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
-                    Add New Student
-                </a>
             </div>
             <div class="card-body p-24">
                 <div class="table-responsive scroll-sm">

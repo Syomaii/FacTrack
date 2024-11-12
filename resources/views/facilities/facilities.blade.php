@@ -125,8 +125,8 @@
                                     class="w-64-px h-64-px d-inline-flex align-items-center justify-content-center bg-info-200 text-primary-600 mb-16 radius-12">
                                     <iconify-icon icon="{{ $facility->getIconClass() }}" class="h5 mb-0"></iconify-icon>
                                 </div>
-                                <h6 class="mb-8">{{ $facility->name }}</h6>
-                                <a href="/facility-equipment/{{ $facility->id }}"
+                                <h6 class="mb-8">{{ ucwords($facility->name) }}</h6>
+                                <a href="/facility-equipment/{{ ucwords($facility->id) }}"
                                     class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
                                     @if ($facility->type == 'laboratory')
                                         View Laboratory

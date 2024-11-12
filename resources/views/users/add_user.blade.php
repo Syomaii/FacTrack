@@ -76,7 +76,7 @@
                                                 <input type="text"
                                                     class="form-control radius-8 {{ $errors->has('firstname') ? 'is-invalid' : '' }}"
                                                     id="firstname" name="firstname" placeholder="Enter First Name"
-                                                    value="{{ old('firstname') }}">
+                                                    value="{{ old('firstname') }}" autofocus>
                                             </div>
                                             <small class="text-danger">{{ $errors->first('firstname') }}</small>
                                         </div>
@@ -299,8 +299,9 @@
                         </div>
                     </div>
                 </div>
+            </div>
         </form>
-
+    </div>
         @include('templates.footer_inc')
 </main>
 @include('templates.footer')

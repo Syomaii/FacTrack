@@ -27,7 +27,7 @@ class OfficeController extends Controller
         ]);
     
         $officeData = [
-            'name' => $data['name'],
+            'name' => ucwords($data['name']),
             'description' => $data['description'],
             'type' => $data['type'], 
         ];

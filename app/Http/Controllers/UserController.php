@@ -33,8 +33,7 @@ class UserController extends Controller
             'email' => 'required|email|max:255|unique:users,email',
             'mobile_no' => 'required|string|max:15',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'type' => 'required|string|max:255',
-            'select_type' => 'required|string',  // Check if office or department is selected
+            'type' => 'required|string|max:255',  // Check if office or department is selected
             'office_id' => 'nullable|exists:offices,id', // Added validation for office_id
             'department' => 'nullable|string|max:255', // Added validation for department
         ];
@@ -43,18 +42,17 @@ class UserController extends Controller
 
         $officeId = null;
 
-        
+        $typeofOffice = $request->input('select_type');
 
         // If the user is an admin and selects office or department
         if ($userRole === 'admin') {
-            if ($validatedData['select_type'] === 'office') {
-                // Validate that office_id is provided
+            if ($typeofOffice === 'office') {
                 if (!$request->office_id) {
                     return back()->withErrors(['office' => 'Office field cannot be empty.']);
                 }
                 $officeId = $request->office_id; // Use the office_id from the dropdown
 
-            } elseif ($validatedData['select_type'] === 'department') {
+            } elseif ($typeofOffice ===  'department') {
                 // Validate that department is provided
                 if (!$request->department) {
                     return back()->withErrors(['department' => 'Department field cannot be empty.']);
@@ -76,7 +74,7 @@ class UserController extends Controller
                     return back()->withErrors(['department' => 'Selected department does not exist.']);
                 }
             }   
-        } else {
+        } elseif(($userRole != 'admin')) {
             // If not admin, use the authenticated user's office_id
             $officeId = Auth::user()->office_id;
         }
