@@ -9,6 +9,7 @@ use App\Models\Disposed;
 use App\Models\Maintenance;
 use App\Models\Repair;
 use App\Models\Donated;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -290,6 +291,75 @@ class ReportController extends Controller
             return response()->json(['error' => 'Server error: ' . $e->getMessage()], 500);
         }
     }
+
+    public function userReports()
+    {
+        $users = User::with(['office:id,name', 'designation:id,name'])
+            ->select('id', 'firstname', 'lastname', 'office_id', 'designation_id', 'email', 'mobile_no', 'status', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->get();
     
+        // Group users by office name after retrieving them
+        $usersGroupedByOffice = $users->groupBy(function ($user) {
+            return $user->office->name ?? 'No Office';
+        });
+        
+        // Prepare report data
+        $reportData = $usersGroupedByOffice->map(function ($usersByOffice) {
+            return $usersByOffice->map(function ($user) {
+                return [
+                    'name' => ucfirst($user->firstname) . ' ' . ucfirst($user->lastname),
+                    'office' => $user->office->name ?? 'N/A',
+                    'designation' => $user->designation->name ?? 'N/A',
+                    'email' => $user->email ?? 'N/A',
+                    'mobile_no' => $user->mobile_no ?? 'N/A',
+                    'status' => $user->status ?? 'N/A',
+                    'created_at' => $user->created_at ? $user->created_at->format('Y-m-d') : 'N/A',
+                ];
+            })->values(); // Add ->values() to reset the keys within each office group
+        });
     
+        return view('reports/user_reports', compact('reportData'))->with('title', 'User Reports');
+    }
+    
+    public function setDateRangeUsers(Request $request)
+    {
+        try {
+            $startDate = Carbon::parse($request->query('start'))->startOfDay();
+            $endDate = Carbon::parse($request->query('end'))->endOfDay();
+
+            // Validate the date range
+            if (!$startDate || !$endDate || $startDate->greaterThan($endDate)) {
+                return response()->json(['error' => 'Invalid or missing date range'], 400);
+            }
+
+            // Retrieve user data within the date range
+            $users = User::whereBetween('created_at', [$startDate, $endDate])
+                ->get();
+
+            // Group the results by office
+            $reportData = $users->groupBy('office')->map(function ($group) {
+                return $group->map(function ($user) {
+                    return [
+                        'name' => $user->name,
+                        'office' => $user->office,
+                        'designation' => $user->designation,
+                        'email' => $user->email,
+                        'mobile_no' => $user->mobile_no,
+                        'status' => $user->status,
+                        'created_at' => Carbon::parse($user->created_at)->format('Y-m-d'),
+                    ];
+                });
+            });
+
+            return response()->json($reportData);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Server error: ' . $e->getMessage()], 500);
+        }
+    }
+
+    
+
+ 
 }

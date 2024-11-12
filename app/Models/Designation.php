@@ -13,4 +13,10 @@ class Designation extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function designation()
+    {
+        return $this->belongsTo(Designation::class);
+    }
+
 }

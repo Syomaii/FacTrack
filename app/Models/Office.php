@@ -31,10 +31,15 @@ protected $table = "offices";
         if ($type === 'department') {
             return 'mingcute:home-6-fill'; 
         } elseif ($type === 'office') {
-            return 'fluent:toolbox-20-filled'; 
+            return 'fluent:home-20-filled'; 
         } else {
             return 'mingcute:tool-fill'; 
         }
+    }
+
+    public function office()
+    {
+        return $this->belongsTo(Office::class);
     }
     
 }

@@ -86,6 +86,10 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/update-office/{id}', [OfficeController::class, 'updateOffice'])->name('updateOffice');
         Route::get('/office/{id}', [OfficeController::class, 'officeFacilities'])->name('officeFacilities');
         Route::post('/users/{user}/reset-password', [UserController::class, 'resetUserPassword'])->name('users.reset_password');
+        Route::get('/user-reports', [ReportController::class, 'userReports'])->name('user_reports');
+        Route::get('/edit-date-range', [ReportController::class, 'setDateRangeUsers']);
+
+
     });
     // Route::get('/users', [PageController::class, 'users']);
 
