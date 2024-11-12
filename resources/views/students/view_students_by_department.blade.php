@@ -15,9 +15,13 @@
                     </a>
                 </li>
                 <li>-</li>
-                <a href="{{ route('view-department') }}" class="d-flex align-items-center gap-1 hover-text-primary">
-                    All Departments
-                </a>
+                <li class="fw-medium">
+                    <a href="{{ route('view-department') }}" class="d-flex align-items-center gap-1 hover-text-primary">
+                        Departments
+                    </a>
+                </li>
+                <li class="fw-medium">-</li>
+                <li class="fw-medium">{{ ucwords($department) }}</li>
             </ul>
         </div>
 
@@ -99,59 +103,60 @@
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
                         <span>Showing {{ $start }} to {{ $end }} of {{ $totalStudents }}
                             entries</span>
-                            <ul class="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
-                                <!-- Previous Page Link -->
-                                <li class="page-item">
-                                    <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
-                                        href="{{ $students->previousPageUrl() }}" aria-disabled="{{ $students->onFirstPage() }}">
-                                        <iconify-icon icon="ep:d-arrow-left"></iconify-icon>
-                                    </a>
-                                </li>
-                            
-                                <!-- Pagination Pages -->
-                                @if ($students->lastPage() > 1)
-                                    <!-- Show first page if not too close to current -->
-                                    @if ($students->currentPage() > 3)
-                                        <li class="page-item">
-                                            <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
-                                                href="{{ $students->url(1) }}">1</a>
-                                        </li>
-                                        @if ($students->currentPage() > 4)
-                                            <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
-                                        @endif
-                                    @endif
-                                    
-                                    @for ($i = max(1, $students->currentPage() - 1); $i <= min($students->lastPage(), $students->currentPage() + 1); $i++)
-                                        <li class="page-item">
-                                            <a class="page-link {{ $i === $students->currentPage() ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-secondary-light' }} fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
-                                                href="{{ $students->url($i) }}">{{ $i }}</a>
-                                        </li>
-                                    @endfor
-
-                                    @if ($students->currentPage() < $students->lastPage() - 2)
-                                        @if ($students->currentPage() < $students->lastPage() - 3)
-                                            <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
-                                        @endif
-                                        <li class="page-item">
-                                            <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
-                                                href="{{ $students->url($students->lastPage()) }}">{{ $students->lastPage() }}</a>
-                                        </li>
+                        <ul class="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
+                            <!-- Previous Page Link -->
+                            <li class="page-item">
+                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
+                                    href="{{ $students->previousPageUrl() }}" aria-disabled="{{ $students->onFirstPage() }}">
+                                    <iconify-icon icon="ep:d-arrow-left"></iconify-icon>
+                                </a>
+                            </li>
+                        
+                            <!-- Pagination Pages -->
+                            @if ($students->lastPage() > 1)
+                                <!-- Show first page if not too close to current -->
+                                @if ($students->currentPage() > 3)
+                                    <li class="page-item">
+                                        <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                            href="{{ $students->url(1) }}">1</a>
+                                    </li>
+                                    @if ($students->currentPage() > 4)
+                                        <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
                                     @endif
                                 @endif
-                            
-                                <!-- Next Page Link -->
-                                <li class="page-item">
-                                    <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
-                                        href="{{ $students->nextPageUrl() }}">
-                                        <iconify-icon icon="ep:d-arrow-right"></iconify-icon>
-                                    </a>
-                                </li>
-                            </ul>
+
+                                @for ($i = max(1, $students->currentPage() - 1); $i <= min($students->lastPage(), $students->currentPage() + 1); $i++)
+                                    <li class="page-item">
+                                        <a class="page-link {{ $i === $students->currentPage() ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-secondary-light' }} fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                            href="{{ $students->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if ($students->currentPage() < $students->lastPage() - 2)
+                                    @if ($students->currentPage() < $students->lastPage() - 3)
+                                        <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
+                                    @endif
+                                    <li class="page-item">
+                                        <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                            href="{{ $students->url($students->lastPage()) }}">{{ $students->lastPage() }}</a>
+                                    </li>
+                                @endif
+                            @else   
+                                    
+                            @endif
+                        
+                            <!-- Next Page Link -->
+                            <li class="page-item">
+                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
+                                    href="{{ $students->nextPageUrl() }}">
+                                    <iconify-icon icon="ep:d-arrow-right"></iconify-icon>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 @endif
             </div>
         </div>
-
     </div>
 
     @include('templates.footer_inc')
