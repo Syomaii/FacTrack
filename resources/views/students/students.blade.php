@@ -14,13 +14,13 @@
                         Dashboard
                     </a>
                 </li>
-                <li>-</li>
+                <li class="fw-medium">-</li>
                 <li class="fw-medium">
                     <a href="{{ route('view-department') }}" class="d-flex align-items-center gap-1 hover-text-primary">
                         Students
                     </a>
                 </li>
-                <li>-</li>
+                <li class="fw-medium">-</li>
                 <li class="fw-medium">Import File</li>
             </ul>
         </div>
