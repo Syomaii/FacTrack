@@ -125,7 +125,7 @@ class PageController extends Controller
     }
 
     public function scanCode(){
-        return view('equipments/scancode')->with('title', 'Scan Code');
+        return view('transaction.scancode')->with('title', 'Scan Code');
     }
 
     public function returnEquipment(){
@@ -212,12 +212,12 @@ class PageController extends Controller
     public function maintenance()
     {
         // Logic for scanning or displaying equipment in maintenance
-        return view('equipments/maintenance')->with('title', 'Maintenance Equipment'); // Load the maintenance view
+        return view('transaction.maintenance')->with('title', 'Maintenance Equipment'); // Load the maintenance view
     }   
     public function repairEquipment()
     {
         // Logic for scanning or displaying equipment in maintenance
-        return view('equipments/repair')->with('title', 'Repair Equipment'); // Load the maintenance view
+        return view('transaction.repair')->with('title', 'Repair Equipment'); // Load the maintenance view
     }    
     public function students(){
         return view('students.students')->with('title', 'Import');
