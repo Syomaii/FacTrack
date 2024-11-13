@@ -18,15 +18,15 @@ class Facility extends Model
 
     public function getIconClass()
     {
-        $name = strtolower($this->name);
-        if (strpos($name, 'computer') !== false) {
+        $name = strtolower($this->type);
+        if (strpos($name, 'laboratory') !== false) {
             return 'ri:computer-fill';
         } elseif (strpos($name, 'room') !== false) {
             return 'mingcute:home-6-fill';
         } elseif (strpos($name, 'office') !== false) {
-            return 'fluent:toolbox-20-filled';
+            return 'mdi:door-open'; 
         } else {
-            return 'mingcute:tool-fill';    
+            return 'mingcute:folder-fill';    
         }
     }
 

@@ -79,9 +79,69 @@
                 </div>
 
                 <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
-                    <span>Showing 1 to {{ $borrows->count() }} of {{ $borrows->total() }} entries</span>
-                    {{ $borrows->links() }} <!-- For pagination -->
+                    <span>Showing {{ $borrows->firstItem() }} to {{ $borrows->lastItem() }} of
+                        {{ $borrows->total() }} entries</span>
+
+                    @if ($borrows->total() > 0)
+                        <ul class="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
+                            <!-- Previous Page Link -->
+                            <li class="page-item">
+                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                    href="{{ $borrows->previousPageUrl() }}"
+                                    aria-disabled="{{ $borrows->onFirstPage() }}">
+                                    <iconify-icon icon="ep:d-arrow-left"></iconify-icon>
+                                </a>
+                            </li>
+
+                            <!-- Pagination Pages -->
+                            @if ($borrows->lastPage() > 1)
+                                <!-- Show first page if not too close to current -->
+                                @if ($borrows->currentPage() > 3)
+                                    <li class="page-item">
+                                        <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                            href="{{ $borrows->url(1) }}">1</a>
+                                    </li>
+                                    @if ($borrows->currentPage() > 4)
+                                        <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
+                                    @endif
+                                @endif
+
+                                @for ($i = max(1, $borrows->currentPage() - 1); $i <= min($borrows->lastPage(), $borrows->currentPage() + 1); $i++)
+                                    <li class="page-item">
+                                        <a class="page-link {{ $i === $borrows->currentPage() ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-secondary-light' }} fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                            href="{{ $borrows->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if ($borrows->currentPage() < $borrows->lastPage() - 2)
+                                    @if ($borrows->currentPage() < $borrows->lastPage() - 3)
+                                        <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
+                                    @endif
+                                    <li class="page-item">
+                                        <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                            href="{{ $borrows->url($borrows->lastPage()) }}">{{ $borrows->lastPage() }}</a>
+                                    </li>
+                                @endif
+                            @else
+                                <!-- If there's only one page -->
+                                <span>Page 1</span>
+                            @endif
+
+                            <!-- Next Page Link -->
+                            <li class="page-item">
+                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                    href="{{ $borrows->nextPageUrl() }}">
+                                    <iconify-icon icon="ep:d-arrow-right"></iconify-icon>
+                                </a>
+                            </li>
+                        </ul>
+                    @else
+                        <!-- Display message if no entries -->
+                        <span>No entries found.</span>
+                    @endif
                 </div>
+
+
             </div>
         </div>
     </div>

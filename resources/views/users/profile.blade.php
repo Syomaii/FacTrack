@@ -3,7 +3,7 @@
 
 <main class="dashboard-main">
     <x-navbar />
-    
+
     <div class="dashboard-main-body">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
             <h6 class="fw-semibold mb-0">User Profile</h6>
@@ -16,11 +16,11 @@
                 </li>
                 <li class="fw-medium">-</li>
                 <li class="fw-medium">
-                    {{ ucwords($user->firstname) }} {{ ucwords($user->lastname) }} 
+                    {{ ucwords($user->firstname) }} {{ ucwords($user->lastname) }}
                 </li>
             </ul>
         </div>
-        
+
         @if (session('updateprofilesuccessfully'))
             <div
                 class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
@@ -45,7 +45,8 @@
         <div class="row gy-4">
             <div class="col-lg-4">
                 <div class="user-grid-card position-relative border radius-16 overflow-hidden bg-base h-100">
-                    <img src="{{ asset('assets/images/user-grid/uc.jpg') }}" alt="" class="w-100 object-fit-cover">
+                    <img src="{{ asset('assets/images/user-grid/uc.jpg') }}" alt=""
+                        class="w-100 object-fit-cover">
                     <div class="pb-24 ms-16 mb-24 me-16 mt--100">
                         <div class="text-center border border-top-0 border-start-0 border-end-0">
                             <img src="/{{ auth()->user()->image }}" alt=""
@@ -84,20 +85,26 @@
                     <div class="card-body p-24">
                         <ul class="nav border-gradient-tab nav-pills mb-20 d-inline-flex" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link d-flex align-items-center px-24 active" id="pills-edit-profile-tab"
-                                    data-bs-toggle="pill" data-bs-target="#pills-edit-profile" type="button" role="tab"
+                                <button class="nav-link d-flex align-items-center px-24 active"
+                                    id="pills-edit-profile-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-edit-profile" type="button" role="tab"
                                     aria-controls="pills-edit-profile" aria-selected="true">
                                     Edit Profile
                                 </button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link d-flex align-items-center px-24" id="pills-change-password-tab"
-                                    data-bs-toggle="pill" data-bs-target="#pills-change-password" type="button"
-                                    role="tab" aria-controls="pills-change-password" aria-selected="false"
-                                    tabindex="-1">
-                                    Change Password
-                                </button>
-                            </li>
+                            @if (
+                                !(auth()->id() !== $user->id &&
+                                    (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
+                                ))
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link d-flex align-items-center px-24"
+                                        id="pills-change-password-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-change-password" type="button" role="tab"
+                                        aria-controls="pills-change-password" aria-selected="false" tabindex="-1">
+                                        Change Password
+                                    </button>
+                                </li>
+                            @endif
                         </ul>
 
                         <div class="tab-content" id="pills-tabContent">
@@ -134,7 +141,8 @@
                                                     First Name <span class="text-danger-600">*</span>
                                                 </label>
                                                 <input type="text" class="form-control radius-8" id="firstname"
-                                                    name="firstname" value="{{ ucwords($user->firstname) }}" required>
+                                                    name="firstname" value="{{ ucwords($user->firstname) }}"
+                                                    required>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -187,14 +195,18 @@
                                     </div>
 
                                     <div class="d-flex align-items-center justify-content-center gap-3">
-                                        <button type="button"
-                                            class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8">
-                                            Cancel
-                                        </button>
-                                        <button type="submit"
-                                            class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8">
-                                            Save
-                                        </button>
+                                        @if (auth()->user()->id === $user->id ||
+                                                (auth()->user()->type === 'facility manager' && $user->type === 'operator') ||
+                                                (auth()->user()->type === 'admin' && $user->type === 'operator'))
+                                            <button type="button"
+                                                class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8">
+                                                Cancel
+                                            </button>
+                                            <button type="submit"
+                                                class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8">
+                                                Save
+                                            </button>
+                                        @endif
                                     </div>
                                 </form>
                             </div>
@@ -236,8 +248,9 @@
                                                 New Password <span class="text-danger-600">*</span>
                                             </label>
                                             <div class="position-relative">
-                                                <input type="password" class="form-control radius-8" id="new-password"
-                                                    name="password" required placeholder="Enter New Password">
+                                                <input type="password" class="form-control radius-8"
+                                                    id="new-password" name="password" required
+                                                    placeholder="Enter New Password">
                                                 <span
                                                     class="toggle-password ri-eye-line cursor-pointer position-absolute end-0 top-50 translate-middle-y me-16 text-secondary-light"
                                                     data-toggle="#new-password"></span>
