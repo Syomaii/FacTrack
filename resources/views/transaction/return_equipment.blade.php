@@ -46,20 +46,22 @@
                         Borrow
                     </button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link d-flex align-items-center px-24" id="maintenance-tab" data-bs-toggle="pill"
-                        data-bs-target="#maintenance" type="button" role="tab" aria-controls="maintenance"
-                        aria-selected="false">
-                        In Maintenance
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link d-flex align-items-center px-24" id="repair-tab" data-bs-toggle="pill"
-                        data-bs-target="#repair" type="button" role="tab" aria-controls="repair"
-                        aria-selected="false">
-                        Repair
-                    </button>
-                </li>
+                @if (Auth::user()->designation_id === 3)
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link d-flex align-items-center px-24" id="maintenance-tab" data-bs-toggle="pill"
+                            data-bs-target="#maintenance" type="button" role="tab" aria-controls="maintenance"
+                            aria-selected="false">
+                            In Maintenance
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link d-flex align-items-center px-24" id="repair-tab" data-bs-toggle="pill"
+                            data-bs-target="#repair" type="button" role="tab" aria-controls="repair"
+                            aria-selected="false">
+                            Repair
+                        </button>
+                    </li>
+                @endif
             </ul>
 
             <!-- Tab Content -->
@@ -85,75 +87,77 @@
                     </div>
                 </div>
 
-                <!-- Maintenance Tab -->
-                <div class="tab-pane fade" id="maintenance" role="tabpanel" aria-labelledby="maintenance-tab">
-                    <div class="card p-3">
-                        <form enctype="multipart/form-data" method="POST" id="maintenanceForm">
-                            @csrf
-                            <input type="hidden" name="code" id="maintenance_code" />
-                            <input type="hidden" name="returned_date" id="maintenance_returned_date"
-                                value="{{ now()->format('Y-m-d\TH:i') }}">
-                            <div id="preview-maintenance" style="width: 300px; height: 50px;"></div>
-                            <select class="form-control mb-3" id="maintenance_issue" name="issue_note">
-                                <option value="" selected disabled>Problems Encountered</option>
-                                <option value="System Failure">System Failure</option>
-                                <option value="HDD Failure">HDD Failure</option>
-                                <option value="FDD Failure">FDD Failure</option>
-                                <option value="Memory error">Memory error</option>
-                                <option value="Other">Other</option>
-                            </select>
-                            <input class="form-control mb-3" placeholder="Technician" id="maintenance_technician"
-                                name="technician"></input>
-                            <textarea class="form-control mb-3" placeholder="Action Taken" id="maintenance_action_taken" name="action_taken"></textarea>
-                            <textarea class="form-control mb-3" placeholder="Remarks" id="maintenance_remarks" name="remarks"></textarea>
-                            <textarea class="form-control mb-3" placeholder="Recommendations" id="maintenance_recommendations"
-                                name="recommendations"></textarea>
+                @if (Auth::user()->designation === "Maintenance Personnel")
+                    <!-- Maintenance Tab -->
+                    <div class="tab-pane fade" id="maintenance" role="tabpanel" aria-labelledby="maintenance-tab">
+                        <div class="card p-3">
+                            <form enctype="multipart/form-data" method="POST" id="maintenanceForm">
+                                @csrf
+                                <input type="hidden" name="code" id="maintenance_code" />
+                                <input type="hidden" name="returned_date" id="maintenance_returned_date"
+                                    value="{{ now()->format('Y-m-d\TH:i') }}">
+                                <div id="preview-maintenance" style="width: 300px; height: 50px;"></div>
+                                <select class="form-control mb-3" id="maintenance_issue" name="issue_note">
+                                    <option value="" selected disabled>Problems Encountered</option>
+                                    <option value="System Failure">System Failure</option>
+                                    <option value="HDD Failure">HDD Failure</option>
+                                    <option value="FDD Failure">FDD Failure</option>
+                                    <option value="Memory error">Memory error</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <input class="form-control mb-3" placeholder="Technician" id="maintenance_technician"
+                                    name="technician"></input>
+                                <textarea class="form-control mb-3" placeholder="Action Taken" id="maintenance_action_taken" name="action_taken"></textarea>
+                                <textarea class="form-control mb-3" placeholder="Remarks" id="maintenance_remarks" name="remarks"></textarea>
+                                <textarea class="form-control mb-3" placeholder="Recommendations" id="maintenance_recommendations"
+                                    name="recommendations"></textarea>
 
-                            <div class="d-flex justify-content-center gap-3 mt-3">
-                                <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
-                                    data-bs-target="#scanModalMaintenance">
-                                    Scan QR Code
-                                </button>
-                                <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
-                            </div>
-                        </form>
+                                <div class="d-flex justify-content-center gap-3 mt-3">
+                                    <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
+                                        data-bs-target="#scanModalMaintenance">
+                                        Scan QR Code
+                                    </button>
+                                    <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Repair Tab -->
-                <div class="tab-pane fade" id="repair" role="tabpanel" aria-labelledby="repair-tab">
-                    <div class="card p-3">
-                        <form enctype="multipart/form-data" method="POST" id="repairForm">
-                            @csrf
-                            <input type="hidden" name="code" id="repair_code" />
-                            <input type="hidden" name="returned_date" id="repair_returned_date"
-                                value="{{ now()->format('Y-m-d\TH:i') }}">
-                            <div id="preview-repair" style="width: 300px; height: 50px;"></div>
-                            <select class="form-control mb-3" id="repair_issue" name="issue_note">
-                                <option value="" selected disabled>Problems Encountered</option>
-                                <option value="System Failure">System Failure</option>
-                                <option value="HDD Failure">HDD Failure</option>
-                                <option value="FDD Failure">FDD Failure</option>
-                                <option value="Memory error">Memory error</option>
-                                <option value="Other">Other</option>
-                            </select>
-                            <input class="form-control mb-3" placeholder="Technician" id="repair_technician"
-                                name="technician"></input>
-                            <textarea class="form-control mb-3" placeholder="Action Taken" id="repair_action_taken" name="action_taken"></textarea>
-                            <textarea class="form-control mb-3" placeholder="Remarks" id="repair_remarks" name="remarks"></textarea>
-                            <textarea class="form-control mb-3" placeholder="Recommendations" id="repair_recommendations"
-                                name="recommendations"></textarea>
+                    <!-- Repair Tab -->
+                    <div class="tab-pane fade" id="repair" role="tabpanel" aria-labelledby="repair-tab">
+                        <div class="card p-3">
+                            <form enctype="multipart/form-data" method="POST" id="repairForm">
+                                @csrf
+                                <input type="hidden" name="code" id="repair_code" />
+                                <input type="hidden" name="returned_date" id="repair_returned_date"
+                                    value="{{ now()->format('Y-m-d\TH:i') }}">
+                                <div id="preview-repair" style="width: 300px; height: 50px;"></div>
+                                <select class="form-control mb-3" id="repair_issue" name="issue_note">
+                                    <option value="" selected disabled>Problems Encountered</option>
+                                    <option value="System Failure">System Failure</option>
+                                    <option value="HDD Failure">HDD Failure</option>
+                                    <option value="FDD Failure">FDD Failure</option>
+                                    <option value="Memory error">Memory error</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <input class="form-control mb-3" placeholder="Technician" id="repair_technician"
+                                    name="technician"></input>
+                                <textarea class="form-control mb-3" placeholder="Action Taken" id="repair_action_taken" name="action_taken"></textarea>
+                                <textarea class="form-control mb-3" placeholder="Remarks" id="repair_remarks" name="remarks"></textarea>
+                                <textarea class="form-control mb-3" placeholder="Recommendations" id="repair_recommendations"
+                                    name="recommendations"></textarea>
 
-                            <div class="d-flex justify-content-center gap-3 mt-3">
-                                <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
-                                    data-bs-target="#scanModalRepair">
-                                    Scan QR Code
-                                </button>
-                                <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
-                            </div>
-                        </form>
+                                <div class="d-flex justify-content-center gap-3 mt-3">
+                                    <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
+                                        data-bs-target="#scanModalRepair">
+                                        Scan QR Code
+                                    </button>
+                                    <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                @endif
 
             </div>
         </div>
