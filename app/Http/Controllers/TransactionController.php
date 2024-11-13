@@ -69,7 +69,7 @@ class TransactionController extends Controller
             return back()->withErrors(['equipment_code' => 'Equipment is already borrowed.'])->withInput();
         }
 
-        return redirect()->route('equipments/borrow_details', ['code' => $equipment->code])
+        return redirect()->route('borrow_details', ['code' => $equipment->code])
                          ->with([
                              'borrowers_name' => $data['borrowers_name'],
                              'borrowers_id_no' => $data['borrowers_id_no'],
@@ -93,7 +93,7 @@ class TransactionController extends Controller
         ];
 
 
-        return view('equipments/borrow_details', $data);
+        return view('transaction.borrow_details', $data);
     }
 
     public function submitBorrow(Request $request, $id)
@@ -173,7 +173,7 @@ class TransactionController extends Controller
         $maintenanceDate = $request->input('maintenance_date') ?: now()->format('Y-m-d');
         $issueNote = $request->input('issue_note') ?: 'No issue provided';
     
-        return view('equipments.maintenance_equipment_details', [
+        return view('transaction.maintenance_equipment_details', [
             'equipment' => $equipment,
             'maintenance_id_no' => $equipment->id, 
             'issue_note' => $issueNote,
@@ -229,7 +229,7 @@ class TransactionController extends Controller
         $repairedDate = $request->input('repair_date') ?: now()->format('Y-m-d');
         $issueNote = $request->input('issue_note') ?: 'No issue provided';
     
-        return view('equipments.repair_equipment_details', [
+        return view('transaction.repair_equipment_details', [
             'equipment' => $equipment,
             'repair_id_no' => $equipment->id, 
             'issue_note' => $issueNote,
