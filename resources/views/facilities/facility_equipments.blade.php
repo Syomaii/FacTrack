@@ -120,9 +120,9 @@
         </div>
 
     </div>
-
-    @include('templates.footer')
+    @include('templates.footer_inc')
 </main>
+@include('templates.footer')
 
 <!-- Edit Facility Modal -->
 <div class="modal fade" id="editFacilityModal" tabindex="-1" aria-labelledby="editFacilityModalLabel"
