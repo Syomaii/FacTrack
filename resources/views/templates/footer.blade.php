@@ -3,8 +3,8 @@
 <script src="/assets/js/lib/jquery-3.7.1.min.js"></script>
 <!-- Bootstrap js -->
 <script src="/assets/js/lib/bootstrap.bundle.min.js"></script>
-<!-- Apex Chart js -->
-<script src="/assets/js/lib/apexcharts.min.js"></script>
+{{-- <!-- Apex Chart js -->
+<script src="/assets/js/lib/apexcharts.min.js"></script> --}}
 <!-- Data Table js -->
 <script src="/assets/js/lib/dataTables.min.js"></script>
 <!-- Iconify Font js -->
@@ -23,8 +23,8 @@
 <script>
     let table = new DataTable('#dataTable');
 </script>
-<script type="text/javascript" src="/assets/js/lib/instascan.min.js"></script>
-<script src="/assets/js/homeTwoChart.js"></script>
+{{-- <script type="text/javascript" src="/assets/js/lib/instascan.min.js"></script> --}}
+{{-- <script src="/assets/js/homeTwoChart.js"></script> --}}
 
 @if (url()->current() == 'http://localhost:8000')
     :
@@ -48,6 +48,8 @@
         // ========================= Password Show Hide Js End ===========================
     </script>
 @endif
+
+
 @if (url()->current() == url('borrow-equipment'))
     <script src="/assets/js/lib/html5-qrcode.min.js"></script>
     <script>
@@ -93,9 +95,6 @@
         }
     </script>
 @endif
-
-
-
 
 
 <script>
