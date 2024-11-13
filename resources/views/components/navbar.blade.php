@@ -13,8 +13,10 @@
       </div>
       <div class="col-auto">
         <div class="d-flex flex-wrap align-items-center gap-3">
-          <button type="button" data-theme-toggle
-            class="w-40-px h-40-px bg-neutral-200 rounded-circle d-flex justify-content-center align-items-center"></button>
+          <button type="button" data-bs-toggle="modal" data-bs-target="#scanModal"
+            class="w-40-px h-40-px bg-neutral-200 rounded-circle d-flex justify-content-center align-items-center" id="scanCode">
+            <iconify-icon icon="fe:vector" class="menu-icon"></iconify-icon>
+          </button>
 
 
           <div class="dropdown">
@@ -85,12 +87,6 @@
                     <iconify-icon icon="solar:user-linear" class="icon text-xl"></iconify-icon> My Profile</a>
                 </li>
                 <li>
-                  <a class="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
-                    href="company.html">
-                    <iconify-icon icon="icon-park-outline:setting-two" class="icon text-xl"></iconify-icon>
-                    Setting</a>
-                </li>
-                <li>
                   <a class="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-danger d-flex align-items-center gap-3"
                     href="/logout">
                     <iconify-icon icon="lucide:power" class="icon text-xl"></iconify-icon> Log Out</a>
@@ -102,3 +98,83 @@
       </div>
     </div>
   </div>
+  <div class="modal fade" id="scanModal" tabindex="-1" aria-labelledby="scanModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content background-color-blue">
+            <div class="modal-header">
+                <h5 class="modal-title" id="scanModalLabel">Scan QR Code</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <input type="hidden" name="borrower_code" id="borrower_code">
+            <div class="modal-body">
+                <div id="preview" class="display-flex align-items-center justify-content-center scan-code"
+                     style="width: 100%; height: 400px; border: 2px dashed #ccc;">
+                    <!-- QR code scanner will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/assets/js/lib/html5-qrcode.min.js"></script>
+<script>
+    let scanner;
+
+    function startScanner() {
+        if (!scanner) {
+            scanner = new Html5Qrcode("preview");
+        }
+
+        scanner.start(
+            { facingMode: "environment" },
+            {
+                fps: 20,
+                qrbox: { width: 300, height: 300 }
+            },
+            success,
+            error
+        ).catch(err => {
+            console.log("Error starting scanner:", err);
+        });
+    }
+
+    function stopScanner() {
+        if (scanner) {
+            scanner.stop().then(() => {
+                console.log("Scanner stopped.");
+            }).catch(err => {
+                console.log("Error stopping scanner:", err);
+            });
+        }
+    }
+
+    function success(result) {
+        console.log("Scan result:", result);
+        $('#borrower_code').val(result);
+
+        stopScanner();
+        window.location.href = "/equipment-details/" + result;
+    }
+
+    function error(err) {
+        console.log("Scanning error:", err);
+    }
+
+    $(document).ready(function() {
+        $('#scanCode').on('click', function() {
+            startScanner();
+            $('#scanModal').modal('show');
+        });
+
+        $('#scanModal').on('hidden.bs.modal', function() {
+            stopScanner();
+        });
+
+        $(window).on('beforeunload', function() {
+            stopScanner();
+        });
+    });
+
+    
+
+</script>
