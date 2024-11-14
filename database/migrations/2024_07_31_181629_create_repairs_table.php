@@ -21,8 +21,8 @@ return new class extends Migration
             $table->dateTime('returned_date')->nullable();
             $table->text('remarks');
             $table->text('issue');
-            $table->string('action_taken', 255)->nullable();
-            $table->string('recommendations', 255)->nullable();
+            $table->text('action_taken')->nullable();
+            $table->text('recommendations')->nullable();
             $table->string('technician', 255)->nullable();
             $table->string('status', 50);
             $table->timestamps();
