@@ -156,23 +156,26 @@ class PageController extends Controller
     public function equipmentDetails($code)
     {
         $equipments = Equipment::where('code', $code)->first();
-    
+        
         // Check if equipment exists
         if (!$equipments) {
             return redirect()->back()->with('error', 'Equipment not found');
         }
-
-        $offices = $equipments->offices;
     
+        // Get the timeline for the equipment
+        $timeline = $equipments->timeline()->get(); // Get the timeline entries
+    
+        // Pass the data to the view
         $data = [
             'equipments' => $equipments,
-            'timeline' => $equipments->timeline,
-            'offices' => $offices,
+            'timeline' => $timeline,
             'title' => 'Equipment Details'
         ];
-    
+        
         return view('equipments/equipment_details', $data);
     }
+    
+    
     
 
     public function addUser(){

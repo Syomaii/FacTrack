@@ -35,5 +35,4 @@ class Borrower extends Model
         return $this->belongsTo(Equipment::class, 'equipment_id'); 
     }
 
-
 }

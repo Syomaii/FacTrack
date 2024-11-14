@@ -119,11 +119,58 @@
             @foreach ($timeline->sortByDesc('created_at') as $entry)
                 <div class="timeline-item {{ $loop->even ? 'below' : 'above' }}">
                     <p>{{ 'The status of the equipment is ' . $entry->status }}</p>
-                    <p>{{ $entry->remarks . ' ' . $entry->created_at }}</p>
-                    <p>{{ 'Triggered by ' . $entry->user->firstname . ' ' . $entry->user->lastname }}</p>
+
+                    @if ($entry->status == 'Borrowed')
+                        @if ($entry->equipment->borrows->isNotEmpty())
+                            @foreach ($entry->equipment->borrows as $borrower)
+                                <p>{{ 'Borrower: ' . $borrower->borrowers_name }}</p>
+                                <p>{{ 'Borrower Department: ' . $borrower->department }}</p>
+                            @endforeach
+                        @else
+                            <p>{{ 'No borrower found' }}</p>
+                        @endif
+                    @elseif($entry->status == 'In Maintenance')
+                        @if ($entry->equipment->maintenance->isNotEmpty())
+                            @foreach ($entry->equipment->maintenance as $maintenance)
+                                <p>{{ 'Issue: ' . $maintenance->issue }}</p>
+                            @endforeach
+                        @else
+                            <p>{{ 'No issue found' }}</p>
+                        @endif
+                    @elseif($entry->status == 'In Repair')
+                        @if ($entry->equipment->repairs->isNotEmpty())
+                            @foreach ($entry->equipment->repairs as $repair)
+                                <p>{{ 'Issue: ' . $repair->issue }}</p>
+                            @endforeach
+                        @else
+                            <p>{{ 'No issue found' }}</p>
+                        @endif
+                    @elseif($entry->status == 'Donated')
+                        @if ($entry->equipment->donated->isNotEmpty())
+                            @foreach ($entry->equipment->donated as $donates)
+                                <p>{{ 'Condition: ' . $donates->condition }}</p>
+                                <p>{{ 'Recipient: ' . $donates->recipient }}</p>
+                            @endforeach
+                        @endif
+                    @elseif($entry->status == 'Disposed')
+                        @if ($entry->equipment->disposed->isNotEmpty())
+                            @foreach ($entry->equipment->disposed as $disposes)
+                                <p>{{ 'Disposed By: ' . $disposes->user->firstname . ' ' . $disposes->user->lastname }}
+                                </p>
+                            @endforeach
+                        @else
+                            <p>{{ 'No disposal record found' }}</p>
+                        @endif
+                    @endif
+                    <p>{{ $entry->remarks . ' at ' . $entry->created_at }}</p>
+                    <p>{{ 'Operated by ' . $entry->user->firstname . ' ' . $entry->user->lastname }}</p>
                 </div>
             @endforeach
         </div>
+
+
+
+
 
 
     </div>

@@ -25,4 +25,16 @@ class Timeline extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    // In Timeline.php model
+public function borrow()
+{
+    return $this->belongsTo(Borrower::class, 'borrowers_id_no');
+}
+
+public function maintenance()
+{
+    return $this->belongsTo(Maintenance::class, 'maintenance_id');
+}
+
 }

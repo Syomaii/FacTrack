@@ -59,4 +59,21 @@ class Equipment extends Model
         return $this->hasMany(Borrower::class, 'equipment_id');
     }
 
+    public function maintenance()
+    {
+        return $this->hasMany(Maintenance::class, 'equipment_id');
+    }
+
+    public function repairs()
+    {
+        return $this->hasMany(Repair::class, 'equipment_id');
+    }
+    public function donated()
+    {
+        return $this->hasMany(Donated::class, 'equipment_id');
+    }
+    public function disposed()
+    {
+        return $this->hasMany(Disposed::class, 'equipment_id');
+    }
 }
