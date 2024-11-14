@@ -5,109 +5,83 @@
     <x-navbar />
 
     <div class="dashboard-main-body">
+        <!-- Page Header -->
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
             <h6 class="fw-semibold mb-0">Equipment Details</h6>
-            <ul class="d-flex align-items-center gap-2">
-                <li class="fw-medium">
+            <ul class="breadcrumb d-flex align-items-center gap-2">
+                <li>
                     <a href="/dashboard" class="d-flex align-items-center gap-1 hover-text-primary">
                         <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
                         Dashboard
                     </a>
                 </li>
-                <li>-</li>
                 @if (auth()->user()->type != 'admin')
-                    <li class="fw-medium">
-                        <a href="/equipments" class="d-flex align-items-center gap-1 hover-text-primary">
-                            <iconify-icon class="icon text-lg"></iconify-icon>
-                            Equipments
-                        </a>
+                    <li>
+                        <a href="/equipments" class="d-flex align-items-center gap-1 hover-text-primary">Equipments</a>
                     </li>
-                    <li>-</li>
                 @endif
-                <li class="fw-medium">Equipment Details</li>
-                <li>-</li>
-                <li class="fw-medium">{{ $equipments->name }}</li>
+                <li>{{ $equipments->name }}</li>
             </ul>
         </div>
+
+        <!-- Success Alert -->
         @if (session('addEquipmentSuccessfully'))
-            <div
-                class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-2">
-                    <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
-                    {{ session('addEquipmentSuccessfully') }}
-                </div>
+            <div class="alert alert-success alert-dismissible fade show mb-3">
+                <iconify-icon icon="akar-icons:double-check" class="icon me-2"></iconify-icon>
+                {{ session('addEquipmentSuccessfully') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
 
-        <div class="card bg-white shadow rounded-3 p-3 border-0 edetails">
+        <!-- Equipment Details Card -->
+        <div class="card bg-white shadow rounded-3 p-3 mb-4">
             <div class="row g-0">
-                <div class="img-container col-md-6">
-                    <p class="ename">{{ $equipments->name }}</p>
-                    <img src="{{ asset($equipments->image) }}" class="img-fluid" alt="{{ $equipments->name }}">
+                <!-- Image Section -->
+                <div class="col-md-6 text-center">
+                    <p class="ename">{{ ucwords($equipments->name) }}</p>
+                    <img src="{{ asset($equipments->image) }}" class="img-fluid rounded" alt="{{ ucwords($equipments->name) }}">
                 </div>
-                <div class="details-container col-md-6">
+
+                <!-- Details Section -->
+                <div class="col-md-6">
                     <div class="row">
-                        <div class="details-item col-md-6">
-                            <strong>Brand:</strong>
-                            <p>{{ $equipments->brand }}</p>
-                        </div>
-                        <div class="details-item col-md-6">
-                            <strong>Status:</strong>
-                            <p>{{ $equipments->status }}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="details-item col-md-6">
-                            <strong>Serial Number:</strong>
-                            <p>{{ $equipments->serial_no }}</p>
-                        </div>
-                        <div class="details-item col-md-6">
-                            <strong>Facility:</strong>
-                            <p>{{ $equipments->facility->name }}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="details-item col-md-6">
+                        @foreach ([
+                            'Brand' => $equipments->brand,
+                            'Status' => $equipments->status,
+                            'Serial Number' => $equipments->serial_no,
+                            'Facility' => $equipments->facility->name,
+                            'Acquisition Date' => date('d M Y', strtotime($equipments->acquired_date)),
+                        ] as $label => $value)
+                            <div class="col-md-6 mb-3">
+                                <strong>{{ $label }}:</strong>
+                                <p>{{ $value }}</p>
+                            </div>
+                        @endforeach
+                        <div class="col-md-6">
                             <strong>QR Code:</strong>
                             <div id="qrCode">{!! QrCode::size(100)->generate($equipments->code) !!}</div>
-                        </div>
-                        <div class="details-item col-md-6">
-                            <strong>Acquisition Date:</strong>
-                            <p>{{ date('d M Y', strtotime($equipments->acquired_date)) }}</p>
                         </div>
                     </div>
 
                     @if (auth()->user()->type === 'facility manager')
                         <div class="mt-4">
-                            @if ($equipments->status !== 'Donated' && $equipments->status !== 'Disposed')
-                                <a href="javascript:void(0)"
-                                    class="btn btn-success text-base radius-8 px-20 py-11 edit-equipment"
+                            @if (!in_array($equipments->status, ['Donated', 'Disposed']))
+                                <a href="javascript:void(0)" class="btn btn-success edit-equipment"
                                     data-id="{{ $equipments->id }}" data-name="{{ $equipments->name }}"
-                                    data-description="{{ $equipments->description }}"
-                                    data-acquired_date="{{ $equipments->acquired_date }}"
-                                    data-status="{{ $equipments->status }}"
-                                    data-facility="{{ $equipments->facility->name }}"
-                                    data-brand="{{ $equipments->brand }}"
-                                    data-serial_no="{{ $equipments->serial_no }}">Edit
-                                    Equipment
+                                    data-description="{{ $equipments->description }}" data-status="{{ $equipments->status }}"
+                                    data-facility="{{ $equipments->facility->name }}" data-brand="{{ $equipments->brand }}"
+                                    data-serial_no="{{ $equipments->serial_no }}">
+                                    Edit Equipment
                                 </a>
-                            @endif
-                            <a href="javascript:void(0)"
-                                class="btn btn-danger text-base radius-8 px-20 py-11 delete-equipment"
-                                data-id="{{ $equipments->id }}">Delete Equipment
-                            </a>
-                            @if ($equipments->status !== 'Donated' && $equipments->status !== 'Disposed')
-                                <button type="button" class="btn btn-primary text-base radius-8 px-20 py-11"
-                                    onclick="printInvoice()">
+                                <button type="button" class="btn btn-primary" onclick="printInvoice()">
                                     Print QR Code
                                 </button>
                             @endif
-
-                            <form id="delete-form-{{ $equipments->id }}"
-                                action="{{ route('delete_equipment', $equipments->id) }}" method="POST"
-                                style="display: none;">
-                                @csrf
-                                @method('DELETE')
+                            <a href="javascript:void(0)" class="btn btn-danger delete-equipment" data-id="{{ $equipments->id }}">
+                                Delete Equipment
+                            </a>
+                            <form id="delete-form-{{ $equipments->id }}" action="{{ route('delete_equipment', $equipments->id) }}" method="POST" style="display: none;">
+                                @csrf @method('DELETE')
                             </form>
                         </div>
                     @endif
@@ -115,6 +89,7 @@
             </div>
         </div>
 
+        <!-- Timeline Section -->
         <div class="timeline-horizontal">
             @foreach ($timeline->sortByDesc('created_at') as $entry)
                 <div class="timeline-item {{ $loop->even ? 'below' : 'above' }}">
@@ -174,11 +149,29 @@
 
 
     </div>
+                @php
+                    // Determine the background color based on the status
+                    $statusColors = [
+                        'Available' => 'green',
+                        'In Maintenance' => 'yellow',
+                        'Borrowed' => 'orange',
+                        'Missing' => 'red',
+                    ];
+                    $color = $statusColors[$entry->status] ?? 'gray'; // Default to gray if status not in array
+                @endphp
+        
+                <div class="timeline-item {{ $loop->even ? 'below' : 'above' }}" style="border-left: 5px solid {{ $color }}; padding-left: 10px;">
+                    <p><strong>The status of the equipment is:</strong> <span>{{ $entry->status }}</span></p>
+                    <p>Status updated to {{ $entry->status }} - {{ $entry->created_at }}</p>
+                    <p>Triggered by {{ $entry->user->firstname }} {{ $entry->user->lastname }}</p>
+                </div>
+            @endforeach
+        </div>
+        
     @include('templates.footer_inc')
 
     <!-- Edit Equipment Modal -->
-    <div class="modal fade" id="editEquipmentModal" tabindex="-1" aria-labelledby="editEquipmentModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="editEquipmentModal" tabindex="-1" aria-labelledby="editEquipmentModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -187,68 +180,24 @@
                 </div>
                 <div class="modal-body">
                     <form id="editEquipmentForm" action="{{ route('update_equipment') }}" method="POST">
-                        @csrf
-                        @method('PUT')
+                        @csrf @method('PUT')
                         <input type="hidden" name="id" id="equipmentId">
-
-                        <!-- Name -->
-                        <div class="mb-3">
-                            <label for="equipmentName" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="equipmentName" name="name" required>
-                            @error('name')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Brand -->
-                        <div class="mb-3">
-                            <label for="equipmentBrand" class="form-label">Brand</label>
-                            <input type="text" class="form-control" id="equipmentBrand" name="brand" required>
-                            @error('brand')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Serial Number -->
-                        <div class="mb-3">
-                            <label for="equipmentSerialNo" class="form-label">Serial Number</label>
-                            <input type="text" class="form-control" id="equipmentSerialNo" name="serial_no"
-                                required>
-                            @error('serial_no')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Description -->
-                        <div class="mb-3">
-                            <label for="equipmentDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="equipmentDescription" name="description" required></textarea>
-                            @error('description')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Acquired Date -->
-                        <div class="mb-3">
-                            <label for="equipmentAcquiredDate" class="form-label">Acquired Date</label>
-                            <input type="datetime-local" class="form-control" id="equipmentAcquiredDate"
-                                name="acquired_date" required>
-                            @error('acquired_date')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Facility -->
-                        <div class="mb-3">
-                            <label for="equipmentFacility" class="form-label">Facility</label>
-                            <input type="text" class="form-control" id="equipmentFacility" name="facility"
-                                required>
-                            @error('facility')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Status -->
+                        @foreach ([
+                            'Name' => 'equipmentName',
+                            'Brand' => 'equipmentBrand',
+                            'Serial Number' => 'equipmentSerialNo',
+                            'Description' => 'equipmentDescription',
+                            'Acquired Date' => 'equipmentAcquiredDate',
+                            'Facility' => 'equipmentFacility',
+                        ] as $label => $id)
+                            <div class="mb-3">
+                                <label for="{{ $id }}" class="form-label">{{ $label }}</label>
+                                <input type="{{ $id === 'equipmentAcquiredDate' ? 'datetime-local' : 'text' }}" class="form-control" id="{{ $id }}" name="{{ strtolower(str_replace(' ', '_', $label)) }}" required>
+                                @error(strtolower(str_replace(' ', '_', $label)))
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        @endforeach
                         <div class="mb-3">
                             <label for="equipmentStatus" class="form-label">Status</label>
                             <select class="form-control" id="equipmentStatus" name="status" required>
@@ -261,7 +210,6 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-
                         <button type="submit" class="btn btn-primary">Save</button>
                     </form>
                 </div>
@@ -270,68 +218,63 @@
     </div>
 </main>
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('.edit-equipment')) {
-                var button = e.target.closest('.edit-equipment');
-                var id = button.dataset.id;
-                var name = button.dataset.name;
-                var brand = button.dataset.brand;
-                var serial_no = button.dataset.serial_no;
-                var description = button.dataset.description;
-                var acquired_date = button.dataset.acquired_date;
-                var status = button.dataset.status;
-                var facility = button.dataset.facility;
+    document.addEventListener('DOMContentLoaded', () => {
+        // Adjust spacing for the QR Code section
+        const qrCodeContainer = document.getElementById('qrCode');
+        if (qrCodeContainer) {
+            qrCodeContainer.style.marginBottom = '20px'; // Add space between the QR code and buttons
+            qrCodeContainer.style.marginTop = '10px'; // Ensure space above the QR code
+        }
 
-                var formattedDate = new Date(acquired_date).toISOString().slice(0, 16);
+        // Adjust spacing for the button container
+        const buttonContainer = document.querySelector('.mt-4');
+        if (buttonContainer) {
+            buttonContainer.style.marginTop = '30px'; // Create space between the QR code and the buttons
+            buttonContainer.style.display = 'flex'; // Arrange buttons in a row
+            buttonContainer.style.justifyContent = 'flex-start'; // Align buttons to the left
+            buttonContainer.style.gap = '10px'; // Add space between each button
+        }
 
-                document.getElementById('equipmentId').value = id;
-                document.getElementById('equipmentName').value = name;
-                document.getElementById('equipmentBrand').value = brand;
-                document.getElementById('equipmentSerialNo').value = serial_no;
-                document.getElementById('equipmentDescription').value = description;
-                document.getElementById('equipmentAcquiredDate').value = formattedDate;
-                document.getElementById('equipmentStatus').value = status;
-                document.getElementById('equipmentFacility').value = facility;
+        // Adjust spacing for each button (optional, if additional individual button tweaks are needed)
+        const buttons = buttonContainer?.querySelectorAll('a, button');
+        if (buttons) {
+            buttons.forEach((button) => {
+                button.style.padding = '10px 15px'; // Ensure consistent button padding
+            });
+        }
 
-                var editModal = new bootstrap.Modal(document.getElementById('editEquipmentModal'));
-                editModal.show();
-            }
-
-            if (e.target.closest('.delete-equipment')) {
-                var button = e.target.closest('.delete-equipment');
-                var id = button.dataset.id;
-
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById(`delete-form-${id}`).submit();
-                    }
-                });
+        document.addEventListener('click', (e) => {
+            const button = e.target.closest('.edit-equipment') || e.target.closest('.delete-equipment');
+            if (button) {
+                if (button.classList.contains('edit-equipment')) {
+                    showEditModal(button.dataset);
+                } else {
+                    confirmDelete(button.dataset.id);
+                }
             }
         });
     });
 
     function printInvoice() {
-        var printContents = document.getElementById('qrCode').innerHTML;
-        var originalContents = document.body.innerHTML;
-
+        const printContents = document.getElementById('qrCode').innerHTML;
         document.body.innerHTML = printContents;
-
         window.print();
+        location.reload();
+    }
 
-        document.body.innerHTML = originalContents;
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(delete-form-${id}).submit();
+            }
+        });
     }
 </script>
 

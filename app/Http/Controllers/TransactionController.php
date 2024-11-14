@@ -11,6 +11,7 @@ use App\Models\Repair;
 use App\Models\Disposed;
 use App\Models\Donated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
@@ -36,7 +37,7 @@ class TransactionController extends Controller
     {
         // Log the ID without any curly braces
         $id = trim($id, '{}'); // Remove curly braces if they exist
-        \Log::info("Fetching details for cleaned ID: " . $id);
+        Log::info("Fetching details for cleaned ID: " . $id);
         
         $student = Students::where('id_no', $id)->first(['firstname', 'lastname', 'department']);
         
@@ -123,7 +124,7 @@ class TransactionController extends Controller
             'borrowers_name' => $validatedData['borrowers_name'],
             'department' => $validatedData['department'],
             'purpose' => $validatedData['purpose'],
-            'user_id' => auth()->user()->id,
+            'user_id' => Auth::user()->id,
             'borrowed_date' => now(),
             'remarks' => 'The day the equipment is Borrowed',
             'expected_returned_date' => $validatedData['expected_returned_date'],   // Save expected_returned_date
@@ -202,7 +203,7 @@ class TransactionController extends Controller
             'remarks' => 'The day the equipment is Maintained', // Make sure this is the intended field
             'issue' => $validatedData['issue_note'],
             'maintained_date' => $validatedData['maintenance_date'], // Use the date from the input
-            'user_id' => auth()->user()->id,
+            'user_id' => Auth::user()->id,
             'status' => 'In Maintenance',
         ]);
     
@@ -258,7 +259,7 @@ class TransactionController extends Controller
             'remarks' => 'The day the equipment is Repaired', // Make sure this is the intended field
             'issue' => $validatedData['issue_note'],
             'repaired_date' => $validatedData['repair_date'], // Use the date from the input
-            'user_id' => auth()->user()->id,
+            'user_id' => Auth::user()->id,
             'status' => 'In Repair',
         ]);
     
@@ -310,7 +311,7 @@ class TransactionController extends Controller
             'equipment_id' => $equipment->id, // Use the ID of the equipment
             'remarks' => 'The day the equipment is Disposed', // Make sure this is the intended field
             'disposed_date' => $validatedData['disposed_date'], // Use the date from the input
-            'user_id' => auth()->user()->id,
+            'user_id' => Auth::user()->id,
             'status' => 'Disposed',
         ]);
     
@@ -374,7 +375,7 @@ class TransactionController extends Controller
         'equipment_id' => $equipment->id,
         'remarks' => $validatedData['remarks'],
         'donated_date' => $validatedData['donated_date'],
-        'user_id' => auth()->user()->id,
+        'user_id' => Auth::user()->id,
         'status' => 'Donated',
         'condition' => $validatedData['condition'], 
         'recipient' => $validatedData['recipient'], 

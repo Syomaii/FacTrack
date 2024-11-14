@@ -28,24 +28,24 @@
                         <form action="{{ route('borrow-equipment-post', $equipment->id) }}" method="post">
                             @csrf
                             <div class="mb-3">
-                                <label class="form-label">Borrower's Name</label>
-                                <input type="text" class="form-control w-100" style="max-width: 1000vh" name="borrowers_name" value="{{ $borrowers_name }}" readonly>
-                            </div>
-                            <div class="mb-3">
                                 <label class="form-label">Borrower's ID</label>
                                 <input type="text" class="form-control w-100" style="max-width: 1000vh" name="borrowers_id_no" value="{{ $borrowers_id_no }}" readonly>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">User ID</label>
-                                <input type="text" class="form-control w-100" style="max-width: 1000vh" name="user_id" readonly>
+                                <label class="form-label">Borrower's Name</label>
+                                <input type="text" class="form-control w-100" style="max-width: 1000vh" name="borrowers_name" value="{{ $borrowers_name }}" readonly>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Borrowed Date</label>
-                                <input type="date" class="form-control w-100" style="max-width: 1000vh" name="borrowed_date" readonly>
+                                <label class="form-label">Department</label>
+                                <input type="text" class="form-control w-100" style="max-width: 1000vh" name="department" value="{{ $department }}" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Purpose</label>
+                                <input type="text" class="form-control w-100" style="max-width: 1000vh" name="purpose" value="{{ $purpose }}" readonly>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Expected Return Date</label>
-                                <input type="date" class="form-control w-100" style="max-width: 1000vh" name="expected_returned_date" value="{{ $expected_return_date }}" readonly>
+                                <input type="text" class="form-control w-100" style="max-width: 1000vh" name="expected_returned_date" value="{{ $expected_return_date }}" readonly>
                             </div>
                             <div class="d-flex justify-content-center gap-4" style="padding-top: 25px">
                                 <a href="/equipments" class="btn btn-outline-danger">Cancel</a>

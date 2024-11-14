@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->dateTime('donated_date');
             $table->string('condition', 50);
-            $table->string('recipient', 255);
+            $table->text('recipient');
             $table->string('remarks', 255);
             $table->timestamps();
         });

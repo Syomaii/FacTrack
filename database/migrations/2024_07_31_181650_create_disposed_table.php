@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreign('equipment_id')->references('id')->on('equipments')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->dateTime('disposed_date');
+            $table->string('received_by', 100);
             $table->string('remarks', 255);
             $table->timestamps();
 
