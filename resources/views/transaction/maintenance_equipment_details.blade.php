@@ -18,35 +18,51 @@
                 </ul>
             </div>
         @endif
-
-        <div class="card h-100 p-0 radius-12">
-            <div class="card-body p-24">
-                <div class="row justify-content-center">
-                    <div class="col-xxl-6 col-xl-8 col-lg-10">
-                        <div class="card border shadow-sm">
-                            <div class="card-body">
-                                <h4>Review Maintenance Details</h4>
-                                <ul>
-                                    <li><strong>Equipment ID:</strong> {{ $maintenance_id_no }}</li>
-                                    <li><strong>Equipment Name:</strong> {{ $equipment->name }}</li>
-                                    <li><strong>Equipment Code:</strong> {{ $equipment->code }}</li>
-                                    <li><strong>Maintenance Issue:</strong> {{ $issue_note }}</li>
-                                    <li><strong>Maintenance Date:</strong> {{ $maintenance_date }}</li>
-                                    <li><strong>Equipment Status:</strong> {{ $equipment->status }}</li>
-                                </ul>
-
-                                <!-- Submit and Cancel Buttons -->
-                                <form action="{{ route('maintenance-equipment-post', $equipment->id) }}" method="post">
-                                    @csrf
-                                    <input type="hidden" name="maintenance_id_no" value="{{ $maintenance_id_no }}">
-                                    <input type="hidden" name="issue_note" value="{{ $issue_note }}">
-                                    <input type="hidden" name="maintenance_date" value="{{ $maintenance_date }}">
-                                    <button type="submit" class="btn btn-primary px-5 py-2">Submit</button>
-                                </form>
-
-                                <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
+        <div class="row g-4">
+            <!-- Borrow Details Section -->
+            <div class="col-lg-6">
+                <div class="card h-100">
+                    <div class="card-body" style="padding-top: 100px">
+                        <form action="{{ route('maintenance-equipment-post', $equipment->id) }}" method="post">
+                            @csrf
+                            <input type="hidden" name="maintenance_id_no" value="{{ $maintenance_id_no }}">
+                            <div class="mb-3">
+                                <label class="form-label">Issue</label>
+                                <input type="text" class="form-control w-100" style="max-width: 1000vh" name="issue_note" value="{{ $issue_note }}" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Maintenance Date</label>
+                                <input type="text" class="form-control w-100" style="max-width: 1000vh" name="maintenance_date" value="{{ $maintenance_date }}" readonly>
+                            </div>
+                            <div class="d-flex justify-content-center gap-4" style="padding-top: 25px">
+                                <a href="/equipments" class="btn btn-outline-danger">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Equipment Details Section -->
+            <div class="col-lg-6">
+                <div class="card h-100">
+                    <h4 class="fw-bold d-flex justify-content-end mt-5" style="margin-right: 75px">{{ ucwords($equipment->name) }}</h4>
+                    <div class="card-body text-center">
+                        <img src="/{{ $equipment->image }}" alt="Equipment Image" class="img-fluid rounded mb-3 bg-light w-100" style="max-width: 620px;">
+                        <div class="row gy-4">
+                            <div class="col-lg-6">
+                                <div class="d-flex mt-3" style="margin-left: 4rem;"><strong>Equipment code:</strong></li></div>
+                                <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $equipment->code }}</div>
+                            </div>
+                            <div class="col-lg-6 d-flex justify-content-end">
+                                <div class="d-flex" style="margin-top: 1.0rem; margin-right: 5rem">{!! QrCode::size(60)->generate($equipment->code) !!}</div>
                             </div>
                         </div>
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Status:</strong></div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $equipment->status }}</div>
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Serial Number:</strong></div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $equipment->serial_no }}</div>   
+
                     </div>
                 </div>
             </div>
