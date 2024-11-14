@@ -123,23 +123,23 @@
                                     <!-- Scan Button Triggering Modal -->
                                     <div class="d-flex justify-content-center gap-3">
                                         <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
-                                            data-bs-target="#scanModal">
+                                            data-bs-target="#scanModalBorrow" id="scanCodeBorrow">
                                             Scan QR Code
                                         </button>
                                         <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
                                     </div>
 
-                                    <div class="modal fade" id="scanModal" tabindex="-1"
-                                        aria-labelledby="scanModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="scanModalBorrow" tabindex="-1"
+                                        aria-labelledby="scanModalBorrowLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered ">
                                             <div class="modal-content background-color-blue">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="scanModalLabel">Scan QR Code</h5>
+                                                    <h5 class="modal-title" id="scanModalBorrowLabel">Borrow Equipment</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <div id="preview"
+                                                    <div id="previewBorrow"
                                                         class="display-flex align-items-center justify-content-center scan-code"
                                                         style="width: 100%; height: 400px; border: 2px dashed #ccc;">
                                                         <!-- QR code scanner will be displayed here -->
@@ -199,22 +199,17 @@
     }
 
     $(document).ready(function() {
-        $('#scanModal').on('show.bs.modal', function() {
+        $('#scanCodeBorrow').on('click', function() {
             startScanner();
+            $('#scanModalBorrow').modal('show');
         });
 
-        $('#scanModal').on('hidden.bs.modal', function() {
-            if (scanner) {
-                scanner.stop();
-                scanner.destroy(); 
-                scanner = null; 
-            }
+        $('#scanModalBorrow').on('hidden.bs.modal', function() {
+            stopScanner();
         });
 
         $(window).on('beforeunload', function() {
-            if (scanner) {
-                scanner.stop();
-            }   
+            stopScanner();
         });
     });
 </script>

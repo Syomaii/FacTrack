@@ -67,24 +67,24 @@
                                     <!-- Scan Button Triggering Modal -->
                                     <div class="d-flex justify-content-center gap-3">
                                         <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
-                                            data-bs-target="#scanModal">
+                                            data-bs-target="#scanModalDonate" id="scanCodeDonate">
                                             Scan QR Code
                                         </button>
                                         <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
                                     </div>
 
                                     <!-- Modal for QR Code Scanning -->
-                                    <div class="modal fade" id="scanModal" tabindex="-1"
-                                        aria-labelledby="scanModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="scanModalDonate" tabindex="-1"
+                                        aria-labelledby="scanModalDonateLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="scanModalLabel">Scan QR Code</h5>
+                                                    <h5 class="modal-title" id="scanModalDonateLabel">Donate Equipment</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <div id="preview"
+                                                    <div id="previewDonate"
                                                         class="display-flex align-items-center justify-content-center scan-code"
                                                         style="width: 100%; height: 400px; border: 2px dashed #ccc;">
                                                         <!-- QR code scanner will be displayed here -->
@@ -105,38 +105,3 @@
     @include('templates.footer_inc')
 </main>
 @include('templates.footer')
-
-<!-- QR Scanner JavaScript -->
-<script src="/assets/js/lib/html5-qrcode.min.js"></script>
-<script>
-    const scanner = new Html5QrcodeScanner('preview', {
-        qrbox: {
-            width: 300,
-            height: 300,
-        },
-        fps: 20,
-    });
-
-    scanner.render(success, error);
-
-    function success(result) {
-        console.log(result);
-
-        var donated_id_no = $('#donated_id_no').val();
-        var condition = $('#condition').val();
-        var recipient = $('#recipient').val();
-        var remarks = $('#remarks').val();
-        var donated_date = $('#donated_date').val();
-
-        window.location.href = "/donated-equipment-details/" + result +
-            "?donated_id_no=" + encodeURIComponent(donated_id_no) +
-            "&condition=" + encodeURIComponent(condition) +
-            "&recipient=" + encodeURIComponent(recipient) +
-            "&remarks=" + encodeURIComponent(remarks) +
-            "&donated_date=" + encodeURIComponent(donated_date);
-    }
-
-    function error(err) {
-        console.log(err);
-    }
-</script>

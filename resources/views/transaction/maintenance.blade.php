@@ -51,24 +51,24 @@
                                     <!-- Scan Button Triggering Modal -->
                                     <div class="d-flex justify-content-center gap-3">
                                         <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
-                                            data-bs-target="#scanModal">
+                                            data-bs-target="#scanModalMaintenance" id="scanCodeMaintenance">
                                             Scan QR Code
                                         </button>
                                         <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
                                     </div>
 
                                     <!-- Modal for QR Code Scanning -->
-                                    <div class="modal fade" id="scanModal" tabindex="-1"
-                                        aria-labelledby="scanModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="scanModalMaintenance" tabindex="-1"
+                                        aria-labelledby="scanModalMaintenanceLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="scanModalLabel">Scan QR Code</h5>
+                                                    <h5 class="modal-title" id="scanModalMaintenanceLabel">Maintenance Equipment</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <div id="preview"
+                                                    <div id="previewMaintenance"
                                                         class="display-flex align-items-center justify-content-center scan-code"
                                                         style="width: 100%; height: 400px; border: 2px dashed #ccc;">
                                                         <!-- QR code scanner will be displayed here -->
@@ -90,33 +90,3 @@
 </main>
 @include('templates.footer')
 
-<!-- QR Scanner JavaScript -->
-<script src="/assets/js/lib/html5-qrcode.min.js"></script>
-<script>
-    const scanner = new Html5QrcodeScanner('preview', {
-        qrbox: {
-            width: 300,
-            height: 300,
-        },
-        fps: 20,
-    });
-
-    scanner.render(success, error);
-
-    function success(result) {
-        console.log(result);
-
-        var maintenance_id_no = $('#maintenance_id_no').val();
-        var issue_note = $('#issue_note').val();
-        var maintenance_date = $('#maintenance_date').val();
-
-        window.location.href = "/maintenance-equipment-details/" + result +
-            "?maintenance_id_no=" + encodeURIComponent(maintenance_id_no) +
-            "&issue_note=" + encodeURIComponent(issue_note) +
-            "&maintenance_date=" + encodeURIComponent(maintenance_date);
-    }
-
-    function error(err) {
-        console.log(err);
-    }
-</script>

@@ -267,7 +267,7 @@
 
         // Determine Y-axis settings based on max value in data
         const maxDataValue = Math.max(...dataPoints);
-        const yAxisStepSize = maxDataValue <= 20 ? 20 : 10;
+        const yAxisStepSize = maxDataValue <= 10 ? 10 : 2;
         const yAxisMax = Math.ceil(maxDataValue / yAxisStepSize) * yAxisStepSize;
 
         // Initialize the chart
@@ -324,7 +324,7 @@
                         min: 0,
                         max: yAxisMax, // Set maximum value dynamically based on data
                         ticks: {
-                            stepSize: yAxisStepSize - 15, // Set step size dynamically
+                            stepSize: yAxisStepSize-8, // Set step size dynamically
                             font: {
                                 size: 12
                             },

@@ -169,11 +169,11 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Scan QR Code (Borrow)</h5>
+                    <h5 class="modal-title">Return Equipment (Borrow)</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="preview-borrow-scan" style="width: 100%; height: 300px;"></div>
+                    <div id="preview-borrow-scan" style="width: 100%; height: 400px;"></div>
                 </div>
             </div>
         </div>
@@ -184,11 +184,11 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Scan QR Code (Maintenance)</h5>
+                    <h5 class="modal-title">Return Equipment (Maintenance)</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="preview-maintenance-scan" style="width: 100%; height: 300px;"></div>
+                    <div id="preview-maintenance-scan" style="width: 100%; height: 400px;"></div>
                 </div>
             </div>
         </div>
@@ -199,11 +199,11 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Scan QR Code (Repair)</h5>
+                    <h5 class="modal-title">Return Equipment (Repair)</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="preview-repair-scan" style="width: 100%; height: 300px;"></div>
+                    <div id="preview-repair-scan" style="width: 100%; height: 400px;"></div>
                 </div>
             </div>
         </div>
@@ -217,89 +217,121 @@
 <!-- QR Scanner JavaScript for Each Tab -->
 <script src="/assets/js/lib/html5-qrcode.min.js"></script>
 <script>
-    function initScanner(previewId, successCallback) {
-        const scanner = new Html5QrcodeScanner(previewId, {
-            qrbox: {
-                width: 300,
-                height: 300
-            },
-            fps: 20,
+    let borrowScanner, maintenanceScanner, repairScanner;
+
+    function startScanner(previewId, successCallback, scannerType) {
+        if (scannerActive) return; // Prevent starting if another scanner is active
+
+        let scanner;
+        if (scannerType === 'borrow') {
+            if (!borrowScanner) {
+                borrowScanner = new Html5Qrcode(previewId);
+            }
+            scanner = borrowScanner;
+        } else if (scannerType === 'maintenance') {
+            if (!maintenanceScanner) {
+                maintenanceScanner = new Html5Qrcode(previewId);
+            }
+            scanner = maintenanceScanner;
+        } else if (scannerType === 'repair') {
+            if (!repairScanner) {
+                repairScanner = new Html5Qrcode(previewId);
+            }
+            scanner = repairScanner;
+        }
+
+        scanner.start(
+            { facingMode: "environment" },
+            { fps: 20, qrbox: { width: 300, height: 300 } },
+            successCallback,
+            console.error
+        ).then(() => {
+            scannerActive = true; // Mark scanner as active
+        }).catch(err => {
+            console.log("Error starting scanner:", err);
         });
-        scanner.render(successCallback, console.error);
+    }
+
+    function stopScanner(scanner) {
+        if (scanner && scannerActive) {
+            scanner.stop().then(() => {
+                console.log("Scanner stopped.");
+                scannerActive = false;
+            }).catch(err => {
+                console.log("Error stopping scanner:", err);
+            });
+        }
     }
 
     // Borrow scanner
     $('#scanModalBorrow').on('shown.bs.modal', function() {
-        initScanner("preview-borrow-scan", function(result) {
-            console.log("Scanned Result:", result); // Log the scanned result
+        startScanner("preview-borrow-scan", function(result) {
+            console.log("Scanned Result:", result);
 
-            // Set the scanned code in the hidden input
-            $('#code').val(result); // Assuming result is the scanned code
+            $('#code').val(result);
 
-            // Construct the action URL by using the scanned result
             var actionUrl = "{{ url('/return-equipment/') }}/" + result;
-
-            console.log("Action URL:", actionUrl); // Log the constructed URL
+            console.log("Action URL:", actionUrl);
 
             $('#borrowForm').attr('action', actionUrl);
 
-            // Confirm before submitting
-            if (confirm("Do you want to submit the form with scanned code: " + result + "?")) {
-                $('#borrowForm').submit(); // Submit the form
-                $('#scanModalBorrow').modal('hide'); // Close the modal after submission
-            } else {
-                $('#code').val(''); // Clear the scanned code if not submitting
-            }
-        });
+            // Directly submit the form
+            $('#borrowForm').submit();
+            $('#scanModalBorrow').modal('hide'); // Close the modal after submission
+        }, 'borrow');
     });
 
     // Maintenance scanner
     $('#scanModalMaintenance').on('shown.bs.modal', function() {
-        initScanner("preview-maintenance-scan", function(result) {
-            console.log("Scanned Result:", result); // Log the scanned result
+        startScanner("preview-maintenance-scan", function(result) {
+            console.log("Scanned Result:", result);
 
-            // Set the scanned code in the hidden input
-            $('#code').val(result); // Assuming result is the scanned code
+            $('#code').val(result);
 
-            // Construct the action URL by using the scanned result
             var actionUrl = "{{ url('/return-equipment/') }}/" + result;
-
-            console.log("Action URL:", actionUrl); // Log the constructed URL
+            console.log("Action URL:", actionUrl);
 
             $('#maintenanceForm').attr('action', actionUrl);
 
-            // Confirm before submitting
-            if (confirm("Do you want to submit the form with scanned code: " + result + "?")) {
-                $('#maintenanceForm').submit(); // Submit the form
-                $('#scanModalMaintenance').modal('hide'); // Close the modal after submission
-            } else {
-                $('#code').val(''); // Clear the scanned code if not submitting
-            }
-        });
+            // Directly submit the form
+            $('#maintenanceForm').submit();
+            $('#scanModalMaintenance').modal('hide'); // Close the modal after submission
+        }, 'maintenance');
     });
 
     // Repair scanner
     $('#scanModalRepair').on('shown.bs.modal', function() {
-        initScanner("preview-repair-scan", function(result) {
-            console.log("Scanned Result:", result); // Log the scanned result
+        startScanner("preview-repair-scan", function(result) {
+            console.log("Scanned Result:", result);
 
-            // Set the scanned code in the hidden input
-            $('#code').val(result); // Assuming result is the scanned code
+            $('#code').val(result);
 
-            // Construct the action URL by using the scanned result
             var actionUrl = "{{ url('/return-equipment/') }}/" + result;
-
-            console.log("Action URL:", actionUrl); // Log the constructed URL
+            console.log("Action URL:", actionUrl);
 
             $('#repairForm').attr('action', actionUrl);
 
-            // Confirm before submitting
-            if (confirm("Do you want to submit the form with scanned code: " + result + "?")) {
-                $('#repairForm').submit(); // Submit the form
-                $('#scanModalRepair').modal('hide'); // Close the modal after submission
-            } else {
-                $('#code').val(''); // Clear the scanned code if not submitting
-            }
-        });
+            // Directly submit the form
+            $('#repairForm').submit();
+            $('#scanModalRepair').modal('hide'); // Close the modal after submission
+        }, 'repair');
+    });
+
+    // Stop the scanner when modals are hidden
+    $('#scanModalBorrow, #scanModalMaintenance, #scanModalRepair').on('hidden.bs.modal', function() {
+        if ($(this).attr('id') === 'scanModalBorrow') {
+            stopScanner(borrowScanner);
+        } else if ($(this).attr('id') === 'scanModalMaintenance') {
+            stopScanner(maintenanceScanner);
+        } else if ($(this).attr('id') === 'scanModalRepair') {
+            stopScanner(repairScanner);
+        }
+    });
+
+    // Stop scanner before page unload
+    $(window).on('beforeunload', function() {
+        stopScanner(borrowScanner);
+        stopScanner(maintenanceScanner);
+        stopScanner(repairScanner);
     });
 </script>

@@ -119,6 +119,7 @@
 <script src="/assets/js/lib/html5-qrcode.min.js"></script>
 <script>
     let scanner;
+    let scannerActive = false; 
 
     function startScanner() {
         if (!scanner) {
@@ -126,14 +127,13 @@
         }
 
         scanner.start(
-            { facingMode: "environment" },
-            {
-                fps: 20,
-                qrbox: { width: 300, height: 300 }
-            },
+        { facingMode: "environment" },
+        { fps: 20, qrbox: { width: 300, height: 300 } },
             success,
             error
-        ).catch(err => {
+        ).then(() => {
+            scannerActive = true;
+        }).catch(err => {
             console.log("Error starting scanner:", err);
         });
     }
@@ -142,6 +142,7 @@
         if (scanner) {
             scanner.stop().then(() => {
                 console.log("Scanner stopped.");
+                scannerActive = false;
             }).catch(err => {
                 console.log("Error stopping scanner:", err);
             });
@@ -161,18 +162,20 @@
     }
 
     $(document).ready(function() {
-        $('#scanCode').on('click', function() {
-            startScanner();
-            $('#scanModal').modal('show');
-        });
+      $('#scanCode').on('click', function() {
+          if (!scannerActive) { 
+              startScanner();
+              $('#scanModal').modal('show');
+          }
+      });
 
-        $('#scanModal').on('hidden.bs.modal', function() {
-            stopScanner();
-        });
+      $('#scanModal').on('hidden.bs.modal', function() {
+          stopScanner();
+      });
 
-        $(window).on('beforeunload', function() {
-            stopScanner();
-        });
+      $(window).on('beforeunload', function() {
+          stopScanner();
+      });
     });
 
     
