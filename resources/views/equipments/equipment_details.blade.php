@@ -142,12 +142,6 @@
                 </div>
             @endforeach
         </div>
-
-
-
-
-
-
     </div>
                 @php
                     // Determine the background color based on the status
@@ -159,16 +153,9 @@
                     ];
                     $color = $statusColors[$entry->status] ?? 'gray'; // Default to gray if status not in array
                 @endphp
+
         
-                <div class="timeline-item {{ $loop->even ? 'below' : 'above' }}" style="border-left: 5px solid {{ $color }}; padding-left: 10px;">
-                    <p><strong>The status of the equipment is:</strong> <span>{{ $entry->status }}</span></p>
-                    <p>Status updated to {{ $entry->status }} - {{ $entry->created_at }}</p>
-                    <p>Triggered by {{ $entry->user->firstname }} {{ $entry->user->lastname }}</p>
-                </div>
-            @endforeach
-        </div>
-        
-    @include('templates.footer_inc')
+    
 
     <!-- Edit Equipment Modal -->
     <div class="modal fade" id="editEquipmentModal" tabindex="-1" aria-labelledby="editEquipmentModalLabel" aria-hidden="true">
@@ -216,8 +203,9 @@
             </div>
         </div>
     </div>
+    @include('templates.footer_inc')
 </main>
-
+@include('templates.footer')
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         // Adjust spacing for the QR Code section
@@ -278,4 +266,3 @@
     }
 </script>
 
-@include('templates.footer')

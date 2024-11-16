@@ -41,6 +41,8 @@ class EquipmentController extends Controller
         // Generate a unique equipment code
         $code = date('y') . $officeId . date('m') . date('d') . $facilityId . date('H') . $data['user_id'] . date('is');
         $data['code'] = $code;
+
+        $data['next_due_date'] = Carbon::now()->addDays(30);
     
         // Handle the image file upload
         if ($request->hasFile('image')) {

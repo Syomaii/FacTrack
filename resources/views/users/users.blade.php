@@ -96,10 +96,10 @@
                                     </td>
                                     <td>
                                         <h6 class="text-md mb-0 fw-medium flex-grow-1">
-                                            {{ Str::title($user->firstname) }}</h6>
+                                            {{ ucwords($user->firstname) }}</h6>
                                     </td>
                                     <td>
-                                        <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ Str::title($user->lastname) }}
+                                        <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ ucwords($user->lastname) }}
                                         </h6>
                                     </td>
                                     <td>
@@ -111,15 +111,16 @@
                                             class="text-md mb-0 fw-normal text-secondary-light">{{ $user->mobile_no }}</span>
                                     </td>
                                     <td>
-                                        {{ Str::title($user->office) ? Str::title($user->office->name) : 'N/A' }}
+                                        {{ ucwords($user->office) ? ucwords($user->office->name) : 'N/A' }}
                                     </td>
                                     <td>
-                                        {{ Str::title($user->designation) ? Str::title($user->designation->name) : 'N/A' }}
+                                        {{ ucwords($user->designation) ? ucwords($user->designation->name) : 'N/A' }}
                                     </td>
-                                    <td>{{ Str::title($user->type) }}</td>
+                                    <td>{{ ucwords($user->type) }}</td>
                                     <td class="text-center">
-                                        <span
-                                            class="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">Active</span>
+                                        <span class="{{ $user->status == 'inactive' ? 'bg-danger text-white border border-danger-main' : 'bg-success-focus border border-success-main' }} px-24 py-4 radius-4 fw-medium text-sm">
+                                            {{ ucwords($user->status) }}
+                                        </span>
                                     </td>
                                     <td class="text-center">
                                         <div class="d-flex align-items-center gap-10 justify-content-center">

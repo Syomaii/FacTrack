@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     Route::get('/profile/{id}', [PageController::class, 'profile'])->name('profile');
     Route::put('/profile/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
+    Route::get('/notifications', [PageController::class, 'notifications']);
 
  //---------------------------------------Operator, Facility Manager and Admin -----------------------------------------------
 

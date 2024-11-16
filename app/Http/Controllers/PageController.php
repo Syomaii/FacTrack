@@ -50,7 +50,9 @@ class PageController extends Controller
         ))->with('title', 'Dashboard');
     }
     
-    
+    public function notifications(){
+        return view('notifications')->with('title', 'Notifications');
+    }
     
 
     public function facilities(){
