@@ -210,16 +210,17 @@
                                     </div>
                                 </form>
                             </div>
-                            @if (auth()->user()->type === 'admin' && auth()->id() !== $user->id)
-                                <!-- Reset Password Button for Admin -->
-                                <form action="{{ route('users.reset_password', $user->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-primary">Reset Password</button>
-                                </form>
-                            @else
-                                <!-- Change Password Form -->
-                                <div class="tab-pane fade" id="pills-change-password" role="tabpanel"
-                                    aria-labelledby="pills-change-password-tab" tabindex="0">
+                            <!-- Change Password Form -->
+                            <div class="tab-pane fade" id="pills-change-password" role="tabpanel"
+                                aria-labelledby="pills-change-password-tab" tabindex="0">
+                                @if (auth()->user()->type === 'admin' && auth()->id() !== $user->id)
+                                    <!-- Reset Password Button for Admin -->
+                                    <form action="{{ route('users.reset_password', $user->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" id="reset-password-btn" class="btn btn-primary">Reset
+                                            Password</button>
+                                    </form>
+                                @else
                                     <form action="{{ route('change_password', $user->id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
@@ -277,7 +278,7 @@
 
                                         <button type="submit" class="btn btn-primary">Save Password</button>
                                     </form>
-                                </div>
+                            </div>
                             @endif
                         </div>
                     </div>
@@ -289,6 +290,31 @@
 </main>
 @include('templates.footer')
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const resetPasswordBtn = document.getElementById('reset-password-btn');
+        const resetPasswordForm = document.getElementById('reset-password-form');
+
+        resetPasswordBtn.addEventListener('click', function() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, reset it!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    resetPasswordForm.submit();
+                    Swal.fire(
+                        'Reset!',
+                        'The password for reset has been sent.',
+                        'success'
+                    );
+                }
+            });
+        });
+    });
     document.addEventListener('DOMContentLoaded', function() {
         const togglePasswordButtons = document.querySelectorAll('.toggle-password');
 
