@@ -50,13 +50,16 @@ class SendEmailNotification extends Notification
 
     public function toResetPasswordMail(object $notifiable): MailMessage
     {
+        $resetUrl = url('/password/reset?token=' . $this->details['token'] . '&email=' . urlencode($this->details['email']));
+    
         return (new MailMessage)
-                    ->subject('Password Reset Request')
-                    ->greeting('Hello!')
-                    ->line('An admin has reset your password. Click the link below to set a new password.')
-                    ->action('Reset My Password', url('/password/reset'))
-                    ->line('Thank you for using our application!');
+            ->subject('Password Reset Request')
+            ->greeting('Hello ' . $notifiable->name . '!')
+            ->line('An admin has reset your password. Click the link below to set a new password.')
+            ->action('Reset My Password', $resetUrl)
+            ->line('Thank you for using our application!');
     }
+    
 
     /**
      * Get the array representation of the notification.

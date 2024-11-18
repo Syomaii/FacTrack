@@ -15,11 +15,13 @@
                         Dashboard
                     </a>
                 </li>
+                <li>-</li>
                 @if (auth()->user()->type != 'admin')
                     <li>
                         <a href="/equipments" class="d-flex align-items-center gap-1 hover-text-primary">Equipments</a>
                     </li>
                 @endif
+                <li>-</li>
                 <li>{{ $equipments->name }}</li>
             </ul>
         </div>
@@ -39,19 +41,20 @@
                 <!-- Image Section -->
                 <div class="col-md-6 text-center">
                     <p class="ename">{{ ucwords($equipments->name) }}</p>
-                    <img src="{{ asset($equipments->image) }}" class="img-fluid rounded" alt="{{ ucwords($equipments->name) }}">
+                    <img src="{{ asset($equipments->image) }}" class="img-fluid rounded"
+                        alt="{{ ucwords($equipments->name) }}">
                 </div>
 
                 <!-- Details Section -->
                 <div class="col-md-6">
                     <div class="row">
                         @foreach ([
-                            'Brand' => $equipments->brand,
-                            'Status' => $equipments->status,
-                            'Serial Number' => $equipments->serial_no,
-                            'Facility' => $equipments->facility->name,
-                            'Acquisition Date' => date('d M Y', strtotime($equipments->acquired_date)),
-                        ] as $label => $value)
+        'Brand' => $equipments->brand,
+        'Status' => $equipments->status,
+        'Serial Number' => $equipments->serial_no,
+        'Facility' => $equipments->facility->name,
+        'Acquisition Date' => date('d M Y', strtotime($equipments->acquired_date)),
+    ] as $label => $value)
                             <div class="col-md-6 mb-3">
                                 <strong>{{ $label }}:</strong>
                                 <p>{{ $value }}</p>
@@ -68,8 +71,10 @@
                             @if (!in_array($equipments->status, ['Donated', 'Disposed']))
                                 <a href="javascript:void(0)" class="btn btn-success edit-equipment"
                                     data-id="{{ $equipments->id }}" data-name="{{ $equipments->name }}"
-                                    data-description="{{ $equipments->description }}" data-status="{{ $equipments->status }}"
-                                    data-facility="{{ $equipments->facility->name }}" data-brand="{{ $equipments->brand }}"
+                                    data-description="{{ $equipments->description }}"
+                                    data-status="{{ $equipments->status }}"
+                                    data-facility="{{ $equipments->facility->name }}"
+                                    data-brand="{{ $equipments->brand }}"
                                     data-serial_no="{{ $equipments->serial_no }}">
                                     Edit Equipment
                                 </a>
@@ -77,10 +82,13 @@
                                     Print QR Code
                                 </button>
                             @endif
-                            <a href="javascript:void(0)" class="btn btn-danger delete-equipment" data-id="{{ $equipments->id }}">
+                            <a href="javascript:void(0)" class="btn btn-danger delete-equipment"
+                                data-id="{{ $equipments->id }}">
                                 Delete Equipment
                             </a>
-                            <form id="delete-form-{{ $equipments->id }}" action="{{ route('delete_equipment', $equipments->id) }}" method="POST" style="display: none;">
+                            <form id="delete-form-{{ $equipments->id }}"
+                                action="{{ route('delete_equipment', $equipments->id) }}" method="POST"
+                                style="display: none;">
                                 @csrf @method('DELETE')
                             </form>
                         </div>
@@ -92,14 +100,28 @@
         <!-- Timeline Section -->
         <div class="timeline-horizontal">
             @foreach ($timeline->sortByDesc('created_at') as $entry)
-                <div class="timeline-item {{ $loop->even ? 'below' : 'above' }}">
+                @php
+                    // Determine the background color based on the status
+                    $statusColors = [
+                        'Available' => 'green',
+                        'In Maintenance' => 'yellow',
+                        'Borrowed' => 'orange',
+                        'In Repair' => 'red',
+                        'Donated' => 'brown',
+                        'Disposed' => 'black',
+                    ];
+                    $color = $statusColors[$entry->status] ?? 'gray';
+                @endphp
+
+                <div class="timeline-item {{ $loop->even ? 'below' : 'above' }}"
+                    style="border-left: 5px solid {{ $color }}; padding-left: 10px;">
                     <p>{{ 'The status of the equipment is ' . $entry->status }}</p>
 
                     @if ($entry->status == 'Borrowed')
                         @if ($entry->equipment->borrows->isNotEmpty())
                             @foreach ($entry->equipment->borrows as $borrower)
-                                <p>{{ 'Borrower: ' . $borrower->borrowers_name }}</p>
-                                <p>{{ 'Borrower Department: ' . $borrower->department }}</p>
+                                <p>{{ 'Borrower: ' . ucwords($borrower->borrowers_name) }}</p>
+                                <p>{{ 'Borrower Department: ' . ucwords($borrower->department) }}</p>
                             @endforeach
                         @else
                             <p>{{ 'No borrower found' }}</p>
@@ -107,7 +129,7 @@
                     @elseif($entry->status == 'In Maintenance')
                         @if ($entry->equipment->maintenance->isNotEmpty())
                             @foreach ($entry->equipment->maintenance as $maintenance)
-                                <p>{{ 'Issue: ' . $maintenance->issue }}</p>
+                                <p>{{ 'Issue: ' . ucwords($maintenance->issue) }}</p>
                             @endforeach
                         @else
                             <p>{{ 'No issue found' }}</p>
@@ -115,7 +137,7 @@
                     @elseif($entry->status == 'In Repair')
                         @if ($entry->equipment->repairs->isNotEmpty())
                             @foreach ($entry->equipment->repairs as $repair)
-                                <p>{{ 'Issue: ' . $repair->issue }}</p>
+                                <p>{{ 'Issue: ' . ucwords($repair->issue) }}</p>
                             @endforeach
                         @else
                             <p>{{ 'No issue found' }}</p>
@@ -123,14 +145,14 @@
                     @elseif($entry->status == 'Donated')
                         @if ($entry->equipment->donated->isNotEmpty())
                             @foreach ($entry->equipment->donated as $donates)
-                                <p>{{ 'Condition: ' . $donates->condition }}</p>
-                                <p>{{ 'Recipient: ' . $donates->recipient }}</p>
+                                <p>{{ 'Condition: ' . ucwords($donates->condition) }}</p>
+                                <p>{{ 'Recipient: ' . ucwords($donates->recipient) }}</p>
                             @endforeach
                         @endif
                     @elseif($entry->status == 'Disposed')
                         @if ($entry->equipment->disposed->isNotEmpty())
                             @foreach ($entry->equipment->disposed as $disposes)
-                                <p>{{ 'Disposed By: ' . $disposes->user->firstname . ' ' . $disposes->user->lastname }}
+                                <p>{{ 'Disposed By: ' . ucwords($disposes->user->firstname) . ' ' . ucwords($disposes->user->lastname) }}
                                 </p>
                             @endforeach
                         @else
@@ -138,10 +160,45 @@
                         @endif
                     @endif
                     <p>{{ $entry->remarks . ' at ' . $entry->created_at }}</p>
-                    <p>{{ 'Operated by ' . $entry->user->firstname . ' ' . $entry->user->lastname }}</p>
+                    <p>{{ 'Operated by ' . ucwords($entry->user->firstname) . ' ' . ucwords($entry->user->lastname) }}
+                    </p>
                 </div>
             @endforeach
         </div>
+
+        @include('templates.footer_inc')
+
+        <!-- Edit Equipment Modal -->
+        <div class="modal fade" id="editEquipmentModal" tabindex="-1" aria-labelledby="editEquipmentModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editEquipmentModalLabel">Edit Equipment</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editEquipmentForm" action="{{ route('update_equipment') }}" method="POST">
+                            @csrf @method('PUT')
+                            <input type="hidden" name="id" id="equipmentId">
+                            @foreach ([
+        'Name' => 'equipmentName',
+        'Brand' => 'equipmentBrand',
+        'Serial Number' => 'equipmentSerialNo',
+        'Description' => 'equipmentDescription',
+        'Acquired Date' => 'equipmentAcquiredDate',
+        'Facility' => 'equipmentFacility',
+    ] as $label => $id)
+                                <div class="mb-3">
+                                    <label for="{{ $id }}" class="form-label">{{ $label }}</label>
+                                    <input type="{{ $id === 'equipmentAcquiredDate' ? 'datetime-local' : 'text' }}"
+                                        class="form-control" id="{{ $id }}"
+                                        name="{{ strtolower(str_replace(' ', '_', $label)) }}" required>
+                                    @error(strtolower(str_replace(' ', '_', $label)))
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            @endforeach
     </div>
                 @php
                     // Determine the background color based on the status
@@ -178,32 +235,28 @@
                             'Facility' => 'equipmentFacility',
                         ] as $label => $id)
                             <div class="mb-3">
-                                <label for="{{ $id }}" class="form-label">{{ $label }}</label>
-                                <input type="{{ $id === 'equipmentAcquiredDate' ? 'datetime-local' : 'text' }}" class="form-control" id="{{ $id }}" name="{{ strtolower(str_replace(' ', '_', $label)) }}" required>
-                                @error(strtolower(str_replace(' ', '_', $label)))
+                                <label for="equipmentStatus" class="form-label">Status</label>
+                                <select class="form-control" id="equipmentStatus" name="status" required>
+                                    <option value="Available">Available</option>
+                                    <option value="In Maintenance">In Maintenance</option>
+                                    <option value="In Repair">In Repair</option>
+                                    <option value="Borrowed">Borrowed</option>
+                                </select>
+                                @error('status')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                        @endforeach
-                        <div class="mb-3">
-                            <label for="equipmentStatus" class="form-label">Status</label>
-                            <select class="form-control" id="equipmentStatus" name="status" required>
-                                <option value="Available">Available</option>
-                                <option value="In Maintenance">In Maintenance</option>
-                                <option value="In Repair">In Repair</option>
-                                <option value="Borrowed">Borrowed</option>
-                            </select>
-                            @error('status')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </form>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
+=======
     </div>
     @include('templates.footer_inc')
+>>>>>>> 2c8075e47dbeeea5cb86e2095ed799736f4ffcc1
 </main>
 @include('templates.footer')
 <script>
@@ -260,9 +313,15 @@
             confirmButtonText: 'Yes, delete it!',
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById(delete-form-${id}).submit();
+                document.getElementById(delete - form - $ {
+                    id
+                }).submit();
             }
         });
     }
 </script>
 
+<<<<<<< HEAD
+@include('templates.footer')
+=======
+>>>>>>> 2c8075e47dbeeea5cb86e2095ed799736f4ffcc1

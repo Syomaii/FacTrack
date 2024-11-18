@@ -39,6 +39,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     Route::get('/notifications', [PageController::class, 'notifications']);
+    Route::get('/password/reset', [UserController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/password/reset', [UserController::class, 'updatePassword'])->name('password.update');
+
 
     Route::middleware(['checkRole:student'])->group(function (){
         Route::get('/student-dashboard', [StudentController::class, 'studentDashboard'])->name('student.dashboard');

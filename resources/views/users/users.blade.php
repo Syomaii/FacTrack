@@ -45,21 +45,16 @@
             <div
                 class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                 <div class="d-flex align-items-center flex-wrap gap-3">
-                    <span class="text-md fw-medium text-secondary-light mb-0">Show</span>
-                    <select class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
-                        @for ($i = 1; $i <= $totalUsers; $i++)
-                            <option>{{ $i }}</option>
-                        @endfor
-                    </select>
                     <form class="navbar-search" method="GET" action="{{ route('search-user') }}">
                         <input type="text" class="bg-base h-40-px w-auto" name="search" placeholder="Search"
                             value="{{ request('search') }}">
                         <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
                     </form>
-                    <select class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
-                        <option>Status</option>
-                        <option>Active</option>
-                        <option>Inactive</option>
+                    <select name="status" class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
+                        <option value="">Status</option>
+                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
+                        <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive
+                        </option>
                     </select>
                 </div>
                 <a href="/add-user"
@@ -74,8 +69,8 @@
                         <thead>
                             <tr>
                                 <th scope="col"></th>
-                                <th scope="col">FirstName</th>
-                                <th scope="col">LastName</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Phone Number</th>
                                 <th scope="col">Office</th>
@@ -87,7 +82,7 @@
                         </thead>
                         <tbody>
                             @forelse ($users as $user)
-                                <tr>
+                                <tr data-status="{{ strtolower($user->status) }}">
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <img src="{{ $user->image }}" alt=""
@@ -133,6 +128,10 @@
                                             </a>
                                         </div>
                                     </td>
+                                    <div id="no-users-message" class="text-center" style="display: none;">
+                                        <strong class="text-center p-3" style="font-size: 20px">No users found with the
+                                            selected status.</strong>
+                                    </div>
                                 </tr>
                             @empty
                                 <tr>
@@ -178,3 +177,33 @@
     @include('templates.footer_inc')
 </main>
 @include('templates.footer')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const statusSelect = document.querySelector('select[name="status"]');
+        const userRows = document.querySelectorAll('tbody tr');
+        const noUsersMessage = document.getElementById('no-users-message');
+
+        statusSelect.addEventListener('change', function() {
+            const selectedStatus = this.value.toLowerCase();
+            let hasVisibleUsers = false; // Flag to check if there are visible users
+
+            userRows.forEach(row => {
+                const userStatus = row.getAttribute('data-status');
+
+                if (selectedStatus === '' || userStatus === selectedStatus) {
+                    row.style.display = ''; // Show the row
+                    hasVisibleUsers = true; // Set flag to true if a user is visible
+                } else {
+                    row.style.display = 'none'; // Hide the row
+                }
+            });
+
+            // Show the no users message if no users are visible
+            if (!hasVisibleUsers) {
+                noUsersMessage.style.display = 'block'; // Show message if no users are visible
+            } else {
+                noUsersMessage.style.display = 'none'; // Hide message if users are visible
+            }
+        });
+    });
+</script>

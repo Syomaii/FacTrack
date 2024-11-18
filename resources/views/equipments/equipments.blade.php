@@ -45,42 +45,29 @@
         @endif
 
         <div class="card basic-data-table">
+
+            <div
+                class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
+                <div class="d-flex align-items-center flex-wrap gap-3">
+                    <form class="navbar-search">
+                        <input type="text" class="bg-base h-40-px w-auto border" name="search" id="equipmentSearch"
+                            placeholder="Search">
+                        <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
+                    </form>
+                    <select name="status" id="statusFilter"
+                        class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
+                        <option value="">Status</option>
+                        <option value="Available">Available</option>
+                        <option value="Borrowed">Borrowed</option>
+                        <option value="In Maintenance">In Maintenance</option>
+                        <option value="In Repair">In Repair</option>
+                        <option value="Donated">Donated</option>
+                        <option value="Disposed">Disposed</option>
+                    </select>
+                </div>
+            </div>
             <div class="card-body">
                 <table class="table bordered-table mb-0" data-page-length='10'>
-                    <form action="">
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <input type="text" class="form-control" placeholder="Search" name="q"
-                                    value="{{ isset($_GET['q']) ? $_GET['q'] : '' }}">
-                            </div>
-                            <div class="col-md-4">
-                                <select name="category" id="" class="form-control">
-                                    <option value="" hidden>Category</option>
-                                    <option
-                                        {{ isset($_GET['category']) && $_GET['category'] == 'Available' ? 'selected' : '' }}>
-                                        Available</option>
-                                    <option
-                                        {{ isset($_GET['category']) && $_GET['category'] == 'Maintenance' ? 'selected' : '' }}>
-                                        Maintenance</option>
-                                    <option
-                                        {{ isset($_GET['category']) && $_GET['category'] == 'Borrowed' ? 'selected' : '' }}>
-                                        Borrowed</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <select name="e" id="" class="form-control">
-                                    <option value="10" hidden>Entries per page</option>
-                                    <option {{ isset($_GET['e']) && $_GET['e'] == 10 ? 'selected' : '' }}>10</option>
-                                    <option {{ isset($_GET['e']) && $_GET['e'] == 25 ? 'selected' : '' }}>25</option>
-                                    <option {{ isset($_GET['e']) && $_GET['e'] == 50 ? 'selected' : '' }}>50</option>
-                                    <option {{ isset($_GET['e']) && $_GET['e'] == 100 ? 'selected' : '' }}>100</option>
-                                </select>
-                            </div>
-                            <div class="col-md-1">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </div>
-                    </form>
                     <thead>
                         <tr>
                             <th scope="col">Item No.</th>
@@ -105,8 +92,8 @@
                                             class="flex-shrink-0 me-12 radius-8" width="50">
                                     </div>
                                 </td>
-                                <td>{{ $equipment->brand }}</td> <!-- Brand Data -->
-                                <td>{{ $equipment->name }}</td>
+                                <td>{{ ucwords($equipment->brand) }}</td> <!-- Brand Data -->
+                                <td>{{ ucwords($equipment->name) }}</td>
                                 <td>{{ $equipment->serial_no }}</td> <!-- Serial Number Data -->
                                 <td>{{ $equipment->facility->name }}</td>
                                 <td>{!! QrCode::size(100)->generate($equipment->code) !!}</td>
@@ -172,8 +159,70 @@
 
                     </tbody>
                 </table>
-                {{ $equipments->links() }}
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
+                    <span>Showing {{ $equipments->firstItem() }} to {{ $equipments->lastItem() }} of
+                        {{ $equipments->total() }} entries</span>
+
+                    @if ($equipments->total() > 0)
+                        <ul class="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
+                            <!-- Previous Page Link -->
+                            <li class="page-item">
+                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                    href="{{ $equipments->previousPageUrl() }}"
+                                    aria-disabled="{{ $equipments->onFirstPage() }}">
+                                    <iconify-icon icon="ep:d-arrow-left"></iconify-icon>
+                                </a>
+                            </li>
+
+                            <!-- Pagination Pages -->
+                            @if ($equipments->lastPage() > 1)
+                                <!-- Show first page if not too close to current -->
+                                @if ($equipments->currentPage() > 3)
+                                    <li class="page-item">
+                                        <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                            href="{{ $equipments->url(1) }}">1</a>
+                                    </li>
+                                    @if ($equipments->currentPage() > 4)
+                                        <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
+                                    @endif
+                                @endif
+
+                                @for ($i = max(1, $equipments->currentPage() - 1); $i <= min($equipments->lastPage(), $equipments->currentPage() + 1); $i++)
+                                    <li class="page-item">
+                                        <a class="page-link {{ $i === $equipments->currentPage() ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-secondary-light' }} fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                            href="{{ $equipments->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if ($equipments->currentPage() < $equipments->lastPage() - 2)
+                                    @if ($equipments->currentPage() < $equipments->lastPage() - 3)
+                                        <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
+                                    @endif
+                                    <li class="page-item">
+                                        <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                            href="{{ $equipments->url($equipments->lastPage()) }}">{{ $equipments->lastPage() }}</a>
+                                    </li>
+                                @endif
+                            @else
+                                <!-- If there's only one page -->
+                                <span>Page 1</span>
+                            @endif
+
+                            <!-- Next Page Link -->
+                            <li class="page-item">
+                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                    href="{{ $equipments->nextPageUrl() }}">
+                                    <iconify-icon icon="ep:d-arrow-right"></iconify-icon>
+                                </a>
+                            </li>
+                        </ul>
+                    @else
+                        <!-- Display message if no entries -->
+                        <span>No entries found.</span>
+                    @endif
+                </div>
             </div>
+
         </div>
     </div>
 
@@ -327,6 +376,55 @@
                     }
                 });
             }
+        });
+    });
+
+    document.getElementById('equipmentSearch').addEventListener('input', function() {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll('tbody tr'); // Select all rows in the table body
+        const selectedStatus = document.getElementById('statusFilter').value
+            .toLowerCase(); // Get the selected status
+
+        rows.forEach(function(row) {
+            // Get the text content of the relevant columns (Brand, Name, Serial No., Facility)
+            let brand = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+            let name = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+            let serialNo = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+            let facility = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
+            let statusCell = row.cells[7].innerText.toLowerCase(); // Get the status of the current row
+
+            // Check if the filter matches any of the fields
+            const matchesSearch = brand.includes(filter) || name.includes(filter) || serialNo.includes(
+                filter) || facility.includes(filter);
+            const matchesStatus = selectedStatus === '' || statusCell.includes(
+                selectedStatus); // Check if the row matches the selected status
+
+            // Show or hide the row based on search and status filter
+            if (matchesSearch && matchesStatus) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const statusFilter = document.getElementById('statusFilter');
+        const tableRows = document.querySelectorAll('tbody tr');
+
+        // Function to filter table rows based on selected status
+        statusFilter.addEventListener('change', function() {
+            const selectedStatus = statusFilter.value.toLowerCase();
+
+            tableRows.forEach(row => {
+                const statusCell = row.cells[7].innerText
+                    .toLowerCase(); // Assuming status is in the 8th column (index 7)
+                if (selectedStatus === '' || statusCell.includes(selectedStatus)) {
+                    row.style.display = ''; // Show row
+                } else {
+                    row.style.display = 'none'; // Hide row
+                }
+            });
         });
     });
 </script>

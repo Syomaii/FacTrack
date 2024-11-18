@@ -98,18 +98,7 @@ class PageController extends Controller
     public function equipments(){
         $officeId = Auth::user()->office_id;
 
-        if (isset($_GET['q'])){
-            $q = $_GET['q'];
-            $category = $_GET['category'];
-            $e = $_GET['e'];
-            $equipments = Equipment::whereHas('facility', function ($query) use ($officeId) {
-                $query->where('office_id', $officeId);
-            })->orderBy('acquired_date', 'desc')->paginate($e);
-        }else{
-            $equipments = Equipment::whereHas('facility', function ($query) use ($officeId) {
-                $query->where('office_id', $officeId);
-            })->orderBy('acquired_date', 'desc')->paginate(5);
-        }
+         $equipments = Equipment::paginate(10);
 
         return view('equipments/equipments', compact('equipments'))->with('title', 'Equipments');
     }
