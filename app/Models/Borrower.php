@@ -29,10 +29,14 @@ class Borrower extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Borrower.php
     public function equipment()
     {
         return $this->belongsTo(Equipment::class, 'equipment_id'); 
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(Students::class, 'borrowers_id_no');
     }
 
 }

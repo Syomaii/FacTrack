@@ -6,7 +6,11 @@
             <img src="/assets/images/401.png" alt="" class="mb-24" style="width: 550px; height: 550px;">
             <h6 class="mb-16">Error 401 - Unauthorized</h6>
             <p class="text-secondary-light">You are not authorized to open this link</p>
-            <a href="/dashboard" class="btn btn-primary-600 radius-8 px-20 py-11">Back to Home</a>
+            @if(auth()->user()->type != 'student')
+                <a href="/dashboard" class="btn btn-primary-600 radius-8 px-20 py-11">Back to Home</a>
+            @elseif (auth()->user()->type === 'student')
+                <a href="/student-dashboard" class="btn btn-primary-600 radius-8 px-20 py-11">Back to Home</a>
+            @endif
         </div>
     </div>
 </div>

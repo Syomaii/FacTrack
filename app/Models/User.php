@@ -22,6 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'designation_id',
         'office_id',
+        'student_id',
         'firstname',
         'lastname',
         'email',
@@ -43,7 +44,7 @@ class User extends Authenticatable implements MustVerifyEmail
     //  *
     //  * @return array<string, string>
     //  */
-    // protected function casts(): array
+    // protected function casts(): array    
     // {
     //     return [
     //         'email_verified_at' => 'datetime',
@@ -65,6 +66,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function office()
     {
         return $this->belongsTo(Office::class);
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Students::class);
     }
 
 }

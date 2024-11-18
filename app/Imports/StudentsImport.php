@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Students;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth; 
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
@@ -52,37 +53,44 @@ class StudentsImport implements
 
     public function model(array $row)
     {   
-        
         Log::info('Row data:', $row);  // Log each row's data for debugging
 
-
         $userType = Auth::user()->type;
-        if($userType == 'admin'){
+        $department = null;
 
-            return new Students([
-                'id_no' => $row["ID No."] ?? null,
-                'firstname' => ucwords(strtolower($row["First Name"] ?? '')),
-                'lastname' => ucwords(strtolower($row["Last Name"] ?? '')),
-                'gender' => $row["Gender"] ?? null,
-                'email' => $row["Email"] ?? null,
-                'course' => $row["Course / Year"] ?? null,
-                'department' => ucwords($this->department)
-                
-            ]);
-        } elseif($userType == 'facility manager'){
+        if ($userType == 'admin') {
+            $department = ucwords($this->department);
+        } elseif ($userType == 'facility manager') {
             $department = Auth::user()->office->name;
-
-            return new Students([
-                'id_no' => $row["ID No."] ?? null,
-                'firstname' => ucwords(strtolower($row["First Name"] ?? '')),
-                'lastname' => ucwords(strtolower($row["Last Name"] ?? '')),
-                'gender' => $row["Gender"] ?? null,
-                'email' => $row["Email"] ?? null,
-                'course' => $row["Course / Year"] ?? null,
-                'department' => $department,
-                
-            ]);
         }
+
+        // Create a Student record
+        $student = new Students([
+            'id_no' => $row["ID No."] ?? null,
+            'firstname' => ucwords(strtolower($row["First Name"] ?? '')),
+            'lastname' => ucwords(strtolower($row["Last Name"] ?? '')),
+            'gender' => $row["Gender"] ?? null,
+            'email' => $row["Email"] ?? null,
+            'course' => $row["Course / Year"] ?? null,
+            'department' => $department,
+        ]);
+
+        // Create a User record for the Student
+        $user = new User([
+            'image' => 'images/profile_pictures/default-profile.png',
+            'firstname' => $student->firstname,
+            'lastname' => $student->lastname,
+            'email' => $student->email,
+            'password' => bcrypt($student->id_no), // Default password (should be updated by the user later)
+            'type' => 'student', // Assign role as 'student'
+            'status' => 'active',
+            'mobile_no' => 'none', // Optional: Link to the Student ID
+        ]);
+
+        $student->save(); // Save the Student record first
+        $user->save();    // Save the corresponding User record
+
+        return $student;
     }
     
     public function rules(): array

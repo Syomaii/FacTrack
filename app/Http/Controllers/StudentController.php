@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RegisteredUserMail;
 use App\Models\Borrower;
+use App\Models\Designation;
 use App\Models\Students;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -58,7 +63,61 @@ class StudentController extends Controller
         $studentBorrowHistory = Borrower::with('equipment')->where('borrowers_id_no', $id_no)->get();
 
         if (!$student) {
-            abort(404); // Or handle no student found
+            abort(404); 
+        }
+
+        return view('students.student_profile', compact('student', 'studentBorrowHistory'))->with('title', 'Student Profile');
+    }
+
+    public function addStudentPost(Request $request)
+    {
+        $data = $request->validate([
+            'id_no' => 'required|integer|digits:8|unique:students,id_no', 
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'gender' => 'required|in:M,F',
+            'email' => 'required|email|unique:students,email',
+            'course' => 'required|string|max:255',
+            'department' => 'required|string|max:255',
+        ]);
+        
+        User::create([
+            'student_id' => $data['id_no'],
+            'image' => 'images/profile_pictures/default-profile.png',
+            'firstname' => ucwords($data['firstname']),
+            'lastname' => ucwords($data['lastname']),
+            'email' => $data['email'],
+            'password' => bcrypt($data['id_no']), 
+            'type' => 'student', 
+            'status' => 'active',
+            'mobile_no' => 'none', 
+        ]);
+        
+        Students::create([
+            'id_no' => $data['id_no'],
+            'firstname' => ucwords($data['firstname']),
+            'lastname' => ucwords($data['lastname']),
+            'gender' => $data['gender'],
+            'email' => $data['email'],
+            'course' => strtoupper($data['course']), 
+            'department' => ucwords($data['department']), 
+        ]);
+
+        return redirect('/add-student')->with('success', 'Student added successfully.');
+    }
+
+    public function studentDashboard(){
+        
+        return view('students.student_dashboard')->with('title', 'Student Dashboard');
+    }
+
+    public function profile($student_id)
+    {
+        $student = Students::where('id_no', $student_id)->first();
+        $studentBorrowHistory = Borrower::with('equipment')->where('borrowers_id_no', $student_id)->get();
+
+        if (!$student) {
+            abort(404); 
         }
 
         return view('students.student_profile', compact('student', 'studentBorrowHistory'))->with('title', 'Student Profile');

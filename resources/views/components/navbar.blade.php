@@ -89,12 +89,21 @@
                             </button>
                         </div>
                         <ul class="to-top-list">
-                            <li>
-                                <a class="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
-                                    href="{{ route('profile', ['id' => Auth::user()->id]) }}">
-                                    <iconify-icon icon="solar:user-linear" class="icon text-xl"></iconify-icon> My
-                                    Profile</a>
-                            </li>
+                            @if (auth()->user()->type != 'student')
+                                <li>
+                                    <a class="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
+                                        href="{{ route('profile', ['id' => Auth::user()->id]) }}">
+                                        <iconify-icon icon="solar:user-linear" class="icon text-xl"></iconify-icon> My
+                                        Profile</a>
+                                </li>
+                            @elseif (auth()->user()->type === 'student')
+                                <li>
+                                    <a class="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
+                                        href="{{ route('student.profile', ['id' => Auth::user()->id]) }}">
+                                        <iconify-icon icon="solar:user-linear" class="icon text-xl"></iconify-icon> My
+                                        Profile</a>
+                                </li>
+                            @endif
                             <li>
                                 <a class="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-danger d-flex align-items-center gap-3"
                                     href="/logout">

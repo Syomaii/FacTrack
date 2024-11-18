@@ -36,7 +36,7 @@
                     <img src="{{ asset('assets/images/user-grid/uc.jpg') }}" alt="" class="w-100 object-fit-cover">
                     <div class="pb-24 ms-16 mb-24 me-16 mt--100">
                         <div class="text-center border border-top-0 border-start-0 border-end-0 pt-5 mt-5">
-                            <h6 class="mb-0 mt-16">{{ Str::title($student->firstname) }} {{ Str::title($student->lastname) }}</h6>
+                            <h6 class="mb-0 mt-16">{{ ucwords($student->firstname) }} {{ ucwords($student->lastname) }}</h6>
                             <span class="text-secondary-light mb-16">{{ $student->email }}</span>
                         </div>
                         <div class="mt-24">
@@ -44,8 +44,8 @@
                             <ul>
                                 <li class="d-flex align-items-center gap-1 mb-12">
                                     <span class="w-30 text-md fw-semibold text-primary-light">Full Name</span>
-                                    <span class="w-70 text-secondary-light fw-medium">: {{ Str::title($student->firstname) }}
-                                        {{ Str::title($student->lastname) }}</span>
+                                    <span class="w-70 text-secondary-light fw-medium">: {{ ucwords($student->firstname) }}
+                                        {{ ucwords($student->lastname) }}</span>
                                 </li>
                                 <li class="d-flex align-items-center gap-1 mb-12">
                                     <span class="w-30 text-md fw-semibold text-primary-light">ID Number</span>
@@ -69,39 +69,40 @@
                 <div class="card h-100">
                     <div class="card-body p-24">
                         <h6 class="text-xl mb-16">Borrow History</h6>
-                        
-                        @forelse ($studentBorrowHistory as $borrowHistory)
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Item</th>
-                                            <th scope="col">Borrow Date</th>
-                                            <th scope="col">Return Date</th>
-                                            <th scope="col">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Equipment</th>
+                                        <th scope="col">Borrow Date</th>
+                                        <th scope="col">Expected Return Date</th>
+                                        <th scope="col">Return Date</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($studentBorrowHistory as $borrowHistory)
                                         <tr>
                                             <td>{{ $borrowHistory->equipment->name }}</td>
                                             <td>{{ $borrowHistory->borrowed_date }}</td>
+                                            <td>{{ $borrowHistory->expected_returned_date }}</td>
                                             <td>{{ $borrowHistory->returned_date ? $borrowHistory->returned_date : 'N/A' }}</td>
                                             <td>
-                                                @if ($borrowHistory->equipment->status == 'Available')
+                                                @if (!is_null($borrowHistory->returned_date))
                                                     <span class="badge bg-success">Returned</span>
                                                 @else
                                                     <span class="badge bg-warning">Pending</span>
                                                 @endif
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        @empty
-                            <div class="d-flex justify-content-center align-items-center">
-                                <strong class="text-s mb-16 text-center ">This student hasn't borrowed anything yet.</strong>
-                            </div>
-                        @endforelse
+                                    @empty
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <strong class="text-s mb-16 text-center ">This student hasn't borrowed anything yet.</strong>
+                                        </div>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

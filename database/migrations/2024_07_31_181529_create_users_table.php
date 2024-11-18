@@ -40,9 +40,11 @@ return new class extends Migration
             $table->increments('id');
             $table->unsignedInteger('designation_id')->nullable();
             $table->unsignedInteger('office_id')->nullable();
+            $table->unsignedInteger('student_id')->nullable();
             $table->index('office_id');
             $table->foreign('designation_id')->references('id')->on('designations')->onDelete('cascade');
             $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
+            $table->foreign('student_id')->references('id_no')->on('students')->onDelete('cascade');
             $table->string('firstname', 50);
             $table->string("lastname", 50);
             $table->string("email", 50)->unique();
