@@ -68,7 +68,6 @@
                                 id="remember" {{ old('remember') ? 'checked' : '' }}>
                             <label class="form-check-label" for="remember">Remember me </label>
                         </div>
-                        <a href="forgot-password.html" class="text-primary-600 fw-medium">Forgot Password?</a>
                     </div>
                 </div>
 
