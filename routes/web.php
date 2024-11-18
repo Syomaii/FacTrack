@@ -30,6 +30,7 @@ Route::get('/error404', [PageController::class, 'error404']);
 Route::middleware(['guest'])->group(function () {
     Route::post('/', [UserController::class, 'loginUser'])->name('login.post');
     Route::get('/', [PageController::class,'login'])->name('login');     
+    Route::get('/password/reset', [UserController::class, 'showResetForm'])->name('password.reset');
     // Route::get('/', function () { return view('index'); })->name('login');
 });
 

@@ -19,6 +19,10 @@
                 <div class="alert alert-danger" role="alert">
                     {{ session('status') }}
                 </div>
+            @elseif(session('successPasswordReset'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('successPasswordReset') }}
+                </div>
             @endif
             @error('email')
                 <div class="alert alert-danger bg-danger-100 text-danger-600 border-danger-100 px-24 py-11 mb-0 fw-semibold text-lg radius-8 d-flex align-items-center justify-content-between mb-3"
