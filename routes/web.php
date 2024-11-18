@@ -38,19 +38,27 @@ Route::middleware(['guest'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
-    Route::get('/profile/{id}', [PageController::class, 'profile'])->name('profile');
-    Route::put('/profile/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
+    Route::get('/notifications', [PageController::class, 'notifications']);
+    Route::get('/password/reset', [UserController::class, 'showResetForm'])->name('password.reset');
     Route::post('/password/reset', [UserController::class, 'updatePassword'])->name('password.update');
 
+
+    Route::middleware(['checkRole:student'])->group(function (){
+        Route::get('/student-dashboard', [StudentController::class, 'studentDashboard'])->name('student.dashboard');
+        Route::get('/profile/{id}', [StudentController::class, 'profile'])->name('student.profile');
+        
+    });
 
  //---------------------------------------Operator, Facility Manager and Admin -----------------------------------------------
 
     Route::middleware(['checkRole:admin,facility manager,operator'])->group(function (){
+        Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
+        Route::get('/profile/{id}', [PageController::class, 'profile'])->name('profile');
+        Route::put('/profile/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
         Route::get('/equipment-details/{code}', [PageController::class, 'equipmentDetails'])->name('equipment-details');
         Route::get('/add-student', [PageController::class, 'addStudent'])->name('add-student');
-        Route::post('/add-studentPost', [UserController::class, 'addStudentPost'])->name('add-studentPost');
+        Route::post('/add-studentPost', [StudentController::class, 'addStudentPost'])->name('add-studentPost');
         
         Route::get('/view-department', [StudentController::class, 'viewDepartment'])->name('view-department');
         Route::get('/department/{department}/students', [StudentController::class, 'viewStudentsByDepartment'])->name('view-department-students');

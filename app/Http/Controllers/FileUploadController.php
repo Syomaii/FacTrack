@@ -27,7 +27,6 @@ class FileUploadController extends Controller
         if ($failureCount === $totalRows) {
             return redirect()->back()->with('error', 'All the IDs are taken.');
         } elseif ($failureCount > 0 && $failureCount < $totalRows) {
-            dd($failureCount);
             return redirect()->back()->with('success', 'Successfully uploaded and imported the file with some duplicates skipped.');
         }elseif($failureCount === 0){
             return redirect()->back()->with('success', 'Successfully uploaded and imported the file.');

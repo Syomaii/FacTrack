@@ -23,5 +23,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule = app(Schedule::class);
         $schedule->command('maintenance:check')->daily(); 
         $schedule->command('user:mark-inactive')->daily();
+        $schedule->command('equiment:notify-overdue')->everyTenSeconds();
     })
     ->create();

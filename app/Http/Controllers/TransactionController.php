@@ -35,8 +35,7 @@ class TransactionController extends Controller
 
     public function getStudentDetails($id)
     {
-        // Log the ID without any curly braces
-        $id = trim($id, '{}'); // Remove curly braces if they exist
+        $id = trim($id, '{}');
         Log::info("Fetching details for cleaned ID: " . $id);
         
         $student = Students::where('id_no', $id)->first(['firstname', 'lastname', 'department']);
@@ -70,6 +69,9 @@ class TransactionController extends Controller
             return back()->withErrors(['equipment_code' => 'Equipment is already borrowed.'])->withInput();
         }
 
+        
+        
+
         return redirect()->route('borrow_details', ['code' => $equipment->code])
                          ->with([
                              'borrowers_name' => $data['borrowers_name'],
@@ -93,6 +95,16 @@ class TransactionController extends Controller
             'title' => 'Borrow Details',
         ];
 
+        $student = Students::where('id_no', $data['borrowers_id_no'])->first();
+            
+        if (!$student) {
+            return redirect()->back()->withErrors(['msg' => 'Student record not found.']);
+        }
+
+        if ($student->overdue_count >= 2) {
+            return redirect()->back()->withErrors(['msg' => 'Student cannot borrow due to overdue violations.']);
+        }
+
 
         return view('transaction.borrow_details', $data);
     }
@@ -110,13 +122,12 @@ class TransactionController extends Controller
 
         $equipment = Equipment::findOrFail($id);
 
-        // Find the equipment using the ID
-        $equipment = Equipment::findOrFail($id);
-
         // Check if the equipment is available for borrowing
         if ($equipment->status !== 'Available') {
             return back()->withErrors(['equipment' => 'This equipment is not available for borrowing.']);
         }
+
+        
 
         // Insert the borrow details into the 'borrows' table
         Borrower::create([
@@ -127,7 +138,7 @@ class TransactionController extends Controller
             'user_id' => Auth::user()->id,
             'borrowed_date' => now(),
             'remarks' => 'The day the equipment is Borrowed',
-            'expected_returned_date' => $validatedData['expected_returned_date'],   // Save expected_returned_date
+            'expected_returned_date' => date('Y-m-d H:i:s', strtotime($validatedData['expected_returned_date'])),   // Save expected_returned_date
             'equipment_id' => $equipment->id,
             'status' => 'Borrowed',
         ]);
@@ -355,44 +366,43 @@ class TransactionController extends Controller
 
 
     public function submitDonated(Request $request, $code)
-{
-    $validatedData = $request->validate([
-        'remarks' => 'required|string|max:255',
-        'donated_date' => 'required|date',
-        'condition' => 'required|string', 
-        'recipient' => 'required|string|max:255', 
-    ]);
+    {
+        $validatedData = $request->validate([
+            'remarks' => 'required|string|max:255',
+            'donated_date' => 'required|date',
+            'condition' => 'required|string', 
+            'recipient' => 'required|string|max:255', 
+        ]);
 
-    // Find the equipment by code
-    $equipment = Equipment::findOrFail($code);
+        // Find the equipment by code
+        $equipment = Equipment::findOrFail($code);
 
-    // Check if the equipment is available for donation
-    if ($equipment->status !== 'Available') {
-        return back()->withErrors(['equipment' => 'This equipment is not available for donation.']);
+        // Check if the equipment is available for donation
+        if ($equipment->status !== 'Available') {
+            return back()->withErrors(['equipment' => 'This equipment is not available for donation.']);
+        }
+
+        Donated::create([
+            'equipment_id' => $equipment->id,
+            'remarks' => $validatedData['remarks'],
+            'donated_date' => $validatedData['donated_date'],
+            'user_id' => Auth::user()->id,
+            'status' => 'Donated',
+            'condition' => $validatedData['condition'], 
+            'recipient' => $validatedData['recipient'], 
+        ]);
+
+        // Update equipment status
+        $equipment->status = 'Donated';
+        $equipment->save();
+
+        return redirect()->route('donated_equipment')
+                        ->with('donatedSuccessfully', 'Donation record submitted successfully.');
     }
-
-    Donated::create([
-        'equipment_id' => $equipment->id,
-        'remarks' => $validatedData['remarks'],
-        'donated_date' => $validatedData['donated_date'],
-        'user_id' => Auth::user()->id,
-        'status' => 'Donated',
-        'condition' => $validatedData['condition'], 
-        'recipient' => $validatedData['recipient'], 
-    ]);
-
-    // Update equipment status
-    $equipment->status = 'Donated';
-    $equipment->save();
-
-    return redirect()->route('donated_equipment')
-                     ->with('donatedSuccessfully', 'Donation record submitted successfully.');
-}
 
 
     public function returnEquipment($code, Request $request)
     {
-        
         $equipment = Equipment::where('code', $code)->first();
         
         // Check if the equipment exists
@@ -411,33 +421,50 @@ class TransactionController extends Controller
                     'returned_date' => 'required|date',
                     'remarks' => 'nullable|string',
                 ]);
-
+            
                 $equipment = Equipment::where('code', $code)->first();
             
                 if (!$equipment) {
                     return redirect()->back()->withErrors(['msg' => 'Equipment not found.']);
                 }
+            
+                $borrow = Borrower::where('equipment_id', $equipment->id)
+                    ->whereNull('returned_date')
+                    ->latest()
+                    ->first();
+            
+                if (!$borrow) {
+                    return redirect()->back()->withErrors(['msg' => 'Borrow record not found or already returned.']);
+                }
 
                 $borrow = Borrower::where('equipment_id', $equipment->id)
                     ->whereNull('returned_date')
-                    ->latest() 
+                    ->latest()
                     ->first();
 
-                    if (!$borrow) {
-                        return redirect()->back()->withErrors(['msg' => 'Borrow record not found or already returned.']);
-                    }
-    
-                    $borrow->update([
-                        'returned_date' => $validatedData['returned_date'],
-                        'remarks' => $validatedData['remarks'],
-                        'status' => 'Returned'
-                    ]);
+                $student = Students::where('id_no', $borrow->borrowers_id_no)->first();
+                    
+                if (!$student) {
+                    return redirect()->back()->withErrors(['msg' => 'Student record not found.']);
+                }
 
-                    $equipment->status = 'Available';
-                    $equipment->save();
-                    $borrow->save();
-                
-                    return redirect()->back()->with('success', 'Equipment returned successfully.');
+                $borrow->update([
+                    'returned_date' => $validatedData['returned_date'],
+                    'remarks' => $validatedData['remarks'],
+                    'status' => 'Returned',
+                ]);
+            
+                $equipment->update(['status' => 'Available']);
+            
+                if ($borrow->returned_date > $borrow->expected_returned_date) {
+                    $student->increment('overdue_count'); // Increase the overdue count for the student
+            
+                    if ($student->overdue_count == 2) {
+                        // (Optional) Add custom actions here, such as sending a warning email
+                    }
+                }
+            
+                return redirect()->back()->with('success', 'Equipment returned successfully.');
             break;
 
             case "In Maintenance":

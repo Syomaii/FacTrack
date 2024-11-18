@@ -138,6 +138,13 @@ class UserController extends Controller
                 Cookie::queue(Cookie::forget('email'));
                 Cookie::queue(Cookie::forget('password'));
             }
+            if(Auth::user()->type === 'student'){
+                if(Auth::user()->created_at->eq(Auth::user()->updated_at)){
+                    return redirect()->route('student.dashboard')->with('newUser', "Looks like you haven't changed your password yet. Change it now");
+                }else{
+                    return redirect()->route('student.dashboard')->with('loginUserSuccessfully', 'You are logged in!');
+                }
+            }
             if(Auth::user()->type != 'admin'){
                 if(Auth::user()->created_at->eq(Auth::user()->updated_at)){
                     return redirect()->intended('dashboard')->with('newUser', "Looks like you haven't changed your password yet. Change it now");
@@ -282,34 +289,6 @@ public function updatePassword(Request $request)
         $end = min($start + $totalUsers - 1, $totalUsers);
     
         return view('users/users', compact('users', 'totalUsers', 'start', 'end'))->with('title', 'Users');
-    }
-
-    
-
-    public function addStudentPost(Request $request)
-    {
-        $request->validate([
-            'id_no' => 'required|integer|digits:8|unique:students,id_no', 
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'gender' => 'required|in:M,F',
-            'email' => 'required|email|unique:students,email',
-            'course' => 'required|string|max:255',
-            'department' => 'required|string|max:255',
-        ]);
-
-        // Create a new student record
-        Students::create([
-            'id_no' => $request->id_no,
-            'firstname' => $request->firstname,
-            'lastname' => $request->lastname,
-            'gender' => $request->gender,
-            'email' => $request->email,
-            'course' => $request->course,
-            'department' => $request->department,
-        ]);
-
-        return redirect('/add-student')->with('success', 'Student added successfully.');
     }
 
     

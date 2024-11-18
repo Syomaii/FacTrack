@@ -64,13 +64,15 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="mb-3">
-                        <label for="file" class="form-label fw-semibold">Department</label>
-                        <input type="text" name="department" id="department" class="form-control @error('department') is-invalid @enderror" placeholder="Enter department" required>
-                        @error('department')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+                    @if (auth()->user()->type === 'admin')
+                        <div class="mb-3">
+                            <label for="file" class="form-label fw-semibold">Department</label>
+                            <input type="text" name="department" id="department" class="form-control @error('department') is-invalid @enderror" placeholder="Enter department" required>
+                            @error('department')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    @endif
                     <button type="button" class="btn btn-primary w-100" id="previewBtn">Preview</button>
                     <button type="submit" class="btn btn-success w-100 mt-3" id="submitBtn" style="display: none;" disabled>Confirm and Submit</button>
                 </form>
