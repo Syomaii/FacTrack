@@ -42,6 +42,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     Route::get('/profile/{id}', [PageController::class, 'profile'])->name('profile');
     Route::put('/profile/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
+    Route::get('/password/reset', [UserController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/password/reset', [UserController::class, 'updatePassword'])->name('password.update');
+
 
  //---------------------------------------Operator, Facility Manager and Admin -----------------------------------------------
 

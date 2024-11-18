@@ -54,8 +54,6 @@
                         <span>Users</span>
                     </a>
                 </li>
-                
-                
             @endif
             <li>
                 <a href="/view-department">
@@ -67,7 +65,7 @@
                 <li class="dropdown">
                     <a href="javascript:void(0)">
                         <iconify-icon icon="fe:vector" class="menu-icon"></iconify-icon>
-                        <span>Transaction</span>
+                        <span>Operation</span>
                     </a>
 
                     <!-- Simplified Sidebar Menu -->
