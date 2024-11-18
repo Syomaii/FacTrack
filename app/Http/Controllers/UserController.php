@@ -228,10 +228,10 @@ class UserController extends Controller
 
     public function showResetForm(Request $request)
 {
-    return view('auth.reset_password', [
+    return view('users/reset_password', [
         'token' => $request->query('token'),
         'email' => $request->query('email'),
-    ]);
+    ])->with('title', 'Reset Password');
 }
 
 public function updatePassword(Request $request)
@@ -253,7 +253,7 @@ public function updatePassword(Request $request)
     );
 
     return $status === Password::PASSWORD_RESET
-        ? redirect()->route('login')->with('success', 'Password reset successfully.')
+        ? redirect()->route('users/index')->with('successPasswordReset', 'Password reset successfully.')
         : back()->withErrors(['email' => [__($status)]]);
 }
 
