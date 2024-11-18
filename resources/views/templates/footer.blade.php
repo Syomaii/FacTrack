@@ -428,6 +428,7 @@
 @endif
 
 
+@if (url()->current() != url('notifications'))
 <script>
     $(document).ready(function() {
         setTimeout(function() {
@@ -437,6 +438,7 @@
         }, 2000);
     });
 </script>
+@endif
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

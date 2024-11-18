@@ -239,7 +239,7 @@
                 </div>
             </div>
 
-            
+
         </div>
     </div>
     @include('templates.footer_inc')
@@ -324,7 +324,7 @@
                         min: 0,
                         max: yAxisMax, // Set maximum value dynamically based on data
                         ticks: {
-                            stepSize: yAxisStepSize-8, // Set step size dynamically
+                            stepSize: yAxisStepSize - 8, // Set step size dynamically
                             font: {
                                 size: 12
                             },
@@ -362,4 +362,3 @@
         });
     });
 </script>
-

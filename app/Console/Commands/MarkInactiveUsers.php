@@ -13,7 +13,7 @@ class MarkInactiveUsers extends Command
      *
      * @var string
      */
-    protected $signature = 'users:mark-inactive';
+    protected $signature = 'user:mark-inactive';
 
     /**
      * The console command description.
@@ -26,12 +26,18 @@ class MarkInactiveUsers extends Command
      */
     public function handle()
     {
-        $thresholdDate = Carbon::now()->subDays(30);
+        $thresholdDate = Carbon::now()->subSeconds(30); //change to 30 if done with testing
         
-        User::where('last_login_at', '<', $thresholdDate)
-            ->where('status', 'active')
-            ->update(['status' => 'inactive']);
+        $users = User::where('last_login_at', '<', $thresholdDate)
+                     ->where('status', '!=', 'inactive')
+                     ->get();
 
-        $this->info('Inactive users marked successfully.');
+        foreach ($users as $user) {
+            $user->status = 'inactive'; 
+            $user->save();
+            $this->info('User ' . $user->firstname . ' has been marked as inactive.');
+        }
+
+        $this->info('User status update complete.');
     }
 }

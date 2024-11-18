@@ -199,6 +199,41 @@
                                     @enderror
                                 </div>
                             @endforeach
+    </div>
+                @php
+                    // Determine the background color based on the status
+                    $statusColors = [
+                        'Available' => 'green',
+                        'In Maintenance' => 'yellow',
+                        'Borrowed' => 'orange',
+                        'Missing' => 'red',
+                    ];
+                    $color = $statusColors[$entry->status] ?? 'gray'; // Default to gray if status not in array
+                @endphp
+
+        
+    
+
+    <!-- Edit Equipment Modal -->
+    <div class="modal fade" id="editEquipmentModal" tabindex="-1" aria-labelledby="editEquipmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editEquipmentModalLabel">Edit Equipment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editEquipmentForm" action="{{ route('update_equipment') }}" method="POST">
+                        @csrf @method('PUT')
+                        <input type="hidden" name="id" id="equipmentId">
+                        @foreach ([
+                            'Name' => 'equipmentName',
+                            'Brand' => 'equipmentBrand',
+                            'Serial Number' => 'equipmentSerialNo',
+                            'Description' => 'equipmentDescription',
+                            'Acquired Date' => 'equipmentAcquiredDate',
+                            'Facility' => 'equipmentFacility',
+                        ] as $label => $id)
                             <div class="mb-3">
                                 <label for="equipmentStatus" class="form-label">Status</label>
                                 <select class="form-control" id="equipmentStatus" name="status" required>
@@ -217,8 +252,13 @@
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
+=======
+    </div>
+    @include('templates.footer_inc')
+>>>>>>> 2c8075e47dbeeea5cb86e2095ed799736f4ffcc1
 </main>
-
+@include('templates.footer')
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         // Adjust spacing for the QR Code section
@@ -281,4 +321,7 @@
     }
 </script>
 
+<<<<<<< HEAD
 @include('templates.footer')
+=======
+>>>>>>> 2c8075e47dbeeea5cb86e2095ed799736f4ffcc1

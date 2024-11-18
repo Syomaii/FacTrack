@@ -21,6 +21,7 @@ class Equipment extends Model
         'image',
         'status',
         'owned_by',
+        'next_due_date',
         'user_id'
     ];
 
