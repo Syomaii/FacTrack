@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens; 
 
-class Students extends Authenticatable
+class Students extends Model
 {
     use HasApiTokens;
 
-    protected $guard = "students";
+    protected $table = "students";
 
     protected $fillable = [
-        'id_no',
+        'id',
         'firstname',
         'lastname',
         'gender',

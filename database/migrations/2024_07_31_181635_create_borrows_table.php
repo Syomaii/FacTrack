@@ -17,8 +17,8 @@ return new class extends Migration
             $table->unsignedInteger('user_id');
             $table->foreign('equipment_id')->references('id')->on('equipments')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedInteger('borrowers_id_no');
-            $table->foreign('borrowers_id_no')->references('id_no')->on('students')->onDelete('cascade');
+            $table->string('borrowers_id_no');
+            $table->foreign('borrowers_id_no')->references('id')->on('students')->onDelete('cascade');
             $table->string('borrowers_name', 100);
             $table->string('department', 50);
             $table->dateTime('borrowed_date');

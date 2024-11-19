@@ -49,7 +49,7 @@
             </div>
         </div>
         <!-- Department Group By-->
-        <div class="scrollable-content" style="overflow-y: auto; overflow-x: hidden; max-height: 600px;">
+        <div class="scrollable-content" style="overflow-y: auto; overflow-x: hidden; max-height: 700px;">
             <div class="row gy-4" id="studentList">
                 @if ($students->isNotEmpty())
                     @foreach ($students as $department => $group)

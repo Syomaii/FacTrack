@@ -147,7 +147,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($users as $user)
+                                    @forelse ($users as $user)
                                         <tr class="user-row">
                                             <td>
                                                 <div class="d-flex align-items-center">
@@ -168,40 +168,71 @@
                                                     class="bg-success-focus text-success-600 border border-success-main px-24 py-4 radius-4 fw-medium text-sm">Active</span>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr class="user-row">
+                                            <td colspan="10" class="text-center"><strong>No users found from your office/department.</strong></td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
 
-                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
-                            <span>
-                                Showing {{ $users->firstItem() }} to {{ $users->lastItem() }} of
-                                {{ $users->total() }}
-                                entries
-                            </span>
-                            <ul class="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
-                                <li class="page-item">
-                                    <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
-                                        href="{{ $users->previousPageUrl() }}"
-                                        @if ($users->onFirstPage()) style="pointer-events: none; opacity: 0.5;" @endif>
-                                        <iconify-icon icon="ep:d-arrow-left"></iconify-icon>
-                                    </a>
-                                </li>
-                                @for ($i = 1; $i <= $users->lastPage(); $i++)
+                        @if ($totalUsers > 0)
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
+                                <span>Showing {{ $start }} to {{ $end }} of {{ $totalUsers }}
+                                    entries</span>
+                                <ul class="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
+                                    <!-- Previous Page Link -->
                                     <li class="page-item">
-                                        <a class="page-link {{ $i === $users->currentPage() ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-secondary-light' }} fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
-                                            href="{{ $users->url($i) }}">{{ $i }}</a>
+                                        <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
+                                            href="{{ $users->previousPageUrl() }}" aria-disabled="{{ $users->onFirstPage() }}">
+                                            <iconify-icon icon="ep:d-arrow-left"></iconify-icon>
+                                        </a>
                                     </li>
-                                @endfor
-                                <li class="page-item">
-                                    <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
-                                        href="{{ $users->nextPageUrl() }}"
-                                        @if (!$users->hasMorePages()) style="pointer-events: none; opacity: 0.5;" @endif>
-                                        <iconify-icon icon="ep:d-arrow-right"></iconify-icon>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                                
+                                    <!-- Pagination Pages -->
+                                    @if ($users->lastPage() > 1)
+                                        <!-- Show first page if not too close to current -->
+                                        @if ($users->currentPage() > 3)
+                                            <li class="page-item">
+                                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                                    href="{{ $users->url(1) }}">1</a>
+                                            </li>
+                                            @if ($users->currentPage() > 4)
+                                                <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
+                                            @endif
+                                        @endif
+
+                                        @for ($i = max(1, $users->currentPage() - 1); $i <= min($users->lastPage(), $users->currentPage() + 1); $i++)
+                                            <li class="page-item">
+                                                <a class="page-link {{ $i === $users->currentPage() ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-secondary-light' }} fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                                    href="{{ $users->url($i) }}">{{ $i }}</a>
+                                            </li>
+                                        @endfor
+
+                                        @if ($users->currentPage() < $users->lastPage() - 2)
+                                            @if ($users->currentPage() < $users->lastPage() - 3)
+                                                <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
+                                            @endif
+                                            <li class="page-item">
+                                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                                    href="{{ $users->url($users->lastPage()) }}">{{ $users->lastPage() }}</a>
+                                            </li>
+                                        @endif
+                                    @else   
+                                            
+                                    @endif
+                                
+                                    <!-- Next Page Link -->
+                                    <li class="page-item">
+                                        <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
+                                            href="{{ $users->nextPageUrl() }}">
+                                            <iconify-icon icon="ep:d-arrow-right"></iconify-icon>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

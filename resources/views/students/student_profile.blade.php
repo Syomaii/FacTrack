@@ -14,11 +14,13 @@
                     </a>
                 </li>
                 <li>-</li>
-                <a href="{{ redirect()->back() }}" class="d-flex align-items-center gap-1 hover-text-primary">
-                    Student Profile
-                </a>
+                <li class="fw-medium">
+                    <a href="{{ url()->previous() }}" class="d-flex align-items-center gap-1 hover-text-primary">
+                        {{ $student->department }}
+                    </a>
+                </li>
                 <li>-</li>
-                <li class="fw-medium">{{ $student->id_no }}</li>
+                <li class="fw-medium">{{ $student->id }}</li>
             </ul>
         </div>
         @if (session('updateprofilesuccessfully'))
@@ -49,7 +51,7 @@
                                 </li>
                                 <li class="d-flex align-items-center gap-1 mb-12">
                                     <span class="w-30 text-md fw-semibold text-primary-light">ID Number</span>
-                                    <span class="w-70 text-secondary-light fw-medium">: {{ $student->id_no }}</span>
+                                    <span class="w-70 text-secondary-light fw-medium">: {{ $student->id }}</span>
                                 </li>
                                 <li class="d-flex align-items-center gap-1 mb-12">
                                     <span class="w-30 text-md fw-semibold text-primary-light">Course / Year</span>
@@ -67,42 +69,51 @@
             </div>
             <div class="col-lg-8">
                 <div class="card h-100">
-                    <div class="card-body p-24">
+                    <div class="card-body p-24 ">
                         <h6 class="text-xl mb-16">Borrow History</h6>
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Equipment</th>
-                                        <th scope="col">Borrow Date</th>
-                                        <th scope="col">Expected Return Date</th>
-                                        <th scope="col">Return Date</th>
-                                        <th scope="col">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($studentBorrowHistory as $borrowHistory)
+                        
+                        @if ($studentBorrowHistory->isEmpty())
+                            @if (auth()->user()->type != 'student' )
+                                <div class="d-flex justify-content-center align-items-center w-100 mt-5">
+                                    <strong class="text-center p-3" style="font-size: 20px">This student hasn't borrowed anything yet.</strong>
+                                </div>
+                            @else
+                            <div class="d-flex justify-content-center align-items-center w-100 mt-5">
+                                <strong class="text-center p-3" style="font-size: 20px">No data found.</strong>
+                            </div>
+                            @endif
+                        @else
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
                                         <tr>
-                                            <td>{{ $borrowHistory->equipment->name }}</td>
-                                            <td>{{ $borrowHistory->borrowed_date }}</td>
-                                            <td>{{ $borrowHistory->expected_returned_date }}</td>
-                                            <td>{{ $borrowHistory->returned_date ? $borrowHistory->returned_date : 'N/A' }}</td>
-                                            <td>
-                                                @if (!is_null($borrowHistory->returned_date))
-                                                    <span class="badge bg-success">Returned</span>
-                                                @else
-                                                    <span class="badge bg-warning">Pending</span>
-                                                @endif
-                                            </td>
+                                            <th scope="col">Equipment</th>
+                                            <th scope="col">Borrow Date</th>
+                                            <th scope="col">Expected Return Date</th>
+                                            <th scope="col">Return Date</th>
+                                            <th scope="col">Status</th>
                                         </tr>
-                                    @empty
-                                        <div class="d-flex justify-content-center align-items-center">
-                                            <strong class="text-s mb-16 text-center ">This student hasn't borrowed anything yet.</strong>
-                                        </div>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($studentBorrowHistory as $borrowHistory)
+                                            <tr>
+                                                <td>{{ $borrowHistory->equipment->name }}</td>
+                                                <td>{{ $borrowHistory->borrowed_date }}</td>
+                                                <td>{{ $borrowHistory->expected_returned_date }}</td>
+                                                <td>{{ $borrowHistory->returned_date ? $borrowHistory->returned_date : 'N/A' }}</td>
+                                                <td>
+                                                    @if (!is_null($borrowHistory->returned_date))
+                                                        <span class="badge bg-success">Returned</span>
+                                                    @else
+                                                        <span class="badge bg-warning">Pending</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

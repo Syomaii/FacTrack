@@ -11,12 +11,14 @@
     </div>
     <div class="sidebar-menu-area">
         <ul class="sidebar-menu" id="sidebar-menu">
-            <li>
-                <a href="/dashboard">
-                    <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
-                    <span>Dashboard</span>
-                </a>
-            </li>
+            @if (auth()->user()->type != 'student')
+                <li>
+                    <a href="/dashboard">
+                        <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+            @endif
             @if (auth()->user()->type === 'admin')
                 <li>
                     <a href="/offices">
@@ -170,6 +172,20 @@
                             </li>
                         @endif
                     </ul>
+                </li>
+            @endif
+            @if (auth()->user()->type === 'student')
+                <li>
+                    <a href="/student-dashboard">
+                        <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/reserve-equipment">
+                        <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
+                        <span>Reserve</span>
+                    </a>
                 </li>
             @endif
         </ul>

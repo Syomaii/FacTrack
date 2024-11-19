@@ -16,6 +16,12 @@
                 </li>
                 <li class="fw-medium">-</li>
                 <li class="fw-medium">
+                    <a href="{{ url()->previous() }}" class="d-flex align-items-center gap-1 hover-text-primary">
+                        Users
+                    </a>
+                </li>
+                <li class="fw-medium">-</li>
+                <li class="fw-medium">
                     {{ ucwords($user->firstname) }} {{ ucwords($user->lastname) }}
                 </li>
             </ul>

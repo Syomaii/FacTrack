@@ -21,18 +21,30 @@ class PageController extends Controller
 
     public function dashboard()
     {
+        $loggedInUser = Auth::user();
         // Fetch recent logged-in users, paginated users, and equipment data
         $recentLoggedIn = User::where('type', '!=', 'admin')
             ->orderBy('last_login_at', 'desc')
             ->take(5)
             ->get();
-    
-        $users = User::where('type', '!=', 'admin')->paginate(10);
+
+        if($loggedInUser->type === 'admin'){
+            $users = User::with(['designation', 'office']) // Load relationships
+                    ->where('type', '!=', 'admin') // Filter by office ID
+                    ->paginate(5); 
+        }else{
+            $users = User::where('type', '!=', 'admin') // Exclude admin users
+                    ->where('office_id', $loggedInUser->office_id) // Filter by office ID
+                    ->paginate(5); 
+        }
+
+        $totalUsers = User::where('office_id', $loggedInUser->office_id)->count();
         $userCount = User::where('type', '!=', 'admin')->count();
         $equipmentCount = Equipment::count();
         $totalBorrowedEquipments = Borrower::whereNull('returned_date')->count();
         $totalInRepairEquipments = Equipment::where('status', 'in_repair')->count();
-    
+        $start = ($users->currentPage() - 1) * $users->perPage() + 1;
+        $end = min($start + $users->perPage() - 1, $totalUsers);
         // Fetch all data from the borrows table
         $borrows = Borrower::all(); // Fetch all records from the borrows table
     
@@ -46,7 +58,8 @@ class PageController extends Controller
         // Pass all data to the view
         return view('dashboard', compact(
             'userCount', 'equipmentCount', 'totalBorrowedEquipments',
-            'totalInRepairEquipments', 'borrows', 'users', 'recentLoggedIn', 'borrowedPerMonth'
+            'totalInRepairEquipments', 'borrows', 'users', 'recentLoggedIn', 'borrowedPerMonth',
+            'totalUsers', 'start', 'end'
         ))->with('title', 'Dashboard');
     }
     
@@ -166,9 +179,6 @@ class PageController extends Controller
         return view('equipments/equipment_details', $data);
     }
     
-    
-    
-
     public function addUser(){
         $designations = Designation::all();
         $offices = Office::all();
@@ -214,7 +224,9 @@ class PageController extends Controller
         return view('transaction.repair')->with('title', 'Repair Equipment'); // Load the maintenance view
     }    
     public function students(){
-        return view('students.students')->with('title', 'Import');
+        $offices = Office::all();
+
+        return view('students.students', compact('offices'))->with('title', 'Import');
     }
 
     public function disposeEquipment()

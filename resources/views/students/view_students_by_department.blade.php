@@ -61,7 +61,7 @@
                                 <tr>
 
                                     <td>
-                                        <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ $student->id_no }}</h6>
+                                        <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ $student->id }}</h6>
                                     </td>
                                     <td>
                                         <h6 class="text-md mb-0 fw-medium flex-grow-1">
@@ -84,7 +84,7 @@
                                             class="text-md mb-0 fw-normal text-secondary-light">{{ $student->course }}</span>
                                     </td>
                                     <td>
-                                        <a href="{{ route('student.show_profile', $student->id_no) }}"
+                                        <a href="{{ route('student.show_profile', $student->id) }}"
                                             class="w-32-px h-32-px bg-primary-light text-primary-600 rounded-circle d-inline-flex align-items-center justify-content-center view-equipment">
                                             <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
                                         </a>

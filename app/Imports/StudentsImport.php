@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Office;
 use App\Models\Students;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth; 
@@ -59,14 +60,17 @@ class StudentsImport implements
         $department = null;
 
         if ($userType == 'admin') {
+            $office = Office::where('department', $department)->first();
+            $officeId = $office;
             $department = ucwords($this->department);
         } elseif ($userType == 'facility manager') {
             $department = Auth::user()->office->name;
+            $officeId = Auth::user()->office_id;
         }
 
         // Create a Student record
         $student = new Students([
-            'id_no' => $row["ID No."] ?? null,
+            'id' => $row["ID No."] ?? null,
             'firstname' => ucwords(strtolower($row["First Name"] ?? '')),
             'lastname' => ucwords(strtolower($row["Last Name"] ?? '')),
             'gender' => $row["Gender"] ?? null,
@@ -77,11 +81,14 @@ class StudentsImport implements
 
         // Create a User record for the Student
         $user = new User([
+            'student_id' => $row["ID No."] ?? null,
+            'designation_id' => 3,
+            'office_id' => $officeId,
             'image' => 'images/profile_pictures/default-profile.png',
             'firstname' => $student->firstname,
             'lastname' => $student->lastname,
             'email' => $student->email,
-            'password' => bcrypt($student->id_no), // Default password (should be updated by the user later)
+            'password' => bcrypt($student->id), // Default password (should be updated by the user later)
             'type' => 'student', // Assign role as 'student'
             'status' => 'active',
             'mobile_no' => 'none', // Optional: Link to the Student ID
@@ -96,7 +103,7 @@ class StudentsImport implements
     public function rules(): array
     {
         return [
-            '*.ID No\.' => ['unique:students,id_no'], // Target the exact header format
+            '*.ID No\.' => ['unique:students,id'], // Target the exact header format
         ];
     }
 

@@ -9,6 +9,7 @@ use App\Models\Designation;
 use App\Models\Students;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -27,7 +28,7 @@ class StudentController extends Controller
     public function viewStudentsByDepartment($department)
     {
         $students = Students::where('department', $department)->paginate(10);
-        $studentsIdNo = Students::where('department', $department)->pluck('id_no');
+        $studentsIdNo = Students::where('department', $department)->pluck('id');
         $totalStudents = Students::where('department', $department)->count();
         $start = ($students->currentPage() - 1) * $students->perPage() + 1;
         $end = min($start + $students->perPage() - 1, $totalStudents);
@@ -57,10 +58,10 @@ class StudentController extends Controller
         ])->with('title', 'Search Results');
     }
 
-    public function studentProfile($id_no)
+    public function studentProfile($id)
     {
-        $student = Students::where('id_no', $id_no)->first();
-        $studentBorrowHistory = Borrower::with('equipment')->where('borrowers_id_no', $id_no)->get();
+        $student = Students::where('id', $id)->first();
+        $studentBorrowHistory = Borrower::with('equipment')->where('borrowers_id', $id)->get();
 
         if (!$student) {
             abort(404); 
@@ -72,7 +73,7 @@ class StudentController extends Controller
     public function addStudentPost(Request $request)
     {
         $data = $request->validate([
-            'id_no' => 'required|integer|digits:8|unique:students,id_no', 
+            'id' => 'required|integer|digits:8|unique:students,id', 
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'gender' => 'required|in:M,F',
@@ -82,19 +83,19 @@ class StudentController extends Controller
         ]);
         
         User::create([
-            'student_id' => $data['id_no'],
+            'student_id' => $data['id'],
             'image' => 'images/profile_pictures/default-profile.png',
             'firstname' => ucwords($data['firstname']),
             'lastname' => ucwords($data['lastname']),
             'email' => $data['email'],
-            'password' => bcrypt($data['id_no']), 
+            'password' => bcrypt($data['id']), 
             'type' => 'student', 
             'status' => 'active',
             'mobile_no' => 'none', 
         ]);
         
         Students::create([
-            'id_no' => $data['id_no'],
+            'id' => $data['id'],
             'firstname' => ucwords($data['firstname']),
             'lastname' => ucwords($data['lastname']),
             'gender' => $data['gender'],
@@ -108,13 +109,21 @@ class StudentController extends Controller
 
     public function studentDashboard(){
         
-        return view('students.student_dashboard')->with('title', 'Student Dashboard');
+        $student = Auth::user();
+
+        $data = ([
+            'student' => $student,
+            'title' => 'Student Dashboard'
+        ]);
+
+
+        return view('students.student_dashboard', $data);
     }
 
     public function profile($student_id)
     {
-        $student = Students::where('id_no', $student_id)->first();
-        $studentBorrowHistory = Borrower::with('equipment')->where('borrowers_id_no', $student_id)->get();
+        $student = Students::where('id', $student_id)->first();
+        $studentBorrowHistory = Borrower::with('equipment')->where('borrowers_id', $student_id)->get();
 
         if (!$student) {
             abort(404); 

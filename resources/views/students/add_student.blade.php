@@ -60,13 +60,13 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="id_no"
+                                        <label for="id"
                                             class="form-label fw-semibold text-primary-light text-sm mb-8">ID Number</label>
                                         <input type="text"
-                                            class="form-control radius-8 {{ $errors->has('id_no') ? 'is-invalid' : '' }}"
-                                            id="id_no" name="id_no" placeholder="Enter ID Number"
-                                            value="{{ old('id_no') }}">
-                                        <small class="text-danger">{{ $errors->first('id_no') }}</small>
+                                            class="form-control radius-8 {{ $errors->has('id') ? 'is-invalid' : '' }}"
+                                            id="id" name="id" placeholder="Enter ID Number"
+                                            value="{{ old('id') }}">
+                                        <small class="text-danger">{{ $errors->first('id') }}</small>
                                     </div>
 
                                     <div class="row">

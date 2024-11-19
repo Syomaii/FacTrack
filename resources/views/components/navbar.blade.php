@@ -16,7 +16,7 @@
                 <button type="button" data-bs-toggle="modal" data-bs-target="#scanModal"
                     class="w-40-px h-40-px bg-neutral-200 rounded-circle d-flex justify-content-center align-items-center"
                     id="scanCode">
-                    <iconify-icon icon="fe:vector" class="menu-icon"></iconify-icon>
+                    <iconify-icon icon="tabler:line-scan"></iconify-icon>
                 </button>
 
 

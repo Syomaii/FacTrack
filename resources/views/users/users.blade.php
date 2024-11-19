@@ -148,18 +148,48 @@
                         <span>Showing {{ $start }} to {{ $end }} of {{ $totalUsers }}
                             entries</span>
                         <ul class="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
+                            <!-- Previous Page Link -->
                             <li class="page-item">
                                 <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
-                                    href="{{ $users->previousPageUrl() }}">
+                                    href="{{ $users->previousPageUrl() }}" aria-disabled="{{ $users->onFirstPage() }}">
                                     <iconify-icon icon="ep:d-arrow-left"></iconify-icon>
                                 </a>
                             </li>
-                            @for ($i = 1; $i <= $users->lastPage(); $i++)
-                                <li class="page-item">
-                                    <a class="page-link {{ $i === $users->currentPage() ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-secondary-light' }} fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
-                                        href="{{ $users->url($i) }}">{{ $i }}</a>
-                                </li>
-                            @endfor
+                        
+                            <!-- Pagination Pages -->
+                            @if ($users->lastPage() > 1)
+                                <!-- Show first page if not too close to current -->
+                                @if ($users->currentPage() > 3)
+                                    <li class="page-item">
+                                        <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                            href="{{ $users->url(1) }}">1</a>
+                                    </li>
+                                    @if ($users->currentPage() > 4)
+                                        <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
+                                    @endif
+                                @endif
+
+                                @for ($i = max(1, $users->currentPage() - 1); $i <= min($users->lastPage(), $users->currentPage() + 1); $i++)
+                                    <li class="page-item">
+                                        <a class="page-link {{ $i === $users->currentPage() ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-secondary-light' }} fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                            href="{{ $users->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if ($users->currentPage() < $users->lastPage() - 2)
+                                    @if ($users->currentPage() < $users->lastPage() - 3)
+                                        <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
+                                    @endif
+                                    <li class="page-item">
+                                        <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                            href="{{ $users->url($users->lastPage()) }}">{{ $users->lastPage() }}</a>
+                                    </li>
+                                @endif
+                            @else   
+                                    
+                            @endif
+                        
+                            <!-- Next Page Link -->
                             <li class="page-item">
                                 <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
                                     href="{{ $users->nextPageUrl() }}">

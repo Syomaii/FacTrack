@@ -65,12 +65,20 @@
                         @enderror
                     </div>
                     @if (auth()->user()->type === 'admin')
-                        <div class="mb-3">
-                            <label for="file" class="form-label fw-semibold">Department</label>
-                            <input type="text" name="department" id="department" class="form-control @error('department') is-invalid @enderror" placeholder="Enter department" required>
-                            @error('department')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                        <div class="form-group mb-3 col-md-12">
+                            <label for="department"
+                                class="form-label fw-semibold">Select
+                                Department</label>
+                            <select class="form-control radius-8" id="department" name="department">
+                                <option value="" disabled selected>Select a Department</option>
+                                @foreach ($offices as $office)
+                                    @if ($office->type == 'department')
+                                        <!-- Adjusted condition -->
+                                        <option value="{{ $office->id }}">{{ $office->name }}
+                                        </option>
+                                    @endif
+                                @endforeach
+                            </select>
                         </div>
                     @endif
                     <button type="button" class="btn btn-primary w-100" id="previewBtn">Preview</button>

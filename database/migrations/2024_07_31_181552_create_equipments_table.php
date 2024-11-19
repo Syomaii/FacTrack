@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('image', 255);
             $table->string('status', 50);
             $table->string('owned_by', 50);
+            $table->date('next_due_date')->nullable();
             $table->timestamps();
         });
     }

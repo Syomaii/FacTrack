@@ -38,7 +38,21 @@
             </ul>
         </div>
 
-        <h1>HI I'M A FUCKING STUDENT</h1>
+        <div class="d-flex w-100 row gy-4 w-100">
+            <div class="col-lg-8">
+                <div class="d-flex justify-content-start align-items-end radius-10 bg-white" style="height: 20vh; width: 80">
+                    <h5 class="" style="margin-left: 8rem; margin-bottom: 5.5rem">Welcome, {{ $student->firstname }}</h5>
+                </div>
+                
+            </div>
+            <div class="col-lg-4">
+                <div class="card h-100">
+                    
+                </div>
+            </div>
+              
+        </div>
+        
 
         
     </div>
