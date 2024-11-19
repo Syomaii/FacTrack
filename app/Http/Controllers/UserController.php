@@ -178,13 +178,23 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
     
-        $data = $request->validate([
-            'firstname' => 'required|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
-            'mobile_no' => 'required|string|max:15',
-            'designation_id' => 'required|exists:designations,id',
-        ]);
+        if($user->email === $request->email){
+            $data = $request->validate([
+                'firstname' => 'required|string|max:255',
+                'lastname' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'mobile_no' => 'required|string|max:15',
+                'designation_id' => 'required|exists:designations,id',
+            ]);
+        }else{
+            $data = $request->validate([
+                'firstname' => 'required|string|max:255',
+                'lastname' => 'required|string|max:255',
+                'email' => 'required|email|max:255|unique:users,email',
+                'mobile_no' => 'required|string|max:15',
+                'designation_id' => 'required|exists:designations,id',
+            ]);
+        }
     
         $user->update($data);
     

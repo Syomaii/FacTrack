@@ -62,13 +62,15 @@
                     <iconify-icon icon="ic:baseline-search" class="icon"></iconify-icon>
                 </button>
             </div>
-
-            <div class="d-flex gap-3 ms-3"> <!-- Added ms-3 for left margin -->
-                <a href="#" style="width: 170px" data-bs-toggle="modal" data-bs-target="#addFacilityModal">
-                    <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11">Add
-                        Facility</button>
-                </a>
-            </div>
+            @if (auth()->user()->type === 'facility manager')
+                <div class="d-flex gap-3 ms-3"> <!-- Added ms-3 for left margin -->
+                    <a href="#" style="width: 170px" data-bs-toggle="modal" data-bs-target="#addFacilityModal">
+                        <button type="button"
+                            class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11">Add
+                            Facility</button>
+                    </a>
+                </div>
+            @endif
         </div>
 
 

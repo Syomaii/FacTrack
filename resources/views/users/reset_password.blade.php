@@ -54,11 +54,11 @@
                     Reset Password
                 </button>
             </form>
-            <div class="text-center mt-16">
+            {{-- <div class="text-center mt-16">
                 <a href="{{ route('users/index') }}" class="text-primary-600 fw-medium">
                     Return to Login Page
                 </a>
-            </div>
+            </div> --}}
         </div>
     </div>
 </section>
