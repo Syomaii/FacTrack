@@ -3,7 +3,7 @@
 <section class="auth bg-base d-flex flex-wrap">
     <div class="auth-left d-lg-block d-none">
         <div class="d-flex align-items-center flex-column h-100 justify-content-center">
-            <img src="assets/images/auth/auth-img.png" alt="">
+            <img src="/assets/images/auth/forgot-pass.png" alt="">
         </div>
     </div>
     <div class="auth-right py-32 px-24 d-flex flex-column justify-content-center">
@@ -54,11 +54,11 @@
                     Reset Password
                 </button>
             </form>
-            {{-- <div class="text-center mt-16">
-                <a href="{{ route('users/index') }}" class="text-primary-600 fw-medium">
+            <div class="text-center mt-16">
+                <a href="{{ route('login') }}" class="text-primary-600 fw-medium">
                     Return to Login Page
                 </a>
-            </div> --}}
+            </div>
         </div>
     </div>
 </section>

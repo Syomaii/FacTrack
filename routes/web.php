@@ -32,6 +32,7 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/', [PageController::class,'login'])->name('login');     
     Route::get('/password/reset', [UserController::class, 'showResetForm'])->name('password.reset');
     Route::post('/password/reset', [UserController::class, 'updatePassword'])->name('password.update');
+    
     // Route::get('/', function () { return view('index'); })->name('login');
 });
 

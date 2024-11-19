@@ -244,37 +244,37 @@ class UserController extends Controller
     }
 
     public function showResetForm(Request $request)
-{
-    return view('users/reset_password', [
-        'token' => $request->query('token'),
-        'email' => $request->query('email'),
-    ])->with('title', 'Reset Password');
-}
+    {
+        return view('users/reset_password', [
+            'token' => $request->query('token'),
+            'email' => $request->query('email'),
+        ])->with('title', 'Reset Password');
+    }
 
-public function updatePassword(Request $request)
-{
-    $request->validate([
-        'token' => 'required',
-        'email' => 'required|email',
-        'password' => 'required|min:8|confirmed',
-    ]);
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
 
-    // Reset the password
-    $status = Password::reset(
-        $request->only('email', 'password', 'password_confirmation', 'token'),
-        function ($user, $password) {
-            $user->forceFill([
-                'password' => Hash::make($password),
-            ])->save();
-        }
-    );
+        // Reset the password
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password),
+                ])->save();
+            }
+        );
 
-    return $status === Password::PASSWORD_RESET
-        ? redirect()->route('users/index')->with('successPasswordReset', 'Password reset successfully.')
-        : back()->withErrors(['email' => [__($status)]]);
-}
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('login')->with('successPasswordReset', 'Password reset successfully.')
+            : back()->withErrors(['email' => [__($status)]]);
+    }
 
-    
+        
     public function searchUser(Request $request)
     {
         $query = User::query();
@@ -284,9 +284,9 @@ public function updatePassword(Request $request)
             $searchTerm = $request->input('search');
             $query->where(function($q) use ($searchTerm) {
                 $q->where('firstname', 'LIKE', "%{$searchTerm}%")
-                  ->orWhere('lastname', 'LIKE', "%{$searchTerm}%")
-                  ->orWhere('email', 'LIKE', "%{$searchTerm}%")
-                  ->orWhere('mobile_no', 'LIKE', "%{$searchTerm}%");
+                ->orWhere('lastname', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('email', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('mobile_no', 'LIKE', "%{$searchTerm}%");
             });
         }
     
@@ -298,8 +298,8 @@ public function updatePassword(Request $request)
         $start = ($users->currentPage() - 1) * $users->perPage() + 1;
         $end = min($start + $totalUsers - 1, $totalUsers);
     
-        return view('users/users', compact('users', 'totalUsers', 'start', 'end'))->with('title', 'Users');
+        return view('users.users', compact('users', 'totalUsers', 'start', 'end'))->with('title', 'Users');
     }
 
-    
-}
+        
+    }
