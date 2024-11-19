@@ -58,18 +58,18 @@
                                 <div class="card-body p-24">
                                     <!-- Department Name -->
                                     <h5 class="mb-16">{{ ucwords($department) }}</h5>
-    
+
                                     <!-- Students in Department -->
                                     @foreach ($group as $student)
                                         <p>{{ $student->name }}</p>
                                     @endforeach
-    
+
                                     <a href="{{ route('view-department-students', $department) }}"
                                         class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
                                         View students in this department <iconify-icon icon="iconamoon:arrow-right-2"
                                             class="text-xl"></iconify-icon>
                                     </a>
-    
+
                                 </div>
                             </div>
                         </div>
@@ -102,5 +102,3 @@
     });
 </script>
 @include('templates.footer')
-
-

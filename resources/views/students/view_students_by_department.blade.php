@@ -107,11 +107,12 @@
                             <!-- Previous Page Link -->
                             <li class="page-item">
                                 <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
-                                    href="{{ $students->previousPageUrl() }}" aria-disabled="{{ $students->onFirstPage() }}">
+                                    href="{{ $students->previousPageUrl() }}"
+                                    aria-disabled="{{ $students->onFirstPage() }}">
                                     <iconify-icon icon="ep:d-arrow-left"></iconify-icon>
                                 </a>
                             </li>
-                        
+
                             <!-- Pagination Pages -->
                             @if ($students->lastPage() > 1)
                                 <!-- Show first page if not too close to current -->
@@ -141,10 +142,9 @@
                                             href="{{ $students->url($students->lastPage()) }}">{{ $students->lastPage() }}</a>
                                     </li>
                                 @endif
-                            @else   
-                                    
+                            @else
                             @endif
-                        
+
                             <!-- Next Page Link -->
                             <li class="page-item">
                                 <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"

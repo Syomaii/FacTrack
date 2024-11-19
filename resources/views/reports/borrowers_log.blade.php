@@ -51,7 +51,7 @@
                                 <th scope="col">Department</th>
                                 <th scope="col">Equipment Name</th>
                                 <th scope="col">Borrow Date</th>
-                                <th scope="col">Return Date</th>
+                                <th scope="col">Returned Date</th>
                                 <th scope="col">Status</th>
                             </tr>
                         </thead>
@@ -65,7 +65,7 @@
                                         ({{ ucwords($borrow->equipment->brand) }})
                                     </td>
                                     <td>{{ $borrow->borrowed_date }}</td>
-                                    <td>{{ $borrow->return_date ? $borrow->return_date->format('Y-m-d') : 'Not Returned' }}
+                                    <td>{{ $borrow->returned_date ? $borrow->returned_date : 'Not Yet Returned' }}
                                     </td>
                                     <td>{{ $borrow->status }}</td>
                                 </tr>

@@ -44,11 +44,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     Route::get('/notifications', [PageController::class, 'notifications']);
 
-
     Route::middleware(['checkRole:student'])->group(function (){
         Route::get('/student-dashboard', [StudentController::class, 'studentDashboard'])->name('student.dashboard');
         Route::get('/student-profile/{id}', [StudentController::class, 'profile'])->name('student.profile');
         Route::get('/reserve-equipment', [ReservationController::class, 'reserveEquipment'])->name('student.reserve_equipment');
+        Route::get('/profile/{id}', [StudentController::class, 'profile'])->name('student.profile');
+        
     });
 
  //---------------------------------------Operator, Facility Manager and Admin -----------------------------------------------
@@ -59,12 +60,14 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/profile/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
         Route::get('/equipment-details/{code}', [PageController::class, 'equipmentDetails'])->name('equipment-details');
         Route::get('/add-student', [PageController::class, 'addStudent'])->name('add-student');
+        Route::get('/facility-equipment/{id}', [PageController::class, 'facilityEquipments'])->name('facility_equipment');
         Route::post('/add-studentPost', [StudentController::class, 'addStudentPost'])->name('add-studentPost');
         
         Route::get('/view-department', [StudentController::class, 'viewDepartment'])->name('view-department');
         Route::get('/department/{department}/students', [StudentController::class, 'viewStudentsByDepartment'])->name('view-department-students');
         Route::get('/search-student', [StudentController::class, 'search'])->name('search-student');
         Route::get('/student/{id}', [StudentController::class, 'studentProfile'])->name('student.show_profile');
+        Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->name('change_password');
     });
 
 
@@ -75,9 +78,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/add-user', [PageController::class, 'addUser'])->name('add-user');
         Route::get('/search-user', [UserController::class, 'searchUser'])->name('search-user');
         Route::post('/add-user', [UserController::class, 'addUserPost'])->name('addUserPost');
-        Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->name('change_password');
-        Route::get('/facility-equipment/{id}', [PageController::class, 'facilityEquipments'])->name('facility_equipment');
-        
         //for student routes
         Route::get('/students', [PageController::class, 'students']);
         Route::post('/students', [FileUploadController::class, 'importStudents'])->name('import.file');
@@ -111,6 +111,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['checkRole:operator,facility manager'])->group(function () {
 
         //Page Controller
+        Route::get('/facilities', [PageController::class, 'facilities'])->name('facilities');
         Route::get('/scan-code', [PageController::class, 'scanCode']);
         Route::get('/equipments', [PageController::class, 'equipments'])->name('equipments');
         Route::get('/borrowed-equipments', [ReportController::class, 'borrowedEquipmentReports'])->name('borrowed_equipments');
@@ -172,7 +173,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['checkRole:facility manager'])->group(function () {
         Route::get('/generatedqr', [PageController::class, 'generatedQr']);
-        Route::get('/facilities', [PageController::class, 'facilities'])->name('facilities');
         Route::get('/add-equipment/{id}', [PageController::class, 'addEquipment'])->name('add_equipment');
         Route::post('/add-equipment/{id}', [EquipmentController::class, 'addEquipmentPost'])->name('add_equipment');
         Route::get('/equipment-code/{code}', [EquipmentController::class, 'equipmentCode'])->name('added-equipment');
