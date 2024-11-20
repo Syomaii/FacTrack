@@ -135,12 +135,18 @@
                                         </div>
                                         <div class="form-group mb-3 col-md-6">
                                             <label for="department"
-                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Department</label>
-                                            <input type="text"
-                                                class="form-control radius-8 {{ $errors->has('department') ? 'is-invalid' : '' }}"
-                                                id="department" name="department" placeholder="Enter Department"
-                                                value="{{ old('department') }}">
-                                            <small class="text-danger">{{ $errors->first('department') }}</small>
+                                                class="form-label fw-semibold">Select
+                                                Department</label>
+                                            <select class="form-control radius-8" id="department" name="department">
+                                                <option value="" disabled selected>Select a Department</option>
+                                                @foreach ($offices as $office)
+                                                    @if ($office->type == 'department')
+                                                        <!-- Adjusted condition -->
+                                                        <option value="{{ $office->name }}">{{ $office->name }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
 

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('borrowers_name', 100);
             $table->string('department', 50);
             $table->dateTime('borrowed_date');
-            $table->date('expected_returned_date');
+            $table->dateTime('expected_returned_date');
             $table->dateTime('returned_date')->nullable();
             $table->string('status', 50);
             $table->string('purpose', 50);

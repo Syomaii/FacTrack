@@ -6,7 +6,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
-class MarkInactiveUsers extends Command
+class MarkInactiveUsersCommand extends Command
 {
     /**
      * The name and signature of the console command.

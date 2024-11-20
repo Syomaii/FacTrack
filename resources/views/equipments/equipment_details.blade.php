@@ -49,12 +49,12 @@
                 <div class="col-md-6">
                     <div class="row">
                         @foreach ([
-        'Brand' => $equipments->brand,
-        'Status' => $equipments->status,
-        'Serial Number' => $equipments->serial_no,
-        'Facility' => $equipments->facility->name,
-        'Acquisition Date' => date('d M Y', strtotime($equipments->acquired_date)),
-    ] as $label => $value)
+                            'Brand' => $equipments->brand,
+                            'Status' => $equipments->status,
+                            'Serial Number' => $equipments->serial_no,
+                            'Facility' => $equipments->facility->name,
+                            'Acquisition Date' => date('d M Y', strtotime($equipments->acquired_date)),
+                        ] as $label => $value)
                             <div class="col-md-6 mb-3">
                                 <strong>{{ $label }}:</strong>
                                 <p>{{ $value }}</p>
@@ -165,9 +165,10 @@
                 </div>
             @endforeach
         </div>
+    </div>
         @include('templates.footer_inc')
-        @include('templates.footer')
 </main>
+@include('templates.footer')
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         // Adjust spacing for the QR Code section

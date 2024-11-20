@@ -2,22 +2,21 @@
 
 namespace App\Notifications;
 
-use App\Models\Students;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OverdueEquipmentsNotification extends Notification
+class ReserveEquipmentNotification extends Notification
 {
     use Queueable;
-    protected $student;
+
     /**
      * Create a new notification instance.
      */
-    public function __construct($student)
+    public function __construct()
     {
-        $this->student = $student;
+        //
     }
 
     /**
@@ -27,7 +26,7 @@ class OverdueEquipmentsNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        return ['mail'];
     }
 
     /**
@@ -36,10 +35,9 @@ class OverdueEquipmentsNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('A student has been notified about overdue equipment.')
-                    ->line('Student: ' . $this->student->firstname . ' ' . $this->student->lastname)
-                    ->action('View Borrower', url('/student/' . $this->student->id)) // Adjust the URL based on your routes
-                    ->line('Please ensure to take appropriate actions.');
+                    ->line('The introduction to the notification.')
+                    ->action('Notification Action', url('/'))
+                    ->line('Thank you for using our application!');
     }
 
     /**
@@ -50,8 +48,7 @@ class OverdueEquipmentsNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => 'Overdue Equipment Notification',
-            'message' => 'A student has been notified about overdue equipment: ' . $this->student->firstname . ' ' . $this->student->lastname,
+            //
         ];
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\QRCodeController;
@@ -43,6 +44,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     Route::get('/notifications', [PageController::class, 'notifications']);
+    Route::get('/mark-notification-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('markNotificationAsRead');
+
 
     Route::middleware(['checkRole:student'])->group(function (){
         Route::get('/student-dashboard', [StudentController::class, 'studentDashboard'])->name('student.dashboard');

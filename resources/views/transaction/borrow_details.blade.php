@@ -45,7 +45,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Expected Return Date</label>
-                                <input type="text" class="form-control w-100" style="max-width: 1000vh" name="expected_returned_date" value="{{ $expected_return_date }}" readonly>
+                                <input type="text" class="form-control w-100" style="max-width: 1000vh" name="expected_returned_date" value="{{ date('M-d-Y h:i:s', strtotime($expected_return_date)) }}" readonly>
                             </div>
                             <div class="d-flex justify-content-center gap-4" style="padding-top: 25px">
                                 <a href="/equipments" class="btn btn-outline-danger">Cancel</a>

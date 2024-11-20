@@ -114,7 +114,7 @@
         <div class="row gy-4 mt-1 mb-3">
             <div class="col-xxl-12 col-xl-12">
                 <div class="card h-100">
-                    <div class="card-body">
+                    <div class="card-body borrowedEquipment">
                         <h6>Borrowed Equipments Per Month</h6>
                         <canvas id="borrowedEquipmentsChart" class="pt-28"></canvas>
                     </div>
@@ -279,96 +279,105 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const ctx = document.getElementById('borrowedEquipmentsChart').getContext('2d');
-
+        const chartContainer = document.querySelector('.borrowedEquipment');
         // Fetch the borrowed data from PHP to JavaScript
         const borrowedPerMonthData = @json($borrowedPerMonth);
 
-        // Prepare labels and data points
-        const labels = borrowedPerMonthData.map(data => {
-            const date = new Date(data.year, data.month - 1);
-            return date.toLocaleString('default', {
-                month: 'short',
-                year: 'numeric'
+        // Check if data exists and is not empty
+        if (borrowedPerMonthData && borrowedPerMonthData.length > 0) {
+            // Prepare labels and data points
+            const labels = borrowedPerMonthData.map(data => {
+                const date = new Date(data.year, data.month - 1);
+                return date.toLocaleString('default', {
+                    month: 'short',
+                    year: 'numeric'
+                });
             });
-        });
 
-        const dataPoints = borrowedPerMonthData.map(data => data.total);
+            const dataPoints = borrowedPerMonthData.map(data => data.total);
 
-        // Determine Y-axis settings based on max value in data
-        const maxDataValue = Math.max(...dataPoints);
-        const yAxisStepSize = maxDataValue <= 10 ? 10 : 2;
-        const yAxisMax = Math.ceil(maxDataValue / yAxisStepSize) * yAxisStepSize;
+            // Determine Y-axis settings based on max value in data
+            const maxDataValue = Math.max(...dataPoints);
+            const yAxisStepSize = maxDataValue <= 10 ? 10 : 2;
+            const yAxisMax = Math.ceil(maxDataValue / yAxisStepSize) * yAxisStepSize;
 
-        // Initialize the chart
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Borrowed Equipments',
-                    data: dataPoints,
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderRadius: 5,
-                    barPercentage: 0.6,
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            font: {
-                                size: 14
-                            },
-                            color: '#333'
-                        }
-                    },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                        backgroundColor: '#fff',
+            // Initialize the chart
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Borrowed Equipments',
+                        data: dataPoints,
                         borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1,
-                        titleColor: '#333',
-                        bodyColor: '#333',
-                        displayColors: false,
-                    }
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderRadius: 5,
+                        barPercentage: 0.6,
+                    }]
                 },
-                scales: {
-                    x: {
-                        grid: {
-                            display: false
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 14
+                                },
+                                color: '#333'
+                            }
                         },
-                        ticks: {
-                            font: {
-                                size: 12
-                            },
-                            color: '#555'
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: '#fff',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1,
+                            titleColor: '#333',
+                            bodyColor: '#333',
+                            displayColors: false,
                         }
                     },
-                    y: {
-                        beginAtZero: true,
-                        min: 0,
-                        max: yAxisMax, // Set maximum value dynamically based on data
-                        ticks: {
-                            stepSize: yAxisStepSize - 8, // Set step size dynamically
-                            font: {
-                                size: 12
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
                             },
-                            color: '#555'
+                            ticks: {
+                                font: {
+                                    size: 12
+                                },
+                                color: '#555'
+                            }
                         },
-                        grid: {
-                            color: 'rgba(200, 200, 200, 0.3)',
-                            borderDash: [5, 5]
+                        y: {
+                            beginAtZero: true,
+                            min: 0,
+                            max: yAxisMax, // Set maximum value dynamically based on data
+                            ticks: {
+                                stepSize: yAxisStepSize,
+                                font: {
+                                    size: 12
+                                },
+                                color: '#555'
+                            },
+                            grid: {
+                                color: 'rgba(200, 200, 200, 0.3)',
+                                borderDash: [5, 5]
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        } else {
+        // Display a message inside the card body if no data is available
+        chartContainer.innerHTML = `
+            <h6>Borrowed Equipments Per Month</h6>
+            <p class="text-center mt-3 text-muted"><strong>No data available for borrowed equipment.</strong></p>
+        `;
+    }
     });
 
 

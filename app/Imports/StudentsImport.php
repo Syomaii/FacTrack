@@ -58,10 +58,11 @@ class StudentsImport implements
 
         $userType = Auth::user()->type;
         $department = null;
+        $officeId = null;
 
         if ($userType == 'admin') {
-            $office = Office::where('department', $department)->first();
-            $officeId = $office;
+            $office = Office::where('type', '=', 'department')->first();
+            $officeId = $office ? $office->id : null;
             $department = ucwords($this->department);
         } elseif ($userType == 'facility manager') {
             $department = Auth::user()->office->name;

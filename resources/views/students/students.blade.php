@@ -74,7 +74,7 @@
                                 @foreach ($offices as $office)
                                     @if ($office->type == 'department')
                                         <!-- Adjusted condition -->
-                                        <option value="{{ $office->id }}">{{ $office->name }}
+                                        <option value="{{ $office->name }}">{{ $office->name }}
                                         </option>
                                     @endif
                                 @endforeach
