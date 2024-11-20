@@ -25,5 +25,16 @@ class NotificationController extends Controller
         return response()->json(['message' => 'Notification sent to facility managers']);
     }
 
-    
+    public function markAsRead($id)
+    {
+        $notification = auth()->user()->notifications()->find($id);
+
+        if ($notification) {
+            $notification->markAsRead(); // This sets `read_at` to the current timestamp
+        }
+
+        return redirect()->back(); // Redirect back to the notifications page
+    }
+
+
 }

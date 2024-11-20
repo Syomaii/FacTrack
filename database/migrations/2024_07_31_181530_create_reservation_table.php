@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('reservation', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
+            $table->string('student_id');
             $table->unsignedInteger('equipment_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedInteger('office_id');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
             $table->foreign('equipment_id')->references('id')->on('equipments')->onDelete('cascade');
             $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
             $table->dateTime('reservation_date');
             $table->dateTime('expected_return_date');
-            $table->enum('status', ['pending, approved, declined, completed, cancelled']);
+            $table->enum('status', ['pending', 'approved', 'declined', 'completed', 'cancelled']);
             $table->text('purpose');
             $table->timestamps();
         });
