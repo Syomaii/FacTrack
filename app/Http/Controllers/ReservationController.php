@@ -78,6 +78,7 @@ public function reserved(Request $request)
         return redirect()->back()->withErrors(['error' => 'Equipment not found.']);
     }
 
+    $office_id = $equipment->facility->office->id; 
     // Check if the equipment is already reserved in the given time range
     $existingReservation = Reservation::where('equipment_id', $request->equipment_id)
     ->where(function ($query) use ($request) {
@@ -100,6 +101,7 @@ public function reserved(Request $request)
     Reservation::create([
         'user_id' =>  Auth::user()->student_id ,
         'equipment_id' => $request->equipment_id,
+        'office_id' => $office_id,
         'reservation_date' => $request->reservation_date,
         'expected_return_date' => $request->expected_return_date,
         'status' => 'pending',
