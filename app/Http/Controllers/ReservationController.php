@@ -79,6 +79,7 @@ public function reserved(Request $request)
     }
 
     $office_id = $equipment->facility->office->id; 
+    $studentId = auth()->user()->student_id;
     // Check if the equipment is already reserved in the given time range
     $existingReservation = Reservation::where('equipment_id', $request->equipment_id)
     ->where(function ($query) use ($request) {
@@ -99,7 +100,7 @@ public function reserved(Request $request)
 
     // Create a new reservation
     Reservation::create([
-        'user_id' =>  Auth::user()->student_id ,
+        'student_id' =>  $studentId,
         'equipment_id' => $request->equipment_id,
         'office_id' => $office_id,
         'reservation_date' => $request->reservation_date,

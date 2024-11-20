@@ -69,9 +69,11 @@
                         <div class="mb-3">
                             <label for="equipmentSearch" class="form-label">Search Equipment</label>
                             <input type="text" id="equipmentSearch" name="equipment_query" class="form-control"
-                                placeholder="Type to search..." autocomplete="off">
+                                placeholder="Type to search..." autocomplete="off"
+                                value="{{ old('equipment_query', $selectedEquipment->name ?? '') }}">
                             <div id="searchMessage" class="text-danger mt-2" style="display: none;"></div>
                         </div>
+
 
                         <!-- Equipment Details Section -->
                         <div id="equipmentDetails">
@@ -94,7 +96,7 @@
                         <!-- Purpose -->
                         <div class="mb-3">
                             <label for="purpose" class="form-label">Purpose</label>
-                            <textarea id="purpose" name="purpose" class="form-control" placeholder="State the purpose for reservation" required></textarea>
+                            <textarea id="purpose" name="purpose" class="form-control" placeholder="State the purpose for reservation" required>{{ old('purpose') }}</textarea>
                         </div>
 
                         <!-- Reservation Date -->
