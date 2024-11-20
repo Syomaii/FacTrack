@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedInteger('equipment_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('equipment_id')->references('id')->on('equipments')->onDelete('cascade');
+            $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
             $table->dateTime('reservation_date');
             $table->dateTime('expected_return_date');
             $table->enum('status', ['pending, approved, declined, completed, cancelled']);

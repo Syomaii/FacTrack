@@ -61,6 +61,7 @@
                     <form action="{{ route('students.reserved') }}" method="POST">
                         @csrf
 
+                        <!-- Hidden Equipment ID -->
                         <input type="hidden" id="equipment_id" name="equipment_id"
                             value="{{ old('equipment_id', $selectedEquipment->id ?? '') }}">
 
@@ -103,9 +104,17 @@
                                 placeholder="Select reservation date" required>
                         </div>
 
+                        <div class="mb-3">
+                            <label for="expectedReturnDate" class="form-label">Expected Return Date</label>
+                            <input type="text" id="expectedReturnDate" name="expected_return_date"
+                                class="form-control" placeholder="Select expected return date" required>
+                        </div>
+
+
                         <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary w-100 mt-3">Reserve Equipment</button>
                     </form>
+
 
 
                 </div>
@@ -123,6 +132,11 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize Flatpickr for start and end date inputs
         flatpickr("#reservationDate", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+        });
+
+        flatpickr("#expectedReturnDate", {
             enableTime: true,
             dateFormat: "Y-m-d H:i",
         });
@@ -146,18 +160,22 @@
                         equipmentDetails.innerHTML = '';
                         data.equipments.forEach(equipment => {
                             equipmentDetails.innerHTML += `
-                            <div class="mb-3 p-2 border rounded equipment-item" onclick="selectEquipment(${equipment.id}, '${equipment.name}', '${equipment.image}', '${equipment.brand}', '${equipment.status}', '${equipment.serial_no}', '${equipment.facility}')">
-                                <div class="text-center mb-3">
-                                    <img src="${equipment.image}" alt="${equipment.name}" class="img-fluid rounded" style="max-height: 200px;">
-                                </div>
-                                <p><strong>Name:</strong> ${equipment.name}</p>
-                                <p><strong>Brand:</strong> ${equipment.brand}</p>
-                                <p><strong>Status:</strong> ${equipment.status}</p>
-                                <p><strong>Serial Number:</strong> ${equipment.serial_no}</p>
-                                <p><strong>Facility:</strong> ${equipment.facility}</p>
-                                <p><strong>Description:</strong> ${equipment.description}</p>
+                        <div class="mb-3 p-2 border rounded">
+                            <div class="text-center mb-3">
+                                <img src="${equipment.image}" alt="${equipment.name}" class="img-fluid rounded" style="max-height: 200px;">
                             </div>
-                        `;
+                            <p><strong>Name:</strong> ${equipment.name}</p>
+                            <p><strong>Brand:</strong> ${equipment.brand}</p>
+                            <p><strong>Status:</strong> ${equipment.status}</p>
+                            <p><strong>Serial Number:</strong> ${equipment.serial_no}</p>
+                            <p><strong>Facility:</strong> ${equipment.facility}</p>
+                            <p><strong>Description:</strong> ${equipment.description}</p>
+                            <button class="btn btn-primary select-equipment" 
+                                    onclick="selectEquipment(${equipment.id}, '${equipment.name}', '${equipment.image}', '${equipment.brand}', '${equipment.status}', '${equipment.serial_no}', '${equipment.facility}')">
+                                Select Equipment
+                            </button>
+                        </div>
+                    `;
                         });
 
                         // Update pagination controls
@@ -166,8 +184,8 @@
                         nextPage.disabled = !data.nextPage;
                     } else {
                         equipmentDetails.innerHTML = `
-                        <p class="text-muted text-center">No equipment found for the searched brand. Please try another search.</p>
-                    `;
+                    <p class="text-muted text-center">No equipment found for the searched query. Please try another search.</p>
+                `;
                         paginationControls.style.display = 'none';
                     }
                 })
@@ -176,6 +194,7 @@
                     searchMessage.textContent = 'An error occurred. Please try again.';
                 });
         }
+
 
         equipmentSearch.addEventListener('input', function() {
             const query = equipmentSearch.value.trim();
@@ -203,18 +222,30 @@
         });
 
         // Function to handle equipment selection
-        window.selectEquipment = function(id, name) {
+        window.selectEquipment = function(id, name, image, brand, status, serial_no, facility) {
             // Update the hidden input field with the selected equipment ID
             const equipmentIdField = document.getElementById('equipment_id');
-            const equipmentSearchField = document.getElementById('equipmentSearch');
+            equipmentIdField.value = id;
 
-            if (equipmentIdField && equipmentSearchField) {
-                equipmentIdField.value = id; // Set the equipment ID
-                equipmentSearchField.value = name; // Update the search input with the selected name
+            // Display the selected equipment details
+            const equipmentDetails = document.getElementById('equipmentDetails');
+            equipmentDetails.innerHTML = `
+        <div class="mb-3 p-2 border rounded">
+            <div class="text-center mb-3">
+                <img src="${image}" alt="${name}" class="img-fluid rounded" style="max-height: 200px;">
+            </div>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Brand:</strong> ${brand}</p>
+            <p><strong>Status:</strong> ${status}</p>
+            <p><strong>Serial Number:</strong> ${serial_no}</p>
+            <p><strong>Facility:</strong> ${facility}</p>
+            <p class="text-success">This equipment has been selected for reservation.</p>
+        </div>
+    `;
 
-                console.log('Selected Equipment ID:', id); // Debugging
-            }
+            console.log(`Equipment selected: ID ${id}, Name ${name}`);
         };
+
 
 
         equipmentSearch.addEventListener('input', function() {
