@@ -48,7 +48,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/student-dashboard', [StudentController::class, 'studentDashboard'])->name('student.dashboard');
         Route::get('/student-profile/{id}', [StudentController::class, 'profile'])->name('student.profile');
         Route::get('/reserve-equipment', [ReservationController::class, 'reserveEquipment'])->name('student.reserve_equipment');
+        Route::get('/api/search-equipment', [ReservationController::class, 'searchEquipment']);
         Route::get('/profile/{id}', [StudentController::class, 'profile'])->name('student.profile');
+        Route::post('/reservations', [ReservationController::class, 'reserved'])->name('students.reserved');
+
         
     });
 
