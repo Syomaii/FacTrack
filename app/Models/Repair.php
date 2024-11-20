@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Repair extends Model
+
+
 {
+    use Notifiable;
+    
     protected $table = "repairs";
     protected $fillable = [
         'equipment_id',

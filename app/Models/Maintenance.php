@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Maintenance extends Model
 {
+    use Notifiable;
     protected $table = "maintenance";
     protected $fillable = [
         'equipment_id',

@@ -24,7 +24,7 @@ class Students extends Model
         'department',
     ];
 
-    protected $primaryKey = 'id_no';
+    protected $primaryKey = 'id';
 
     public $incrementing = false;
 

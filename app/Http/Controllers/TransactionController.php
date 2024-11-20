@@ -27,8 +27,8 @@ class TransactionController extends Controller
     {
         $search = $request->get('id');
      
-        $result = Students::where('id_no', 'LIKE',  $search . '%')->orderBy('id_no')
-        ->pluck('id_no');
+        $result = Students::where('id', 'LIKE',  $search . '%')->orderBy('id')
+        ->pluck('id');
           
         return response()->json($result);
     }
@@ -38,7 +38,7 @@ class TransactionController extends Controller
         $id = trim($id, '{}');
         Log::info("Fetching details for cleaned ID: " . $id);
         
-        $student = Students::where('id_no', $id)->first(['firstname', 'lastname', 'department']);
+        $student = Students::where('id', $id)->first(['firstname', 'lastname', 'department']);
         
         if ($student) {
             return response()->json($student);
@@ -95,7 +95,7 @@ class TransactionController extends Controller
             'title' => 'Borrow Details',
         ];
 
-        $student = Students::where('id_no', $data['borrowers_id_no'])->first();
+        $student = Students::where('id', $data['borrowers_id_no'])->first();
             
         if (!$student) {
             return redirect()->back()->withErrors(['msg' => 'Student record not found.']);
@@ -442,7 +442,7 @@ class TransactionController extends Controller
                     ->latest()
                     ->first();
 
-                $student = Students::where('id_no', $borrow->borrowers_id_no)->first();
+                $student = Students::where('id', $borrow->borrowers_id_no)->first();
                     
                 if (!$student) {
                     return redirect()->back()->withErrors(['msg' => 'Student record not found.']);

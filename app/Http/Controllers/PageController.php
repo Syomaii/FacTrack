@@ -64,7 +64,8 @@ class PageController extends Controller
     }
     
     public function notifications(){
-        return view('notifications')->with('title', 'Notifications');
+        $notifications = Auth::check() ? Auth::user()->notifications()->get() : collect();
+        return view('notifications', compact('notifications'))->with('title', 'Notifications');
     }
     
 
@@ -242,8 +243,9 @@ class PageController extends Controller
     }
 
     public function addStudent()
-{
-    return view('students/add_student')->with('title', 'Add Student');
-}
+    {
+        $offices = Office::all();
+        return view('students/add_student', compact('offices'))->with('title', 'Add Student');
+    }
 
 }

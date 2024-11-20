@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\RegisteredUserMail;
 use App\Models\Borrower;
 use App\Models\Designation;
+use App\Models\Office;
 use App\Models\Students;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -61,7 +62,7 @@ class StudentController extends Controller
     public function studentProfile($id)
     {
         $student = Students::where('id', $id)->first();
-        $studentBorrowHistory = Borrower::with('equipment')->where('borrowers_id', $id)->get();
+        $studentBorrowHistory = Borrower::with('equipment')->where('borrowers_id_no', $id)->get();
 
         if (!$student) {
             abort(404); 
@@ -81,28 +82,34 @@ class StudentController extends Controller
             'course' => 'required|string|max:255',
             'department' => 'required|string|max:255',
         ]);
-        
-        User::create([
-            'student_id' => $data['id'],
-            'image' => 'images/profile_pictures/default-profile.png',
-            'firstname' => ucwords($data['firstname']),
-            'lastname' => ucwords($data['lastname']),
-            'email' => $data['email'],
-            'password' => bcrypt($data['id']), 
-            'type' => 'student', 
-            'status' => 'active',
-            'mobile_no' => 'none', 
-        ]);
+        $office = Office::where('type', '=', 'department')->first();
+        $officeId = $office ? $office->id : null;
         
         Students::create([
             'id' => $data['id'],
-            'firstname' => ucwords($data['firstname']),
-            'lastname' => ucwords($data['lastname']),
+            'firstname' => ucwords(strtolower($data['firstname'])),
+            'lastname' => ucwords(strtolower($data['lastname'])),
             'gender' => $data['gender'],
             'email' => $data['email'],
             'course' => strtoupper($data['course']), 
             'department' => ucwords($data['department']), 
         ]);
+
+        User::create([
+            'student_id' => $data['id'] ?? null,
+            'designation_id' => 3,
+            'office_id' => $officeId,
+            'image' => 'images/profile_pictures/default-profile.png',
+            'firstname' => ucwords(strtolower($data['firstname'])),
+            'lastname' => ucwords(strtolower($data['lastname'])),
+            'email' => $data['email'],
+            'password' => bcrypt($data['id']), // Default password (should be updated by the user later)
+            'type' => 'student', // Assign role as 'student'
+            'status' => 'active',
+            'mobile_no' => 'none', // Optional: Link to the Student ID
+        ]);
+        
+        
 
         return redirect('/add-student')->with('success', 'Student added successfully.');
     }

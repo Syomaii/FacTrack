@@ -8,7 +8,7 @@ use App\Notifications\MaintenanceDueNotification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Auth;
 
-class CheckMaintenanceDue extends Command
+class CheckMaintenanceDueCommand extends Command
 {
     /**
      * The name and signature of the console command.
