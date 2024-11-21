@@ -132,9 +132,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/disposed-equipments', [ReportController::class, 'disposedEquipmentReports']);
         Route::get('/disposed-equipment-reports', [ReportController::class, 'setDateDisposedEquipmentReports'])->name('disposed.equipment.reports');
         Route::get('/borrowers-log', [PageController::class, 'borrowersLog'])->name('borrowersLog');
-        // In your routes/web.php
-        Route::get('/equipment-search', [EquipmentController::class, 'equipmentSearch'])->name('equipment_search');
-        Route::get('/borrower-search', [PageController::class, 'borrowerSearch'])->name('borrower_search');
+        Route::get('/reservations-log', [ReservationController::class, 'reservationLogs'])->name('reservationsLog');
+        Route::get('/reservation-details/{id}', [ReservationController::class, 'reservationDetails'])->name('reservation.reservation_details');
         
         // Route::get('/product-details/{id}', [PageController::class, 'productDetails'])->name('product.details');
         

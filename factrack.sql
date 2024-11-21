@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 14, 2024 at 07:33 AM
+-- Generation Time: Nov 20, 2024 at 08:10 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -31,11 +31,11 @@ CREATE TABLE `borrows` (
   `id` int(10) UNSIGNED NOT NULL,
   `equipment_id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
-  `borrowers_id_no` int(10) UNSIGNED NOT NULL,
+  `borrowers_id_no` varchar(255) NOT NULL,
   `borrowers_name` varchar(100) NOT NULL,
   `department` varchar(50) NOT NULL,
   `borrowed_date` datetime NOT NULL,
-  `expected_returned_date` date NOT NULL,
+  `expected_returned_date` datetime NOT NULL,
   `returned_date` datetime DEFAULT NULL,
   `status` varchar(50) NOT NULL,
   `purpose` varchar(50) NOT NULL,
@@ -49,9 +49,32 @@ CREATE TABLE `borrows` (
 --
 
 INSERT INTO `borrows` (`id`, `equipment_id`, `user_id`, `borrowers_id_no`, `borrowers_name`, `department`, `borrowed_date`, `expected_returned_date`, `returned_date`, `status`, `purpose`, `remarks`, `created_at`, `updated_at`) VALUES
-(1, 4, 2, 9445040, 'Angelica Eve Angel', 'College of Computer Studies', '2024-11-06 17:14:19', '2024-11-08', '2024-11-06 17:21:00', 'Borrowed', 'huwam', 'okay na', '2024-11-06 09:14:19', '2024-11-06 09:22:06'),
-(2, 3, 2, 14708127, 'Lexer John Amorcillo', 'College of Computer Studies', '2024-11-14 13:35:48', '2024-11-15', '2024-11-14 13:46:00', 'Returned', 'huwam', 'okay ra', '2024-11-14 05:35:48', '2024-11-14 05:46:39'),
-(3, 3, 2, 18004473, 'John Colleen Saberon', 'College of Computer Studies', '2024-11-14 13:48:04', '2024-11-15', NULL, 'Borrowed', 'huwam', 'The day the equipment is Borrowed', '2024-11-14 05:48:04', '2024-11-14 05:48:04');
+(1, 1, 2, '18035147', 'John Lyndon Ibaoc', 'College Of Computer Studies', '2024-11-20 22:13:17', '2024-11-21 00:00:00', '2024-11-20 22:14:00', 'Returned', 'huwam', 'uli na nako', '2024-11-20 14:13:17', '2024-11-20 14:15:06'),
+(2, 1, 2, '19066729', 'Christian Jay Putolss', 'College Of Computer Studies', '2024-11-20 23:57:01', '2024-11-20 00:00:00', '2024-11-21 03:08:00', 'Returned', 'huwam', 'ok', '2024-11-20 15:57:01', '2024-11-20 19:08:33');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cache`
+--
+
+CREATE TABLE `cache` (
+  `key` varchar(255) NOT NULL,
+  `value` mediumtext NOT NULL,
+  `expiration` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cache_locks`
+--
+
+CREATE TABLE `cache_locks` (
+  `key` varchar(255) NOT NULL,
+  `owner` varchar(255) NOT NULL,
+  `expiration` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -70,8 +93,9 @@ CREATE TABLE `designations` (
 
 INSERT INTO `designations` (`id`, `name`) VALUES
 (1, 'Dean'),
-(2, 'Working Student\r\n'),
-(3, 'Maintenance Personnel');
+(2, 'Working Student'),
+(3, 'Student'),
+(4, 'Maintenance Personnel');
 
 -- --------------------------------------------------------
 
@@ -84,6 +108,7 @@ CREATE TABLE `disposed` (
   `equipment_id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `disposed_date` datetime NOT NULL,
+  `received_by` varchar(100) NOT NULL,
   `remarks` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -97,6 +122,12 @@ CREATE TABLE `disposed` (
 
 CREATE TABLE `donated` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `equipment_id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `donated_date` datetime NOT NULL,
+  `condition` varchar(50) NOT NULL,
+  `recipient` text NOT NULL,
+  `remarks` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -120,6 +151,7 @@ CREATE TABLE `equipments` (
   `image` varchar(255) NOT NULL,
   `status` varchar(50) NOT NULL,
   `owned_by` varchar(50) NOT NULL,
+  `next_due_date` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -128,13 +160,8 @@ CREATE TABLE `equipments` (
 -- Dumping data for table `equipments`
 --
 
-INSERT INTO `equipments` (`id`, `facility_id`, `user_id`, `brand`, `name`, `serial_no`, `description`, `acquired_date`, `code`, `image`, `status`, `owned_by`, `created_at`, `updated_at`) VALUES
-(2, 2, 2, 'hehe', 'hehe', '523424', 'hehe', '2024-10-31 00:00:00', '241110320323209', 'images/equipments/pc.png', 'In Maintenance', 'University', '2024-11-02 19:32:09', '2024-11-04 21:33:25'),
-(3, 2, 2, 'lenovo', 'pc2', '48945162', 'pc2', '2024-10-27 00:00:00', '241110320323316', 'images/equipments/pc.png', 'Borrowed', 'University', '2024-11-02 19:33:16', '2024-11-14 05:48:04'),
-(4, 3, 2, 'monoblock', 'chair', '89759486542', 'a plastic chair', '2024-10-29 00:00:00', '241110330624835', 'images/equipments/chair.jpeg', 'Available', 'University', '2024-11-02 22:48:35', '2024-11-06 09:22:06'),
-(5, 2, 2, 'acer', 'pc3', '6252688748574', 'a pc', '2024-10-29 00:00:00', '241110421022727', 'images/equipments/pc.png', 'In Maintenance', 'University', '2024-11-04 02:27:27', '2024-11-04 21:35:29'),
-(6, 2, 2, 'apple', 'mac', '5647687867486', 'a mac pc', '2024-10-29 00:00:00', '241110421022933', 'images/equipments/pc.png', 'Available', 'University', '2024-11-04 02:29:33', '2024-11-04 21:37:37'),
-(7, 2, 2, 'wala', 'wala', '64768687568', 'wala', '2024-10-29 00:00:00', '241110721325030', 'images/equipments/Screenshot (1).png', 'Available', 'University', '2024-11-07 05:50:30', '2024-11-07 05:50:30');
+INSERT INTO `equipments` (`id`, `facility_id`, `user_id`, `brand`, `name`, `serial_no`, `description`, `acquired_date`, `code`, `image`, `status`, `owned_by`, `next_due_date`, `created_at`, `updated_at`) VALUES
+(1, 1, 2, 'Dell', 'Monitor sq12314f1sda', '97867878345', 'A monitor', '2024-11-20 00:00:00', '241112012124234', 'images/equipments/dell-monitor.jpeg', 'Available', 'University', '2024-12-20', '2024-11-20 13:42:34', '2024-11-20 19:08:33');
 
 -- --------------------------------------------------------
 
@@ -157,8 +184,10 @@ CREATE TABLE `facilities` (
 --
 
 INSERT INTO `facilities` (`id`, `office_id`, `name`, `description`, `type`, `created_at`, `updated_at`) VALUES
-(2, 1, 'C1s', 'Computer laboratory 12s', 'office', '2024-10-22 23:55:03', '2024-11-08 04:27:16'),
-(3, 1, 'Stock Room', 'Stock Room', 'room', '2024-11-02 22:47:43', '2024-11-02 22:47:43');
+(1, 1, 'C2', 'C2', 'laboratory', '2024-11-20 13:39:41', '2024-11-20 13:39:41'),
+(2, 1, 'C1', 'Computer Lab 1', 'laboratory', '2024-11-20 13:39:56', '2024-11-20 13:39:56'),
+(3, 1, 'Room 212', 'Room', 'room', '2024-11-20 13:40:13', '2024-11-20 13:40:13'),
+(4, 1, 'Dean\'s Office', 'office of the dean', 'office', '2024-11-20 13:40:25', '2024-11-20 13:40:25');
 
 -- --------------------------------------------------------
 
@@ -174,20 +203,13 @@ CREATE TABLE `maintenance` (
   `returned_date` datetime DEFAULT NULL,
   `remarks` varchar(255) NOT NULL,
   `issue` varchar(255) NOT NULL,
-  `action_taken` varchar(255) DEFAULT NULL,
-  `recommendations` varchar(255) DEFAULT NULL,
+  `action_taken` text DEFAULT NULL,
+  `recommendations` text DEFAULT NULL,
+  `technician` varchar(255) DEFAULT NULL,
   `status` varchar(50) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `maintenance`
---
-
-INSERT INTO `maintenance` (`id`, `equipment_id`, `user_id`, `maintained_date`, `returned_date`, `remarks`, `issue`, `action_taken`, `recommendations`, `status`, `created_at`, `updated_at`) VALUES
-(1, 6, 2, '2024-11-05 00:00:00', '2024-11-05 05:36:00', 'asd', 'asd', 'asd', 'asd', 'okay', '2024-11-04 21:36:20', '2024-11-04 21:37:01'),
-(2, 6, 2, '2024-11-05 00:00:00', '2024-11-05 05:37:00', 'asdasd', 'asd', 'asd', 'asd', 'okay', '2024-11-04 21:37:20', '2024-11-04 21:37:37');
 
 -- --------------------------------------------------------
 
@@ -224,20 +246,23 @@ CREATE TABLE `migrations` (
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (1, '2024_07_31_181510_create_offices_table', 1),
 (2, '2024_07_31_181522_create_designations_table', 1),
-(3, '2024_07_31_181529_create_users_table', 1),
-(4, '2024_07_31_181542_create_facilities_table', 1),
-(5, '2024_07_31_181552_create_equipments_table', 1),
-(7, '2024_07_31_181629_create_repairs_table', 1),
+(3, '2024_07_31_181528_create_students_table', 1),
+(4, '2024_07_31_181529_create_users_table', 1),
+(5, '2024_07_31_181542_create_facilities_table', 1),
+(6, '2024_07_31_181552_create_equipments_table', 1),
+(7, '2024_07_31_181613_create_maintenance_table', 1),
+(8, '2024_07_31_181629_create_repairs_table', 1),
+(9, '2024_07_31_181635_create_borrows_table', 1),
 (10, '2024_07_31_181650_create_disposed_table', 1),
 (11, '2024_08_05_081759_create_donated_table', 1),
 (12, '2024_08_05_081814_create_timeline_table', 1),
 (13, '2024_08_07_170136_create_notifications_table', 1),
 (14, '2024_10_19_113619_add_remember_token_to_users_table', 1),
-(16, '2024_07_31_181613_create_maintenance_table', 2),
-(20, '2024_07_31_181634_create_students_table', 3),
-(21, '2024_11_07_052748_add_last_login_at_to_users_table', 4),
-(22, '2024_11_03_005817_create_personal_access_tokens_table', 5),
-(23, '2024_11_14_041207_create_maintenance_schedules_table', 6);
+(15, '2024_11_01_114623_create_personal_access_tokens_table', 1),
+(16, '2024_11_02_065807_create_password_resets_table', 1),
+(17, '2024_11_14_041207_create_maintenance_schedules_table', 1),
+(18, '2024_11_15_014603_create_cache_table', 1),
+(20, '2024_07_31_181530_create_reservation_table', 2);
 
 -- --------------------------------------------------------
 
@@ -255,6 +280,15 @@ CREATE TABLE `notifications` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `data`, `read_at`, `created_at`, `updated_at`) VALUES
+('62d30cd0-68ab-4338-9c4f-fb6ac589fb4d', 'App\\Notifications\\OverdueEquipmentsNotification', 'App\\Models\\User', 2, '{\"title\":\"Overdue Equipment Notification\",\"message\":\"A student has been notified about overdue equipment: Christian Jay Putolss\"}', '2024-11-20 18:23:11', '2024-11-20 17:53:32', '2024-11-20 18:23:11'),
+('9e542dd5-5b47-4baf-8b7c-817bd015b3dc', 'App\\Notifications\\OverdueEquipmentsNotification', 'App\\Models\\User', 2, '{\"title\":\"Overdue Equipment Notification\",\"message\":\"A student has been notified about overdue equipment: Christian Jay Putolss\"}', '2024-11-20 18:10:49', '2024-11-20 16:16:32', '2024-11-20 18:10:49'),
+('9fd1a664-c8f2-499c-b1d2-e31d7373078a', 'App\\Notifications\\OverdueEquipmentsNotification', 'App\\Models\\User', 2, '{\"title\":\"Overdue Equipment Notification\",\"message\":\"A student has been notified about overdue equipment: Christian Jay Putolss\"}', '2024-11-20 18:22:55', '2024-11-20 18:14:53', '2024-11-20 18:22:55');
 
 -- --------------------------------------------------------
 
@@ -276,13 +310,19 @@ CREATE TABLE `offices` (
 --
 
 INSERT INTO `offices` (`id`, `name`, `description`, `type`, `created_at`, `updated_at`) VALUES
-(1, 'College of Computer Study', 'CCS', 'department', '2024-10-22 20:59:55', '2024-11-08 04:28:45'),
-(2, 'College of Criminology', 'CoCs', 'department', '2024-10-22 21:00:06', '2024-10-29 07:06:12'),
-(3, 'College of Teacher Education', 'CTE', 'department', '2024-10-29 07:10:28', '2024-10-29 07:10:28'),
-(4, 'College of Nursing', 'CoN', 'department', '2024-11-07 11:15:54', '2024-11-07 11:15:54'),
-(5, 'Office of the Maintenance', 'Maintenance', 'office', '2024-11-07 11:17:34', '2024-11-07 11:17:34'),
-(6, 'Office of the vice president', 'ovp', 'office', '2024-11-10 03:36:08', '2024-11-10 03:36:08'),
-(7, 'Office Of The President', 'oop', 'office', '2024-11-10 03:42:40', '2024-11-10 03:42:40');
+(1, 'College Of Computer Studies', 'CCS', 'department', '2024-11-19 07:34:50', '2024-11-19 07:34:50');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_reset_tokens`
+--
+
+CREATE TABLE `password_reset_tokens` (
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -303,14 +343,6 @@ CREATE TABLE `personal_access_tokens` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `personal_access_tokens`
---
-
-INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `expires_at`, `created_at`, `updated_at`) VALUES
-(1, 'App\\Models\\User', 5, 'ResetPasswordToken', '43f64f07c3c4525bf34a0dd78fd8817d13242a019f856c9c7b3627cc8b52b6db', '[\"*\"]', NULL, NULL, '2024-11-07 06:01:38', '2024-11-07 06:01:38'),
-(2, 'App\\Models\\User', 6, 'ResetPasswordToken', '8e68d4f2b0005bb3d7a2ea0620e04b0cba8e2d45439e0d0655cba0fa6b031cbc', '[\"*\"]', NULL, NULL, '2024-11-09 13:22:36', '2024-11-09 13:22:36');
-
 -- --------------------------------------------------------
 
 --
@@ -323,8 +355,31 @@ CREATE TABLE `repairs` (
   `user_id` int(10) UNSIGNED NOT NULL,
   `repaired_date` datetime NOT NULL,
   `returned_date` datetime DEFAULT NULL,
-  `remarks` varchar(255) NOT NULL,
+  `remarks` text NOT NULL,
+  `issue` text NOT NULL,
+  `action_taken` text DEFAULT NULL,
+  `recommendations` text DEFAULT NULL,
+  `technician` varchar(255) DEFAULT NULL,
   `status` varchar(50) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reservation`
+--
+
+CREATE TABLE `reservation` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `student_id` varchar(255) NOT NULL,
+  `equipment_id` int(10) UNSIGNED NOT NULL,
+  `office_id` int(10) UNSIGNED NOT NULL,
+  `reservation_date` datetime NOT NULL,
+  `expected_return_date` datetime NOT NULL,
+  `status` enum('pending','approved','declined','completed','cancelled') NOT NULL,
+  `purpose` text NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -336,13 +391,14 @@ CREATE TABLE `repairs` (
 --
 
 CREATE TABLE `students` (
-  `id_no` varchar(255) NOT NULL,
+  `id` varchar(255) NOT NULL,
   `firstname` varchar(50) NOT NULL,
   `lastname` varchar(50) NOT NULL,
   `gender` varchar(1) NOT NULL,
   `email` varchar(50) NOT NULL,
   `course` varchar(50) NOT NULL,
   `department` varchar(100) NOT NULL,
+  `overdue_count` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -351,264 +407,51 @@ CREATE TABLE `students` (
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`id_no`, `firstname`, `lastname`, `gender`, `email`, `course`, `department`, `created_at`, `updated_at`) VALUES
-('09445040', 'Angelica Eve', 'Angel', 'F', 'kaaiyukichan1417@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('10480770', 'Tyler Joshua', 'De Leon', 'M', 'tylerjoshuadeleon@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('11532231', 'Aldrin', 'Baclohan', 'M', 'aldrin.dino.baclohan@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('13607924', 'John April', 'Patalinghug', 'M', 'johnapril1996@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('13638069', 'Janvel', 'Andrino', 'M', 'janzskies13@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('14708127', 'Lexer John', 'Amorcillo', 'M', 'lexeramorcillo@gmail.com', 'BSIT 4', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('15462312', 'Test5', 'Test5', 'M', 'test5@test.com', 'test', 'Testing Department', '2024-11-12 04:30:54', '2024-11-12 04:30:54'),
-('15762412', 'Zariell Emanuele Ondree', 'Averilla', 'M', 'ondreeaverilla@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('16523214', 'Test4', 'Test4', 'M', 'test4@test.com', 'test', 'Testing Department', '2024-11-12 04:30:54', '2024-11-12 04:30:54'),
-('16880684', 'Vingie', 'Wenceslao', 'M', 'parasofficiall@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('17824563', 'Test2', 'Test2', 'M', 'test2@test.com', 'test', 'Testing Department', '2024-11-12 04:30:54', '2024-11-12 04:30:54'),
-('17917790', 'Benedict', 'Avenido', 'M', 'benedictavenido1320@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('17918624', 'Francis Miguel', 'Diano', 'M', 'hotxspot47@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('17928441', 'Uriel Jorosh', 'Garcia', 'M', 'jojostand2020@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('17931635', 'Jade Mykel', 'Ventic', 'M', 'jmykelvenz@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('17933193', 'Patrick Aiken', 'Aredidon', 'M', 'sacc39301@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('17939257', 'Vaneth Mea', 'Cadivida', 'F', 'van.cadivida@yahoo.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('18004473', 'John Colleen', 'Saberon', 'M', 'johnsaberon178@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('18011296', 'Veejay', 'Cuizon', 'M', 'veejaycuizon24@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('18778148', 'Test1', 'Test1', 'M', 'test1@test.com', 'test', 'Testing Department', '2024-11-12 04:30:54', '2024-11-12 04:30:54'),
-('18976811', 'Dominic', 'Tacatani', 'M', 'greatdominic143@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('18977496', 'Charles Thom', 'Matidios', 'M', 'charlesthommatidios@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('18977595', 'Joseph Ivan Jr.', 'Quisido', 'M', 'QUISIDOJOSEPH23@GMAIL.COM', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('18990820', 'Via', 'Gelig', 'F', 'viagelig01@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('18991968', 'Rey', 'Comendador', 'M', 'reycomendador4@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('19067898', 'Test', 'Test', 'M', 'test@test.com', 'test', 'Testing Department', '2024-11-12 04:30:54', '2024-11-12 04:30:54'),
-('19069913', 'Kent Ryann', 'Bongcaron', 'M', 'Bongcaronk@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('19074764', 'Francis Dave', 'Gelborion', 'M', 'gelboriondave@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('19077247', 'Keir', 'Gom-os', 'M', 'keirgomos@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('19101245', 'Jundix', 'Pepino', 'M', 'julixpepino3@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('19101773', 'Chrystal Jem', 'Gadiano', 'F', 'jemgadiano09@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('19107044', 'Maureen', 'Simafranca', 'F', 'Maurhianasimafranca@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('19125244', 'John Carlo', 'Diocampo', 'M', 'jcdiocampo23@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('19132158', 'Agel', 'Genita', 'F', 'kellybrooke734@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('19138114', 'Larry', 'Pino', 'M', 'walablayf@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('19253678', 'Test3', 'Test3', 'M', 'test3@test.com', 'test', 'Testing Department', '2024-11-12 04:30:54', '2024-11-12 04:30:54'),
-('20147073', 'Irene', 'Ferrer', 'M', 'ferrerirenerigodo@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('20148408', 'Twinky', 'Casidsid', 'F', 'casidsidtwinky.2004@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('20150145', 'Jes Vincent', 'Sungahid', 'M', 'sungahidjes@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('20152039', 'Jessiah France', 'Armero', 'M', 'francearmero663@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('20152063', 'Jose Danielle', 'Inocentes', 'M', 'daniel.inocentes81@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('20152590', 'Jameskevin', 'Velasco', 'M', 'lkhevinlvelasco@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('20154343', 'Ronan', 'Madanguit', 'M', 'madanguitronan@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('20154601', 'Shaen Jhee', 'Garcia', 'M', 'shaenjhee@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('20155501', 'Kemp', 'Jumao-as', 'M', 'kempjumaoas@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('20157636', 'Frix Adrian', 'De Loyola', 'M', 'frixadrian2@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('20157653', 'Jenifer', 'Pongasi', 'F', 'jeniferpongasi18@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('20157908', 'Gave', 'Capuras', 'M', 'gavesarupac@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('20158527', 'Angel Marie', 'Sabido', 'F', 'sabidoangel.uc@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('20158623', 'Maryneil Jade', 'Sevilla', 'F', 'sevillamaryneil.uc@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('20158714', 'Ivan Jethro', 'Dungog', 'M', 'dungogjethro@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('20158757', 'Kirby', 'Estimada', 'M', 'kirbsrigonan@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('20159732', 'Allan Jay', 'Villanueva', 'M', 'myuserisinvalid@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('20166642', 'Vince', 'YbaÑez', 'M', 'vinzzybanez@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('20173806', 'Vivien Heart', 'Conson', 'F', 'vivienhearty@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('20174912', 'Derick', 'Aton', 'M', 'derickaton12345@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('20176098', 'Leande May', 'Soronio', 'F', 'leandemays@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('20177766', 'Vina May', 'Blen', 'M', 'blenvinamay580@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('20181099', 'Lovelyn', 'Gula', 'M', 'gulalovelyn205@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('20182301', 'Charles Vincent', 'Amodia', 'M', 'amodia.charlesvincent@gmail.com', 'BSIT 4', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('20183604', 'Calvin Paul', 'Mendoza', 'M', 'ultramite.98@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('22200943', 'Aaron', 'Cumahig', 'M', 'aaroncumahig12@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('22201537', 'Argee Boy', 'Paquibot', 'M', 'aboy.paqs@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('22202113', 'John Anakin', 'Injug', 'M', 'johninjug56@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('22202519', 'Daniel Kane Isidore', 'Mapano', 'M', 'mapano.daniel@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('22203475', 'Joemar', 'Ygot', 'M', 'joemarygot@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('22203483', 'John Henry', 'Tero', 'M', 'johnhenrytero007@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('22203517', 'Lloyd Christopher ', 'Singcol', 'M', 'kbager263@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('22204226', 'Stephen John', 'De Los Santos', 'M', 'stephjohndelossantos@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('22204366', 'Jan David', 'Capuyan', 'M', 'ezdavidz789@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('22204374', 'Erika Gabrielle', 'Samson', 'F', 'kaisamson.uc@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('22204390', 'John Angelo', 'Ayson', 'M', 'johnangeloayson@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('22205942', 'Glord', 'Hiyas', 'M', 'hiyasglord@gmail.com', 'BSIT 4', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('22207708', 'Jaycee Kent', 'Cabansag', 'M', 'jayceekentcabansag123@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('22213532', 'Alexandre', 'Paquibot', 'M', 'paquibotalexandre00@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('22214209', 'Esper Jona', 'Mandigma', 'F', 'espermandigz@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('22215727', 'Allyssa Faith', 'Ejares', 'F', 'allyejares24@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('22216618', 'Kaycee', 'Roamar', 'F', 'roamarkaycee@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('22222111', 'Sheilmae Jean', 'Furog', 'F', 'sheilmaefurog@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('22222145', 'Richie', 'Caracas', 'M', 'richiecaracas83@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('22222681', 'John Carlo', 'Borgueta', 'M', 'johncarloborgueta@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('22223390', 'Kendrick Emmanuel', 'Oanes', 'M', 'keooanes@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('22223788', 'John Michael', 'Lim', 'M', 'johnmichaellim041202@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('22225528', 'Nichol Angelo', 'Degamo', 'M', 'angelo07232002@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('22226054', 'Lemuel', 'Mangao', 'M', 'lemuelmangao69@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('22226930', 'Harold', 'Gutierrez', 'M', 'growtopiagusion@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('22227169', 'Jhermaine Rob', 'Landeza', 'M', 'jhermainerb1@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('22228894', 'Vladimir Clint', 'Catigan', 'M', 'therealvlad3@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('22235170', 'Rizza Joy', 'Aradillos', 'F', 'ilex.aradillos@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('22236368', 'Mark Andrew', 'Sencil', 'M', 'sencilmarkandrew12@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('22242077', 'Kevser', 'Emanet', 'F', 'kevseremttt@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('22244735', 'Sara', 'Pahara', 'F', 'paharasara@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23206824', 'Nimu', 'Gonzaga', 'M', 'nimugonzaga@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23206832', 'Riel Maico', 'Aparre', 'M', 'Rielmaicoaparre1@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23207194', 'Gwen', 'Dupal-ag', 'F', 'gwenixwinters1803@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23207723', 'Carla Jay', 'Gersamio', 'F', 'carlajaygersamio081@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23208689', 'Kenjade', 'Baring', 'M', 'kenjade1baring2003@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23209091', 'John Humer ', 'Melendres', 'M', 'humermelendres@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23209794', 'Lei Dennise ', 'Balunan', 'F', 'balunanleidennise@gmail.com', 'BSIT 3', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('23210651', 'James Ivan', 'Quilantang', 'M', 'ivanquilantang303@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23210776', 'Liza Mae', 'Balunan', 'F', 'lizamaebalunan17@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23210792', 'Jimarnie', 'Branzuela', 'M', 'jimarnie.branzuela@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23211774', 'Andrei Joshua', 'Neri', 'M', 'andreineri2002@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23212731', 'Sanzibel', 'Makiling', 'F', 'sanzibelmakiling03@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('23212848', 'Jazryl', 'Padin', 'F', 'jazrylpadin@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23213176', 'Samantha Khaye ', 'Ymbong', 'F', 'icedc156@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23213200', 'Mark Darryl', 'Gabito', 'M', 'darrylgabito03@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23213325', 'Christian Rey', 'Fuentes', 'M', 'myklax23@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23213572', 'Ralph Christian', 'De Jesus', 'M', 'dj.ralphyan@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23214042', 'Ares Daniel', 'Marte', 'M', 'aresdmarte@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23214588', 'Mark Jorland', 'Iway', 'M', 'markjorlandiway1234@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23215692', 'Rumart ', 'Tatoy', 'M', 'rumartbarontatoyuclm@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23215825', 'Gianne Isabelle', 'Augusto', 'F', 'gianneaisabelle@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23215833', 'John Clarence', 'Belarmino', 'M', 'clarencebelarmino@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23216047', 'Kristine Mae', 'NuÑeza', 'F', 'KMNUNEZA@SYMONSYSTEM.COM', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23216591', 'Kendrick', 'Lazo', 'M', 'visionperipheral69@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23216799', 'Chryssdale Heart', 'Allasgo', 'M', 'chryssdaleheartallasgo@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23217508', 'Kenneth', 'Fernandez', 'M', 'fernandezkenneth654@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23218811', 'Aj', 'Villamor', 'M', 'ajvillamor45@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23218928', 'Jayred Deil', 'Mahasol', 'M', 'jayredmahasol@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23218944', 'Kezekiah', 'Yatong', 'F', 'kezekiahy@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23219504', 'Junriel', 'Casul', 'M', 'jpopcasul@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23221567', 'Francis Miguel', 'Formentera', 'M', 'francis.formentera29@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23221997', 'Chuck ', 'Ybalez ', 'M', 'shamsipad2022@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23224116', 'Rogiel', 'Dinoy', 'M', 'rogidinoy@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('23224702', 'Laleine ', 'Flores', 'F', 'floreslaleine009@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23224710', 'Jan Christopher', 'Obregon', 'M', 'janobregon857@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23224975', 'Joanna', 'Dimpas', 'F', 'joannadimpas182@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23225949', 'James Emmanuel', 'Embudo', 'M', 'embudojames4@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23226038', 'Angelito ', 'Berame ', 'M', 'angelberame712@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23226673', 'Ethanael', 'Tan', 'M', 'ethk3250@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23228851', 'Clemens', 'Neuda', 'M', 'clemensneuda13@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23229123', 'Alyssa', 'Sumile', 'F', 'alyssa.sumile18@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23229263', 'Janine ', 'Alolod', 'F', 'zaninyu11778@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23229339', 'Jerome', 'Ayong', 'M', 'jeromeayong405@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23231236', 'Luxury Landy', 'Joren', 'M', 'luxurylandy98@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23232242', 'Caryl', 'Dapanas', 'F', 'dapanascaryl@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23232457', 'Judy Lou', 'Cortes', 'F', 'judylou.cortes@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23234255', 'Jarcel Franz', 'Tubigon', 'M', 'Jarcelfranz@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23235211', 'Jhun Kenneth', 'Curacha', 'M', 'kennethcuracha018@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23235229', 'Seth', 'Alcos', 'M', 'sethalcos@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23236607', 'Briyce', 'Bentulan', 'M', 'brays0903@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23236730', 'Ivan', 'Cuyos', 'M', 'cuyosivan1@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23236896', 'Chad Michael', 'Sira', 'M', 'chadsira321@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23236912', 'Ken Lloyd ', 'Brazal', 'M', 'kenlloydbrazal@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23238009', 'Christy Mae', 'Manog', 'F', 'christy221mae@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23238165', 'Jesryle James', 'Agrabio', 'M', 'jesryleagrabio08@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23238413', 'Bern Dione ', 'Dioso', 'M', 'berndione03@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23239049', 'Mary Kris', 'Gaut', 'F', 'gmarykris663@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23239163', 'Jhon Axell', 'SeÑagan', 'M', 'sirjhonny147@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23240823', 'Miranda Lois ', 'Arriola', 'F', 'miranda.arriola29@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('23240922', 'John Paul ', 'Sanoria', 'M', 'akashikun14@yahoo.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23241664', 'Florence Easter ', 'Cuizon', 'F', 'cuizonflorence99@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23243637', 'Noriann', 'Catuburan', 'F', 'norianncatuburan4@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23245962', 'Joeharvey', 'Baguio', 'M', 'joeharveyb@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23245996', 'Vince Bernard', 'Gabaca', 'M', 'vince.gabaca1@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23246127', 'Kent', 'Amante', 'M', 'kentamante70@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23246267', 'Harven Raye ', 'Tampus', 'M', 'harvenraye.tampus2003@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23246390', 'Justine Ezekiel', 'Justiniani', 'M', 'jejustiniani2003@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23248669', 'Megan Ys ', 'Tepait ', 'M', 'meganclan2017@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23249121', 'Alyssa', 'Albiso', 'F', 'albisoalyssa8@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23249592', 'Louie Jay', 'Bonghanoy', 'M', 'louiejaybonghanoy69@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23251051', 'Lance', 'Jayme', 'M', 'lancejayme13@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23251077', 'Aldwyn John', 'Baisac', 'M', 'johnslem143@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23251259', 'NiÑa Regene', 'Lumapas', 'F', 'lumapasalex6@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23251275', 'Charmel', 'Buscar', 'M', 'charmelbuscar15@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23252216', 'Cris Dyford', 'Bonghanoy', 'M', 'dyforbonghanoy@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23252257', 'Vinz Angelo', 'Onde', 'M', 'vinz.onde@email.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23252810', 'Kevin John', 'Salimbangon', 'M', 'kelltdb38@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23255508', 'Danisse', 'Jumao-as', 'F', 'danissejumaoas30@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23255516', 'Monica Joy', 'Madrazo', 'F', 'monicaozardam@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23255920', 'Lany Fe', 'Nazareno ', 'F', 'nazarenolany22@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23255938', 'Mark NiÑo', 'Abayon', 'M', 'markheyabayon999@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23255953', 'Iggy', 'Martinez', 'M', 'kraziecj85@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23256035', 'Kean Gabriel', 'Diaz', 'M', 'keandiaz894@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23258320', 'Shiela Mae', 'Fabrigar', 'F', 'shiesfranky@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23259070', 'Stephen Nikkole', 'Lumban', 'M', 'lumbanstephen@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('23259161', 'Nick Casper', 'Tesado', 'M', 'caspertesado@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23259633', 'Vince Rodulph', 'Doming', 'M', 'vdoming70@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23259948', 'Earl Francis', 'Ong', 'M', 'earlfrancisong@gmail.com', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('23260888', 'Kento ', 'Futamata', 'M', 'kenfutamata123@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23261035', 'Russel', 'Longakit', 'M', 'Russel.longakit@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23261118', 'Fred Nykrow', 'Abordo', 'M', 'fredabordo25@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23261332', 'Shannen Rhey', 'Abellanosa', 'M', 'shannenrhey@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23262439', 'Flora May', 'Villarias', 'F', 'floramay_villarias@yahoo.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23264153', 'Mark Niel', 'Poro', 'M', 'jonas142poro@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('23266000', 'Carl Rj', 'Avenido', 'M', 'carlitoavenido81@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('23269665', 'Roswell Rey', 'Ceniza', 'M', 'cenizaroswellrey@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23269731', 'Stephen Hans', 'Amistoso', 'M', '21700382@usc.edu.ph', 'BSCS 4', 'College of Computer Studies', '2024-11-05 21:36:23', '2024-11-05 21:36:23'),
-('23270010', 'Glaisa Mae', 'Andales', 'F', 'glaisamaeandales25@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('23270044', 'James David', 'Guba', 'M', 'jamesdavidguba2@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23270085', 'Cyril', 'Seno', 'M', 'cyriljeremyseno@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('23270374', 'Ernest James', 'Lofranco', 'M', 'ernestjames193@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('23270671', 'May Kyla', 'Cabanog', 'F', 'maykylacabanog@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23271018', 'Jasper', 'TabaÑag', 'M', 'jaspertabanag96@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23271240', 'Jan Michael', 'Cabahug', 'M', 'jancabahug31@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('23271463', 'Clark John', 'Monteclaro', 'M', 'jc2222004@gmail.com', 'BSIT 3', 'College of Computer Study', '2024-11-06 06:06:10', '2024-11-06 06:06:10'),
-('24206989', 'Brad Anthony Vann', 'Sarra', 'M', 'bradsarra@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24207524', 'Prince David', 'Bentulan', 'M', 'princedavidbentulan@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24207730', 'Kient Michael', 'Abenoja', 'M', 'kientabenoja@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24207748', 'John Benedict', 'Pitogo', 'M', 'pitogojohnbenedict@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24207938', 'Eduard', 'Tojong', 'M', 'eduardtojong8@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24207953', 'Rj', 'Alenton', 'M', 'soulrj3@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24208019', 'Ingrid Maria Sofia ', 'Gacayan', 'F', 'sofiacalledo@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24208175', 'Louis Clint ', 'Lactud', 'M', 'loy.shortcut@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24208290', 'Imee', 'Camba', 'F', 'imeegcamba99@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24208423', 'Clark Edzel', 'Pulvera', 'M', 'pulveraclark105@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24209140', 'Kiana Kae', 'Cirilo', 'F', 'arar.cirilo@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24212524', 'Jamaica Mae', 'Jumuad', 'F', 'jmjumuad2@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24212946', 'Nathaniel', 'Tiro', 'M', 'natztiro312@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24214157', 'Ayn Lorebelle', 'Cavan', 'F', '02ayncavan@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24214199', 'Princess Abegeal', 'Alegre', 'F', 'alegreabe60@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24214207', 'Emelio', 'Mondares', 'M', 'emeliomondares14@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24214546', 'Kyle', 'Peralta', 'M', 'kyleperaltahax@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24214744', 'Renante', 'Taac-taac', 'M', 'xxkingrenantex@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24214967', 'John Vincent', 'Saplad', 'M', 'johnsaplad61@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24218026', 'Andre Benedict', 'Claudio', 'M', 'slexinator@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24218059', 'Fiona Marie ', 'Palacios ', 'F', 'fionamariepalacios18@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24218364', 'Rey Marhkn Angelo', 'Mendoza', 'M', 'mendozareymarhkangelo@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24222465', 'Erlan Jude', 'Gimenez', 'M', 'erlanjudegimenez17@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24225435', 'Glyzel', 'Galagar', 'F', 'glyzelgalagar14@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24227530', 'James', 'Casquejo', 'M', 'jamescasquejo456@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24228199', 'Channyl Jacquelyn ', 'Pizon', 'F', 'channylumapaspizon@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24229254', 'Marielle Andrea', 'Torreon', 'F', 'marrielleandrea.torreon@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24230088', 'Randolph', 'Bacolot', 'M', 'lichtb44@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24234023', 'John Christian', 'Lenizo', 'M', 'lenizochristian8@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24234676', 'John Benedict', 'CaÑon', 'M', 'canonjohnbenedict81@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24239527', 'John Rey', 'Donal', 'M', 'toounit@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24241911', 'Mary Jasmin', 'Ompad', 'F', 'ompad.maryjasmin@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24242760', 'Crazelle Patrice', 'Soscano', 'F', 'icamille.camacho@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24243966', 'John Elton', 'Geromo', 'M', 'johneltongeromo438@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24244766', 'Marcin', 'Pascua', 'F', 'pascua.marcin1@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24245102', 'Matthew', 'QuiÑones', 'M', 'flavrsoft@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24245268', 'Ivan Justine', 'Cortes', 'M', 'Ivancortes027@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24245748', 'Jay', 'Talingting', 'M', 'Talingtingjay099@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24245763', 'Icy', 'Coloscos', 'F', 'coloscosicy56@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24246423', 'Vanessa Mae', 'Florenosos', 'F', 'florenososvanmae615@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24247942', 'Glendel', 'Catipay', 'F', 'catipayglendel@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24248510', 'Joei Xena Lee', 'Deocampo', 'F', 'joeilee454@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24249229', 'Princess', 'Dupal-ag', 'F', 'itzmeprinttet10@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24249369', 'Wilfred Cholo', 'PeÑales', 'M', 'Cholopenales0@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24251852', 'Sean Leonard', 'Torres', 'M', 'Seantorres712@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24252736', 'Roy Vincent', 'Gimongala', 'M', 'rvince.gimongala@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24253437', 'Jabin', 'Aldiano', 'M', 'jabinaldiano14@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24254377', 'John Mark', 'Pagobo', 'M', 'johnmarkpagobo21@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24255069', 'Joseph Richard', 'Tabar', 'M', 'josephrichardtabar@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24255184', 'John Vhengie', 'Booc', 'M', 'vhengie02@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24255879', 'Christo Rey', 'Espina', 'M', 'christoreyespina@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24257602', 'Cris Roniel', 'Ibali', 'M', 'ibalicris@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24259095', 'Francis ', 'Tanga-an ', 'M', 'francismermo@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24261182', 'Hernan', 'Panaguiton', 'M', 'hernancpanaguiton@gmail.com', 'BSIT 2', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24262479', 'Joseph Lemuel', 'Fernandez', 'M', 'jct.josephlemuelfernandez@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('24267312', 'Joshua', 'Inoc', 'M', 'shua0257@gmail.com', 'BSIT 2', 'College Of Criminology', '2024-11-10 11:40:50', '2024-11-10 11:40:50'),
-('24267379', 'Kurt Godwin', 'Carwana', 'M', 'kurtcarwana09@gmail.comm', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:08:17', '2024-11-06 02:08:17'),
-('24269185', 'Louis Vincent', 'Tajanlangit', 'M', 'vinxvade@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-06 02:09:31', '2024-11-06 02:09:31'),
-('24269615', 'Rembrant', 'Pasardan', 'M', 'pasardanbranter@gmail.com', 'BSIT 3', 'College of Computer Studies', '2024-11-05 21:34:00', '2024-11-05 21:34:00'),
-('49874872', 'hah', 'haha', 'M', 'hah@hah.com', 'bsit2', 'hehe', '2024-11-12 15:22:30', '2024-11-12 15:22:30');
+INSERT INTO `students` (`id`, `firstname`, `lastname`, `gender`, `email`, `course`, `department`, `overdue_count`, `created_at`, `updated_at`) VALUES
+('17936428', 'Charles Jenson', 'Fabrigas', 'M', 'Charles.fabrgas@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:16', '2024-11-20 14:04:16'),
+('18035147', 'John Lyndon', 'Ibaoc', 'M', '27gooddays@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:17', '2024-11-20 14:04:17'),
+('18985812', 'Laurence Johnvel', 'Pantaleon', 'M', 'johnvelpantaleon20@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:18', '2024-11-20 14:04:18'),
+('18988592', 'Coolbay John', 'Rodrigo', 'M', 'coolbayjohn9sapphire@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:19', '2024-11-20 14:04:19'),
+('19066729', 'Christian Jay', 'Putolss', 'M', 'syomairays7@gmail.com', 'BSIT-4', 'College Of Computer Studies', NULL, '2024-11-20 15:56:15', '2024-11-20 19:08:33'),
+('19093459', 'Daryl', 'Capacite', 'M', 'daryl.capacite1963@gmail.com', 'BSIT 2', 'College Of Computer Studies', NULL, '2024-11-20 14:04:14', '2024-11-20 14:04:14'),
+('23207038', 'John Emmanuel', 'Watin', 'M', 'watinemmanuel@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:20', '2024-11-20 14:04:20'),
+('23207640', 'Richnell', 'Adana', 'M', 'Richnelladana.ra@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:13', '2024-11-20 14:04:13'),
+('23216708', 'Dansean James', 'Awit', 'M', 'jamesdansean@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:13', '2024-11-20 14:04:13'),
+('23222425', 'Roomitch', 'Ripdos', 'M', 'roomitchm@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:19', '2024-11-20 14:04:19'),
+('23222771', 'Jon Rohnbert', 'Biong', 'M', 'Rohnbert123456@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:14', '2024-11-20 14:04:14'),
+('23229388', 'Jhouanese', 'Condor', 'M', 'condorjhounaese@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:15', '2024-11-20 14:04:15'),
+('23233299', 'Mar Luar', 'Igot', 'M', 'marluarigot31@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:17', '2024-11-20 14:04:17'),
+('23238686', 'Jhanly', 'Selencio', 'M', 'jlyselencio01@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:20', '2024-11-20 14:04:20'),
+('23240302', 'John Pearlnel', 'Dinoro', 'M', 'jndnro.21@gmail.com', 'BSIT 12', 'College Of Computer Studies', NULL, '2024-11-20 14:04:15', '2024-11-20 14:04:15'),
+('23245954', 'Lui Mar', 'Geopano', 'M', 'luimargeopano4@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:16', '2024-11-20 14:04:16'),
+('23257363', 'Jhorsten', 'Baclohan', 'M', 'Jhorstenbaclohan0@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:14', '2024-11-20 14:04:14'),
+('25223538', 'Jeof Cyril', 'Humawan ', 'M', 'jeofcyril21@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:17', '2024-11-20 14:04:17'),
+('25228453', 'Elaine Ena', 'Villaluna', 'F', 'elaineenavillaluna@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:13', '2024-11-20 14:04:13'),
+('25230210', 'Jhon Rickciel', 'Escaran', 'M', 'jhonrickcieloe@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:16', '2024-11-20 14:04:16'),
+('25230228', 'Jhehanz', 'Bosotros', 'M', 'hanzjheigot12@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:14', '2024-11-20 14:04:14'),
+('25231218', 'Jayson Bernard', 'Frias', 'M', 'jaysonbernardfrias9@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:16', '2024-11-20 14:04:16'),
+('25232018', 'Tyrone Wayne ', 'Landero', 'M', 'Landerswaynet@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:18', '2024-11-20 14:04:18'),
+('25232398', 'Denver', 'Remo', 'M', 'denverremo007@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:19', '2024-11-20 14:04:19'),
+('25232604', 'Kevin', 'Kikuchi', 'M', 'chekoykuchi@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:18', '2024-11-20 14:04:18'),
+('25233990', 'Cesar', 'Dico', 'M', 'cjdico18@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:15', '2024-11-20 14:04:15'),
+('25234196', 'Shien Rose', 'Bilagantol', 'F', 'bilagantolshienrose@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:12', '2024-11-20 14:04:12'),
+('25236530', 'Rohwen Kent', 'Nim', 'M', 'teresacuna22@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:18', '2024-11-20 14:04:18'),
+('25236613', 'Remixon', 'Ipanag', 'M', 'ipanagremixon@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:17', '2024-11-20 14:04:17'),
+('25236696', 'Rojamin Merari', 'Pantorilla', 'M', 'rojaminygay@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:19', '2024-11-20 14:04:19'),
+('25236969', 'Jose Kobe ', 'Sanchez', 'M', 'sanchezplayerxp@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:19', '2024-11-20 14:04:19'),
+('25239831', 'John Rupert', 'Segarino', 'M', 'segarinorupert@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:20', '2024-11-20 14:04:20'),
+('25240714', 'Clark Adelaide', 'Lopez', 'M', 'clarklopez999@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:18', '2024-11-20 14:04:18'),
+('25240755', 'Matt Kerby', 'Cogo', 'M', 'mattcogo1@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:15', '2024-11-20 14:04:15'),
+('25241472', 'Armando', 'Yangao', 'M', 'armandoyangao@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:20', '2024-11-20 14:04:20'),
+('25243247', 'Geovan', 'Candongo', 'M', 'geovancandongo19@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:14', '2024-11-20 14:04:14'),
+('25243510', 'Sed Melton', 'Santos', 'M', 'sedsantos89@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:20', '2024-11-20 14:04:20'),
+('25243726', 'John Mar', 'Aledon', 'M', 'johnmaraledon823@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:13', '2024-11-20 14:04:13'),
+('25243858', 'John Jesnel', 'Remoto', 'M', 'kamihamiha64@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:19', '2024-11-20 14:04:19'),
+('25244427', 'Glenmark', 'Gungob', 'M', 'glenmarkgungob24@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:17', '2024-11-20 14:04:17'),
+('25244799', 'Liel Joseph', 'Ceniza', 'M', 'Lielceniza@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:15', '2024-11-20 14:04:15'),
+('25251927', 'Krishna Eurelle', 'Dizon', 'F', 'kryshxgorg@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:12', '2024-11-20 14:04:12'),
+('25251935', 'Hannah Shane', 'Tejero', 'F', 'hannahshanetejero27@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:13', '2024-11-20 14:04:13'),
+('25268020', 'Andrew', 'Galon', 'M', 'andrewgalon07@gmail.com', 'BSIT 1', 'College Of Computer Studies', NULL, '2024-11-20 14:04:16', '2024-11-20 14:04:16');
 
 -- --------------------------------------------------------
 
@@ -631,33 +474,11 @@ CREATE TABLE `timeline` (
 --
 
 INSERT INTO `timeline` (`id`, `remarks`, `status`, `equipment_id`, `user_id`, `created_at`, `updated_at`) VALUES
-(3, 'The day the equipment is added in the system', 'Available', 2, 2, '2024-11-02 19:32:09', '2024-11-02 19:32:09'),
-(4, 'The day the equipment is added in the system', 'Available', 3, 2, '2024-11-02 19:33:16', '2024-11-02 19:33:16'),
-(5, 'The day the equipment is added in the system', 'Available', 4, 2, '2024-11-02 22:48:35', '2024-11-02 22:48:35'),
-(6, 'The day the equipment is added in the system', 'Available', 5, 2, '2024-11-04 02:27:27', '2024-11-04 02:27:27'),
-(7, 'The day the equipment is added in the system', 'Available', 6, 2, '2024-11-04 02:29:33', '2024-11-04 02:29:33'),
-(8, 'Status updated to In Maintenance', 'In Maintenance', 2, 2, '2024-11-04 05:14:43', '2024-11-04 05:14:43'),
-(9, 'Status updated to Available', 'Available', 2, 2, '2024-11-04 19:37:39', '2024-11-04 19:37:39'),
-(10, 'Status updated to In Maintenance', 'In Maintenance', 2, 2, '2024-11-04 20:32:36', '2024-11-04 20:32:36'),
-(11, 'Status updated to Available', 'Available', 2, 2, '2024-11-04 20:33:00', '2024-11-04 20:33:00'),
-(12, 'Status updated to In Maintenance', 'In Maintenance', 2, 2, '2024-11-04 20:34:24', '2024-11-04 20:34:24'),
-(13, 'Status updated to Available', 'Available', 2, 2, '2024-11-04 20:34:49', '2024-11-04 20:34:49'),
-(14, 'Status updated to In Maintenance', 'In Maintenance', 2, 2, '2024-11-04 20:35:55', '2024-11-04 20:35:55'),
-(15, 'Status updated to Available', 'Available', 2, 2, '2024-11-04 20:36:31', '2024-11-04 20:36:31'),
-(16, 'Status updated to In Maintenance', 'In Maintenance', 2, 2, '2024-11-04 20:37:15', '2024-11-04 20:37:15'),
-(17, 'Status updated to Available', 'Available', 2, 2, '2024-11-04 20:45:07', '2024-11-04 20:45:07'),
-(18, 'Status updated to In Maintenance', 'In Maintenance', 2, 2, '2024-11-04 21:33:25', '2024-11-04 21:33:25'),
-(19, 'Status updated to In Maintenance', 'In Maintenance', 5, 2, '2024-11-04 21:35:29', '2024-11-04 21:35:29'),
-(20, 'Status updated to In Maintenance', 'In Maintenance', 6, 2, '2024-11-04 21:36:20', '2024-11-04 21:36:20'),
-(21, 'Status updated to Available', 'Available', 6, 2, '2024-11-04 21:37:01', '2024-11-04 21:37:01'),
-(22, 'Status updated to In Maintenance', 'In Maintenance', 6, 2, '2024-11-04 21:37:20', '2024-11-04 21:37:20'),
-(23, 'Status updated to Available', 'Available', 6, 2, '2024-11-04 21:37:37', '2024-11-04 21:37:37'),
-(24, 'Status updated to Borrowed', 'Borrowed', 4, 2, '2024-11-06 09:14:19', '2024-11-06 09:14:19'),
-(25, 'Status updated to Available', 'Available', 4, 2, '2024-11-06 09:22:06', '2024-11-06 09:22:06'),
-(26, 'The day the equipment is added in the system', 'Available', 7, 2, '2024-11-07 05:50:30', '2024-11-07 05:50:30'),
-(27, 'Status updated to Borrowed', 'Borrowed', 3, 2, '2024-11-14 05:35:48', '2024-11-14 05:35:48'),
-(28, 'Status updated to Available', 'Available', 3, 2, '2024-11-14 05:46:39', '2024-11-14 05:46:39'),
-(29, 'Status updated to Borrowed', 'Borrowed', 3, 2, '2024-11-14 05:48:04', '2024-11-14 05:48:04');
+(1, 'The day the equipment is added in the system', 'Available', 1, 2, '2024-11-20 13:42:34', '2024-11-20 13:42:34'),
+(2, 'Status updated to Borrowed', 'Borrowed', 1, 2, '2024-11-20 14:13:17', '2024-11-20 14:13:17'),
+(3, 'Status updated to Available', 'Available', 1, 2, '2024-11-20 14:15:06', '2024-11-20 14:15:06'),
+(4, 'Status updated to Borrowed', 'Borrowed', 1, 2, '2024-11-20 15:57:01', '2024-11-20 15:57:01'),
+(5, 'Status updated to Available', 'Available', 1, 2, '2024-11-20 19:08:33', '2024-11-20 19:08:33');
 
 -- --------------------------------------------------------
 
@@ -669,34 +490,73 @@ CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
   `designation_id` int(10) UNSIGNED DEFAULT NULL,
   `office_id` int(10) UNSIGNED DEFAULT NULL,
+  `student_id` varchar(255) DEFAULT NULL,
   `firstname` varchar(50) NOT NULL,
   `lastname` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `mobile_no` varchar(50) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
-  `status` varchar(50) NOT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
   `type` varchar(50) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `remember_token` varchar(100) DEFAULT NULL,
-  `last_login_at` timestamp NULL DEFAULT NULL
+  `last_login_at` timestamp NULL DEFAULT NULL,
+  `remember_token` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `designation_id`, `office_id`, `firstname`, `lastname`, `email`, `password`, `mobile_no`, `image`, `status`, `type`, `created_at`, `updated_at`, `remember_token`, `last_login_at`) VALUES
-(1, NULL, NULL, 'admin', 'admin', 'admin@gmail.com', '$2y$12$1XlqEw/QMYVaHx6S2EhTUOxBa66ECPrKzOVBl0ymN0FJUNiNLpRmq', '09924821214', 'images/profile_pictures/default-profile.png', 'active', 'admin', NULL, '2024-11-07 11:14:51', '3DkBCuybF248wWczRtbrMorSC9Ih8xLcezT8QtwpQLosOS4JV8DhkONY31yN', '2024-11-13 14:46:22'),
-(2, 1, 1, 'Christian jay', 'Putol', 'chrischanjay29@gmail.com', '$2y$12$w4uacbT0WJPsqPYnswa4ielHaLcR8a8TSCA7nurYP.wiizht0ePQ2', '09081666131', 'images/profile_pictures/default-profile.png', 'active', 'facility manager', '2024-10-22 21:30:56', '2024-11-07 05:35:54', 'waE6I0feaMyIX9E7tTDm3tRWeSTBf27GHQmgHNn4tMyuUQQNUlOhrXnAVt0M', '2024-11-14 02:47:31'),
-(6, 1, 3, 'Juje', 'Sultan', 'jujechu@gmail.com', '$2y$12$6KxYw7W0mKr6ZU6HvgsrSOZTeQr5Ov/uGprQ.uS3xs2BsXGzpDalC', '09081666131', 'images/profile_pictures/default-profile.png', 'active', 'facility manager', '2024-10-29 07:14:32', '2024-10-29 07:14:32', NULL, NULL),
-(7, 1, 2, 'cjay', 'mp', 'christianjayputol29@gmail.com', '$2y$12$XyqS/xwXJvZZUg3tBhlFguriXbPaOUgA2Wyn.rPHCFzyNAw5RyjAS', '09924821214', 'images/profile_pictures/default-profile.png', 'active', 'facility manager', '2024-11-07 08:53:48', '2024-11-07 11:11:01', 'Z4DF3lFWiJBvFKWFVnkH3Tn2X6GjgGPxNixBKaPjFHxndn5iPDIO3zGzpCBq', '2024-11-08 04:39:57'),
-(8, 1, 4, 'test', 'test', 'radazakyle99@gmail.com', '$2y$12$X94kMFm4MZroCwhRjGbEBuSw1wIWH6js7D2/Vy9PBjsiiyzEr7PoW', '09924821214', 'images/profile_pictures/default-profile.png', 'active', 'facility manager', '2024-11-07 11:16:44', '2024-11-07 11:16:44', NULL, NULL),
-(10, 1, 5, 'test', 'test', 'syomairays7@gmail.com', '$2y$12$wmKp0ALnR0pfSALghTDTFuRDSqV9z01sj4K3FbmxNbXHZ4q3ITKfC', '123456789', 'images/profile_pictures/default-profile.png', 'active', 'facility manager', '2024-11-07 11:31:41', '2024-11-07 11:31:41', 'Ix5I7Q379QCAZa9mCF0TQcUnWLz5ptpjiiPnvom3W8BVQrM0G8wTNTe4uHwk', '2024-11-07 11:34:40'),
-(11, 2, 1, 'sad', 'sad', 'sad@sad.sad', '$2y$12$/T1HuanwqgoHGA/uQ6eLQ.aXSnRZ5pu/AaZuNPhZJbPq8z2jce.sS', '09924821214', 'images/profile_pictures/default-profile.png', 'active', 'operator', '2024-11-10 03:11:33', '2024-11-10 03:11:33', NULL, NULL),
-(12, 1, 6, 'hehe', 'hehe', 'hehe@hehe.com', '$2y$12$3rQ7k4io43jc.WKYzfopgeC5mZjdPebXB7PZh7LW3DyaF/HpqsVNq', '099248211214', 'images/profile_pictures/default-profile.png', 'active', 'facility manager', '2024-11-10 03:37:40', '2024-11-10 03:37:40', NULL, NULL),
-(13, 2, 1, 'Working', 'Student', 'dumagpikent321@gmail.com', '$2y$12$ljo0ivCnu2b9Vyl/OTuHC.VtDzails41EtS59N63oD2Xo32jP29wa', '09924821214', 'images/profile_pictures/default-profile.png', 'active', 'operator', '2024-11-12 14:12:59', '2024-11-12 14:12:59', NULL, '2024-11-12 14:20:19');
+INSERT INTO `users` (`id`, `designation_id`, `office_id`, `student_id`, `firstname`, `lastname`, `email`, `password`, `mobile_no`, `image`, `status`, `type`, `created_at`, `updated_at`, `last_login_at`, `remember_token`) VALUES
+(1, NULL, NULL, NULL, 'admin', 'admin', 'admin@gmail.com', '$2y$12$1XlqEw/QMYVaHx6S2EhTUOxBa66ECPrKzOVBl0ymN0FJUNiNLpRmq', '09924821214', 'images/profile_pictures/default-profile.png', 'active', 'admin', '2024-11-19 07:32:49', '2024-11-19 07:32:49', '2024-11-20 11:06:14', NULL),
+(2, 1, 1, NULL, 'Christian Jay', 'Putol', 'chrischanjay29@gmail.com', '$2y$12$1D.6kE3S6xbW5mV/GoP3P.75x8eMxwl7V3lCn/DevPIfXC3H7awlK', '09924821214', 'images/profile_pictures/default-profile.png', 'active', 'facility manager', '2024-11-19 07:35:40', '2024-11-20 10:23:43', '2024-11-20 16:08:54', NULL),
+(90, 2, 1, NULL, 'Christian Jay', 'Putol', 'christianjayputol29@gmail.com', '$2y$12$ue7QswKiAOBpLRMY.2iPM.ciwLCk7HbkljIy0cYPKvBC7V38V1Suy', '09924821214', 'images/profile_pictures/default-profile.png', 'active', 'facility manager', '2024-11-19 07:52:52', '2024-11-19 07:52:52', '2024-11-19 08:00:33', NULL),
+(178, 3, 1, '25234196', 'Shien Rose', 'Bilagantol', 'bilagantolshienrose@gmail.com', '$2y$12$/g5VW3lP13v.XQ5Rk9J1U.hdcXbOKsjr.01ZxOP.0m2Kj6/nHGcLq', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:12', '2024-11-20 14:04:12', NULL, NULL),
+(179, 3, 1, '25251927', 'Krishna Eurelle', 'Dizon', 'kryshxgorg@gmail.com', '$2y$12$G2s9D2Fxekl8/kmhFcTUdO7ZS5T3K8TXtlSHn7zV9Nx6gAgk7Krwu', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:12', '2024-11-20 14:04:12', NULL, NULL),
+(180, 3, 1, '25251935', 'Hannah Shane', 'Tejero', 'hannahshanetejero27@gmail.com', '$2y$12$Y9yfJjh.XSAkPB5C.pB1Pu1tjldl5hXyyXKbt1JaFGgVpz74s3Wa.', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:13', '2024-11-20 14:04:13', NULL, NULL),
+(181, 3, 1, '25228453', 'Elaine Ena', 'Villaluna', 'elaineenavillaluna@gmail.com', '$2y$12$RKlLchIXK0DC.twDC1ZmJ.cNLQVM5npjXQf/rqeNJK5LNLkI2n.fW', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:13', '2024-11-20 14:04:13', NULL, NULL),
+(182, 3, 1, '23207640', 'Richnell', 'Adana', 'Richnelladana.ra@gmail.com', '$2y$12$UC8DezlZBRbs8xAsv1w3..kgm4XlOFdTcN1PWFwncJNGBsOYCDMe.', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:13', '2024-11-20 14:04:13', NULL, NULL),
+(183, 3, 1, '25243726', 'John Mar', 'Aledon', 'johnmaraledon823@gmail.com', '$2y$12$He7f2IEJXMpfit82Znxt/OJSz29Z/HfQ8hvZm7JTMrhW8k7OuIdmm', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:13', '2024-11-20 14:04:13', NULL, NULL),
+(184, 3, 1, '23216708', 'Dansean James', 'Awit', 'jamesdansean@gmail.com', '$2y$12$pNN9TP6vl8dyHWlpbNNHMOcnN0X5CcSGVPJITV3Cl//tOeL43ztx.', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:13', '2024-11-20 14:04:13', NULL, NULL),
+(185, 3, 1, '23257363', 'Jhorsten', 'Baclohan', 'Jhorstenbaclohan0@gmail.com', '$2y$12$MDKadS/N.AMqXOFswl8KgeRcKmQi8RqUSeoJONyeKLWXU870Gz.Gy', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:14', '2024-11-20 14:04:14', NULL, NULL),
+(186, 3, 1, '23222771', 'Jon Rohnbert', 'Biong', 'Rohnbert123456@gmail.com', '$2y$12$bLL.sDBjaJB/yxPwBOUa9erUsGBMsBcA3Yc6yRiz3ktZDvyyyqQqO', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:14', '2024-11-20 14:04:14', NULL, NULL),
+(187, 3, 1, '25230228', 'Jhehanz', 'Bosotros', 'hanzjheigot12@gmail.com', '$2y$12$QYex7MYzrYTQ1MFNGVYdueT4yfxzffuVbKiH0UgJnqHLafIc6LxjC', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:14', '2024-11-20 14:04:14', NULL, NULL),
+(188, 3, 1, '25243247', 'Geovan', 'Candongo', 'geovancandongo19@gmail.com', '$2y$12$dPg4K1bqywA7C9xrrJ2IOuhOFKEC/HeIaxcBnz6eYQs7rLjvTdHiu', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:14', '2024-11-20 14:04:14', NULL, NULL),
+(189, 3, 1, '19093459', 'Daryl', 'Capacite', 'daryl.capacite1963@gmail.com', '$2y$12$BEiyVIhgTiCG0f5dLaVPkuSaR8X3xWGtzyEq4QHlBw2igCKcbldK6', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:14', '2024-11-20 14:04:14', NULL, NULL),
+(190, 3, 1, '25244799', 'Liel Joseph', 'Ceniza', 'Lielceniza@gmail.com', '$2y$12$EtOA71add1/GkS26nsh8zORZGMsjI0SJjWwiD4kXT5PvICLU99VWa', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:15', '2024-11-20 14:04:15', NULL, NULL),
+(191, 3, 1, '25240755', 'Matt Kerby', 'Cogo', 'mattcogo1@gmail.com', '$2y$12$Ti9fC9ih8YcvGpIliydgJOwdVHognG9UnKKqso/wvK5DUkgkQ19MC', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:15', '2024-11-20 14:04:15', NULL, NULL),
+(192, 3, 1, '23229388', 'Jhouanese', 'Condor', 'condorjhounaese@gmail.com', '$2y$12$xe3VXHUFSRRpuhhYYXHv.eqo.6gH3s5sO64YTuuB0EJE3cVpM8ifm', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:15', '2024-11-20 14:04:15', NULL, NULL),
+(193, 3, 1, '25233990', 'Cesar', 'Dico', 'cjdico18@gmail.com', '$2y$12$JrGriEY1YaNh560sf9Tkn.N24w511xNuGej7irbL2eCqBdn90Fcge', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:15', '2024-11-20 14:04:15', NULL, NULL),
+(194, 3, 1, '23240302', 'John Pearlnel', 'Dinoro', 'jndnro.21@gmail.com', '$2y$12$niTc/ijFfysFa6ogJIcX5u6fyKWeVcvTl5BVodS/L5ZqbBcCGLPb2', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:15', '2024-11-20 14:04:15', NULL, NULL),
+(195, 3, 1, '25230210', 'Jhon Rickciel', 'Escaran', 'jhonrickcieloe@gmail.com', '$2y$12$a9OQ1j7ZjE95J0W8f8ms.uZLbSl3n1QUk0OVlg6OTENESWy6WMGku', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:16', '2024-11-20 14:04:16', NULL, NULL),
+(196, 3, 1, '17936428', 'Charles Jenson', 'Fabrigas', 'Charles.fabrgas@gmail.com', '$2y$12$m1SocqyHuNFRRfyrRzKkrO6fRTtgZanW/7TGOuqWy5ySPOCaYoBj6', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:16', '2024-11-20 14:04:16', NULL, NULL),
+(197, 3, 1, '25231218', 'Jayson Bernard', 'Frias', 'jaysonbernardfrias9@gmail.com', '$2y$12$zdFaSktWj5YE6iRuIJxDWeMgBTRckSRWLiX/2lHFGjYHb59H9Gobq', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:16', '2024-11-20 14:04:16', NULL, NULL),
+(198, 3, 1, '25268020', 'Andrew', 'Galon', 'andrewgalon07@gmail.com', '$2y$12$3joi6thsCp8yPEcnOuWFf.PjY7lq2tNGX088DOfkTzqRT5zQr2ymy', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:16', '2024-11-20 14:04:16', NULL, NULL),
+(199, 3, 1, '23245954', 'Lui Mar', 'Geopano', 'luimargeopano4@gmail.com', '$2y$12$XToDreaeXl0khw/HyT5Fp.E3FWu8frimeRdDs9uoBRUmB5Mcq3mRO', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:16', '2024-11-20 14:04:16', NULL, NULL),
+(200, 3, 1, '25244427', 'Glenmark', 'Gungob', 'glenmarkgungob24@gmail.com', '$2y$12$idHZx3kGIGsUsYPbVoV3gOjFrAXnw0xz9bXJnac3hsyOk4T9SAqaK', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:17', '2024-11-20 14:04:17', NULL, NULL),
+(201, 3, 1, '25223538', 'Jeof Cyril', 'Humawan ', 'jeofcyril21@gmail.com', '$2y$12$7gkRGwMsEN0RhYIYKvjLM.Lv67lxWcyZxNnC7/Q.WpnOUCs3u.3Mu', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:17', '2024-11-20 14:04:17', NULL, NULL),
+(202, 3, 1, '18035147', 'John Lyndon', 'Ibaoc', '27gooddays@gmail.com', '$2y$12$mJujW9A7frf9DqC2vhJ15uVO0g8yLNjdt8sLE/Ac42dEypy3/JjIG', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:17', '2024-11-20 14:04:17', NULL, NULL),
+(203, 3, 1, '23233299', 'Mar Luar', 'Igot', 'marluarigot31@gmail.com', '$2y$12$msQ6Rz9EhLPG8S9rtq.bbu3pvpwT4pw.CdbsmdGcEL7u17reyiRm6', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:17', '2024-11-20 14:04:17', NULL, NULL),
+(204, 3, 1, '25236613', 'Remixon', 'Ipanag', 'ipanagremixon@gmail.com', '$2y$12$Uiun0yahHiZ05ix0kOsDJePGlh5MSi4gONjTq3GtBTpcN0v4oMaga', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:17', '2024-11-20 14:04:17', NULL, NULL),
+(205, 3, 1, '25232604', 'Kevin', 'Kikuchi', 'chekoykuchi@gmail.com', '$2y$12$svco4KGWKpkjaGTBmuuc7uJi8EqdXOG06euAzenl.ppUVo6YKl0C2', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:18', '2024-11-20 14:04:18', NULL, NULL),
+(206, 3, 1, '25232018', 'Tyrone Wayne ', 'Landero', 'Landerswaynet@gmail.com', '$2y$12$nvyYQYVlrXmkNHcmEGSdVeMQ3fEqAFPV/.TU97eK7piF72kGs9GJK', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:18', '2024-11-20 14:04:18', NULL, NULL),
+(207, 3, 1, '25240714', 'Clark Adelaide', 'Lopez', 'clarklopez999@gmail.com', '$2y$12$bA6YYhGc19gyj3WfBDH78OCGnSpwEHJ1ZRQxAd5.NzKfeWSK71x56', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:18', '2024-11-20 14:04:18', NULL, NULL),
+(208, 3, 1, '25236530', 'Rohwen Kent', 'Nim', 'teresacuna22@gmail.com', '$2y$12$jJfKrYg8EOf7u6KdJEKnG.bA/BKNhAXSAc1IIf5pHHZGiWp62QHf.', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:18', '2024-11-20 14:04:18', NULL, NULL),
+(209, 3, 1, '18985812', 'Laurence Johnvel', 'Pantaleon', 'johnvelpantaleon20@gmail.com', '$2y$12$ND.XsEdzgZimYWQCB8lo2.cVmsjHCSnzl4Xlav1Dep.qHxUiHASWa', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:18', '2024-11-20 14:04:18', NULL, NULL),
+(210, 3, 1, '25236696', 'Rojamin Merari', 'Pantorilla', 'rojaminygay@gmail.com', '$2y$12$7YVrf4p7Uj1.1zWO1dofVe5KKE6OgFgfc4ij9cWCcZiGGxw4dXyNq', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:19', '2024-11-20 14:04:19', NULL, NULL),
+(211, 3, 1, '25232398', 'Denver', 'Remo', 'denverremo007@gmail.com', '$2y$12$btOJnWGCsSXTFR18l.29d.yp9jp16vqqHuxpyts45DV2.IDfH7QOm', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:19', '2024-11-20 14:04:19', NULL, NULL),
+(212, 3, 1, '25243858', 'John Jesnel', 'Remoto', 'kamihamiha64@gmail.com', '$2y$12$/fTmx.JAkR0wyHuhcDk7jeICMXp9257245refG5yK8/W.MhoNJ9k6', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:19', '2024-11-20 14:04:19', NULL, NULL),
+(213, 3, 1, '23222425', 'Roomitch', 'Ripdos', 'roomitchm@gmail.com', '$2y$12$hv1nIf7HBd0TJMAMv9E4J.9Bypr6B4bofsO7OpZPrJJhiBgphTgdS', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:19', '2024-11-20 14:04:19', NULL, NULL),
+(214, 3, 1, '18988592', 'Coolbay John', 'Rodrigo', 'coolbayjohn9sapphire@gmail.com', '$2y$12$Cmhen7J4cmL6waWAY/bzyOweEmG5UoZynDkGFpLCFccgfcuW/wH5e', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:19', '2024-11-20 14:04:19', NULL, NULL),
+(215, 3, 1, '25236969', 'Jose Kobe ', 'Sanchez', 'sanchezplayerxp@gmail.com', '$2y$12$vTX1q.cGY03CizmgATifB..Mggc8oUb45mKeHUeNDeAqHgGmtRT.y', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:19', '2024-11-20 14:04:19', NULL, NULL),
+(216, 3, 1, '25243510', 'Sed Melton', 'Santos', 'sedsantos89@gmail.com', '$2y$12$zIn61ecdwwM9Hr0mjuc7RenrkcoNMjjIjQ6DOLz8To/QVrKEZOx0u', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:20', '2024-11-20 14:04:20', NULL, NULL),
+(217, 3, 1, '25239831', 'John Rupert', 'Segarino', 'segarinorupert@gmail.com', '$2y$12$Xt9UPPYaOG/rdJ8q3fa7fub5ctZJEYI3BStcu6vGI2Y9YLGW9JZmS', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:20', '2024-11-20 14:04:20', NULL, NULL),
+(218, 3, 1, '23238686', 'Jhanly', 'Selencio', 'jlyselencio01@gmail.com', '$2y$12$DfuB.PZODLIFsmWP4lalXetKOMKLFutjS5WZ.1/qwXA.sNAHxNqY.', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:20', '2024-11-20 14:04:20', NULL, NULL),
+(219, 3, 1, '23207038', 'John Emmanuel', 'Watin', 'watinemmanuel@gmail.com', '$2y$12$wBvnApJ7aXnLTj.zMrjvFuh8kugAM9i3AzOSQMEbkz2ZDxqMB5rLq', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:20', '2024-11-20 14:04:20', NULL, NULL),
+(220, 3, 1, '25241472', 'Armando', 'Yangao', 'armandoyangao@gmail.com', '$2y$12$N7Z4zT/Pk7EAXmnQX/j5zOtK8Sszr8i4.w4qpE0A2v5IgWhDjgkSe', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 14:04:20', '2024-11-20 14:04:20', NULL, NULL),
+(223, 3, 1, '19066729', 'Christian Jay', 'Putolss', 'syomairays7@gmail.com', '$2y$12$0jEmBri5oln6eCkNfVFAyOfRKRgnOSdPozSRRl8YRD/uDn6umntuG', 'none', 'images/profile_pictures/default-profile.png', 'active', 'student', '2024-11-20 15:56:15', '2024-11-20 15:56:15', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -708,7 +568,20 @@ INSERT INTO `users` (`id`, `designation_id`, `office_id`, `firstname`, `lastname
 ALTER TABLE `borrows`
   ADD PRIMARY KEY (`id`),
   ADD KEY `borrows_equipment_id_foreign` (`equipment_id`),
-  ADD KEY `borrows_user_id_foreign` (`user_id`);
+  ADD KEY `borrows_user_id_foreign` (`user_id`),
+  ADD KEY `borrows_borrowers_id_no_foreign` (`borrowers_id_no`);
+
+--
+-- Indexes for table `cache`
+--
+ALTER TABLE `cache`
+  ADD PRIMARY KEY (`key`);
+
+--
+-- Indexes for table `cache_locks`
+--
+ALTER TABLE `cache_locks`
+  ADD PRIMARY KEY (`key`);
 
 --
 -- Indexes for table `designations`
@@ -728,7 +601,9 @@ ALTER TABLE `disposed`
 -- Indexes for table `donated`
 --
 ALTER TABLE `donated`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `donated_equipment_id_foreign` (`equipment_id`),
+  ADD KEY `donated_user_id_foreign` (`user_id`);
 
 --
 -- Indexes for table `equipments`
@@ -780,6 +655,12 @@ ALTER TABLE `offices`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `password_reset_tokens`
+--
+ALTER TABLE `password_reset_tokens`
+  ADD UNIQUE KEY `password_reset_tokens_email_unique` (`email`);
+
+--
 -- Indexes for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
@@ -796,10 +677,19 @@ ALTER TABLE `repairs`
   ADD KEY `repairs_user_id_foreign` (`user_id`);
 
 --
+-- Indexes for table `reservation`
+--
+ALTER TABLE `reservation`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `reservation_student_id_foreign` (`student_id`),
+  ADD KEY `reservation_equipment_id_foreign` (`equipment_id`),
+  ADD KEY `reservation_office_id_foreign` (`office_id`);
+
+--
 -- Indexes for table `students`
 --
 ALTER TABLE `students`
-  ADD PRIMARY KEY (`id_no`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `timeline`
@@ -816,6 +706,7 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `users_email_unique` (`email`),
   ADD KEY `users_office_id_index` (`office_id`),
+  ADD KEY `users_student_id_foreign` (`student_id`),
   ADD KEY `users_designation_id_foreign` (`designation_id`);
 
 --
@@ -826,13 +717,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `borrows`
 --
 ALTER TABLE `borrows`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `designations`
 --
 ALTER TABLE `designations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `disposed`
@@ -850,19 +741,19 @@ ALTER TABLE `donated`
 -- AUTO_INCREMENT for table `equipments`
 --
 ALTER TABLE `equipments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `facilities`
 --
 ALTER TABLE `facilities`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `maintenance`
 --
 ALTER TABLE `maintenance`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `maintenance_schedules`
@@ -874,19 +765,19 @@ ALTER TABLE `maintenance_schedules`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `offices`
 --
 ALTER TABLE `offices`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `repairs`
@@ -895,16 +786,22 @@ ALTER TABLE `repairs`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `reservation`
+--
+ALTER TABLE `reservation`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `timeline`
 --
 ALTER TABLE `timeline`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=224;
 
 --
 -- Constraints for dumped tables
@@ -914,6 +811,7 @@ ALTER TABLE `users`
 -- Constraints for table `borrows`
 --
 ALTER TABLE `borrows`
+  ADD CONSTRAINT `borrows_borrowers_id_no_foreign` FOREIGN KEY (`borrowers_id_no`) REFERENCES `students` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `borrows_equipment_id_foreign` FOREIGN KEY (`equipment_id`) REFERENCES `equipments` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `borrows_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
@@ -923,6 +821,13 @@ ALTER TABLE `borrows`
 ALTER TABLE `disposed`
   ADD CONSTRAINT `disposed_equipment_id_foreign` FOREIGN KEY (`equipment_id`) REFERENCES `equipments` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `disposed_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `donated`
+--
+ALTER TABLE `donated`
+  ADD CONSTRAINT `donated_equipment_id_foreign` FOREIGN KEY (`equipment_id`) REFERENCES `equipments` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `donated_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `equipments`
@@ -958,6 +863,14 @@ ALTER TABLE `repairs`
   ADD CONSTRAINT `repairs_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `reservation`
+--
+ALTER TABLE `reservation`
+  ADD CONSTRAINT `reservation_equipment_id_foreign` FOREIGN KEY (`equipment_id`) REFERENCES `equipments` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `reservation_office_id_foreign` FOREIGN KEY (`office_id`) REFERENCES `offices` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `reservation_student_id_foreign` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `timeline`
 --
 ALTER TABLE `timeline`
@@ -969,7 +882,8 @@ ALTER TABLE `timeline`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `users_designation_id_foreign` FOREIGN KEY (`designation_id`) REFERENCES `designations` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `users_office_id_foreign` FOREIGN KEY (`office_id`) REFERENCES `offices` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `users_office_id_foreign` FOREIGN KEY (`office_id`) REFERENCES `offices` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `users_student_id_foreign` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -41,12 +41,6 @@
                         <span>Equipments</span>
                     </a>
                 </li>
-                <li>
-                    <a href="/borrowers-log">
-                        <iconify-icon icon="mingcute:clipboard-line" class="menu-icon"></iconify-icon>
-                        <span>Borrowers Log</span>
-                    </a>
-                </li>
             @endif
 
             @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'admin')
@@ -68,6 +62,29 @@
             @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
                 <li class="dropdown">
                     <a href="javascript:void(0)">
+                        <iconify-icon icon="mingcute:clipboard-line" class="menu-icon"></iconify-icon>
+                        <span>Logs</span>
+                    </a>
+
+                    <!-- Simplified Sidebar Menu -->
+                    <ul class="sidebar-submenu">
+                        <!-- Borrow Equipments -->
+                        <li>
+                            <a href="/borrowers-log">
+                                <i class="ri-circle-fill circle-icon text-lilac-600 w-auto" class="menu-icon"></i>
+                                Borrowers Log
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/reservations-log">
+                                <i class="ri-circle-fill circle-icon text-warning-main w-auto" class="menu-icon"></i>
+                                <span>Reservation Log</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)">
                         <iconify-icon icon="fe:vector" class="menu-icon"></iconify-icon>
                         <span>Operation</span>
                     </a>
@@ -77,7 +94,8 @@
                         <!-- Borrow Equipments -->
                         <li>
                             <a href="/borrow-equipment">
-                                <iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon>
+                                {{-- <iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon> --}}
+                                <i class="ri-circle-fill circle-icon text-orange w-auto" class="menu-icon"></i>
                                 Borrow Equipments
                             </a>
                         </li>
@@ -85,7 +103,8 @@
                         <!-- Maintenance Equipments -->
                         <li>
                             <a href="/maintenance-equipment">
-                                <iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon>
+                                {{-- <iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon> --}}
+                                <i class="ri-circle-fill circle-icon text-info-main w-auto" class="menu-icon"></i>
                                 Maintenance Equipments
                             </a>
                         </li>
@@ -93,31 +112,35 @@
                         <!-- Repair Equipments -->
                         <li>
                             <a href="/repair-equipment">
-                                <iconify-icon icon="mdi:box-check-outline" class="menu-icon"></iconify-icon>
+                                {{-- <iconify-icon icon="mdi:box-check-outline" class="menu-icon"></iconify-icon> --}}
+                                <i class="ri-circle-fill circle-icon text-danger-main w-auto" class="menu-icon"></i>
                                 Repair Equipments
+                            </a>
+                        </li>
+                        
+                        <!-- Donate Equipments -->
+                        <li>
+                            <a href="/donate-equipment">
+                                {{-- <iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon> --}}
+                                <i class="ri-circle-fill circle-icon text-pink w-auto" class="menu-icon"></i>
+                                Donate Equipments
                             </a>
                         </li>
 
                         <!-- Dispose Equipments -->
                         <li>
                             <a href="/dispose-equipment">
-                                <iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon>
+                                {{-- <iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon> --}}
+                                <i class="ri-circle-fill circle-icon text-black w-auto" class="menu-icon"></i>
                                 Dispose Equipments
-                            </a>
-                        </li>
-
-                        <!-- Donate Equipments -->
-                        <li>
-                            <a href="/donate-equipment">
-                                <iconify-icon icon="icon-park-outline:hold-interface" class="menu-icon"></iconify-icon>
-                                Donate Equipments
                             </a>
                         </li>
 
                         <!-- Return Equipments -->
                         <li>
                             <a href="/return-equipment">
-                                <iconify-icon icon="mdi:box-check-outline" class="menu-icon"></iconify-icon>
+                                {{-- <iconify-icon icon="mdi:box-check-outline" class="menu-icon"></iconify-icon> --}}
+                                <i class="ri-circle-fill circle-icon text-success w-auto" class="menu-icon"></i>
                                 Return Equipments
                             </a>
                         </li>
@@ -142,31 +165,31 @@
                         @elseif (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
                             <li>
                                 <a href="/borrowed-equipments">
-                                    <i class="ri-circle-fill circle-icon text-lilac-600 w-auto" class="menu-icon"></i>
+                                    <i class="ri-circle-fill circle-icon text-orange w-auto" class="menu-icon"></i>
                                     Borrowed Equipments
                                 </a>
                             </li>
                             <li>
                                 <a href="/maintenanced-equipments">
-                                    <i class="ri-circle-fill circle-icon text-warning-main w-auto" class="menu-icon"></i>
+                                    <i class="ri-circle-fill circle-icon text-info-main w-auto" class="menu-icon"></i>
                                     In Maintenance Equipments
                                 </a>
                             </li>
                             <li>
                                 <a href="/repaired-equipments">
-                                    <i class="ri-circle-fill circle-icon text-primary-600 w-auto" class="menu-icon"></i>
+                                    <i class="ri-circle-fill circle-icon text-danger-main w-auto" class="menu-icon"></i>
                                     In Repair Equipments
                                 </a>
                             </li>
                             <li>
                                 <a href="/donated-equipments">
-                                    <i class="ri-circle-fill circle-icon text-info-main w-auto" class="menu-icon"></i>
+                                    <i class="ri-circle-fill circle-icon text-pink w-auto" class="menu-icon"></i>
                                     Donated Equipments
                                 </a>
                             </li>
                             <li>
                                 <a href="/disposed-equipments">
-                                    <i class="ri-circle-fill circle-icon text-danger-main w-auto" class="menu-icon"></i>
+                                    <i class="ri-circle-fill circle-icon text-black w-auto" class="menu-icon"></i>
                                     Disposed Equipments
                                 </a>
                             </li>

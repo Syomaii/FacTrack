@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Students;
 use App\Models\User;
 use App\Notifications\OverdueEquipmentsNotification;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
@@ -27,7 +28,7 @@ class NotificationController extends Controller
 
     public function markAsRead($id)
     {
-        $notification = auth()->user()->notifications()->find($id);
+        $notification = Auth::user()->notifications()->find($id);
 
         if ($notification) {
             $notification->markAsRead(); // This sets `read_at` to the current timestamp

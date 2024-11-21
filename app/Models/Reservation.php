@@ -16,4 +16,19 @@ class Reservation extends Model
         'status',
         'purpose',
     ];
+
+    public function offices()
+    {
+        return $this->belongsTo(Office::class, 'office_id', 'id');
+    }
+
+    public function equipment()
+    {
+        return $this->belongsTo(Equipment::class);
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(Students::class, 'student_id', 'id');
+    }
 }
