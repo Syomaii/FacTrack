@@ -140,6 +140,7 @@ Route::middleware(['auth'])->group(function () {
         //Equipment Controller
         Route::put('/equipments/update', [EquipmentController::class, 'updateEquipment'])->name('update_equipment');
         Route::get('/equipment-search', [EquipmentController::class, 'equipmentSearch'])->name('equipment_search');
+        Route::get('/borrower-search', [PageController::class, 'borrowerSearch'])->name('borrower_search');
 
         
         //QRCodeController
