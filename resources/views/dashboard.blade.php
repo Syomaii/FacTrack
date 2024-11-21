@@ -125,9 +125,9 @@
                         <div class="d-flex align-items-center flex-wrap gap-3">
                             <span class="text-md fw-medium text-secondary-light mb-0">Show</span>
 
-                            <form class="navbar-search">
-                                <input type="text" class="bg-base h-40-px w-auto" id="userSearch"
-                                    placeholder="Search">
+                            <form class="navbar-search" method="GET" action="{{ route('dashboard-search-user') }}">
+                                <input type="text" class="bg-base h-40-px w-auto" name="search" placeholder="Search"
+                                    value="{{ request('search') }}">
                                 <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
                             </form>
                         </div>
@@ -167,7 +167,8 @@
                                         </tr>
                                     @empty
                                         <tr class="user-row">
-                                            <td colspan="10" class="text-center"><strong>No users found from your office/department.</strong></td>
+                                            <td colspan="10" class="text-center"><strong>No users found from your
+                                                    office/department.</strong></td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -182,11 +183,12 @@
                                     <!-- Previous Page Link -->
                                     <li class="page-item">
                                         <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
-                                            href="{{ $users->previousPageUrl() }}" aria-disabled="{{ $users->onFirstPage() }}">
+                                            href="{{ $users->previousPageUrl() }}"
+                                            aria-disabled="{{ $users->onFirstPage() }}">
                                             <iconify-icon icon="ep:d-arrow-left"></iconify-icon>
                                         </a>
                                     </li>
-                                
+
                                     <!-- Pagination Pages -->
                                     @if ($users->lastPage() > 1)
                                         <!-- Show first page if not too close to current -->
@@ -216,10 +218,9 @@
                                                     href="{{ $users->url($users->lastPage()) }}">{{ $users->lastPage() }}</a>
                                             </li>
                                         @endif
-                                    @else   
-                                            
+                                    @else
                                     @endif
-                                
+
                                     <!-- Next Page Link -->
                                     <li class="page-item">
                                         <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
@@ -276,7 +277,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const ctx = document.getElementById('borrowedEquipmentsChart').getContext('2d');
         const chartContainer = document.querySelector('.borrowedEquipment');
         // Fetch the borrowed data from PHP to JavaScript
@@ -369,33 +370,11 @@
                 }
             });
         } else {
-        // Display a message inside the card body if no data is available
-        chartContainer.innerHTML = `
+            // Display a message inside the card body if no data is available
+            chartContainer.innerHTML = `
             <h6>Borrowed Equipments Per Month</h6>
             <p class="text-center mt-3 text-muted"><strong>No data available for borrowed equipment.</strong></p>
         `;
-    }
-    });
-
-
-
-
-    document.getElementById('userSearch').addEventListener('input', function() {
-        let filter = this.value.toLowerCase();
-        let rows = document.querySelectorAll('.user-row'); // Select all user rows
-
-        rows.forEach(function(row) {
-            // Get the text content of the user name, email, and designation
-            let name = row.querySelector('.user-name').textContent.toLowerCase();
-            let email = row.querySelector('.user-email').textContent.toLowerCase();
-            let designation = row.querySelector('.user-designation').textContent.toLowerCase();
-
-            // Check if the filter matches any user field (name, email, designation)
-            if (name.includes(filter) || email.includes(filter) || designation.includes(filter)) {
-                row.style.display = ''; // Show the row
-            } else {
-                row.style.display = 'none'; // Hide the row
-            }
-        });
+        }
     });
 </script>

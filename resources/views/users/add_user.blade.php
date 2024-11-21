@@ -1,3 +1,41 @@
+<style>
+    .scrollable-dropdown {
+        max-height: 250px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: border-color 0.3s;
+        font-size: 30px;
+        padding: 10px;
+    }
+
+    .scrollable-dropdown option {
+        padding: 15px;
+    }
+
+    .scrollable-dropdown:hover {
+        border-color: #007bff;
+    }
+
+    .scrollable-dropdown:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+
+    /* Optional: Style for the label */
+    .form-label {
+        color: #333;
+        font-weight: 600;
+        font-size: 50px;
+    }
+
+    /* Optional: Style for the form group */
+    .form-group {
+        margin-bottom: 20px;
+    }
+</style>
 @include('templates.header')
 <x-sidebar />
 <main class="dashboard-main">
@@ -254,11 +292,11 @@
                                             <label for="office_id"
                                                 class="form-label fw-semibold text-primary-light text-sm mb-8">Select
                                                 Office</label>
-                                            <select class="form-control radius-8" id="office_id" name="office_id">
+                                            <select class="form-control radius-8 scrollable-dropdown" id="office_id"
+                                                name="office_id" size="2">
                                                 <option value="" disabled selected>Select an Office</option>
                                                 @foreach ($offices as $office)
                                                     @if ($office->type == 'office')
-                                                        <!-- Adjusted condition -->
                                                         <option value="{{ $office->id }}">{{ $office->name }}
                                                         </option>
                                                     @endif
@@ -272,11 +310,11 @@
                                             <label for="department"
                                                 class="form-label fw-semibold text-primary-light text-sm mb-8">Select
                                                 Department</label>
-                                            <select class="form-control radius-8" id="department" name="department">
+                                            <select class="form-control radius-8 scrollable-dropdown" id="department"
+                                                name="department" size="5">
                                                 <option value="" disabled selected>Select a Department</option>
                                                 @foreach ($offices as $office)
                                                     @if ($office->type == 'department')
-                                                        <!-- Adjusted condition -->
                                                         <option value="{{ $office->id }}">{{ $office->name }}
                                                         </option>
                                                     @endif
@@ -302,7 +340,7 @@
             </div>
         </form>
     </div>
-        @include('templates.footer_inc')
+    @include('templates.footer_inc')
 </main>
 @include('templates.footer')
 

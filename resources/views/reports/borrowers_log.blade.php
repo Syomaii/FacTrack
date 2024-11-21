@@ -33,9 +33,9 @@
             <div
                 class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                 <div class="d-flex align-items-center flex-wrap gap-3">
-                    <form class="navbar-search">
+                    <form class="navbar-search" method="GET" action="{{ route('borrower_search') }}">
                         <input type="text" class="bg-base h-40-px w-auto" name="search" id="borrowerSearch"
-                            placeholder="Search">
+                            placeholder="Search" value="{{ request('search') }}">
                         <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
                     </form>
                 </div>
@@ -140,8 +140,6 @@
                         <span>No entries found.</span>
                     @endif
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -149,24 +147,3 @@
     @include('templates.footer_inc')
 </main>
 @include('templates.footer')
-<script>
-    document.getElementById('borrowerSearch').addEventListener('input', function() {
-        let filter = this.value.toLowerCase();
-        let rows = document.querySelectorAll('.borrower-row'); // Select all borrower rows
-
-        rows.forEach(function(row) {
-            // Get the text content of the relevant columns (borrower's name, department, and equipment name)
-            let name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-            let department = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-            let equipmentName = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
-
-            // Check if the filter matches any of the fields
-            if (name.includes(filter) || department.includes(filter) || equipmentName.includes(
-                    filter)) {
-                row.style.display = ''; // Show the row
-            } else {
-                row.style.display = 'none'; // Hide the row
-            }
-        });
-    });
-</script>
