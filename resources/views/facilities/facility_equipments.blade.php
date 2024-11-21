@@ -43,13 +43,31 @@
         </div>
 
         @if (session('updateFacilitySuccess'))
-            <div class="alert alert-success">
-                {{ session('updateFacilitySuccess') }}
+            <div
+                class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                    <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
+                    {{ session('updateFacilitySuccess') }}
+                </div>
             </div>
         @elseif (session('addEquipmentSuccessfully'))
-            <div class="alert alert-success">
-                {{ session('addEquipmentSuccessfully') }}
+            <div
+                class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                    <iconify-icon icon="akar-icons:double-check" class="icon text-xl"></iconify-icon>
+                    {{ session('addEquipmentSuccessfully') }}
+                </div>
             </div>
+        @elseif ($errors->any())
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-0 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between"
+                    role="alert">
+                    <div class="d-flex align-items-center gap-2">
+                        <iconify-icon icon="mingcute:delete-2-line" class="icon text-xl"></iconify-icon>
+                        {{ $error }}
+                    </div>
+                </div>
+            @endforeach
         @endif
 
         <!-- Search Bar and Buttons -->
@@ -144,18 +162,13 @@
                         <label for="facilityName" class="form-label">Name</label>
                         <input type="text" class="form-control" id="facilityName" name="name"
                             value="{{ $facility->name }}" required>
-                        @error('name')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
                     </div>
 
                     <!-- Facility Description -->
                     <div class="mb-3">
                         <label for="facilityDescription" class="form-label">Description</label>
                         <textarea class="form-control" id="facilityDescription" name="description" required>{{ $facility->description }}</textarea>
-                        @error('description')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
+
                     </div>
 
                     <!-- Facility Type -->
@@ -167,9 +180,6 @@
                             <option value="office" {{ $facility->type == 'office' ? 'selected' : '' }}>Office</option>
                             <option value="room" {{ $facility->type == 'room' ? 'selected' : '' }}>Room</option>
                         </select>
-                        @error('type')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
                     </div>
 
                     <!-- Submit Button -->

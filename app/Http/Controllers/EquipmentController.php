@@ -79,7 +79,6 @@ class EquipmentController extends Controller
             'description' => 'required',
             'acquired_date' => 'required|date|before_or_equal:now',
             'facility' => 'required|string', 
-            'status' => 'required|in:Available,In Maintenance,In Repair,Borrowed',
         ]);
 
         $facility = Facility::where('name', $data['facility'])->first();
@@ -95,7 +94,6 @@ class EquipmentController extends Controller
             'description' => $data['description'],
             'acquired_date' => $data['acquired_date'],
             'facility_id' => $facility->id, 
-            'status' => $data['status'],
         ];
 
         $equipment = Equipment::where('id', $request['id'])->first();

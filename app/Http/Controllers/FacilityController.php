@@ -38,6 +38,7 @@ class FacilityController extends Controller
     public function updateFacility(Request $request)
     {
         $facility = Facility::find($request->id);
+        
         if($facility->name === $request->name){
             $data = $request->validate([
                 'name' => 'required',
@@ -47,7 +48,7 @@ class FacilityController extends Controller
             ]);
         }else{
             $data = $request->validate([
-                'name' => 'required|unique:offices,name',
+                'name' => 'required|unique:facilities,name',
                 'description'=> 'required',
                 'type' => 'required',
 

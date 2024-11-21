@@ -46,14 +46,23 @@ class StudentController extends Controller
                             ->orWhere('email', 'like', "%$query%")
                             ->orWhere('course', 'like', "%$query%")
                             ->paginate(10);
-
+    
         $department = $students->isNotEmpty() ? $students->first()->department : null;
-
-
+    
+        // Check if the request is an AJAX request
+        if ($request->ajax()) {
+            return view('partials.student_table', [
+                'students' => $students,
+                'totalStudents' => $students->total(),
+                'start' => ($students->currentPage() - 1) * $students->perPage() + 1,
+                'end' => min(($students->currentPage() - 1) * $students->perPage() + $students->perPage(), $students->total())
+            ]);
+        }
+    
         return view('students.view_students_by_department', [
             'students' => $students,
-            'department' => $department, // Pass the department variable
-            'totalStudents' => $students->total(), // You may want to update this
+            'department' => $department,
+            'totalStudents' => $students->total(),
             'start' => ($students->currentPage() - 1) * $students->perPage() + 1,
             'end' => min(($students->currentPage() - 1) * $students->perPage() + $students->perPage(), $students->total())
         ])->with('title', 'Search Results');

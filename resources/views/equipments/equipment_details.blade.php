@@ -49,12 +49,12 @@
                 <div class="col-md-6">
                     <div class="row">
                         @foreach ([
-                            'Brand' => $equipments->brand,
-                            'Status' => $equipments->status,
-                            'Serial Number' => $equipments->serial_no,
-                            'Facility' => $equipments->facility->name,
-                            'Acquisition Date' => date('d M Y', strtotime($equipments->acquired_date)),
-                        ] as $label => $value)
+        'Brand' => $equipments->brand,
+        'Status' => $equipments->status,
+        'Serial Number' => $equipments->serial_no,
+        'Facility' => $equipments->facility->name,
+        'Acquisition Date' => date('d M Y', strtotime($equipments->acquired_date)),
+    ] as $label => $value)
                             <div class="col-md-6 mb-3">
                                 <strong>{{ $label }}:</strong>
                                 <p>{{ $value }}</p>
@@ -68,28 +68,31 @@
 
                     @if (auth()->user()->type === 'facility manager')
                         <div class="mt-4">
-                            @if (!in_array($equipments->status, ['Donated', 'Disposed']))
-                                <a href="javascript:void(0)" class="btn btn-success edit-equipment"
-                                    data-id="{{ $equipments->id }}" data-name="{{ $equipments->name }}"
-                                    data-description="{{ $equipments->description }}"
-                                    data-status="{{ $equipments->status }}"
-                                    data-facility="{{ $equipments->facility->name }}"
-                                    data-brand="{{ $equipments->brand }}"
-                                    data-serial_no="{{ $equipments->serial_no }}">
-                                    Edit Equipment
-                                </a>
-                                <button type="button" class="btn btn-primary" onclick="printInvoice()">
-                                    Print QR Code
-                                </button>
-                            @endif
-                            <a href="javascript:void(0)" class="btn btn-danger delete-equipment"
-                                data-id="{{ $equipments->id }}">
-                                Delete Equipment
+                            <a href="javascript:void(0)"
+                                class="btn btn-success text-base radius-8 px-20 py-11 edit-equipment"
+                                data-id="{{ $equipments->id }}" data-name="{{ $equipments->name }}"
+                                data-description="{{ $equipments->description }}"
+                                data-acquired_date="{{ $equipments->acquired_date }}"
+                                data-facility="{{ $equipments->facility->name }}"
+                                data-brand="{{ $equipments->brand }}"
+                                data-serial_no="{{ $equipments->serial_no }}">Edit
+                                Equipment
                             </a>
+                            <a href="javascript:void(0)"
+                                class="btn btn-danger text-base radius-8 px-20 py-11 delete-equipment"
+                                data-id="{{ $equipments->id }}">Delete Equipment
+                            </a>
+
+                            <button type="button" class="btn btn-primary text-base radius-8 px-20 py-11"
+                                onclick="printInvoice()">
+                                Print QR Code
+                            </button>
+
                             <form id="delete-form-{{ $equipments->id }}"
                                 action="{{ route('delete_equipment', $equipments->id) }}" method="POST"
                                 style="display: none;">
-                                @csrf @method('DELETE')
+                                @csrf
+                                @method('DELETE')
                             </form>
                         </div>
                     @endif
@@ -166,67 +169,145 @@
             @endforeach
         </div>
     </div>
-        @include('templates.footer_inc')
+    @include('templates.footer_inc')
+    <!-- Edit Equipment Modal -->
+    <div class="modal fade" id="editEquipmentModal" tabindex="-1" aria-labelledby="editEquipmentModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editEquipmentModalLabel">Edit Equipment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editEquipmentForm" action="{{ route('update_equipment') }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="id" id="equipmentId">
+
+                        <!-- Name -->
+                        <div class="mb-3">
+                            <label for="equipmentName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="equipmentName" name="name" required>
+                            @error('name')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Brand -->
+                        <div class="mb-3">
+                            <label for="equipmentBrand" class="form-label">Brand</label>
+                            <input type="text" class="form-control" id="equipmentBrand" name="brand" required>
+                            @error('brand')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Serial Number -->
+                        <div class="mb-3">
+                            <label for="equipmentSerialNo" class="form-label">Serial Number</label>
+                            <input type="text" class="form-control" id="equipmentSerialNo" name="serial_no" required>
+                            @error('serial_no')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="equipmentDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="equipmentDescription" name="description" required></textarea>
+                            @error('description')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Acquired Date -->
+                        <div class="mb-3">
+                            <label for="equipmentAcquiredDate" class="form-label">Acquired Date</label>
+                            <input type="datetime-local" class="form-control" id="equipmentAcquiredDate"
+                                name="acquired_date" required>
+                            @error('acquired_date')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Facility -->
+                        <div class="mb-3">
+                            <label for="equipmentFacility" class="form-label">Facility</label>
+                            <input type="text" class="form-control" id="equipmentFacility" name="facility"
+                                required>
+                            @error('facility')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 @include('templates.footer')
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Adjust spacing for the QR Code section
-        const qrCodeContainer = document.getElementById('qrCode');
-        if (qrCodeContainer) {
-            qrCodeContainer.style.marginBottom = '20px'; // Add space between the QR code and buttons
-            qrCodeContainer.style.marginTop = '10px'; // Ensure space above the QR code
-        }
+    document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.edit-equipment')) {
+                var button = e.target.closest('.edit-equipment');
+                var id = button.dataset.id;
+                var name = button.dataset.name;
+                var brand = button.dataset.brand;
+                var serial_no = button.dataset.serial_no;
+                var description = button.dataset.description;
+                var acquired_date = button.dataset.acquired_date;
+                var facility = button.dataset.facility;
 
-        // Adjust spacing for the button container
-        const buttonContainer = document.querySelector('.mt-4');
-        if (buttonContainer) {
-            buttonContainer.style.marginTop = '30px'; // Create space between the QR code and the buttons
-            buttonContainer.style.display = 'flex'; // Arrange buttons in a row
-            buttonContainer.style.justifyContent = 'flex-start'; // Align buttons to the left
-            buttonContainer.style.gap = '10px'; // Add space between each button
-        }
+                var formattedDate = new Date(acquired_date).toISOString().slice(0, 16);
 
-        // Adjust spacing for each button (optional, if additional individual button tweaks are needed)
-        const buttons = buttonContainer?.querySelectorAll('a, button');
-        if (buttons) {
-            buttons.forEach((button) => {
-                button.style.padding = '10px 15px'; // Ensure consistent button padding
-            });
-        }
+                document.getElementById('equipmentId').value = id;
+                document.getElementById('equipmentName').value = name;
+                document.getElementById('equipmentBrand').value = brand;
+                document.getElementById('equipmentSerialNo').value = serial_no;
+                document.getElementById('equipmentDescription').value = description;
+                document.getElementById('equipmentAcquiredDate').value = formattedDate;
+                document.getElementById('equipmentFacility').value = facility;
 
-        document.addEventListener('click', (e) => {
-            const button = e.target.closest('.edit-equipment') || e.target.closest('.delete-equipment');
-            if (button) {
-                if (button.classList.contains('edit-equipment')) {
-                    showEditModal(button.dataset);
-                } else {
-                    confirmDelete(button.dataset.id);
-                }
+                var editModal = new bootstrap.Modal(document.getElementById('editEquipmentModal'));
+                editModal.show();
+            }
+
+            if (e.target.closest('.delete-equipment')) {
+                var button = e.target.closest('.delete-equipment');
+                var id = button.dataset.id;
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById(`delete-form-${id}`).submit();
+                    }
+                });
             }
         });
     });
 
     function printInvoice() {
-        const printContents = document.getElementById('qrCode').innerHTML;
-        document.body.innerHTML = printContents;
-        window.print();
-        location.reload();
-    }
+        var printContents = document.getElementById('qrCode').innerHTML;
+        var originalContents = document.body.innerHTML;
 
-    function confirmDelete(id) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById(delete - form - $ {
-                    id
-                }).submit();
-            }
-        });
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
     }
 </script>

@@ -10,6 +10,7 @@ use App\Models\Maintenance;
 use App\Models\Repair;
 use App\Models\Disposed;
 use App\Models\Donated;
+use App\Models\Timeline;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -143,6 +144,13 @@ class TransactionController extends Controller
             'status' => 'Borrowed',
         ]);
 
+        Timeline::create([
+            'equipment_id' => $equipment->id,
+            'status' => 'Borrowed',
+            'remarks' => 'The day the equipment has been borrowed',
+            'user_id' => Auth::user()->id
+        ]);
+
         $equipment->status = 'Borrowed';
         $equipment->save();
 
@@ -217,6 +225,13 @@ class TransactionController extends Controller
             'user_id' => Auth::user()->id,
             'status' => 'In Maintenance',
         ]);
+
+        Timeline::create([
+            'equipment_id' => $equipment->id,
+            'status' => 'In Maintenance',
+            'remarks' => 'The equipment is in maintenance.',
+            'user_id' => Auth::user()->id
+        ]);
     
         // Update equipment status
         $equipment->status = 'In Maintenance';
@@ -266,12 +281,19 @@ class TransactionController extends Controller
     
         // Create the maintenance record
         Repair::create([
-            'equipment_id' => $equipment->id, // Use the ID of the equipment
-            'remarks' => 'The day the equipment is Repaired', // Make sure this is the intended field
+            'equipment_id' => $equipment->id, 
+            'remarks' => 'The day the equipment is Repaired',
             'issue' => $validatedData['issue_note'],
-            'repaired_date' => $validatedData['repair_date'], // Use the date from the input
+            'repaired_date' => $validatedData['repair_date'], 
             'user_id' => Auth::user()->id,
             'status' => 'In Repair',
+        ]);
+
+        Timeline::create([
+            'equipment_id' => $equipment->id,
+            'status' => 'In Repair',
+            'remarks' => 'The equipment is in repair.',
+            'user_id' => Auth::user()->id
         ]);
     
         // Update equipment status
@@ -325,7 +347,13 @@ class TransactionController extends Controller
             'user_id' => Auth::user()->id,
             'status' => 'Disposed',
         ]);
-    
+        
+        Timeline::create([
+            'equipment_id' => $equipment->id,
+            'status' => 'Disposed',
+            'remarks' => 'The equipment has been disposed.',
+            'user_id' => Auth::user()->id
+        ]);
         // Update equipment status
         $equipment->status = 'Disposed';
         $equipment->save();
@@ -390,6 +418,13 @@ class TransactionController extends Controller
             'status' => 'Donated',
             'condition' => $validatedData['condition'], 
             'recipient' => $validatedData['recipient'], 
+        ]);
+
+        Timeline::create([
+            'equipment_id' => $equipment->id,
+            'status' => 'Donated',
+            'remarks' => 'The equipment is donated.',
+            'user_id' => Auth::user()->id
         ]);
 
         // Update equipment status
