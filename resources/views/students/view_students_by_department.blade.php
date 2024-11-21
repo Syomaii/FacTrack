@@ -29,15 +29,9 @@
             <div
                 class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                 <div class="d-flex align-items-center flex-wrap gap-3">
-                    <span class="text-md fw-medium text-secondary-light mb-0">Show</span>
-                    <select class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
-                        @for ($i = 1; $i <= $totalStudents; $i++)
-                            <option>{{ $i }}</option>
-                        @endfor
-                    </select>
-                    <form class="navbar-search" method="GET" action="{{ route('search-student') }}">
-                        <input type="text" class="bg-base h-40-px w-auto" name="search" placeholder="Search"
-                            value="{{ request('search') }}">
+                    <form id="searchForm" class="navbar-search" method="GET" action="{{ route('search-student') }}">
+                        <input type="text" id="searchInput" class="bg-base h-40-px w-auto" name="search"
+                            placeholder="Search" value="{{ request('search') }}">
                         <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
                     </form>
                 </div>
@@ -58,8 +52,7 @@
                         </thead>
                         <tbody>
                             @forelse ($students as $student)
-                                <tr>
-
+                                <tr class="student-row">
                                     <td>
                                         <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ $student->id }}</h6>
                                     </td>
@@ -92,7 +85,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="text-center">No students found in this department.</td>
+                                    <td colspan="7" class="text-center">No students found.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -162,3 +155,26 @@
     @include('templates.footer_inc')
 </main>
 @include('templates.footer')
+<script>
+    document.getElementById('searchInput').addEventListener('input', function() {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll('.student-row'); // Select all student rows
+
+        rows.forEach(function(row) {
+            // Get the text content of the relevant columns (student's first name, last name, etc.)
+            let firstName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            let lastName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+            let gender = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+            let email = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+            let course = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
+
+            // Check if the filter matches any of the fields
+            if (firstName.includes(filter) || lastName.includes(filter) || gender.includes(filter) ||
+                email.includes(filter) || course.includes(filter)) {
+                row.style.display = ''; // Show the row
+            } else {
+                row.style.display = 'none'; // Hide the row
+            }
+        });
+    });
+</script>

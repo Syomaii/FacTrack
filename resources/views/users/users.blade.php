@@ -113,7 +113,8 @@
                                     </td>
                                     <td>{{ ucwords($user->type) }}</td>
                                     <td class="text-center">
-                                        <span class="{{ $user->status == 'inactive' ? 'bg-danger text-white border border-danger-main' : 'bg-success-focus border border-success-main' }} px-24 py-4 radius-4 fw-medium text-sm">
+                                        <span
+                                            class="{{ $user->status == 'inactive' ? 'bg-danger text-white border border-danger-main' : 'bg-success-focus border border-success-main' }} px-24 py-4 radius-4 fw-medium text-sm">
                                             {{ ucwords($user->status) }}
                                         </span>
                                     </td>
@@ -151,11 +152,12 @@
                             <!-- Previous Page Link -->
                             <li class="page-item">
                                 <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
-                                    href="{{ $users->previousPageUrl() }}" aria-disabled="{{ $users->onFirstPage() }}">
+                                    href="{{ $users->previousPageUrl() }}"
+                                    aria-disabled="{{ $users->onFirstPage() }}">
                                     <iconify-icon icon="ep:d-arrow-left"></iconify-icon>
                                 </a>
                             </li>
-                        
+
                             <!-- Pagination Pages -->
                             @if ($users->lastPage() > 1)
                                 <!-- Show first page if not too close to current -->
@@ -185,10 +187,9 @@
                                             href="{{ $users->url($users->lastPage()) }}">{{ $users->lastPage() }}</a>
                                     </li>
                                 @endif
-                            @else   
-                                    
+                            @else
                             @endif
-                        
+
                             <!-- Next Page Link -->
                             <li class="page-item">
                                 <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px text-md"
@@ -235,5 +236,43 @@
                 noUsersMessage.style.display = 'none'; // Hide message if users are visible
             }
         });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.querySelector('input[name="search"]');
+        const statusSelect = document.querySelector('select[name="status"]');
+        const userRows = document.querySelectorAll('tbody tr');
+        const noUsersMessage = document.getElementById('no-users-message');
+
+        // Function to filter users based on search and status
+        function filterUsers() {
+            const searchValue = searchInput.value.toLowerCase().trim();
+            const selectedStatus = statusSelect.value.toLowerCase().trim();
+            let hasVisibleUsers = false; // Flag to check if there are visible users
+
+            userRows.forEach(row => {
+                const userName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                const userLastName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                const userStatus = row.getAttribute('data-status');
+
+                // Check if the row matches the search query and selected status
+                const matchesSearch = userName.includes(searchValue) || userLastName.includes(
+                    searchValue);
+                const matchesStatus = !selectedStatus || userStatus === selectedStatus;
+
+                if (matchesSearch && matchesStatus) {
+                    row.style.display = ''; // Show the row
+                    hasVisibleUsers = true; // Set flag to true if a user is visible
+                } else {
+                    row.style.display = 'none'; // Hide the row
+                }
+            });
+
+            // Show or hide the "no users" message based on the result
+            noUsersMessage.style.display = hasVisibleUsers ? 'none' : 'block';
+        }
+
+        // Attach event listeners to search input and status select
+        searchInput.addEventListener('input', filterUsers);
+        statusSelect.addEventListener('change', filterUsers);
     });
 </script>

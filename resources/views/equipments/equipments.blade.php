@@ -299,20 +299,6 @@
                         @enderror
                     </div>
 
-                    <!-- Status -->
-                    <div class="mb-3">
-                        <label for="equipmentStatus" class="form-label">Status</label>
-                        <select class="form-control" id="equipmentStatus" name="status" required>
-                            <option value="Available">Available</option>
-                            <option value="In Maintenance">In Maintenance</option>
-                            <option value="In Repair">In Repair</option>
-                            <option value="Borrowed">Borrowed</option>
-                        </select>
-                        @error('status')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-
                     <button type="submit" class="btn btn-primary">Save</button>
                 </form>
             </div>
@@ -336,7 +322,6 @@
                 var serial_no = button.dataset.serial_no;
                 var description = button.dataset.description;
                 var acquired_date = button.dataset.acquired_date;
-                var status = button.dataset.status;
                 var facility = button.dataset.facility;
 
                 // Format acquired date for input field
@@ -349,7 +334,6 @@
                 document.getElementById('equipmentSerialNo').value = serial_no;
                 document.getElementById('equipmentDescription').value = description;
                 document.getElementById('equipmentAcquiredDate').value = formattedDate;
-                document.getElementById('equipmentStatus').value = status;
                 document.getElementById('equipmentFacility').value = facility;
 
                 // Show the modal
