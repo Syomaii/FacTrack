@@ -155,26 +155,3 @@
     @include('templates.footer_inc')
 </main>
 @include('templates.footer')
-<script>
-    document.getElementById('searchInput').addEventListener('input', function() {
-        let filter = this.value.toLowerCase();
-        let rows = document.querySelectorAll('.student-row'); // Select all student rows
-
-        rows.forEach(function(row) {
-            // Get the text content of the relevant columns (student's first name, last name, etc.)
-            let firstName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-            let lastName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-            let gender = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
-            let email = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
-            let course = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
-
-            // Check if the filter matches any of the fields
-            if (firstName.includes(filter) || lastName.includes(filter) || gender.includes(filter) ||
-                email.includes(filter) || course.includes(filter)) {
-                row.style.display = ''; // Show the row
-            } else {
-                row.style.display = 'none'; // Hide the row
-            }
-        });
-    });
-</script>

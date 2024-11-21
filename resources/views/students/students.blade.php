@@ -36,7 +36,8 @@
         @endif
 
         @if (session('error'))
-            <div class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
+            <div
+                class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-2">
                     <iconify-icon icon="akar-icons:warning" class="icon text-xl"></iconify-icon>
                     {{ session('error') }}
@@ -44,14 +45,15 @@
             </div>
         @endif
 
-        
+
         {{-- @if (session()->has('failures'))
             <!-- Debug output -->
             
         @endif --}}
 
         <div class="card h-100 p-0 radius-12">
-            <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
+            <div
+                class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                 <h5 class="mb-0">Import Excel File</h5>
             </div>
             <div class="card-body">
@@ -59,15 +61,15 @@
                     @csrf
                     <div class="mb-3">
                         <label for="file" class="form-label fw-semibold">Select File (XLSX/XLS)</label>
-                        <input type="file" name="file" id="file" class="form-control @error('file') is-invalid @enderror" required>
+                        <input type="file" name="file" id="file"
+                            class="form-control @error('file') is-invalid @enderror" required>
                         @error('file')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     @if (auth()->user()->type === 'admin')
                         <div class="form-group mb-3 col-md-12">
-                            <label for="department"
-                                class="form-label fw-semibold">Select
+                            <label for="department" class="form-label fw-semibold">Select
                                 Department</label>
                             <select class="form-control radius-8" id="department" name="department">
                                 <option value="" disabled selected>Select a Department</option>
@@ -82,7 +84,8 @@
                         </div>
                     @endif
                     <button type="button" class="btn btn-primary w-100" id="previewBtn">Preview</button>
-                    <button type="submit" class="btn btn-success w-100 mt-3" id="submitBtn" style="display: none;" disabled>Confirm and Submit</button>
+                    <button type="submit" class="btn btn-success w-100 mt-3" id="submitBtn" style="display: none;"
+                        disabled>Confirm and Submit</button>
                 </form>
             </div>
 
@@ -123,34 +126,40 @@
     document.getElementById('previewBtn').addEventListener('click', function() {
         var fileInput = document.getElementById('file');
         var file = fileInput.files[0];
-        
-        if (file && (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'application/vnd.ms-excel')) {
+
+        if (file && (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file
+                .type === 'application/vnd.ms-excel')) {
             var reader = new FileReader();
-            
+
             reader.onload = function(e) {
                 var data = new Uint8Array(e.target.result);
-                var workbook = XLSX.read(data, { type: 'array' });
+                var workbook = XLSX.read(data, {
+                    type: 'array'
+                });
                 var firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                var sheetData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-                
+                var sheetData = XLSX.utils.sheet_to_json(firstSheet, {
+                    header: 1
+                });
+
                 // Clear previous table content
                 var tableBody = document.querySelector('table tbody');
-                tableBody.innerHTML = ""; 
-                
+                tableBody.innerHTML = "";
+
                 // Process headers and rows for display
                 var headers = sheetData[0];
                 sheetData.slice(1).forEach(function(row) {
                     var newRow = document.createElement('tr');
-                    
+
                     headers.forEach((header, index) => {
                         var cell = document.createElement('td');
-                        cell.textContent = row[index] || ''; // Fallback to empty if cell data is missing
+                        cell.textContent = row[index] ||
+                            ''; // Fallback to empty if cell data is missing
                         newRow.appendChild(cell);
                     });
-                    
+
                     tableBody.appendChild(newRow);
                 });
-                
+
                 // Enable and display the submit button after preview
                 var submitBtn = document.getElementById('submitBtn');
                 var previewTable = document.getElementById('previewTable');
@@ -163,13 +172,10 @@
                 previewBtn.style.display = 'none';
                 previewBtn.disabled = true;
             };
-            
+
             reader.readAsArrayBuffer(file);
         } else {
             alert('Please upload a valid Excel file (XLSX or XLS).');
         }
     });
-
-
-
 </script>

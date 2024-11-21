@@ -49,9 +49,9 @@
             <div
                 class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                 <div class="d-flex align-items-center flex-wrap gap-3">
-                    <form class="navbar-search">
-                        <input type="text" class="bg-base h-40-px w-auto border" name="search" id="equipmentSearch"
-                            placeholder="Search">
+                    <form class="navbar-search" method="GET" action="{{ route('equipment_search') }}">
+                        <input type="text" class="bg-base h-40-px w-auto" name="search" id="equipmentSearch"
+                            placeholder="Search" value="{{ request('search') }}">
                         <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
                     </form>
                     <select name="status" id="statusFilter"
@@ -359,35 +359,6 @@
                         document.getElementById(`delete-form-${id}`).submit();
                     }
                 });
-            }
-        });
-    });
-
-    document.getElementById('equipmentSearch').addEventListener('input', function() {
-        let filter = this.value.toLowerCase();
-        let rows = document.querySelectorAll('tbody tr'); // Select all rows in the table body
-        const selectedStatus = document.getElementById('statusFilter').value
-            .toLowerCase(); // Get the selected status
-
-        rows.forEach(function(row) {
-            // Get the text content of the relevant columns (Brand, Name, Serial No., Facility)
-            let brand = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-            let name = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
-            let serialNo = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
-            let facility = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
-            let statusCell = row.cells[7].innerText.toLowerCase(); // Get the status of the current row
-
-            // Check if the filter matches any of the fields
-            const matchesSearch = brand.includes(filter) || name.includes(filter) || serialNo.includes(
-                filter) || facility.includes(filter);
-            const matchesStatus = selectedStatus === '' || statusCell.includes(
-                selectedStatus); // Check if the row matches the selected status
-
-            // Show or hide the row based on search and status filter
-            if (matchesSearch && matchesStatus) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
             }
         });
     });

@@ -62,6 +62,47 @@ class PageController extends Controller
             'totalUsers', 'start', 'end'
         ))->with('title', 'Dashboard');
     }
+
+    public function dashboardSearchUser (Request $request)
+    {
+        $search = $request->input('search');
+    
+        // Adjust the query to exclude admin users
+        $users = User::when($search, function ($query, $search) {
+            return $query->where('type', '!=', 'admin') // Exclude admin users
+                         ->where(function($q) use ($search) {
+                             $q->where('firstname', 'like', '%' . $search . '%')
+                               ->orWhere('lastname', 'like', '%' . $search . '%')
+                               ->orWhere('email', 'like', '%' . $search . '%');
+                         });
+        }, function ($query) {
+            // If no search term, just exclude admin users
+            return $query->where('type', '!=', 'admin');
+        })->paginate(10);
+    
+        // Get the total count of users for pagination
+        $totalUsers = User::where('type', '!=', 'admin')->count(); // Count excluding admin users
+        $start = $users->firstItem();
+        $end = $users->lastItem();
+    
+        // Fetch other required data
+        $userCount = User::where('type', '!=', 'admin')->count(); // Count excluding admin users
+        $equipmentCount = Equipment::count();
+        $totalBorrowedEquipments = Equipment::where('status', 'Borrowed')->count();
+        $totalInRepairEquipments = Equipment::where('status', 'In Repair')->count();
+        $borrowedPerMonth = Borrower::selectRaw('YEAR(borrowed_date) as year, MONTH(borrowed_date) as month, COUNT(*) as total')
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'desc')
+            ->orderBy('month', 'desc')
+            ->get();
+        $recentLoggedIn = User::orderBy('last_login_at', 'desc')->take(5)->get();
+    
+        return view('dashboard', compact(
+            'userCount', 'equipmentCount', 'totalBorrowedEquipments',
+            'totalInRepairEquipments', 'users', 'recentLoggedIn', 'borrowedPerMonth',
+            'totalUsers', 'start', 'end'
+        ))->with('title', 'Dashboard');
+    }
     
     public function notifications(){
         $notifications = Auth::check() ? Auth::user()->notifications()->get() : collect();
@@ -213,6 +254,25 @@ class PageController extends Controller
 
         return view('reports.borrowers_log', compact('borrows'))->with('title', 'Borrowers Details');
     }
+
+    // In BorrowerController.php
+public function borrowerSearch(Request $request)
+{
+    $search = $request->input('search');
+
+    $borrows = Borrower::with('equipment')
+        ->when($search, function ($query, $search) {
+            return $query->where('borrowers_name', 'LIKE', "%{$search}%")
+                         ->orWhere('borrowers_id_no', 'LIKE', "%{$search}%")
+                         ->orWhereHas('equipment', function ($q) use ($search) {
+                             $q->where('name', 'LIKE', "%{$search}%")
+                               ->orWhere('brand', 'LIKE', "%{$search}%");
+                         });
+        })
+        ->paginate(10); // Adjust pagination as needed
+
+    return view('reports/borrowers_log', compact('borrows'))->with('title', 'Borrowers Log');
+}
 
     public function maintenance()
     {

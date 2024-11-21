@@ -118,6 +118,18 @@ class EquipmentController extends Controller
         return redirect()->route('equipments')->with('deleteEquipmentSuccessfully', 'Equipment deleted successfully.');
     }
     
+    public function equipmentSearch(Request $request)
+{
+    $search = $request->input('search');
+    $equipments = Equipment::when($search, function ($query, $search) {
+        return $query->where('name', 'like', '%' . $search . '%')
+                     ->orWhere('brand', 'like', '%' . $search . '%')
+                     ->orWhere('serial_no', 'like', '%' . $search . '%')
+                     ->orWhere('owned_by', 'like', '%' . $search . '%');
+    })->paginate(10);
+
+    return view('equipments/equipments', compact('equipments'))->with('title', 'Equipments');
+}
 
     
 }
