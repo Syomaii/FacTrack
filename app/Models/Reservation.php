@@ -8,11 +8,16 @@ class Reservation extends Model
 {
     protected $table = "reservation";
     protected $fillable = [
-        'user_id',
+        'student_id',
         'equipment_id',
         'reservation_date',
         'expected_return_date',
         'status',
         'purpose',
     ];
+
+    public function facility()
+    {
+        return $this->belongsTo(Facility::class);
+    }
 }

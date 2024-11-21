@@ -205,11 +205,10 @@ class PageController extends Controller
 
     public function borrowersLog()
     {
-        // Fetch the borrow records from the database
-        $perPage = 10; // Or you can get this from a request parameter
+        
         $borrows = Borrower::with(['equipment', 'user'])
             ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
+            ->paginate(10);
 
         return view('reports.borrowers_log', compact('borrows'))->with('title', 'Borrowers Details');
     }
