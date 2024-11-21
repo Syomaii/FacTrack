@@ -95,6 +95,7 @@
                                 <td>{{ ucwords($equipment->brand) }}</td> <!-- Brand Data -->
                                 <td>{{ ucwords($equipment->name) }}</td>
                                 <td>{{ $equipment->serial_no }}</td> <!-- Serial Number Data -->
+                                
                                 <td>{{ $equipment->facility->name }}</td>
                                 <td>{!! QrCode::size(100)->generate($equipment->code) !!}</td>
                                 <td>
@@ -283,7 +284,7 @@
                     <!-- Acquired Date -->
                     <div class="mb-3">
                         <label for="equipmentAcquiredDate" class="form-label">Acquired Date</label>
-                        <input type="datetime-local" class="form-control" id="equipmentAcquiredDate"
+                        <input type="date" class="form-control" id="equipmentAcquiredDate"
                             name="acquired_date" required>
                         @error('acquired_date')
                             <div class="text-danger">{{ $message }}</div>

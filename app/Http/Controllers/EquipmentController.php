@@ -25,8 +25,8 @@ class EquipmentController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif',
             'status' => 'required|in:Available,In Maintenance,In Repair,Borrowed',
             'owned_by' => 'required',
+            'owned_by_other' => 'required_if:owned_by,Others',
         ]);
-    
         // Get the facility ID and verify its existence
         $facilityId = $request->input('facility');
         $facility = Facility::where('id', $facilityId)->firstOrFail();
@@ -43,7 +43,9 @@ class EquipmentController extends Controller
         $data['code'] = $code;
 
         $data['next_due_date'] = Carbon::now()->addDays(30);
-    
+        $ownedBy = $request->owned_by === 'Others' ? $request->owned_by_other : $request->owned_by;
+        $data['owned_by'] = $ownedBy;
+
         // Handle the image file upload
         if ($request->hasFile('image')) {
             $image = $request->file('image');

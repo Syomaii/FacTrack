@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('name', 255);
             $table->string('serial_no', 255);
             $table->text('description');
-            $table->dateTime('acquired_date');
+            $table->date('acquired_date');
             $table->string('code', 255);
             $table->string('image', 255);
             $table->string('status', 50);

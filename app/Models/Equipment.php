@@ -27,7 +27,13 @@ class Equipment extends Model
 
     public function facility()
     {
-        return $this->belongsTo(Facility::class);
+        return $this->belongsTo(Facility::class, 'facility_id');
+    }
+
+    // In App\Models\Equipment.php
+    public function office()
+    {
+        return $this->belongsTo(Office::class);
     }
 
     protected static function boot()
@@ -54,7 +60,6 @@ class Equipment extends Model
         return $this->hasMany(Timeline::class);
     }
 
-    // Equipment.php
     public function borrows()
     {
         return $this->hasMany(Borrower::class, 'equipment_id');
@@ -69,10 +74,12 @@ class Equipment extends Model
     {
         return $this->hasMany(Repair::class, 'equipment_id');
     }
+
     public function donated()
     {
         return $this->hasMany(Donated::class, 'equipment_id');
     }
+
     public function disposed()
     {
         return $this->hasMany(Disposed::class, 'equipment_id');

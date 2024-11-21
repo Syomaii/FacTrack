@@ -22,9 +22,6 @@
         </div>
     @endif
 
-
-
-
     <div class="dashboard-main-body">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
             <h6 class="fw-semibold mb-0">Dashboard</h6>
@@ -177,9 +174,9 @@
                             </table>
                         </div>
 
-                        @if ($totalUsers > 0)
+                        @if ($userCount > 0)
                             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
-                                <span>Showing {{ $start }} to {{ $end }} of {{ $totalUsers }}
+                                <span>Showing {{ $start }} to {{ $end }} of {{ $userCount }}
                                     entries</span>
                                 <ul class="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
                                     <!-- Previous Page Link -->
@@ -357,7 +354,7 @@
                             min: 0,
                             max: yAxisMax, // Set maximum value dynamically based on data
                             ticks: {
-                                stepSize: yAxisStepSize,
+                                stepSize: yAxisStepSize - 8,
                                 font: {
                                     size: 12
                                 },

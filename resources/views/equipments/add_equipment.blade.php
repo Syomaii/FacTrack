@@ -181,8 +181,8 @@
                                         </select>
 
                                         <!-- Textbox that will appear when "Others" is selected -->
-                                        <input type="text" class="form-control radius-8 mt-2 d-none"
-                                            id="owned_by_other" name="owned_by_other" placeholder="Please specify" />
+                                        <input type="text" class="form-control radius-8 mt-2 d-none" id="owned_by_other" name="owned_by_other" placeholder="Please specify" value="{{ old('owned_by_other') }}" />
+
 
                                         <small class="text-danger">{{ $errors->first('owned_by') }}</small>
                                     </div>
@@ -214,6 +214,7 @@
 @include('templates.footer')
 
 <script>
+
     document.getElementById('upload-file').addEventListener('change', function(event) {
         const file = event.target.files[0];
         if (file) {
@@ -239,10 +240,18 @@
         var otherInput = document.getElementById('owned_by_other');
 
         // Show or hide the textbox based on the selected value
-        if (selectElement.value === 'Others') {
-            otherInput.classList.remove('d-none');
-        } else {
-            otherInput.classList.add('d-none');
+        if (ownedBySelect.value === 'Others') {
+            ownedByOtherInput.classList.remove('d-none');
         }
+
+        // Listen for changes to the dropdown
+        ownedBySelect.addEventListener('change', function() {
+            if (ownedBySelect.value === 'Others') {
+                ownedByOtherInput.classList.remove('d-none');
+            } else {
+                ownedByOtherInput.classList.add('d-none');
+                ownedByOtherInput.value = '';  // Reset the input value when not "Others"
+            }
+        });
     }
 </script>

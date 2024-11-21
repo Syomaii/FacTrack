@@ -240,7 +240,7 @@ class UserController extends Controller
         // Send the email notification
         Notification::send($user, new SendEmailNotification($details));
 
-        return back()->with('success', 'Password reset email sent successfully.');
+        return back()->with('successResetPassword', 'Password reset email sent successfully.');
     }
 
     public function showResetForm(Request $request)

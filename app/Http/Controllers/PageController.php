@@ -8,6 +8,7 @@ use App\Models\Designation;
 use App\Models\Equipment;
 use App\Models\Facility;
 use App\Models\Office;
+use App\Models\Repair;
 use App\Models\User;
 use Database\Factories\EquipmentFactory;
 use Illuminate\Http\Request;
@@ -28,38 +29,67 @@ class PageController extends Controller
             ->take(5)
             ->get();
 
+        $facilities = Facility::where('office_id', '=', $loggedInUser->office_id)->pluck('id');  
+
+        $equipments = Equipment::whereIn('facility_id', $facilities)->get();
+
         if($loggedInUser->type === 'admin'){
             $users = User::with(['designation', 'office']) // Load relationships
                     ->where('type', '!=', 'admin') // Filter by office ID
                     ->paginate(5); 
-        }else{
+            
+            $borrows = Borrower::all(); 
+            
+            $equipmentCount = Equipment::count();
+            
+            $userCount = User::count();
+            
+            $totalBorrowedEquipments = Borrower::whereNull('returned_date')->count();
+            
+            $totalInRepairEquipments = Equipment::where('status', 'in_repair')->count();
+            
+            $borrowedPerMonth = Borrower::selectRaw('YEAR(borrowed_date) as year, MONTH(borrowed_date) as month, COUNT(*) as total')
+                ->groupBy('year', 'month')
+                ->orderBy('year', 'desc')
+                ->orderBy('month', 'desc')
+                ->get();
+        }elseif($loggedInUser->type === 'operator' || $loggedInUser->type === 'facility manager'){
             $users = User::where('type', '!=', 'admin') // Exclude admin users
                     ->where('office_id', $loggedInUser->office_id) // Filter by office ID
                     ->paginate(5); 
+            
+                    $equipmentCount = Equipment::with('facility') 
+                    ->whereIn('facility_id', $facilities) 
+                    ->count();
+            // Get all the borrowers who have borrowed the equipments from the retrieved list
+            $borrows = Borrower::whereIn('equipment_id', $equipments->pluck('id'))->get();
+            
+            $totalBorrowedEquipments = Borrower::whereIn('equipment_id', $equipments->pluck('id'))
+                                    ->whereNull('returned_date')->count();
+            $totalInRepairEquipments = Repair::whereIn('equipment_id', $equipments->pluck('id'))
+                                    ->whereNull('returned_date')->count();
+
+            $userCount = User::where('type', '!=', 'admin')->where('office_id', $loggedInUser->office_id)->count();
+            
+            $borrowedPerMonth = Borrower::selectRaw('YEAR(borrowed_date) as year, MONTH(borrowed_date) as month, COUNT(*) as total')
+                ->join('equipments', 'borrows.equipment_id', '=', 'equipments.id') // Join with the equipment table
+                ->join('facilities', 'equipments.facility_id', '=', 'facilities.id') // Join with the facilities table
+                ->whereIn('equipments.facility_id', $facilities) // Filter by the equipment's facility_id (which belongs to the same office)
+                ->groupBy('year', 'month')
+                ->orderBy('year', 'desc')
+                ->orderBy('month', 'desc')
+                ->get();
         }
 
-        $totalUsers = User::where('office_id', $loggedInUser->office_id)->count();
-        $userCount = User::where('type', '!=', 'admin')->count();
-        $equipmentCount = Equipment::count();
-        $totalBorrowedEquipments = Borrower::whereNull('returned_date')->count();
-        $totalInRepairEquipments = Equipment::where('status', 'in_repair')->count();
         $start = ($users->currentPage() - 1) * $users->perPage() + 1;
-        $end = min($start + $users->perPage() - 1, $totalUsers);
-        // Fetch all data from the borrows table
-        $borrows = Borrower::all(); // Fetch all records from the borrows table
+        $end = min($start + $users->perPage() - 1, $userCount);
+
+        
     
-        // Calculate borrowed equipment per month (you can modify this query as needed)
-        $borrowedPerMonth = Borrower::selectRaw('YEAR(borrowed_date) as year, MONTH(borrowed_date) as month, COUNT(*) as total')
-            ->groupBy('year', 'month')
-            ->orderBy('year', 'desc')
-            ->orderBy('month', 'desc')
-            ->get();
-    
-        // Pass all data to the view
         return view('dashboard', compact(
             'userCount', 'equipmentCount', 'totalBorrowedEquipments',
             'totalInRepairEquipments', 'borrows', 'users', 'recentLoggedIn', 'borrowedPerMonth',
-            'totalUsers', 'start', 'end'
+            'start', 'end'
         ))->with('title', 'Dashboard');
     }
     
@@ -109,13 +139,21 @@ class PageController extends Controller
             ->with('title', 'Users');
     }
 
-    public function equipments(){
+    public function equipments() {
+        
         $officeId = Auth::user()->office_id;
 
-         $equipments = Equipment::paginate(10);
-
+        $facilities = Facility::where('office_id', '=', $officeId)->pluck('id');  
+    
+        $equipments = Equipment::with('facility')  // Make sure to load the facility relationship
+                    ->whereIn('facility_id', $facilities)  // Filter equipments where facility_id is in the list of retrieved facilities
+                    ->paginate(10);
+        // dd($equipments->toArray());
+        // Return the view with the equipments data
         return view('equipments/equipments', compact('equipments'))->with('title', 'Equipments');
     }
+    
+    
 
     public function profile($id)
     {

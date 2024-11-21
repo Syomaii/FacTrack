@@ -195,6 +195,7 @@
         });
 
         $('#scanModal').on('hidden.bs.modal', function() {
+            $('.modal-backdrop').remove();
             stopScanner();
         });
 

@@ -1,5 +1,6 @@
 @include('templates.header')
 <x-sidebar />
+
 <main class="dashboard-main">
     <x-navbar />
 
@@ -113,8 +114,9 @@
         </div>
     </div>
 
-    @include('templates.footer')
+    @include('templates.footer_inc')
 </main>
+@include('templates.footer')
 
 <!-- Edit Office Modal -->
 <div class="modal fade" id="editOfficeModal" tabindex="-1" aria-labelledby="editOfficeModalLabel" aria-hidden="true">
@@ -208,4 +210,4 @@
     });
 </script>
 
-@include('templates.footer')
+
