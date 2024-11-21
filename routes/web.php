@@ -131,7 +131,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/disposed-equipment-reports', [ReportController::class, 'setDateDisposedEquipmentReports'])->name('disposed.equipment.reports');
         Route::get('/borrowers-log', [PageController::class, 'borrowersLog'])->name('borrowersLog');
         Route::get('/reservations-log', [ReservationController::class, 'reservationLogs'])->name('reservationsLog');
-
+        Route::get('/reservation-details/{id}', [ReservationController::class, 'reservationDetails'])->name('reservation.reservation_details');
         
         // Route::get('/product-details/{id}', [PageController::class, 'productDetails'])->name('product.details');
         

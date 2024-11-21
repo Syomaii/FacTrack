@@ -28,7 +28,6 @@
                 </div>
             </div>
         @endif
-
         <div class="card h-100 p-0 radius-12">
             <div
                 class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
@@ -39,7 +38,6 @@
                         <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
                     </form>
                 </div>
-
             </div>
             <div class="card-body p-24">
                 <div class="table-responsive scroll-sm">
@@ -61,17 +59,35 @@
                             @forelse ($reservations as $reservation)
                                 <tr class="reservation-row">
                                     <td>{{ $reservation->student_id }}</td>
-                                    <td>{{ ucwords($reservation->student->firstname) }} {{ ucwords($reservation->student->firstname) }}</td>
-                                    <td>{{ ucwords($reservation->office->name) }}</td>
+                                    <td> 
+                                        @if ($reservation->student)
+                                            {{ ucwords($reservation->student->firstname) }} {{ ucwords($reservation->student->lastname) }}
+                                        @else
+                                            <span class="text-danger">Student Not Found</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($reservation->offices)
+                                            {{ ucwords($reservation->offices->name) }}
+                                        @else
+                                            <span class="text-danger">Office Not Found</span>
+
+                                        @endif
+                                    </td>
                                     <td>{{ ucwords($reservation->equipment->name) }}
                                         ({{ ucwords($reservation->equipment->brand) }})
                                     </td>
                                     <td>{{ $reservation->reservation_date }}</td>
                                     <td>{{ $reservation->expected_return_date }}
                                     </td>
-                                    <td>{{ $reservation->status }}</td>
-                                    <td>{{ $reservation->purpose }}</td>
-                                    <td>{{ $reservation->status }}</td>
+                                    <td>{{ ucwords($reservation->status) }}</td>
+                                    <td><span class="text-w-200-px">{{ $reservation->purpose }} </span></td>
+                                    <td>
+                                        <a href="{{ route('reservation.reservation_details  ', $reservation->id) }}"
+                                            class="w-32-px h-32-px bg-primary-light text-primary-600 rounded-circle d-inline-flex align-items-center justify-content-center view-equipment">
+                                            <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
+                                        </a>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -156,7 +172,7 @@
 <script>
     document.getElementById('borrowerSearch').addEventListener('input', function() {
         let filter = this.value.toLowerCase();
-        let rows = document.querySelectorAll('.borrower-row'); // Select all borrower rows
+        let rows = document.querySelectorAll('.reservation-row'); // Select all borrower rows
 
         rows.forEach(function(row) {
             // Get the text content of the relevant columns (borrower's name, department, and equipment name)

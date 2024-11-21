@@ -78,6 +78,8 @@ class ReservationController extends Controller
             return redirect()->back()->withErrors(['error' => 'Equipment not found.']);
         }
 
+        $office_id = $equipment->facility->office->id; 
+        $studentId = Auth::user()->student_id;
         // Check if the equipment is already reserved in the given time range
         $existingReservation = Reservation::where('equipment_id', $request->equipment_id)
         ->where(function ($query) use ($request) {
@@ -98,8 +100,9 @@ class ReservationController extends Controller
 
         // Create a new reservation
         Reservation::create([
-            'student_id' =>  Auth::user()->student_id ,
+            'student_id' =>  $studentId,
             'equipment_id' => $request->equipment_id,
+            'office_id' => $office_id,
             'reservation_date' => $request->reservation_date,
             'expected_return_date' => $request->expected_return_date,
             'status' => 'pending',
@@ -110,11 +113,22 @@ class ReservationController extends Controller
     }
 
     public function reservationLogs(){
-        $reservations = Reservation::with(['equipment', 'student'])
+        $reservations = Reservation::with(['student', 'equipment', 'offices'])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
+
 
         return view('logs.reservation_logs', compact('reservations'))->with('title', 'Reservation Logs');
     }
     
+    public function reservationDetails($id){
+        $reservation = Reservation::with(['student', 'equipment', 'offices'])->where('id', $id)->first();
+        $title = "Reservation Details";
+        $data = [
+            'reservation' => $reservation,
+            'title' => $title
+        ];
+
+        return redirect()->route('reservation.reservation_details')->with($data);
+    }
 }
