@@ -30,6 +30,7 @@
                                     <li><strong>Equipment ID:</strong> {{ $disposed_id_no }}</li>
                                     <li><strong>Equipment Name:</strong> {{ $equipment->name }}</li>
                                     <li><strong>Equipment Code:</strong> {{ $equipment->code }}</li>
+                                    <li><strong>Recieved By:</strong> {{ $recievedBy }}</li>
                                     <li><strong>Remarks:</strong> {{ $remarks }}</li>
                                     <li><strong>Disposed Date:</strong> {{ $disposed_date }}</li>
                                     <li><strong>Equipment Status:</strong> {{ $equipment->status }}</li>
