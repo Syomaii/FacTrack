@@ -315,10 +315,12 @@ class TransactionController extends Controller
     
         $disposedDate = $request->input('disposed_date') ?: now()->format('Y-m-d');
         $issueNote = $request->input('remarks') ?: 'No issue provided';
+        $recievedBy = $request->input('recieved_by') ?: 'No recieved by provided';
     
         return view('transaction.disposed_equipment_details', [
             'equipment' => $equipment,
             'disposed_id_no' => $equipment->id, 
+            'recieved_by' => $recievedBy,
             'remarks' => $issueNote,
             'disposed_date' => $disposedDate,
         ])->with('title', 'Repair Details');
@@ -327,6 +329,7 @@ class TransactionController extends Controller
     public function submitDisposed(Request $request, $code)
     {
         $validatedData = $request->validate([
+            'recieved_by' => 'required|string|max:255',
             'remarks' => 'required|string|max:255',
             'disposed_date' => 'required|date',
         ]);
@@ -342,6 +345,7 @@ class TransactionController extends Controller
         // Create the maintenance record
         Disposed::create([
             'equipment_id' => $equipment->id, // Use the ID of the equipment
+            'recieved_by' => $validatedData['recieved_by'], // Make sure this is the intended field
             'remarks' => 'The day the equipment is Disposed', // Make sure this is the intended field
             'disposed_date' => $validatedData['disposed_date'], // Use the date from the input
             'user_id' => Auth::user()->id,

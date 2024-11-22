@@ -43,6 +43,17 @@
                                         value="{{ now()->format('Y-m-d') }}">
 
                                     <div class="mb-3">
+                                        <label for="recieved_by"
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Recieved
+                                            By</label>
+                                        <input type="text"
+                                            class="form-control radius-8 {{ $errors->has('recieved_by') ? 'is-invalid' : '' }}"
+                                            id="recieved_by" name="recieved_by" placeholder="Recieved By"
+                                            value="{{ old('recieved_by') }}">
+                                        <small class="text-danger">{{ $errors->first('recieved_by') }}</small>
+                                    </div>
+
+                                    <div class="mb-3">
                                         <label for="remarks" class="form-label">Remarks</label>
                                         <textarea name="remarks" id="remarks" class="form-control" rows="3" placeholder="Reason for disposal..."></textarea>
                                     </div>
@@ -62,7 +73,8 @@
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="scanModalDisposeLabel">Dispose Equipment</h5>
+                                                    <h5 class="modal-title" id="scanModalDisposeLabel">Dispose Equipment
+                                                    </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
@@ -88,4 +100,3 @@
     @include('templates.footer_inc')
 </main>
 @include('templates.footer')
-
