@@ -1,4 +1,4 @@
-</main>
+</body>
 <!-- jQuery library js -->
 <script src="/assets/js/lib/jquery-3.7.1.min.js"></script>
 <!-- Bootstrap js -->

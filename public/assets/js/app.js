@@ -67,13 +67,13 @@ function calculateSettingAsThemeString({ localStorageTheme }) {
 /**
 * Utility function to update the button text and aria-label.
 */
-// function updateButton({ buttonEl, isDark }) {
-//   const newCta = isDark ? "dark" : "light";
-//   // use an aria-label if you are omitting text on the button
-//   // and using a sun/moon icon, for example
-//   buttonEl.setAttribute("aria-label", newCta);
-//   buttonEl.innerText = newCta;
-// }
+function updateButton({ buttonEl, isDark }) {
+  const newCta = isDark ? "dark" : "light";
+  // use an aria-label if you are omitting text on the button
+  // and using a sun/moon icon, for example
+  buttonEl.setAttribute("aria-label", newCta);
+  buttonEl.innerText = newCta;
+}
 
 /**
 * Utility function to update the theme setting on the html tag
@@ -96,21 +96,21 @@ let currentThemeSetting = calculateSettingAsThemeString({ localStorageTheme });
 /**
 * 3. Update the theme setting and button text accoridng to current settings
 */
-// updateButton({ buttonEl: button, isDark: currentThemeSetting === "dark" });
+updateButton({ buttonEl: button, isDark: currentThemeSetting === "dark" });
 updateThemeOnHtmlEl({ theme: currentThemeSetting });
 
 /**
 * 4. Add an event listener to toggle the theme
 */
-// button.addEventListener("click", (event) => {
-//   const newTheme = currentThemeSetting === "dark" ? "light" : "dark";
+button.addEventListener("click", (event) => {
+  const newTheme = currentThemeSetting === "dark" ? "light" : "dark";
 
-//   localStorage.setItem("theme", newTheme);
-//   updateButton({ buttonEl: button, isDark: newTheme === "dark" });
-//   updateThemeOnHtmlEl({ theme: newTheme });
+  localStorage.setItem("theme", newTheme);
+  updateButton({ buttonEl: button, isDark: newTheme === "dark" });
+  updateThemeOnHtmlEl({ theme: newTheme });
 
-//   currentThemeSetting = newTheme;
-// }); 
+  currentThemeSetting = newTheme;
+}); 
 
 // =========================== Table Header Checkbox checked all js Start ================================
 $('#selectAll').on('change', function () {
