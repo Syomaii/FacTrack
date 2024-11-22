@@ -40,4 +40,8 @@ class Borrower extends Model
         return $this->belongsTo(Students::class, 'borrowers_id_no');
     }
 
+    protected $casts = [
+        'expected_returned_date' => 'datetime',
+        'returned_date' => 'datetime',
+    ];
 }

@@ -129,6 +129,35 @@ class ReservationController extends Controller
             'title' => $title
         ];
 
-        return redirect()->route('reservation.reservation_details')->with($data);
+        return view('students.reservation_details')->with($data);
     }
+
+    public function accept($id)
+    {
+        $reservation = Reservation::findOrFail($id);
+
+        if (in_array('approved', ['pending', 'approved', 'declined'])) { // Replace with your ENUM values
+            $reservation->status = 'approved';
+            $reservation->save();
+
+            return redirect()->back()->with('success', 'Reservation approved successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Invalid status value.');
+    }
+
+    public function decline($id)
+    {
+        $reservation = Reservation::findOrFail($id);
+
+        if (in_array('declined', ['pending', 'approved', 'declined'])) { // Replace with your ENUM values
+            $reservation->status = 'declined';
+            $reservation->save();
+
+            return redirect()->back()->with('success', 'Reservation declined successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Invalid status value.');
+    }
+
 }

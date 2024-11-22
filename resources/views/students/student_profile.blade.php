@@ -105,7 +105,7 @@
                                                     @if (!is_null($borrowHistory->returned_date))
                                                         <span class="badge bg-success">Returned</span>
                                                     @else
-                                                        <span class="badge bg-warning">Pending</span>
+                                                        <span class="badge bg-warning">Not returned </span>
                                                     @endif
                                                 </td>
                                             </tr>

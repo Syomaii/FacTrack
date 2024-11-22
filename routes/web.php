@@ -75,7 +75,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/student/{id}', [StudentController::class, 'studentProfile'])->name('student.show_profile');
         Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->name('change_password');
         Route::get('/dasboard-search-user', [PageController::class, 'dashboardSearchUser'])->name('dashboard-search-user');
-
+        
     });
 
 
@@ -133,8 +133,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/disposed-equipment-reports', [ReportController::class, 'setDateDisposedEquipmentReports'])->name('disposed.equipment.reports');
         Route::get('/borrowers-log', [PageController::class, 'borrowersLog'])->name('borrowersLog');
         Route::get('/reservations-log', [ReservationController::class, 'reservationLogs'])->name('reservationsLog');
-        Route::get('/reservation-details/{id}', [ReservationController::class, 'reservationDetails'])->name('reservation.reservation_details');
-        
+        Route::get('/reservation-details/{id}', [ReservationController::class, 'reservationDetails'])->name('reservation_details');
+        Route::post('/reservation/{id}/accept', [ReservationController::class, 'accept'])->name('reservation.accept');
+        Route::post('/reservation/{id}/decline', [ReservationController::class, 'decline'])->name('reservation.decline');
+
         // Route::get('/product-details/{id}', [PageController::class, 'productDetails'])->name('product.details');
         
         //Equipment Controller

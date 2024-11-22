@@ -83,7 +83,7 @@
                                     <td>{{ ucwords($reservation->status) }}</td>
                                     <td><span class="text-w-200-px">{{ $reservation->purpose }} </span></td>
                                     <td>
-                                        <a href="{{ route('reservation.reservation_details  ', $reservation->id) }}"
+                                        <a href="{{ route('reservation_details', $reservation->id) }}"
                                             class="w-32-px h-32-px bg-primary-light text-primary-600 rounded-circle d-inline-flex align-items-center justify-content-center view-equipment">
                                             <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
                                         </a>

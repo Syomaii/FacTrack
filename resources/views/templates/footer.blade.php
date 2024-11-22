@@ -318,6 +318,7 @@
 
         var disposed_id_no = $('#disposed_id_no').val();
         var remarks = $('#remarks').val();
+        var received_by = $('#received_by').val();
         var disposed_date = $('#disposed_date').val();
 
         stopDisposeScanner();
@@ -325,6 +326,7 @@
         window.location.href = "/disposed-equipment-details/" + result +
             "?disposed_id_no=" + encodeURIComponent(disposed_id_no) +
             "&remarks=" + encodeURIComponent(remarks) +
+            "&received_by=" + encodeURIComponent(received_by) +
             "&disposed_date=" + encodeURIComponent(disposed_date);
     }
 

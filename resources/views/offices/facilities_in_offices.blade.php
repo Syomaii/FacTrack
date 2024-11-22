@@ -76,7 +76,7 @@
 
         <!-- No facilities message -->
         <div class="row gy-4" id="equipmentList">
-            @if ($facilities->isNotEmpty())
+            @if (!$facilities->isEmpty())
                 @foreach ($facilities as $facility)
                     <div class="col-xxl-3 col-sm-6 equipment-card">
                         <div class="card h-100 radius-12 text-center">

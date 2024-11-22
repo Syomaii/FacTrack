@@ -147,7 +147,7 @@ class PageController extends Controller
 
         $facilities = Facility::whereHas('office', function ($query) use ($officeId) {
             $query->where('office_id', $officeId);
-        })->paginate(5);
+        })->get();
 
         return view('facilities/facilities', compact('officeId', 'facilities'))->with('title', 'Facilities');
     }

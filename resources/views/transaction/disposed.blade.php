@@ -44,11 +44,11 @@
 
                                     <div class="mb-3">
                                         <label for="received_by"
-                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Recieved
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">Received
                                             By</label>
                                         <input type="text"
                                             class="form-control radius-8 {{ $errors->has('received_by') ? 'is-invalid' : '' }}"
-                                            id="received_by" name="received_by" placeholder="Recieved By"
+                                            id="received_by" name="received_by" placeholder="Received By"
                                             value="{{ old('received_by') }}">
                                         <small class="text-danger">{{ $errors->first('received_by') }}</small>
                                     </div>

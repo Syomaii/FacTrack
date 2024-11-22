@@ -139,7 +139,7 @@ class StudentController extends Controller
     public function profile($student_id)
     {
         $student = Students::where('id', $student_id)->first();
-        $studentBorrowHistory = Borrower::with('equipment')->where('borrowers_id', $student_id)->get();
+        $studentBorrowHistory = Borrower::with('equipment')->where('borrowers_id_no', $student_id)->get();
 
         if (!$student) {
             abort(404); 

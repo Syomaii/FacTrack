@@ -11,6 +11,7 @@ class Disposed extends Model
         'equipment_id',
         'user_id',
         'disposed_date',
+        'received_by',
         'remarks',
     ];
 

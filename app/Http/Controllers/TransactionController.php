@@ -56,7 +56,7 @@ class TransactionController extends Controller
             'borrowers_name' => 'required|string|max:255',
             'department' => 'required|string|max:255',
             'purpose' => 'required|string|max:255',
-            'expected_return_date' => 'required|date|after:today',
+            'expected_returned_date' => 'required|date|after:today',
             'equipment_code' => 'required', 
         ]);
 
@@ -92,7 +92,7 @@ class TransactionController extends Controller
             'borrowers_name' => $borrowers_name = $request->query('borrowers_name'),
             'department' => $department = $request->query('department'),
             'purpose' => $purpose = $request->query('purpose'),
-            'expected_return_date' => $expected_return_date = $request->query('expected_return_date'),
+            'expected_returned_date' => $expected_returned_date = $request->query('expected_return_date'),
             'title' => 'Borrow Details',
         ];
 
@@ -315,15 +315,15 @@ class TransactionController extends Controller
     
         $disposedDate = $request->input('disposed_date') ?: now()->format('Y-m-d');
         $issueNote = $request->input('remarks') ?: 'No issue provided';
-        $receivedBy = $request->input('received_by') ?: 'No recieved by provided';
+        $received_by = $request->input('received_by') ?: 'No recieved by provided';
     
         return view('transaction.disposed_equipment_details', [
             'equipment' => $equipment,
             'disposed_id_no' => $equipment->id, 
-            'received_by' => $receivedBy,
+            'received_by' => $received_by,
             'remarks' => $issueNote,
             'disposed_date' => $disposedDate,
-        ])->with('title', 'Repair Details');
+        ])->with('title', 'Dispose Details');
     }
 
     public function submitDisposed(Request $request, $code)
@@ -339,7 +339,7 @@ class TransactionController extends Controller
     
         // Check if the equipment is available for maintenance
         if ($equipment->status !== 'Available') {
-            return back()->withErrors(['equipment' => 'This equipment is not available for repair.']);
+            return back()->withErrors(['equipment' => 'This equipment is not available for disposal.']);
         }
     
         // Create the maintenance record

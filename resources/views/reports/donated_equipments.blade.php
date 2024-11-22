@@ -48,7 +48,7 @@
                                     <p class="mb-1 text-sm">Date Issued: {{ now()->format('Y-m-d') }}</p>
                                 </div>
                                 <div>
-                                    <img src="assets/images/logo1.png" alt="University Logo" class="mb-8">
+                                    <img src="/assets/images/logo.png" alt="University Logo" class="mb-8">
                                     <p class="mb-1 text-sm">University of Cebu Lapu-lapu and Mandaue</p>
                                     <p class="mb-1 text-sm">A.C. Cortes Ave., Mandaue City, Cebu, 6014</p>
                                     <p class="mb-0 text-sm">{{ auth()->user()->email }},
