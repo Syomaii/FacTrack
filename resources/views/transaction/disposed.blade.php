@@ -43,14 +43,14 @@
                                         value="{{ now()->format('Y-m-d') }}">
 
                                     <div class="mb-3">
-                                        <label for="recieved_by"
+                                        <label for="received_by"
                                             class="form-label fw-semibold text-primary-light text-sm mb-8">Recieved
                                             By</label>
                                         <input type="text"
-                                            class="form-control radius-8 {{ $errors->has('recieved_by') ? 'is-invalid' : '' }}"
-                                            id="recieved_by" name="recieved_by" placeholder="Recieved By"
-                                            value="{{ old('recieved_by') }}">
-                                        <small class="text-danger">{{ $errors->first('recieved_by') }}</small>
+                                            class="form-control radius-8 {{ $errors->has('received_by') ? 'is-invalid' : '' }}"
+                                            id="received_by" name="received_by" placeholder="Recieved By"
+                                            value="{{ old('received_by') }}">
+                                        <small class="text-danger">{{ $errors->first('received_by') }}</small>
                                     </div>
 
                                     <div class="mb-3">
