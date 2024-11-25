@@ -51,7 +51,6 @@
                                 <th scope="col">Reservation Date</th>
                                 <th scope="col">Expected Return Date</th>
                                 <th scope="col">Status</th>
-                                <th scope="col">Purpose</th>
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>
@@ -81,7 +80,6 @@
                                     <td>{{ $reservation->expected_return_date }}
                                     </td>
                                     <td>{{ ucwords($reservation->status) }}</td>
-                                    <td><span class="text-w-200-px">{{ $reservation->purpose }} </span></td>
                                     <td>
                                         <a href="{{ route('reservation_details', $reservation->id) }}"
                                             class="w-32-px h-32-px bg-primary-light text-primary-600 rounded-circle d-inline-flex align-items-center justify-content-center view-equipment">
