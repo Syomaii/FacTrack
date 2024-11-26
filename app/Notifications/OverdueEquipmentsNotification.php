@@ -27,21 +27,12 @@ class OverdueEquipmentsNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        return ['database'];
     }
 
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-                    ->line('A student has been notified about overdue equipment.')
-                    ->line('Student: ' . $this->student->firstname . ' ' . $this->student->lastname)
-                    ->action('View Borrower', url('/student/' . $this->student->id)) // Adjust the URL based on your routes
-                    ->line('Please ensure to take appropriate actions.');
-    }
-
     /**
      * Get the array representation of the notification.
      *

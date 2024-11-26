@@ -43,8 +43,9 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
-    Route::get('/notifications', [PageController::class, 'notifications']);
-    Route::get('/mark-notification-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('markNotificationAsRead');
+    Route::get('/notifications', [PageController::class, 'notifications'])->name('notifications');
+    Route::get('/notifications/redirect/{id}', [NotificationController::class, 'redirect'])->name('redirect');
+
 
 
     Route::middleware(['checkRole:student'])->group(function (){

@@ -6,36 +6,27 @@ use App\Models\Students;
 use App\Models\User;
 use App\Notifications\OverdueEquipmentsNotification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class NotificationController extends Controller
 {
-    public function sendOverdueEquipmentNotification(Students $student)
-    {
-        // Find the facility manager(s) or users responsible for notifications
-        $facilityManagers = User::where('type', 'facility manager')->get();
+    
 
-        if ($facilityManagers->isEmpty()) {
-            return response()->json(['error' => 'No facility managers found'], 404);
-        }
-
-        foreach ($facilityManagers as $facilityManager) {
-            // Send the notification to each facility manager
-            $facilityManager->notify(new OverdueEquipmentsNotification($student));
-        }
-
-        return response()->json(['message' => 'Notification sent to facility managers']);
-    }
-
-    public function markAsRead($id)
+    public function redirect($id)
     {
         $notification = Auth::user()->notifications()->find($id);
 
-        if ($notification) {
-            $notification->markAsRead(); // This sets `read_at` to the current timestamp
+        if (!$notification->read_at) {
+            $notification->markAsRead();
         }
 
-        return redirect()->back(); // Redirect back to the notifications page
-    }
+        // Determine redirect URL based on notification_type
+        $redirectUrl = match($notification->data['notification_type'] ?? '') {
+            'reservation' => route('reservation_details', $notification->data['reservation_id']),
+            default => route('notifications', $notification->id),
+        };
 
+        return redirect($redirectUrl);
+    }
 
 }

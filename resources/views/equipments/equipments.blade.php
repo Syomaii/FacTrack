@@ -52,7 +52,7 @@
                     <form class="navbar-search" method="GET" action="{{ route('equipment_search') }}">
                         <input type="text" class="bg-base h-40-px w-auto" name="search" id="equipmentSearch"
                             placeholder="Search" value="{{ request('search') }}">
-                        <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
+                        <button type="submit"><iconify-icon icon="ion:search-outline" class="icon"></iconify-icon></button>
                     </form>
                     <select name="status" id="statusFilter"
                         class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">

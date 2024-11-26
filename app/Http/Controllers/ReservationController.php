@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ReserveEquipmentEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Equipment;
 use App\Models\Reservation;
@@ -78,7 +79,8 @@ class ReservationController extends Controller
             return redirect()->back()->withErrors(['error' => 'Equipment not found.']);
         }
 
-        $office_id = $equipment->facility->office->id; 
+        $office = $equipment->facility->office->id; 
+        $student = Auth::user();
         $studentId = Auth::user()->student_id;
         // Check if the equipment is already reserved in the given time range
         $existingReservation = Reservation::where('equipment_id', $request->equipment_id)
@@ -99,15 +101,16 @@ class ReservationController extends Controller
         }
 
         // Create a new reservation
-        Reservation::create([
+        $reservation = Reservation::create([
             'student_id' =>  $studentId,
             'equipment_id' => $request->equipment_id,
-            'office_id' => $office_id,
+            'office_id' => $office,
             'reservation_date' => $request->reservation_date,
             'expected_return_date' => $request->expected_return_date,
             'status' => 'pending',
             'purpose' => $request->purpose,
         ]);
+        event(new ReserveEquipmentEvent($reservation, $student, $office, $equipment));
 
         return redirect()->back()->with('success', 'Reservation successfully created.');
     }
