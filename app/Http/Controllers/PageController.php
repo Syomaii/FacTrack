@@ -13,6 +13,7 @@ use App\Models\User;
 use Database\Factories\EquipmentFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class PageController extends Controller
 {
@@ -92,6 +93,8 @@ class PageController extends Controller
             'start', 'end'
         ))->with('title', 'Dashboard');
     }
+
+    
 
     public function dashboardSearchUser (Request $request)
     {

@@ -14,9 +14,14 @@ class ReserveEquipmentNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    protected $student;
+    protected $reservation;
+    protected $equipment;
+    public function __construct($student, $reservation, $equipment)
     {
-        //
+        $this->student = $student;
+        $this->reservation = $reservation;
+        $this->equipment = $equipment;
     }
 
     /**
@@ -26,19 +31,12 @@ class ReserveEquipmentNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['database'];
     }
 
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
 
     /**
      * Get the array representation of the notification.
@@ -48,7 +46,11 @@ class ReserveEquipmentNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'title' => 'New Equipment Reservation',
+            'message' => $this->student->firstname . ' ' . $this->student->lastname . 
+                ' has requested a reservation for the equipment: ' . $this->equipment->name,
+            'reservation_id' => $this->reservation->id,
+            'notification_type' => 'reservation',
         ];
     }
 }

@@ -4699,14 +4699,6 @@ html[data-theme=dark] .bg-light-pink {
   padding-block: var(--size-10) !important;
 }
 
-.scan{
-  position: fixed;
-  width: 500px;
-  justify-content: center;
-  align-self: center;
-  margin-left: -20px;
-}
-
 .py-11 {
   padding-block: var(--size-11) !important;
 }
@@ -11926,12 +11918,8 @@ select option {
   max-width: max-content;
 }
 
-.avatar-upload-center{
-  margin: auto;
-}
-
 #imagePreview {
-  /* background-image: url("../images/users/admin.png"); */
+  background-image: url("../images/users/admin.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -12893,7 +12881,7 @@ td.fc-header-center {
 }
 
 .sidebar.active .sidebar-menu li.dropdown.dropdown-open .sidebar-submenu, .sidebar.active .sidebar-menu li.dropdown.open .sidebar-submenu {
-  display: block !important;
+  display: none !important;
 }
 
 .sidebar.active .sidebar-menu li.dropdown a::after {
@@ -12985,7 +12973,7 @@ td.fc-header-center {
   .sidebar-menu li.dropdown > a::after {
     font-size: 1.375rem;
   }
-}x
+}
 .sidebar-menu li.dropdown.open > a, .sidebar-menu li.dropdown.dropdown-open > a {
   background-color: var(--brand);
   color: #fff;
@@ -13002,7 +12990,7 @@ td.fc-header-center {
 }
 
 .sidebar-menu li.dropdown.open .sidebar-submenu {
-  display: block !important;
+  display: block;
 }
 
 .sidebar-menu li > a.active-page {

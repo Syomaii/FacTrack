@@ -38,7 +38,7 @@
 
                         <div class="max-h-400-px overflow-y-auto scroll-sm pe-4">
                             @foreach ($notifications as $notification)
-                                <a href="{{ route('markNotificationAsRead', $notification->id) }}"
+                                <a href="{{ route('redirect', $notification->id) }}"
                                     class="px-24 py-12 d-flex align-items-start gap-3 mb-2 justify-content-between bg-blue {{ $notification->read_at ? 'bg-white' : 'bg-blue-50' }}">
                                     <div class="text-black hover-bg-transparent hover-text-primary d-flex align-items-center gap-3">
                                         <span class="w-44-px h-44-px bg-success-subtle text-success-main rounded-circle d-flex justify-content-center align-items-center flex-shrink-0">

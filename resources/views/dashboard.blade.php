@@ -111,9 +111,11 @@
         <div class="row gy-4 mt-1 mb-3">
             <div class="col-xxl-12 col-xl-12">
                 <div class="card h-100">
-                    <div class="card-body borrowedEquipment">
-                        <h6>Borrowed Equipments Per Month</h6>
-                        <canvas id="borrowedEquipmentsChart" class="pt-28"></canvas>
+                    <div class="card-header border-bottom bg-base py-16 px-24">
+                        <h6 class="text-lg fw-semibold mb-0">Borrowed Equipments Per Month</h6>
+                    </div>
+                    <div class="card-body p-24">
+                        <div id="borrowedEquipmentPerMonth" class=""></div>
                     </div>
                 </div>
             </div>
@@ -274,107 +276,106 @@
     @include('templates.footer_inc')
 </main>
 @include('templates.footer')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const ctx = document.getElementById('borrowedEquipmentsChart').getContext('2d');
-        const chartContainer = document.querySelector('.borrowedEquipment');
-        // Fetch the borrowed data from PHP to JavaScript
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
         const borrowedPerMonthData = @json($borrowedPerMonth);
-
-        // Check if data exists and is not empty
-        if (borrowedPerMonthData && borrowedPerMonthData.length > 0) {
-            // Prepare labels and data points
-            const labels = borrowedPerMonthData.map(data => {
-                const date = new Date(data.year, data.month - 1);
-                return date.toLocaleString('default', {
-                    month: 'short',
-                    year: 'numeric'
-                });
-            });
-
-            const dataPoints = borrowedPerMonthData.map(data => data.total);
-
-            // Determine Y-axis settings based on max value in data
-            const maxDataValue = Math.max(...dataPoints);
-            const yAxisStepSize = maxDataValue <= 10 ? 10 : 2;
-            const yAxisMax = Math.ceil(maxDataValue / yAxisStepSize) * yAxisStepSize;
-
-            // Initialize the chart
-            new Chart(ctx, {
+    
+        // Define months from January to December
+        const months = [
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        ];
+    
+        // Initialize data structure for all months
+        const dataMap = Array.from({ length: 12 }, (_, index) => ({
+            x: months[index],
+            y: 0 // Default to 0 if no data is provided for the month
+        }));
+    
+        // Fill in the data from borrowedPerMonthData
+        borrowedPerMonthData.forEach(data => {
+            const monthIndex = data.month - 1; // `data.month` is 1-based, array is 0-based
+            if (monthIndex >= 0 && monthIndex < 12) {
+                dataMap[monthIndex].y = data.total;
+            }
+        });
+    
+        // Determine Y-axis max dynamically based on the highest value
+        const maxYValue = Math.max(...dataMap.map(d => d.y), 10); // Ensure minimum Y max is 10
+        const yAxisStepSize = maxYValue <= 10 ? 10 : 10; // Steps of 10
+        const yAxisMax = Math.ceil(maxYValue / yAxisStepSize) * yAxisStepSize;
+    
+        // ApexCharts configuration
+        const options = {
+            series: [{
+                name: "Borrowed Equipments",
+                data: dataMap
+            }],
+            chart: {
                 type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Borrowed Equipments',
-                        data: dataPoints,
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                        borderRadius: 5,
-                        barPercentage: 0.6,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                font: {
-                                    size: 14
-                                },
-                                color: '#333'
-                            }
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            backgroundColor: '#fff',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1,
-                            titleColor: '#333',
-                            bodyColor: '#333',
-                            displayColors: false,
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                font: {
-                                    size: 12
-                                },
-                                color: '#555'
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            min: 0,
-                            max: yAxisMax, // Set maximum value dynamically based on data
-                            ticks: {
-                                stepSize: yAxisStepSize - 8,
-                                font: {
-                                    size: 12
-                                },
-                                color: '#555'
-                            },
-                            grid: {
-                                color: 'rgba(200, 200, 200, 0.3)',
-                                borderDash: [5, 5]
-                            }
-                        }
+                height: 264,
+                toolbar: {
+                    show: false
+                }
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    borderRadius: 8,
+                    columnWidth: '23%',
+                    endingShape: 'rounded',
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            fill: {
+                type: 'gradient',
+                colors: ['#487FFF'],
+                gradient: {
+                    shade: 'light',
+                    type: 'vertical',
+                    shadeIntensity: 0.5,
+                    gradientToColors: ['#487FFF'],
+                    inverseColors: false,
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    stops: [0, 100],
+                }
+            },
+            grid: {
+                show: true,
+                borderColor: '#D1D5DB',
+                strokeDashArray: 4,
+                position: 'back',
+            },
+            xaxis: {
+                type: 'category',
+                categories: months, // Use predefined month names for X-axis
+            },
+            yaxis: {
+                min: 0,
+                max: yAxisMax,
+                tickAmount: yAxisMax - 3,
+                labels: {
+                    formatter: function (value) {
+                        return value.toFixed(0); // Ensure labels are whole numbers
                     }
                 }
-            });
-        } else {
-            // Display a message inside the card body if no data is available
-            chartContainer.innerHTML = `
-            <h6>Borrowed Equipments Per Month</h6>
-            <p class="text-center mt-3 text-muted"><strong>No data available for borrowed equipment.</strong></p>
-        `;
-        }
+            },
+            tooltip: {
+                y: {
+                    formatter: function (value) {
+                        return value + ' borrows';
+                    }
+                }
+            }
+        };
+    
+        // Render the chart
+        const chart = new ApexCharts(document.querySelector("#borrowedEquipmentPerMonth"), options);
+        chart.render();
     });
 </script>
+

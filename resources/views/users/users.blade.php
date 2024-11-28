@@ -48,13 +48,12 @@
                     <form class="navbar-search" method="GET" action="{{ route('search-user') }}">
                         <input type="text" class="bg-base h-40-px w-auto" name="search" placeholder="Search"
                             value="{{ request('search') }}">
-                        <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
+                        <button type="submit"><iconify-icon icon="ion:search-outline" class="icon"></iconify-icon></button>
                     </form>
-                    <select name="status" class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
+                    <select name="status" id="statusFilter" class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px text-decoration-none">
                         <option value="">Status</option>
-                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
-                        <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive
-                        </option>
+                        <option value="active" >Active</option>
+                        <option value="inactive" >Inactive</option>
                     </select>
                 </div>
                 <a href="/add-user"
@@ -82,7 +81,7 @@
                         </thead>
                         <tbody>
                             @forelse ($users as $user)
-                                <tr data-status="{{ strtolower($user->status) }}">
+                                <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <img src="{{ $user->image }}" alt=""
@@ -208,3 +207,24 @@
     @include('templates.footer_inc')
 </main>
 @include('templates.footer')
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const statusFilter = document.getElementById('statusFilter');
+        const tableRows = document.querySelectorAll('tbody tr');
+
+        // Function to filter table rows based on selected status
+        statusFilter.addEventListener('change', function() {
+            const selectedStatus = statusFilter.value.toLowerCase();
+
+            tableRows.forEach(row => {
+                const statusCell = row.cells[8].innerText.toLowerCase(); 
+                if (selectedStatus === '' || statusCell === selectedStatus) {
+                    row.style.display = ''; // Show row
+                } else {
+                    row.style.display = 'none'; // Hide row
+                }
+            });
+        });
+    });
+</script>

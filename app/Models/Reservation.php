@@ -24,7 +24,7 @@ class Reservation extends Model
 
     public function equipment()
     {
-        return $this->belongsTo(Equipment::class);
+        return $this->belongsTo(Equipment::class, 'equipment_id', 'id');
     }
 
     public function student()
