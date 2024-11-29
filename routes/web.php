@@ -50,13 +50,19 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['checkRole:student'])->group(function (){
         Route::get('/student-dashboard', [StudentController::class, 'studentDashboard'])->name('student.dashboard');
-        Route::get('/student-profile/{id}', [StudentController::class, 'profile'])->name('student.profile');
+        Route::get('/student-profile/{id}', [StudentController::class, 'studentProfile'])->name('student.profile');
         Route::get('/reserve-equipment', [ReservationController::class, 'reserveEquipment'])->name('student.reserve_equipment');
         Route::get('/api/search-equipment', [ReservationController::class, 'searchEquipment']);
-        Route::get('/profile/{id}', [StudentController::class, 'profile'])->name('student.profile');
         Route::post('/reservations', [ReservationController::class, 'reserved'])->name('students.reserved');
 
         
+    });
+
+ //---------------------------------------Operator, Facility Manager and Student -----------------------------------------------
+
+    Route::middleware(['checkRole:operator,facility manager,student'])->group(function () {
+        Route::get('/reservation-details/{id}', [ReservationController::class, 'reservationDetails'])->name('reservation_details');
+
     });
 
  //---------------------------------------Operator, Facility Manager and Admin -----------------------------------------------
@@ -134,7 +140,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/disposed-equipment-reports', [ReportController::class, 'setDateDisposedEquipmentReports'])->name('disposed.equipment.reports');
         Route::get('/borrowers-log', [PageController::class, 'borrowersLog'])->name('borrowersLog');
         Route::get('/reservations-log', [ReservationController::class, 'reservationLogs'])->name('reservationsLog');
-        Route::get('/reservation-details/{id}', [ReservationController::class, 'reservationDetails'])->name('reservation_details');
         Route::post('/reservation/{id}/accept', [ReservationController::class, 'accept'])->name('reservation.accept');
         Route::post('/reservation/{id}/decline', [ReservationController::class, 'decline'])->name('reservation.decline');
 

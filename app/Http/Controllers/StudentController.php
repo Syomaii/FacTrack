@@ -7,6 +7,7 @@ use App\Mail\RegisteredUserMail;
 use App\Models\Borrower;
 use App\Models\Designation;
 use App\Models\Office;
+use App\Models\Reservation;
 use App\Models\Students;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -70,14 +71,16 @@ class StudentController extends Controller
 
     public function studentProfile($id)
     {
-        $student = Students::where('id', $id)->first();
+        $student = Students::findOrFail($id);
         $studentBorrowHistory = Borrower::with('equipment')->where('borrowers_id_no', $id)->get();
-
+        $studentReservations = Reservation::with('equipment')->where('student_id', $id)->get();
+        
         if (!$student) {
             abort(404); 
         }
 
-        return view('students.student_profile', compact('student', 'studentBorrowHistory'))->with('title', 'Student Profile');
+        return view('students.student_profile', compact('student', 'studentBorrowHistory', 'studentReservations'))
+            ->with('title', 'Student Profile');
     }
 
     public function addStudentPost(Request $request)
@@ -136,15 +139,17 @@ class StudentController extends Controller
         return view('students.student_dashboard', $data);
     }
 
-    public function profile($student_id)
-    {
-        $student = Students::where('id', $student_id)->first();
-        $studentBorrowHistory = Borrower::with('equipment')->where('borrowers_id_no', $student_id)->get();
+    // public function profile($student_id)
+    // {
+    //     $student = Students::findOrFail($student_id);
+    //     $studentBorrowHistory = Borrower::with('equipment')->where('borrowers_id_no', $student_id)->get();
+    //     $studentReservations = Reservation::with('equipment')->where('student_id', $student_id)->get();
+        
+    //     if (!$student) {
+    //         abort(404); 
+    //     }
 
-        if (!$student) {
-            abort(404); 
-        }
-
-        return view('students.student_profile', compact('student', 'studentBorrowHistory'))->with('title', 'Student Profile');
-    }
+    //     return view('students.student_profile', compact('student', 'studentBorrowHistory', 'studentReservations'))
+    //         ->with('title', 'Student Profile');
+    // }
 }
