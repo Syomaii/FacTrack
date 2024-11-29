@@ -27,37 +27,44 @@ class EquipmentController extends Controller
             'owned_by' => 'required',
             'owned_by_other' => 'required_if:owned_by,Others',
         ]);
-        // Get the facility ID and verify its existence
+
         $facilityId = $request->input('facility');
         $facility = Facility::where('id', $facilityId)->firstOrFail();
         
-        // Get the associated office ID from the facility
         $officeId = $facility->office_id;
     
-        // Add facility_id and user_id to the data array
         $data['facility_id'] = $facility->id;
         $data['user_id'] = Auth::user()->id;
     
-        // Generate a unique equipment code
-        $code = date('y') . $officeId . date('m') . date('d') . $facilityId . date('H') . $data['user_id'] . date('is');
+        $code = date('y') . $officeId . date('m') . date('d') . $facilityId . date('H') . $data['user_id'] . date('is') . $data['serial_no'];
         $data['code'] = $code;
 
         $data['next_due_date'] = Carbon::now()->addDays(30);
-        $ownedBy = $request->owned_by === 'Others' ? $request->owned_by_other : $request->owned_by;
-        $data['owned_by'] = $ownedBy;
 
-        // Handle the image file upload
+        $ownedBy = $request->owned_by === 'Others' ? $request->owned_by_other : $request->owned_by;
+
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $path = $image->move(public_path('images/equipments'), $image->getClientOriginalName());
-            $data['image'] = 'images/equipments/' . $image->getClientOriginalName();
+            $imageUrl = 'images/equipments/' . $image->getClientOriginalName();
         } 
     
-        // Create the new equipment
-        $equipment = Equipment::create($data);
+        $equipment = Equipment::create([
+            'facility_id' => $facility->id,
+            'user_id' => Auth::user()->id,
+            'brand' => ucwords(strtolower($data['brand'])),
+            'name' => ucwords(strtolower($data['name'])),
+            'serial_no' => $data['serial_no'],  
+            'description' => ucfirst($data['description']),
+            'acquired_date' => $data['acquired_date'],
+            'code' => $data['code'],
+            'image' => $imageUrl,
+            'status' => $data['status'],
+            'owned_by' => $ownedBy,
+            'next_due_date' => Carbon::now()->addDays(30),
+
+        ]);
         
-    
-        // Create a timeline entry for the new equipment
         Timeline::create([
             'equipment_id' => $equipment->id,
             'status' => $equipment->status,
@@ -65,7 +72,6 @@ class EquipmentController extends Controller
             'user_id' => Auth::user()->id
         ]);
     
-        // Redirect to the facility's equipment page with a success message
         return redirect()->route('equipment-details', ['code' => $equipment->code])
                      ->with('title', 'Equipment Details')
                      ->with('addEquipmentSuccessfully', 'Equipment Added Successfully!');

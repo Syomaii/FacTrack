@@ -32,7 +32,7 @@ class Students extends Model
 
     public function borrows()
     {
-        return $this->hasMany(Borrower::class);
+        return $this->hasMany(Borrower::class, 'borrowers_id_no', 'id');
     }
 
     public function user()

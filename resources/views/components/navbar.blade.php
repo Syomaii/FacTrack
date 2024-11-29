@@ -16,7 +16,7 @@
                 <button type="button" data-bs-toggle="modal" data-bs-target="#scanModal"
                     class="w-40-px h-40-px bg-neutral-200 rounded-circle d-flex justify-content-center align-items-center"
                     id="scanCode">
-                    <iconify-icon icon="tabler:line-scan"></iconify-icon>
+                    <iconify-icon icon="tabler:line-scan" class="text-primary-light text-2xl"></iconify-icon>
                 </button>
 
 
@@ -24,7 +24,12 @@
                     <button
                         class="has-indicator w-40-px h-40-px bg-neutral-200 rounded-circle d-flex justify-content-center align-items-center"
                         type="button" data-bs-toggle="dropdown">
-                        <iconify-icon icon="iconoir:bell" class="text-primary-light text-xl"></iconify-icon>
+                        <iconify-icon icon="iconoir:bell" class="text-primary-light text-2xl""></iconify-icon>
+                        @if ($notifications->whereNull('read_at')->count() > 0)
+                            <span class="position-absolute top-0 start-50 translate-middle-y badge rounded-pill bg-danger-600 border-0">
+                                {{ $notifications->whereNull('read_at')->count() }}
+                            </span>
+                        @endif
                     </button>
                     <div class="dropdown-menu to-top dropdown-menu-lg p-0">
                         <div
@@ -33,7 +38,9 @@
                                 <h6 class="text-lg text-primary-light fw-semibold mb-0">Notifications</h6>
                             </div>
                             <span
-                                class="text-primary-600 fw-semibold text-lg w-40-px h-40-px rounded-circle bg-base d-flex justify-content-center align-items-center">{{ $notifications->count() }}</span>
+                                class="text-primary-600 fw-semibold text-lg w-40-px h-40-px rounded-circle bg-base d-flex justify-content-center align-items-center">
+                                {{ $notifications->whereNull('read_at')->count() }}
+                            </span>
                         </div>
 
                         <div class="max-h-400-px overflow-y-auto scroll-sm pe-4">
