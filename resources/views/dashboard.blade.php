@@ -352,15 +352,15 @@
             },
             xaxis: {
                 type: 'category',
-                categories: months, // Use predefined month names for X-axis
+                categories: months, 
             },
             yaxis: {
                 min: 0,
                 max: yAxisMax,
-                tickAmount: yAxisMax - 3,
+                tickAmount: yAxisMax / 4,
                 labels: {
                     formatter: function (value) {
-                        return value.toFixed(0); // Ensure labels are whole numbers
+                        return value.toFixed(0); 
                     }
                 }
             },
