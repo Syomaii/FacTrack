@@ -48,11 +48,13 @@
 
             <div
                 class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
-                <div class="d-flex align-items-center flex-wrap gap-3">
-                    <form class="navbar-search" method="GET" action="{{ route('equipment_search') }}">
+                <div class="d-flex flex-grow-1 flex-wrap align-items-center gap-3">
+                    <form class="navbar-search d-flex align-items-center flex-grow-1" method="GET"
+                        action="{{ route('equipment_search') }}">
                         <input type="text" class="bg-base h-40-px w-auto" name="search" id="equipmentSearch"
                             placeholder="Search" value="{{ request('search') }}">
-                        <button type="submit"><iconify-icon icon="ion:search-outline" class="icon"></iconify-icon></button>
+                        <button type="submit"><iconify-icon icon="ion:search-outline"
+                                class="icon"></iconify-icon></button>
                     </form>
                     <select name="status" id="statusFilter"
                         class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
@@ -95,7 +97,7 @@
                                 <td>{{ ucwords($equipment->brand) }}</td> <!-- Brand Data -->
                                 <td>{{ ucwords($equipment->name) }}</td>
                                 <td>{{ $equipment->serial_no }}</td> <!-- Serial Number Data -->
-                                
+
                                 <td>{{ $equipment->facility->name }}</td>
                                 <td>{!! QrCode::size(100)->generate($equipment->code) !!}</td>
                                 <td>
@@ -284,8 +286,8 @@
                     <!-- Acquired Date -->
                     <div class="mb-3">
                         <label for="equipmentAcquiredDate" class="form-label">Acquired Date</label>
-                        <input type="date" class="form-control" id="equipmentAcquiredDate"
-                            name="acquired_date" required>
+                        <input type="date" class="form-control" id="equipmentAcquiredDate" name="acquired_date"
+                            required>
                         @error('acquired_date')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror

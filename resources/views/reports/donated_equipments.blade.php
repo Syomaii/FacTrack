@@ -143,13 +143,17 @@
                                 </div>
 
                                 <div class="mt-64">
-                                    <p class="text-center text-secondary-light text-sm fw-semibold">End of Report
+                                    <p class="text-center text-secondary-light text-sm fw-semibold" id="end-of-report">
+                                        End of Report
                                     </p>
                                 </div>
 
-                                <div class="d-flex flex-wrap justify-content-between align-items-end mt-64">
-                                    <div class="text-sm border-top d-inline-block px-12">Signature of Technician</div>
-                                    <div class="text-sm border-top d-inline-block px-12">Signature of Supervisor
+                                <div
+                                    class="d-flex flex-wrap justify-content-between align-items-end mt-64 signature-container">
+                                    <div class="text-sm border-top d-inline-block px-12" id="technician-signature">
+                                        Signature of Technician</div>
+                                    <div class="text-sm border-top d-inline-block px-12" id="supervisor-signature">
+                                        Signature of Supervisor
                                     </div>
                                 </div>
                             </div>
@@ -251,12 +255,45 @@
     }
 
     function printInvoice() {
-        var printContents = document.getElementById('invoice').innerHTML;
-        var originalContents = document.body.innerHTML;
+        // Get the content to print
+        var contentToPrint = document.getElementById("invoice").innerHTML;
 
-        document.body.innerHTML = printContents;
-        window.print();
+        // Create a new window for printing
+        var printWindow = window.open('', '', 'height=600,width=800');
 
-        document.body.innerHTML = originalContents;
+        // Write the content to the new window
+        printWindow.document.write('<html><head><title>Reports and Summary</title>');
+
+        // Add print styles
+        printWindow.document.write('<style>');
+        printWindow.document.write('body { font-family: Arial, sans-serif; margin: 20px; }');
+        printWindow.document.write('.chart-container { display: block; margin-bottom: 20px; }');
+        printWindow.document.write('table { width: 100%; border-collapse: collapse; }');
+        printWindow.document.write('th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }');
+        printWindow.document.write('@page { margin: 20mm; }');
+        printWindow.document.write('@media print { #printButton { display: none; } }');
+
+        printWindow.document.write(
+            '@media print { h6.text-md { font-size: 18px; font-weight: bold; } }');
+        printWindow.document.write(
+            '@media print { #end-of-report { text-align: center; font-size: 18px; font-weight: bold; display: block; margin: 25px 0; } }'
+        );
+        printWindow.document.write(
+            '@media print { .signature-container { display: flex; justify-content: space-between; } }');
+        printWindow.document.write(
+            '@media print { #technician-signature { font-size: 18px; font-weight: bold; margin: 20px 0; } }'
+        );
+        printWindow.document.write(
+            '@media print { #supervisor-signature { font-size: 18px; font-weight: bold; margin: 20px 0; } }');
+        printWindow.document.write('</style>');
+
+        printWindow.document.write('</head><body>');
+
+        printWindow.document.write(contentToPrint);
+        printWindow.document.write('</body></html>');
+
+        // Close the document and trigger print
+        printWindow.document.close();
+        printWindow.print();
     }
 </script>

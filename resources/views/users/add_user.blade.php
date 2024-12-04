@@ -1,42 +1,84 @@
+@include('templates.header')
 <style>
-    .scrollable-dropdown {
-        max-height: 250px;
-        overflow-y: auto;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        background-color: #fff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        transition: border-color 0.3s;
-        font-size: 30px;
-        padding: 10px;
+    /* Dropdown styles */
+    .dropdown {
+        max-width: 13em;
+        margin: 80px auto 0;
+        position: relative;
+        width: 100%;
     }
 
-    .scrollable-dropdown option {
-        padding: 15px;
+    .dropdown-btn {
+        background: #1d1f24;
+        font-size: 18px;
+        width: 100%;
+        border: none;
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.7em 0.5em;
+        border-radius: 0.5em;
+        cursor: pointer;
     }
 
-    .scrollable-dropdown:hover {
-        border-color: #007bff;
+    .arrow {
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 6px solid #fff;
+        transition: transform ease-in-out 0.3s;
     }
 
-    .scrollable-dropdown:focus {
-        outline: none;
-        border-color: #007bff;
+    .dropdown-content {
+        list-style: none;
+        position: absolute;
+        top: 3.2em;
+        width: 100%;
+        visibility: hidden;
+        overflow: hidden;
+        background: #2f3238;
+        /* Background for dropdown */
+        border-radius: 0.5em;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
     }
 
-    /* Optional: Style for the label */
-    .form-label {
+    .dropdown-content li {
+        transition: 0.5s;
+    }
+
+    .dropdown:focus-within .dropdown-content {
+        visibility: visible;
+    }
+
+    .dropdown:focus-within .dropdown-btn>.arrow {
+        transform: rotate(180deg);
+    }
+
+    .dropdown-content li:hover {
+        background: #1d1f24;
+        /* Change background on hover */
+    }
+
+    .dropdown-content li a {
+        display: block;
+        padding: 0.7em 0.5em;
+        color: #fff;
+        margin: 0.1em 0;
+        text-decoration: none;
+    }
+
+    /* Base styles */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: "Segoe UI", sans-serif;
         color: #333;
-        font-weight: 600;
-        font-size: 50px;
-    }
-
-    /* Optional: Style for the form group */
-    .form-group {
-        margin-bottom: 20px;
     }
 </style>
-@include('templates.header')
 <x-sidebar />
 <main class="dashboard-main">
     <x-navbar />
@@ -166,37 +208,6 @@
                                         </div>
                                     </div>
 
-                                    {{-- <div class="row">
-                                        <div class="form-group mb-3 col-md-6">
-                                            <label for="password"
-                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Password</label>
-                                            <div class="icon-field">
-                                                <span class="icon">
-                                                    <iconify-icon icon="solar:lock-password-outline"></iconify-icon>
-                                                </span>
-                                                <input id="password" type="password"
-                                                    class="form-control radius-8 {{ $errors->has('password') ? 'is-invalid' : '' }}"
-                                                    name="password" required placeholder="********">
-                                            </div>
-                                            <small class="text-danger">{{ $errors->first('password') }}</small>
-                                        </div>
-                                        <div class="form-group mb-3 col-md-6">
-                                            <label for="password_confirmation"
-                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Confirm
-                                                Password</label>
-                                            <div class="icon-field">
-                                                <span class="icon">
-                                                    <iconify-icon icon="solar:lock-password-outline"></iconify-icon>
-                                                </span>
-                                                <input id="password_confirmation" type="password"
-                                                    class="form-control radius-8 {{ $errors->has('password_confirmation') ? 'is-invalid' : '' }}"
-                                                    name="password_confirmation" required placeholder="********">
-                                            </div>
-                                            <small
-                                                class="text-danger">{{ $errors->first('password_confirmation') }}</small>
-                                        </div>
-                                    </div> --}}
-
                                     <div class="row">
                                         <div class="form-group mb-3 col-md-6">
                                             <label for="designation_id"
@@ -293,8 +304,9 @@
                                                 class="form-label fw-semibold text-primary-light text-sm mb-8">Select
                                                 Office</label>
                                             <select class="form-control radius-8 scrollable-dropdown" id="office_id"
-                                                name="office_id" size="2">
+                                                name="office_id" size="5">
                                                 <option value="" disabled selected>Select an Office</option>
+                                                <!-- This option is not scrollable -->
                                                 @foreach ($offices as $office)
                                                     @if ($office->type == 'office')
                                                         <option value="{{ $office->id }}">{{ $office->name }}
@@ -313,6 +325,7 @@
                                             <select class="form-control radius-8 scrollable-dropdown" id="department"
                                                 name="department" size="5">
                                                 <option value="" disabled selected>Select a Department</option>
+                                                <!-- This option is not scrollable -->
                                                 @foreach ($offices as $office)
                                                     @if ($office->type == 'department')
                                                         <option value="{{ $office->id }}">{{ $office->name }}

@@ -12,29 +12,35 @@ use App\Models\Donated;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
     public function borrowedEquipmentReports()
     {
-        $borrowedEquipments = Borrower::with(['equipment:id,name,brand']) 
+        $user = Auth::user();
+    
+        $borrowedEquipments = Borrower::with(['equipment:id,name,brand'])
+            ->whereHas('user', function($query) use ($user) {
+                $query->where('office_id', $user->office_id);
+            })
             ->select('equipment_id', 'borrowed_date', 'returned_date', 'borrowers_name')
             ->orderBy('borrowed_date', 'desc')
             ->get()
             ->groupBy('equipment.brand');
-
+    
         $reportData = $borrowedEquipments->map(function ($borrowsByBrand) {
             return $borrowsByBrand->map(function ($borrow) {
                 return [
                     'equipment' => $borrow->equipment,
-                    'borrowers_name' => $borrow->borrowers_name ?? 'N/A', 
-                    'times_borrowed' => $borrow->equipment->borrows->count(), 
-                    'last_borrowed' => $borrow->borrowed_date ?? 'N/A', 
-                    'last_returned' => $borrow->returned_date ?? 'N/A', 
+                    'borrowers_name' => $borrow->borrowers_name ?? 'N/A',
+                    'times_borrowed' => $borrow->equipment->borrows->count(),
+                    'last_borrowed' => $borrow->borrowed_date ?? 'N/A',
+                    'last_returned' => $borrow->returned_date ?? 'N/A',
                 ];
             });
         });
-
+    
         return view('reports.borrowed_equipments', compact('reportData', 'borrowedEquipments'))
             ->with('title', 'Borrowed Equipment Reports');
     }
@@ -78,12 +84,17 @@ class ReportController extends Controller
     
     public function maintenancedEquipmentReports()
     {
+        $user = Auth::user();
+    
         $maintenancedEquipments = Maintenance::with(['equipment:id,name,brand'])
-            ->select('equipment_id', 'maintained_date', 'returned_date','technician', 'status', 'recommendations') 
+            ->whereHas('user', function($query) use ($user) {
+                $query->where('office_id', $user->office_id);
+            })
+            ->select('equipment_id', 'maintained_date', 'returned_date', 'technician', 'status', 'recommendations')
             ->orderBy('maintained_date', 'desc')
             ->get()
-        ->groupBy('equipment.brand'); 
-
+            ->groupBy('equipment.brand');
+    
         $reportData = $maintenancedEquipments->map(function ($maintenancesByBrand) {
             return $maintenancesByBrand->map(function ($maintenance) {
                 return [
@@ -97,7 +108,7 @@ class ReportController extends Controller
                 ];
             });
         });
-
+    
         return view('reports.maintenanced_equipments', compact('reportData'))
             ->with('title', 'Maintenanced Equipment Reports');
     }
@@ -105,8 +116,12 @@ class ReportController extends Controller
 
     public function repairedEquipmentReports()
     {
+        $user = Auth::user();
 
         $repairedEquipments = Repair::with(['equipment:id,name,brand'])
+        ->whereHas('user', function($query) use ($user) {
+            $query->where('office_id', $user->office_id);
+        })
         ->select('equipment_id', 'repaired_date', 'returned_date','technician', 'status', 'recommendations') 
         ->orderBy('repaired_date', 'desc')
         ->get()
@@ -166,12 +181,18 @@ class ReportController extends Controller
     }
     
     public function disposedEquipmentReports(){
+        
+        $user = Auth::user();
 
         $disposedEquipments = Disposed::with(['equipment:id,name,brand', 'user:id,firstname,lastname'])
-        ->select('equipment_id', 'disposed_date', 'remarks', 'user_id')
-        ->orderBy('disposed_date', 'desc')
-        ->get()
-        ->groupBy('equipment.brand');
+    ->whereHas('equipment.facility', function ($query) use ($user) {
+        $query->where('office_id', $user->office_id);
+    })
+    ->select('equipment_id', 'disposed_date', 'remarks', 'user_id')
+    ->orderBy('disposed_date', 'desc')
+    ->get()
+    ->groupBy('equipment.brand');
+
 
         // Map the results to count disposed equipment per brand
        $reportData = $disposedEquipments->map(function ($disposalsByBrand) {
@@ -232,7 +253,13 @@ class ReportController extends Controller
     
 
     public function donatedEquipmentReports(){
+
+        $user = Auth::user();
+
         $donatedEquipments = Donated::with(['equipment:id,name,brand'])
+            ->whereHas('user', function($query) use ($user) {
+                $query->where('office_id', $user->office_id);
+            })
             ->select('equipment_id', 'donated_date', 'recipient', 'condition')
             ->orderBy('donated_date', 'desc')
             ->get()

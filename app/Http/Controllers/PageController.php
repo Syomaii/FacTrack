@@ -286,14 +286,22 @@ class PageController extends Controller
     }
 
     public function borrowersLog()
-    {
-        
+{
+    $user = Auth::user();
+
+    if ($user && $user->office) {
         $borrows = Borrower::with(['equipment', 'user'])
+            ->whereHas('user', function ($query) use ($user) {
+                $query->where('office_id', $user->office->id); 
+            })
             ->orderBy('created_at', 'desc')
             ->paginate(10);
-
-        return view('reports.borrowers_log', compact('borrows'))->with('title', 'Borrowers Details');
+    }else {
+        $borrows = collect(); 
     }
+
+    return view('reports.borrowers_log', compact('borrows'))->with('title', 'Borrowers Details');
+}
 
     // In BorrowerController.php
 public function borrowerSearch(Request $request)
