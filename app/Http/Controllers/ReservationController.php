@@ -135,6 +135,10 @@ class ReservationController extends Controller
         return view('students.reservation_details')->with($data);
     }
 
+    public function reserveFacility(){
+        return view('students.reserve_facility')->with('title','Reserve Facility');
+    }
+    
     public function accept($id)
     {
         $reservation = Reservation::findOrFail($id);

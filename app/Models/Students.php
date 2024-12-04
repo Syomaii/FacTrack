@@ -22,6 +22,7 @@ class Students extends Model
         'course',
         'type',
         'department',
+        'overdue_count' => 0,
     ];
 
     protected $primaryKey = 'id';
