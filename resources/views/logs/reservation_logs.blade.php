@@ -32,7 +32,7 @@
             <div
                 class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                 <div class="d-flex align-items-center flex-wrap gap-3">
-                    <form class="navbar-search">
+                    <form class="navbar-search d-flex align-items-center flex-grow-1">
                         <input type="text" class="bg-base h-40-px w-auto" name="search" id="borrowerSearch"
                             placeholder="Search">
                         <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
@@ -58,9 +58,10 @@
                             @forelse ($reservations as $reservation)
                                 <tr class="reservation-row">
                                     <td>{{ $reservation->student_id }}</td>
-                                    <td> 
+                                    <td>
                                         @if ($reservation->student)
-                                            {{ ucwords($reservation->student->firstname) }} {{ ucwords($reservation->student->lastname) }}
+                                            {{ ucwords($reservation->student->firstname) }}
+                                            {{ ucwords($reservation->student->lastname) }}
                                         @else
                                             <span class="text-danger">Student Not Found</span>
                                         @endif
@@ -70,7 +71,6 @@
                                             {{ ucwords($reservation->offices->name) }}
                                         @else
                                             <span class="text-danger">Office Not Found</span>
-
                                         @endif
                                     </td>
                                     <td>{{ ucwords($reservation->equipment->name) }}

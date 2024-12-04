@@ -48,11 +48,13 @@
 
             <div
                 class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
-                <div class="d-flex align-items-center flex-wrap gap-3">
-                    <form class="navbar-search" method="GET" action="{{ route('equipment_search') }}">
+                <div class="d-flex flex-grow-1 flex-wrap align-items-center gap-3">
+                    <form class="navbar-search d-flex align-items-center flex-grow-1" method="GET"
+                        action="{{ route('equipment_search') }}">
                         <input type="text" class="bg-base h-40-px w-auto" name="search" id="equipmentSearch"
                             placeholder="Search" value="{{ request('search') }}">
-                        <button type="submit"><iconify-icon icon="ion:search-outline" class="icon"></iconify-icon></button>
+                        <button type="submit"><iconify-icon icon="ion:search-outline"
+                                class="icon"></iconify-icon></button>
                     </form>
                     <select name="status" id="statusFilter"
                         class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
@@ -233,7 +235,81 @@
 </main>
 
 <!-- Edit Equipment Modal -->
+<div class="modal fade" id="editEquipmentModal" tabindex="-1" aria-labelledby="editEquipmentModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editEquipmentModalLabel">Edit Equipment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editEquipmentForm" action="{{ route('update_equipment') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="id" id="equipmentId">
 
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <label for="equipmentName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="equipmentName" name="name" required>
+                        @error('name')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Brand -->
+                    <div class="mb-3">
+                        <label for="equipmentBrand" class="form-label">Brand</label>
+                        <input type="text" class="form-control" id="equipmentBrand" name="brand" required>
+                        @error('brand')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Serial Number -->
+                    <div class="mb-3">
+                        <label for="equipmentSerialNo" class="form-label">Serial Number</label>
+                        <input type="text" class="form-control" id="equipmentSerialNo" name="serial_no" required>
+                        @error('serial_no')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="equipmentDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="equipmentDescription" name="description" required></textarea>
+                        @error('description')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Acquired Date -->
+                    <div class="mb-3">
+                        <label for="equipmentAcquiredDate" class="form-label">Acquired Date</label>
+                        <input type="date" class="form-control" id="equipmentAcquiredDate" name="acquired_date"
+                            required>
+                        @error('acquired_date')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Facility -->
+                    <div class="mb-3">
+                        <label for="equipmentFacility" class="form-label">Facility</label>
+                        <input type="text" class="form-control" id="equipmentFacility" name="facility" required>
+                        @error('facility')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 @include('templates.footer')
 

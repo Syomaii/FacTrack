@@ -102,7 +102,6 @@
             </div>
         </div>
 
-        <!-- Timeline Section -->
         <div class="timeline-horizontal">
             @foreach ($timeline->sortByDesc('created_at') as $entry)
                 @php
@@ -116,21 +115,27 @@
                         'Disposed' => 'black',
                     ];
                     $color = $statusColors[$entry->status] ?? 'gray';
+
+                    // For Borrowed status: filter unique borrower entries by name and department
+                    $uniqueBorrowers =
+                        $entry->status === 'Borrowed' && $entry->equipment->borrows->isNotEmpty()
+                            ? $entry->equipment->borrows->unique(function ($borrow) {
+                                return $borrow->borrowers_name . '|' . $borrow->department;
+                            })
+                            : collect();
                 @endphp
 
                 <div class="timeline-item {{ $loop->even ? 'below' : 'above' }}"
-                    style="border-left: 5px solid {{ $color }}; padding-left: 10px;">
+                    style="border-left: 5px solid {{ $color }}; padding-left: 10px; margin-bottom: 20px; background: #f9f9f9; border-radius: 5px; padding: 15px;">
                     <p>{{ 'The status of the equipment is ' . $entry->status }}</p>
 
                     @if ($entry->status == 'Borrowed')
-                        @if ($entry->equipment->borrows->isNotEmpty())
-                            @foreach ($entry->equipment->borrows as $borrower)
-                                <p>{{ 'Borrower: ' . ucwords($borrower->borrowers_name) }}</p>
-                                <p>{{ 'Borrower Department: ' . ucwords($borrower->department) }}</p>
-                            @endforeach
-                        @else
+                        @forelse ($uniqueBorrowers as $borrower)
+                            <p>{{ 'Borrower: ' . ucwords($borrower->borrowers_name) }}</p>
+                            <p>{{ 'Department: ' . ucwords($borrower->department) }}</p>
+                        @empty
                             <p>{{ 'No borrower found' }}</p>
-                        @endif
+                        @endforelse
                     @elseif($entry->status == 'In Maintenance')
                         @if ($entry->equipment->maintenance->isNotEmpty())
                             @foreach ($entry->equipment->maintenance as $maintenance)
@@ -164,12 +169,14 @@
                             <p>{{ 'No disposal record found' }}</p>
                         @endif
                     @endif
+
                     <p>{{ $entry->remarks . ' at ' . $entry->created_at }}</p>
-                    <p>{{ 'Operated by ' . ucwords($entry->user->firstname) . ' ' . ucwords($entry->user->lastname) }}
-                    </p>
+                    <p>{{ 'Operated by ' . $entry->user->firstname . ' ' . ucwords($entry->user->lastname) }}</p>
                 </div>
             @endforeach
         </div>
+
+
     </div>
     @include('templates.footer_inc')
     <!-- Edit Equipment Modal -->
@@ -307,7 +314,7 @@
         var originalContents = document.body.innerHTML;
 
         document.body.innerHTML = printContents;
-        
+
         window.print();
 
         document.body.innerHTML = originalContents;

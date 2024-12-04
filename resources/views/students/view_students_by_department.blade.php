@@ -29,7 +29,8 @@
             <div
                 class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                 <div class="d-flex align-items-center flex-wrap gap-3">
-                    <form id="searchForm" class="navbar-search" method="GET" action="{{ route('search-student') }}">
+                    <form id="searchForm" class="navbar-search d-flex align-items-center flex-grow-1" method="GET"
+                        action="{{ route('search-student') }}">
                         <input type="text" id="searchInput" class="bg-base h-40-px w-auto" name="search"
                             placeholder="Search" value="{{ request('search') }}">
                         <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
