@@ -12,12 +12,16 @@ class OverdueEquipmentsNotification extends Notification
 {
     use Queueable;
     protected $student;
+    protected $borrower;
+    protected $equipment;
     /**
      * Create a new notification instance.
      */
-    public function __construct($student)
+    public function __construct($student, $borrower, $equipment)
     {
         $this->student = $student;
+        $this->borrower = $borrower;
+        $this->equipment = $equipment;
     }
 
     /**
@@ -42,7 +46,11 @@ class OverdueEquipmentsNotification extends Notification
     {
         return [
             'title' => 'Overdue Equipment Notification',
-            'message' => 'A student has been notified about overdue equipment: ' . $this->student->firstname . ' ' . $this->student->lastname,
+            'message' => 'Student ' . $this->student->firstname . ' ' . $this->student->lastname . 
+                    'has been notified about overdue equipment: ' . $this->equipment->name,
+            'student_id' => $this->student->id,
+
+            'notification_type' => 'borrows'
         ];
     }
 }

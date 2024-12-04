@@ -32,12 +32,12 @@ class Borrower extends Model
 
     public function equipment()
     {
-        return $this->belongsTo(Equipment::class, 'equipment_id'); 
+        return $this->belongsTo(Equipment::class, 'equipment_id', 'id'); 
     }
 
     public function student()
     {
-        return $this->belongsTo(Students::class, 'borrowers_id_no');
+        return $this->belongsTo(Students::class, 'borrowers_id_no', 'id');
     }
 
     protected $casts = [

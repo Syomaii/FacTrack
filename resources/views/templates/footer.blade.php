@@ -27,7 +27,6 @@
 {{-- <script src="/assets/js/homeTwoChart.js"></script> --}}
 
 @if (url()->current() == 'http://localhost:8000')
-    :
     <script>
         // ================== Password Show Hide Js Start ==========
         function initializePasswordToggle(toggleSelector) {
