@@ -50,6 +50,6 @@ return Application::configure(basePath: dirname(__DIR__))
                     Log::error('Scheduled Task Failed: ' . $e->getMessage());
                 }
             }
-        })->everyTenSeconds(); // Adjust frequency as needed
+        })->daily(); // Adjust frequency as needed
     })
     ->create();

@@ -201,11 +201,25 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li>
-                    <a href="/reserve-equipment">
-                        <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
+                <li class="dropdown">
+                    <a href="javascript:void(0)">
+                        <iconify-icon icon="tabler:calendar-filled" class="menu-icon"></iconify-icon>
                         <span>Reserve</span>
                     </a>
+                    <ul class="sidebar-submenu">
+                            <li>
+                                <a href="/reserve-equipment">
+                                    <iconify-icon icon="mingcute:computer-line" class="menu-icon"></iconify-icon>
+                                    Reserve Equipment
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/reserve-facility">
+                                    <iconify-icon icon="mingcute:storage-line" class="menu-icon"></iconify-icon>
+                                    Reserve Facility
+                                </a>
+                            </li>
+                    </ul>
                 </li>
             @endif
         </ul>

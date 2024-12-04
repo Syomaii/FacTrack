@@ -44,16 +44,19 @@
         <div class="card h-100 p-0 radius-12">
             <div
                 class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
-                <div class="d-flex align-items-center flex-wrap gap-3">
-                    <form class="navbar-search" method="GET" action="{{ route('search-user') }}">
+                <div class="d-flex flex-grow-1 flex-wrap align-items-center gap-3">
+                    <form class="navbar-search d-flex align-items-center flex-grow-1" method="GET"
+                        action="{{ route('search-user') }}">
                         <input type="text" class="bg-base h-40-px w-auto" name="search" placeholder="Search"
                             value="{{ request('search') }}">
-                        <button type="submit"><iconify-icon icon="ion:search-outline" class="icon"></iconify-icon></button>
+                        <button type="submit"><iconify-icon icon="ion:search-outline"
+                                class="icon"></iconify-icon></button>
                     </form>
-                    <select name="status" id="statusFilter" class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px text-decoration-none">
+                    <select name="status" id="statusFilter"
+                        class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px text-decoration-none">
                         <option value="">Status</option>
-                        <option value="active" >Active</option>
-                        <option value="inactive" >Inactive</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
                     </select>
                 </div>
                 <a href="/add-user"
@@ -208,7 +211,6 @@
 </main>
 @include('templates.footer')
 <script>
-
     document.addEventListener('DOMContentLoaded', function() {
         const statusFilter = document.getElementById('statusFilter');
         const tableRows = document.querySelectorAll('tbody tr');
@@ -218,7 +220,7 @@
             const selectedStatus = statusFilter.value.toLowerCase();
 
             tableRows.forEach(row => {
-                const statusCell = row.cells[8].innerText.toLowerCase(); 
+                const statusCell = row.cells[8].innerText.toLowerCase();
                 if (selectedStatus === '' || statusCell === selectedStatus) {
                     row.style.display = ''; // Show row
                 } else {

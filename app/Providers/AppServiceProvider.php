@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // Share notifications with the navbar view
         View::composer('components.navbar', function ($view) {
-            $notifications = Auth::check() ? Auth::user()->notifications()->take(5)->get() : collect();
+            $notifications = Auth::check() ? Auth::user()->notifications()->whereNull('read_at')->get() : collect();
             $view->with('notifications', $notifications);
         });
 

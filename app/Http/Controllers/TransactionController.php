@@ -476,11 +476,6 @@ class TransactionController extends Controller
                     return redirect()->back()->withErrors(['msg' => 'Borrow record not found or already returned.']);
                 }
 
-                $borrow = Borrower::where('equipment_id', $equipment->id)
-                    ->whereNull('returned_date')
-                    ->latest()
-                    ->first();
-
                 $student = Students::where('id', $borrow->borrowers_id_no)->first();
                     
                 if (!$student) {
@@ -496,7 +491,7 @@ class TransactionController extends Controller
                 $equipment->update(['status' => 'Available']);
             
                 if ($borrow->returned_date > $borrow->expected_returned_date) {
-                    $student->increment('overdue_count'); // Increase the overdue count for the student
+                    $student->increment('overdue_count'); 
             
                     if ($student->overdue_count == 2) {
                         // (Optional) Add custom actions here, such as sending a warning email

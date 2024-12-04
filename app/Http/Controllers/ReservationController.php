@@ -115,12 +115,22 @@ class ReservationController extends Controller
         return redirect()->back()->with('success', 'Reservation successfully created.');
     }
 
-    public function reservationLogs(){
-        $reservations = Reservation::with(['student', 'equipment', 'offices'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
-
+    public function reservationLogs()
+    {
+        // Get the authenticated user
+        $user = Auth::user();
+    
+        if ($user && $user->office) {
+            $reservations = Reservation::with(['student', 'equipment', 'offices'])
+                ->whereHas('offices', function ($query) use ($user) {
+                    $query->where('id', $user->office->id); 
+                })
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+        } else {
+            $reservations = collect(); 
+        }
+    
         return view('logs.reservation_logs', compact('reservations'))->with('title', 'Reservation Logs');
     }
     
@@ -135,6 +145,10 @@ class ReservationController extends Controller
         return view('students.reservation_details')->with($data);
     }
 
+    public function reserveFacility(){
+        return view('students.reserve_facility')->with('title','Reserve Facility');
+    }
+    
     public function accept($id)
     {
         $reservation = Reservation::findOrFail($id);

@@ -33,7 +33,8 @@
             <div
                 class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                 <div class="d-flex align-items-center flex-wrap gap-3">
-                    <form class="navbar-search" method="GET" action="{{ route('borrower_search') }}">
+                    <form class="navbar-search d-flex align-items-center flex-grow-1" method="GET"
+                        action="{{ route('borrower_search') }}">
                         <input type="text" class="bg-base h-40-px w-auto" name="search" id="borrowerSearch"
                             placeholder="Search" value="{{ request('search') }}">
                         <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>

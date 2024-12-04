@@ -127,7 +127,8 @@
                         <div class="d-flex align-items-center flex-wrap gap-3">
                             <span class="text-md fw-medium text-secondary-light mb-0">Show</span>
 
-                            <form class="navbar-search" method="GET" action="{{ route('dashboard-search-user') }}">
+                            <form class="navbar-search d-flex align-items-center flex-grow-1" method="GET"
+                                action="{{ route('dashboard-search-user') }}">
                                 <input type="text" class="bg-base h-40-px w-auto" name="search" placeholder="Search"
                                     value="{{ request('search') }}">
                                 <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
@@ -278,21 +279,23 @@
 @include('templates.footer')
 
 <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const borrowedPerMonthData = @json($borrowedPerMonth);
-    
+
         // Define months from January to December
         const months = [
             'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
         ];
-    
+
         // Initialize data structure for all months
-        const dataMap = Array.from({ length: 12 }, (_, index) => ({
+        const dataMap = Array.from({
+            length: 12
+        }, (_, index) => ({
             x: months[index],
             y: 0 // Default to 0 if no data is provided for the month
         }));
-    
+
         // Fill in the data from borrowedPerMonthData
         borrowedPerMonthData.forEach(data => {
             const monthIndex = data.month - 1; // `data.month` is 1-based, array is 0-based
@@ -300,12 +303,12 @@
                 dataMap[monthIndex].y = data.total;
             }
         });
-    
+
         // Determine Y-axis max dynamically based on the highest value
         const maxYValue = Math.max(...dataMap.map(d => d.y), 10); // Ensure minimum Y max is 10
         const yAxisStepSize = maxYValue <= 10 ? 10 : 10; // Steps of 10
         const yAxisMax = Math.ceil(maxYValue / yAxisStepSize) * yAxisStepSize;
-    
+
         // ApexCharts configuration
         const options = {
             series: [{
@@ -366,16 +369,15 @@
             },
             tooltip: {
                 y: {
-                    formatter: function (value) {
+                    formatter: function(value) {
                         return value + ' borrows';
                     }
                 }
             }
         };
-    
+
         // Render the chart
         const chart = new ApexCharts(document.querySelector("#borrowedEquipmentPerMonth"), options);
         chart.render();
     });
 </script>
-
