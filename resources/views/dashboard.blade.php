@@ -362,13 +362,8 @@
                 max: yAxisMax,
                 tickAmount: yAxisMax / 4,
                 labels: {
-<<<<<<< HEAD
-                    formatter: function(value) {
-                        return value.toFixed(0); // Ensure labels are whole numbers
-=======
                     formatter: function (value) {
                         return value.toFixed(0); 
->>>>>>> 5036944e03b2a6fe15962463f62bc032a8e787f6
                     }
                 }
             },
