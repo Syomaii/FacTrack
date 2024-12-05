@@ -75,7 +75,7 @@
                             <tr>
                                 <th scope="col">Item No.</th>
                                 <th class="col"></th>
-                                <th scope="col">Brand</th> 
+                                <th scope="col">Brand</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Serial No.</th>
                                 <th scope="col">Facility</th>
@@ -98,7 +98,7 @@
                                     <td>{{ ucwords($equipment->brand) }}</td> <!-- Brand Data -->
                                     <td>{{ ucwords($equipment->name) }}</td>
                                     <td>{{ $equipment->serial_no }}</td> <!-- Serial Number Data -->
-                                    
+
                                     <td>{{ $equipment->facility->name }}</td>
                                     <td>{!! QrCode::size(100)->generate($equipment->code) !!}</td>
                                     <td>
@@ -160,11 +160,11 @@
                                             office/department.</strong></td>
                                 </tr>
                             @endforelse
-    
+
                         </tbody>
                     </table>
                 </div>
-           
+
                 <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
                     <span>Showing {{ $equipments->firstItem() }} to {{ $equipments->lastItem() }} of
                         {{ $equipments->total() }} entries</span>
@@ -227,7 +227,7 @@
                         <span>No entries found.</span>
                     @endif
                 </div>
-            </div>   
+            </div>
         </div>
     </div>
 
@@ -330,7 +330,7 @@
                 var facility = button.dataset.facility;
 
                 // Format acquired date for input field
-                var formattedDate = new Date(acquired_date).toISOString().slice(0, 16);
+                var formattedDate = new Date(acquired_date).toISOString().slice(0, 10);
 
                 // Populate modal with data
                 document.getElementById('equipmentId').value = id;
