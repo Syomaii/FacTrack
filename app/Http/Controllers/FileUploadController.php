@@ -14,7 +14,8 @@ class FileUploadController extends Controller
 {
     public function importStudents(Request $request)
     {
-        $request->validate(['file' => 'required|file|mimes:xlsx,xls|max:2048']);
+        $request->validate(['file' => 'required|file|mimes:xlsx,xls|max:2048',
+                                    'department' => 'required']);
         $file = $request->file("file")->store('import');
 
         $import = new StudentsImport($request->input('department'));
