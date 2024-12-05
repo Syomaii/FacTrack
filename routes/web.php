@@ -45,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     Route::get('/notifications', [PageController::class, 'notifications'])->name('notifications');
     Route::get('/notifications/redirect/{id}', [NotificationController::class, 'redirect'])->name('redirect');
+    Route::get('/equipment-details/{code}', [PageController::class, 'equipmentDetails'])->name('equipment-details');
 
 
 
@@ -54,6 +55,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reserve-equipment', [ReservationController::class, 'reserveEquipment'])->name('student.reserve_equipment');
         Route::get('/api/search-equipment', [ReservationController::class, 'searchEquipment']);
         Route::post('/reservations', [ReservationController::class, 'reserved'])->name('students.reserved');
+        Route::get('/reserve-facility', [ReservationController::class, 'reserveFacility'])->name('student.reserve_facility');
+
 
         
     });
@@ -71,7 +74,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
         Route::get('/profile/{id}', [PageController::class, 'profile'])->name('profile');
         Route::put('/profile/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
-        Route::get('/equipment-details/{code}', [PageController::class, 'equipmentDetails'])->name('equipment-details');
         Route::get('/add-student', [PageController::class, 'addStudent'])->name('add-student');
         Route::get('/facility-equipment/{id}', [PageController::class, 'facilityEquipments'])->name('facility_equipment');
         Route::post('/add-studentPost', [StudentController::class, 'addStudentPost'])->name('add-studentPost');

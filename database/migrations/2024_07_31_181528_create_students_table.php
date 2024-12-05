@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email', 50);
             $table->string('course', 50);
             $table->string('department', 100);
-            $table->integer('overdue_count')->nullable();
+            $table->integer('overdue_count')->default(0);
             $table->timestamps();
         });
     }
