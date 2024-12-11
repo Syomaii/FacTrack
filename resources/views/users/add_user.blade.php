@@ -1,5 +1,4 @@
-@include('templates.header')
-<style>
+{{-- <style>
     /* Dropdown styles */
     .dropdown {
         max-width: 13em;
@@ -78,7 +77,8 @@
         font-family: "Segoe UI", sans-serif;
         color: #333;
     }
-</style>
+</style> --}}
+@include('templates.header')
 <x-sidebar />
 <main class="dashboard-main">
     <x-navbar />

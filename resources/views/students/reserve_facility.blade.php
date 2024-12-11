@@ -36,7 +36,60 @@
 
 
         <!-- Main Section -->
-        
+        <div class="d-flex justify-content-between align-items-center mb-24">
+            <div class="input-group" style="max-width: 650px;">
+                <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
+                    placeholder="Search facilities...">
+                <button class="btn btn-primary" type="button"><iconify-icon icon="ic:baseline-search"
+                        class="icon"></iconify-icon></button>
+            </div>
+
+            <div class="d-flex gap-3">
+                <button type="button" class="btn btn-warning text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                    id="updateOfficeBtn">Edit Office</button>
+                <button type="button" class="btn btn-danger text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                    id="deleteOfficeBtn">Delete Office</button>
+            </div>
+        </div>
+
+        <!-- No facilities message -->
+        <div class="row gy-4" id="equipmentList">
+            @if (!$facilities->isEmpty())
+                @foreach ($facilities as $facility)
+                    <div class="col-xxl-3 col-sm-6 equipment-card">
+                        <div class="card h-100 radius-12 text-center">
+                            <div class="card-body p-24">
+                                <div class="d-flex flex-column align-items-center">
+                                    <div
+                                        class="w-64-px h-64-px d-inline-flex align-items-center justify-content-center bg-info-200 text-primary-600 mb-16 radius-12">
+                                        <iconify-icon icon="{{ $office->getIconClass() }}"
+                                            class="h5 mb-0"></iconify-icon>
+                                    </div>
+                                    <h6 class="mb-8">{{ $facility->name }}</h6>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="{{ route('facility_equipment', ['id' => $facility->id]) }}"
+                                            class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
+                                            @if ($facility->type == 'laboratory')
+                                                View Laboratory
+                                            @elseif ($facility->type == 'office')
+                                                View Office
+                                            @elseif ($facility->type == 'room')
+                                                View Room
+                                            @endif <iconify-icon icon="iconamoon:arrow-right-2"
+                                                class="text-xl"></iconify-icon>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <div class="d-flex justify-content-center align-items-center" style="height: 55vh; width: 100vw;">
+                    <strong class="text-center p-3">There are no facilities yet in this Office.</strong>
+                </div>
+            @endif
+        </div>
     </div>
 
     @include('templates.footer_inc')
