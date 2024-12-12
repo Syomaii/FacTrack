@@ -89,4 +89,9 @@ class Equipment extends Model
     {
         return $this->hasMany(Reservation::class);
     }
+
+    public function equipmentReservation()
+    {
+        return $this->hasMany(EquipmentReservation::class, 'equipment_id', 'id');
+    }
 }

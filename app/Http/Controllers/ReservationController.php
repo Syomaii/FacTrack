@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Events\ReserveEquipmentEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Equipment;
+use App\Models\EquipmentReservation;
+use App\Models\Facility;
+use App\Models\Office;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +20,6 @@ class ReservationController extends Controller
         $selectedEquipment = null;
 
         if ($request->filled('equipment_id')) {
-            // Fetch selected equipment with facility relationship
             $selectedEquipment = Equipment::with('facility')->find($request->equipment_id);
         }
 
@@ -54,6 +56,7 @@ class ReservationController extends Controller
                     'serial_no' => $equipment->serial_no,
                     'description' => $equipment->description,
                     'facility' => $equipment->facility->name,
+                    'office' => $equipment->facility->office->name,
                     'image' => asset($equipment->image),
                 ];
             }),
@@ -72,7 +75,6 @@ class ReservationController extends Controller
             'purpose' => 'required|string|max:255',
         ]);
 
-        // Fetch the equipment using the validated equipment_id
         $equipment = Equipment::find($request->equipment_id);
 
         if (!$equipment) {
@@ -80,10 +82,10 @@ class ReservationController extends Controller
         }
 
         $office = $equipment->facility->office->id; 
-        $student = Auth::user();
-        $studentId = Auth::user()->student_id;
+        $reserver = Auth::user();
+        $reservers_id_no = Auth::user()->id;
         // Check if the equipment is already reserved in the given time range
-        $existingReservation = Reservation::where('equipment_id', $request->equipment_id)
+        $existingReservation = EquipmentReservation::where('equipment_id', $request->equipment_id)
         ->where(function ($query) use ($request) {
             $query->whereBetween('reservation_date', [$request->reservation_date, $request->expected_return_date])
                 ->orWhereBetween('expected_return_date', [$request->reservation_date, $request->expected_return_date]);
@@ -101,8 +103,8 @@ class ReservationController extends Controller
         }
 
         // Create a new reservation
-        $reservation = Reservation::create([
-            'student_id' =>  $studentId,
+        $reservation = EquipmentReservation::create([
+            'reservers_id_no' =>  $reservers_id_no,
             'equipment_id' => $request->equipment_id,
             'office_id' => $office,
             'reservation_date' => $request->reservation_date,
@@ -110,18 +112,18 @@ class ReservationController extends Controller
             'status' => 'pending',
             'purpose' => $request->purpose,
         ]);
-        event(new ReserveEquipmentEvent($reservation, $student, $office, $equipment));
+        event(new ReserveEquipmentEvent($reservation, $reserver, $office, $equipment));
 
         return redirect()->back()->with('success', 'Reservation successfully created.');
     }
 
-    public function reservationLogs()
+    public function equipmentReservationLog()
     {
         // Get the authenticated user
         $user = Auth::user();
     
         if ($user && $user->office) {
-            $reservations = Reservation::with(['student', 'equipment', 'offices'])
+            $reservations = EquipmentReservation::with(['student', 'equipment', 'offices'])
                 ->whereHas('offices', function ($query) use ($user) {
                     $query->where('id', $user->office->id); 
                 })
@@ -135,7 +137,7 @@ class ReservationController extends Controller
     }
     
     public function reservationDetails($id){
-        $reservation = Reservation::with(['student', 'equipment', 'offices'])->where('id', $id)->first();
+        $reservation = EquipmentReservation::with(['student', 'equipment', 'offices'])->where('id', $id)->first();
         $title = "Reservation Details";
         $data = [
             'reservation' => $reservation,
@@ -145,13 +147,10 @@ class ReservationController extends Controller
         return view('students.reservation_details')->with($data);
     }
 
-    public function reserveFacility(){
-        return view('students.reserve_facility')->with('title','Reserve Facility');
-    }
     
     public function accept($id)
     {
-        $reservation = Reservation::findOrFail($id);
+        $reservation = EquipmentReservation::findOrFail($id);
 
         if (in_array('approved', ['pending', 'approved', 'declined'])) { // Replace with your ENUM values
             $reservation->status = 'approved';
@@ -165,7 +164,7 @@ class ReservationController extends Controller
 
     public function decline($id)
     {
-        $reservation = Reservation::findOrFail($id);
+        $reservation = EquipmentReservation::findOrFail($id);
 
         if (in_array('declined', ['pending', 'approved', 'declined'])) { // Replace with your ENUM values
             $reservation->status = 'declined';
@@ -177,4 +176,18 @@ class ReservationController extends Controller
         return redirect()->back()->with('error', 'Invalid status value.');
     }
 
+    
+    public function reserveFacility(){
+        $office = Office::with('facilities')->get();
+        $facilities = Facility::whereHas('office')->where('allow_reservation', '=', '1')->get();
+        return view('students.reserve_facility', compact('facilities', 'office'))
+            ->with('title','Reserve Facility');
+    }
+
+    
+    public function facilityForReservation($id){
+        $facility = Facility::where('id', $id)->first();
+
+        return view('students.facility_to_be_reserved', compact('facility'))->with('title', 'Reserve Facility');
+    }
 }

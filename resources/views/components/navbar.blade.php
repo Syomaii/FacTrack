@@ -75,10 +75,10 @@
 
                 <!-- Notification dropdown end -->
 
-                <div class="dropdown">
+                <div class="dropdown" style="z-index: 1">
                     <button class="d-flex justify-content-center align-items-center rounded-circle" type="button"
                         data-bs-toggle="dropdown">
-                        <img src="/{{ auth()->user()->image }}" alt="image"
+                        <img src="/{{ auth()->user()->image }}" alt="image" style="z-index: 9999"
                             class="w-40-px h-40-px object-fit-cover rounded-circle">
                     </button>
                     <div class="dropdown-menu to-top dropdown-menu-sm">

@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -31,7 +31,14 @@ class UserController extends Controller
             'designation_id' => 'required|integer|exists:designations,id',
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users')->where(function ($query) use ($request) {
+                    return $query->whereNotNull('faculty_id')->orWhereNotNull('student_id');
+                }),
+            ],
             'mobile_no' => 'required|string|max:15',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'type' => 'required|string|max:255',  // Check if office or department is selected

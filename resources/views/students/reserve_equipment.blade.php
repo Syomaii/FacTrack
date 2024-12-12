@@ -43,6 +43,7 @@
                     <h5 class="fw-semibold mb-3">Equipment Results</h5>
                     
                     <input type="hidden" id="equipment_id" name="equipment_id" value="{{ old('equipment_id', $selectedEquipment->id ?? '') }}">
+                    
 
                     <!-- Searchable Equipment Input -->
                     <div class="mb-3">
@@ -89,7 +90,6 @@
                                     <div class="text-center mb-3">
                                         <img src="{{ $selectedEquipment->image }}" alt="{{ $selectedEquipment->name }}" class="img-fluid rounded" style="max-height: 200px;">
                                     </div>
-        
                                     <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Brand:</strong></div>
                                     <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $selectedEquipment->brand }}</div>
                                     <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Model:</strong></div>
@@ -100,12 +100,13 @@
                                     <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $selectedEquipment->serial_no  }}</div>   
                                     <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Facility:</strong></div>
                                     <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $selectedEquipment->facility->name  }}</div>   
-                                    <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Description:</strong></div>
-                                    <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $selectedEquipment->description  }}</div>
+                                    <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Office:</strong></div>
+                                    <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $selectedEquipment->facility->office->name  }}</div>
+                                    <input type="hidden" id="equipment_id" name="equipment_id" value="{{ old('equipment_id', $selectedEquipment->id ?? '') }}">
                                     @if ($selectedEquipment->status !== 'Available')
                                         <div class="text-center mt-4 mb-4 pb-4">
                                             <button class="btn btn-primary select-equipment disabled" 
-                                                    onclick="selectEquipment(${equipment.id}, '${capitalizeFirstLetter(equipment.name)}', '${equipment.image}', '${capitalizeFirstLetter(equipment.brand)}', '${capitalizeFirstLetter(equipment.status)}', '${equipment.serial_no}', '${capitalizeFirstLetter(equipment.facility)}')">
+                                                    onclick="selectEquipment('${equipment.id}', '${capitalizeFirstLetter(equipment.name)}', '${equipment.image}', '${capitalizeFirstLetter(equipment.brand)}', '${capitalizeFirstLetter(equipment.status)}', '${equipment.serial_no}', '${capitalizeFirstLetter(equipment.facility)}')">
                                                 Select Equipment
                                             </button>
                                         </div>
@@ -113,23 +114,25 @@
                                 </div>
                             @endif
                         </div>
-
                         <!-- Purpose -->
                         <div class="mb-3">
                             <label for="purpose" class="form-label">Purpose</label>
                             <textarea id="purpose" name="purpose" class="form-control" placeholder="State the purpose for reservation" required>{{ old('purpose') }}</textarea>
+                            <small class="text-danger">{{ $errors->first('purpose') }}</small>
                         </div>
 
                         <!-- Reservation Date -->
                         <div class="mb-3">
                             <label for="reservationDate" class="form-label">Reservation Date</label>
                             <input type="date" id="reservationDate" name="reservation_date" class="form-control" required>
+                            <small class="text-danger">{{ $errors->first('reservation_date') }}</small>
                         </div>
 
                         <div class="mb-3">
-                            <label for="expectedReturnDate" class="form-label">Expected End Date</label>
+                            <label for="expectedReturnDate" class="form-label">Expected Return Date</label>
                             <input type="date" id="expectedReturnDate" name="expected_return_date"
                                 class="form-control" required>
+                                <small class="text-danger">{{ $errors->first('expected_return_date') }}</small>
                         </div>
 
 
@@ -153,7 +156,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize Flatpickr for start and end date inputs
-
 
         // Handle Equipment Search
         const equipmentSearch = document.getElementById('equipmentSearch');
@@ -214,17 +216,22 @@
 
                             <!-- Facility and Description -->
                             <div class="row">
+                                <!-- Office -->
+                                <div class="mb-3 col-md-6">
+                                    <div class="d-flex text-xl" style="margin-left: 5rem; margin-top: 15px"><span><strong>Office/Department: </strong>${equipment.office}</span></div>
+                                    
+                                </div>
                                 <!-- Facility -->
                                 <div class="mb-3 col-md-6">
                                     <div class="d-flex text-xl" style="margin-left: 5rem; margin-top: 15px"><span><strong>Facility: </strong>${capitalizeFirstLetter(equipment.facility)}</span></div>
-                                    <div class="d-flex mt-4 text-xl"></div>
+                                    
                                 </div>
                             </div>
 
                             <!-- Select Equipment Button -->
                             <div class="text-center mt-4 mb-4 pb-4">
                                 <button class="btn btn-primary select-equipment" 
-                                        onclick="selectEquipment(${equipment.id}, '${capitalizeFirstLetter(equipment.name)}', '${equipment.image}', '${capitalizeFirstLetter(equipment.brand)}', '${capitalizeFirstLetter(equipment.status)}', '${equipment.serial_no}', '${capitalizeFirstLetter(equipment.facility)}')">
+                                        onclick="selectEquipment('${equipment.id}', '${capitalizeFirstLetter(equipment.name)}', '${equipment.image}', '${capitalizeFirstLetter(equipment.brand)}', '${capitalizeFirstLetter(equipment.status)}', '${equipment.serial_no}', '${equipment.office}', '${capitalizeFirstLetter(equipment.facility)}')">
                                     Select Equipment
                                 </button>
                             </div>
@@ -276,7 +283,7 @@
         });
 
         // Function to handle equipment selection
-        window.selectEquipment = function(id, name, image, brand, status, serial_no, facility) {
+        window.selectEquipment = function(id, name, image, brand, status, serial_no, office, facility) {
             // Update the hidden input field with the selected equipment ID
             const equipmentIdField = document.getElementById('equipment_id');
             equipmentIdField.value = id;
@@ -319,10 +326,15 @@
 
                     <!-- Facility and Description -->
                     <div class="row">
+                        <!-- Office -->
+                        <div class="mb-3 col-md-6">
+                            <div class="d-flex text-xl" style="margin-left: 5rem; margin-top: 15px"><span><strong>Office/Department: </strong>${office}</span></div>
+
+                        </div>
                         <!-- Facility -->
                         <div class="mb-3 col-md-6">
                             <div class="d-flex text-xl" style="margin-left: 5rem; margin-top: 15px"><span><strong>Facility: </strong>${capitalizeFirstLetter(facility)}</span></div>
-                            <div class="d-flex mt-4 text-xl"></div>
+
                         </div>
                     </div>
 

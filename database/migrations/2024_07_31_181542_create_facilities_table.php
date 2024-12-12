@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name', 50);
             $table->string('description', 255)->nullable();
             $table->string('type', 10);
+            $table->boolean('allow_reservation')->default(false);
             $table->timestamps();
         });
     }

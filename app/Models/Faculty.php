@@ -3,22 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Sanctum\HasApiTokens; 
+use Laravel\Sanctum\HasApiTokens;
 
-class Students extends Model
+class Faculty extends Model
 {
     use HasApiTokens;
 
-    protected $table = "students";
+    protected $table = "faculty";
 
     protected $fillable = [
         'id',
         'firstname',
         'lastname',
-        'gender',
         'email',
-        'course',
         'department',
         'overdue_count' => 0,
     ];
