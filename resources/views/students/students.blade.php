@@ -1,3 +1,73 @@
+<style>
+
+#infoModal {
+    display: none; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); 
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto; 
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 800px;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+    position: relative; 
+}
+
+.modal-content .close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    color: #333;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.modal-content h5 {
+    font-size: 1.2em;
+    margin-top: 15px;
+    color: #333;
+}
+
+.modal-content p {
+    font-size: 0.95em;
+    color: #555;
+}
+
+.modal-content img {
+    width: 100%;
+    height: auto;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+</style>
 @include('templates.header')
 <x-sidebar />
 <main class="dashboard-main">
@@ -54,8 +124,27 @@
         <div class="card h-100 p-0 radius-12">
             <div
                 class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
-                <h5 class="mb-0">Import Excel File</h5>
+                <h5 class="mb-0">Import Excel Files 
+                    <button type="button" class="tooltip-button text-primary-600 magnefic-photo" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-primary" data-bs-placement="right" id="openModalButton"><iconify-icon icon="mdi:question-mark-circle-outline" class="icon text-md opacity-75 text-primary-light"></iconify-icon> </button> 
+                    <div class="my-tooltip tip-content hidden text-start shadow">
+                        <h6 class="text-white text-sm mt-3">Excel Format</h6>
+                        <p class="text-white">Click to view format</p>
+                    </div>
+                </h5>
             </div>
+            
+            <div id="infoModal" class="modal hidden mb-5">
+                <div class="modal-content ">
+                    <span class="close cursor-pointer">&times;</span>
+                    <h5>Excel Format Instructions</h5>
+                    <p>Ensure your Excel file matches the required format before uploading.</p>
+                    <h5>Student list</h5>
+                    <img src="/images/excel-format.png" alt="">
+                    <h5>Faculty list</h5>
+                    <img src="/images/excel-format.png" alt="">
+                </div>
+            </div>
+
             <div class="card-body">
                 <form action="{{ route('import.file') }}" method="POST" enctype="multipart/form-data" class="p-3">
                     @csrf
@@ -177,5 +266,58 @@
         } else {
             alert('Please upload a valid Excel file (XLSX or XLS).');
         }
+    });
+</script>
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]'); 
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl)); 
+
+    // Boxed Tooltip
+    $(document).ready(function() {
+        $('.tooltip-button').each(function () {
+            var tooltipButton = $(this);
+            var tooltipContent = $(this).siblings('.my-tooltip').html(); 
+    
+            // Initialize the tooltip
+            tooltipButton.tooltip({
+                title: tooltipContent,
+                trigger: 'hover',
+                html: true
+            });
+    
+            // Optionally, reinitialize the tooltip if the content might change dynamically
+            tooltipButton.on('mouseenter', function() {
+                tooltipButton.tooltip('dispose').tooltip({
+                    title: tooltipContent,
+                    trigger: 'hover',
+                    html: true
+                }).tooltip('show');
+            });
+        });
+    });
+
+    
+
+</script>
+<script>
+    $(document).ready(function () {
+        const $modal = $('#infoModal');
+
+        // Open the modal
+        $('#openModalButton').on('click', function () {
+            $modal.show();
+        });
+
+        // Close the modal
+        $modal.find('.close').on('click', function () {
+            $modal.hide();
+        });
+
+        // Close the modal when clicking outside of it
+        $(window).on('click', function (event) {
+            if ($(event.target).is($modal)) {
+                $modal.hide();
+            }
+        });
     });
 </script>

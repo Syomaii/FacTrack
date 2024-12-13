@@ -28,26 +28,28 @@
                 </ul>
             </div>
         @endif
-        <div class="d-flex justify-content-between align-items-center mb-24">
-            <div class="input-group" style="max-width: 650px;">
-                <input type="text" id="departmentSearch" class="form-control" placeholder="Search Department"
-                    aria-label="Search Department">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-24">
+            <!-- Search Bar -->
+            <div class="input-group flex-grow-1 flex-sm-grow-0 mb-3 mb-sm-0" style="max-width: 650px;">
+                <input type="text" id="departmentSearch" class="form-control" placeholder="Search Department" aria-label="Search Department">
                 <button class="btn btn-primary" type="button">
                     <iconify-icon icon="ic:baseline-search" class="icon"></iconify-icon>
                 </button>
             </div>
-
-            <div class="d-flex justify-content-end gap-2">
+        
+            <!-- Buttons -->
+            <div class="d-flex flex-wrap justify-content-end gap-3">
                 @if (Auth::user()->type != 'operator')
-                    <a href="/students" class="btn btn-primary text-base radius-8 px-20 py-11 mb-3">
-                        Import Excel File
-                    </a>
+                <a href="/students" class="btn btn-primary text-base radius-8 px-20 py-11 w-sm-auto">
+                    Import Excel File
+                </a>
                 @endif
-                <a href="{{ route('add-student') }}" class="btn btn-primary text-base radius-8 px-20 py-11 mb-3">
+                <a href="{{ route('add-student') }}" class="btn btn-primary text-base radius-8 px-20 py-11 w-sm-auto">
                     Add New Student
                 </a>
             </div>
         </div>
+        
         <!-- Department Group By-->
         <div class="scrollable-content" style="overflow-y: auto; overflow-x: hidden; max-height: 700px;">
             <div class="row gy-4" id="studentList">

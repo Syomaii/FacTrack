@@ -76,14 +76,18 @@ class ReservationController extends Controller
         ]);
 
         $equipment = Equipment::find($request->equipment_id);
-
+        
         if (!$equipment) {
             return redirect()->back()->withErrors(['error' => 'Equipment not found.']);
         }
 
         $office = $equipment->facility->office->id; 
         $reserver = Auth::user();
-        $reservers_id_no = Auth::user()->id;
+        if($reserver->type === 'student'){
+            $reservers_id_no = Auth::user()->student_id;
+        }else if($reserver->type === 'faculty'){
+            $reservers_id_no = Auth::user()->faculty_id;
+        }
         // Check if the equipment is already reserved in the given time range
         $existingReservation = EquipmentReservation::where('equipment_id', $request->equipment_id)
         ->where(function ($query) use ($request) {
@@ -137,7 +141,7 @@ class ReservationController extends Controller
     }
     
     public function reservationDetails($id){
-        $reservation = EquipmentReservation::with(['student', 'equipment', 'offices'])->where('id', $id)->first();
+        $reservation = EquipmentReservation::with(['student', 'faculty', 'equipment', 'offices'])->where('id', $id)->first();
         $title = "Reservation Details";
         $data = [
             'reservation' => $reservation,
