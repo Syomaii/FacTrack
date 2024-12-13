@@ -105,6 +105,7 @@ class StudentController extends Controller
             'email' => $data['email'],
             'course' => strtoupper($data['course']), 
             'department' => ucwords($data['department']), 
+            'overdue_count' => 0,
         ]);
 
         User::create([

@@ -78,6 +78,7 @@ class StudentsImport implements
             'email' => $row["Email"] ?? null,
             'course' => $row["Course / Year"] ?? null,
             'department' => $department,
+            'overdue_count' => 0
         ]);
 
         // Create a User record for the Student
@@ -89,10 +90,10 @@ class StudentsImport implements
             'firstname' => $student->firstname,
             'lastname' => $student->lastname,
             'email' => $student->email,
-            'password' => bcrypt($student->id), // Default password (should be updated by the user later)
-            'type' => 'student', // Assign role as 'student'
+            'password' => bcrypt($student->id), 
+            'type' => 'student', 
             'status' => 'active',
-            'mobile_no' => 'none', // Optional: Link to the Student ID
+            'mobile_no' => 'none', 
         ]);
 
         $student->save(); // Save the Student record first
