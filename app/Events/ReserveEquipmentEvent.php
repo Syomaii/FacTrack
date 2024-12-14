@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\EquipmentReservation;
 use App\Models\Reservation;
 use App\Models\Students;
 use App\Models\User;
@@ -25,7 +26,7 @@ class ReserveEquipmentEvent
     public $office;
     public $equipment;
 
-    public function __construct(Reservation $reservation, $student, $office, $equipment)
+    public function __construct(EquipmentReservation $reservation, $student, $office, $equipment)
     {
         $this->reservation = $reservation;
         $this->student = $student;

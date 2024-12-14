@@ -83,7 +83,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/search-student', [StudentController::class, 'search'])->name('search-student');
         Route::get('/student/{id}', [StudentController::class, 'studentProfile'])->name('student.show_profile');
         Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->name('change_password');
-        Route::get('/dasboard-search-user', [PageController::class, 'dashboardSearchUser'])->name('dashboard-search-user');
+        Route::get('/dashboard-search-user', [PageController::class, 'dashboardSearchUser'])->name('dashboard-search-user');
         
     });
 

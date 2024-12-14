@@ -97,7 +97,7 @@
                 <li class="fw-medium">Add User</li>
             </ul>
         </div>
-
+{{-- 
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -106,7 +106,7 @@
                     @endforeach
                 </ul>
             </div>
-        @endif
+        @endif --}}
 
         <form action="{{ route('addUserPost') }}" method="POST" enctype="multipart/form-data" id="userForm">
             @csrf
@@ -245,104 +245,102 @@
                                                     class="form-control radius-8 {{ $errors->has('type') ? 'is-invalid' : '' }}"
                                                     id="type" name="type">
                                                     <option value="" disabled selected>Select a role</option>
-                                                    @if ($userType === 'admin')
-                                                        <option value="facility manager"
-                                                            {{ old('type') == 'Facility manager' ? 'selected' : '' }}>
-                                                            Facility Manager
-                                                        </option>
-                                                    @elseif($userType === 'facility manager')
-                                                        <option value="facility manager"
-                                                            {{ old('type') == 'Facility manager' ? 'selected' : '' }}>
-                                                            Facility Manager
-                                                        </option>
-                                                        <option value="operator"
-                                                            {{ old('type') == 'Operator' ? 'selected' : '' }}> Operator
-                                                        </option>
-                                                    @endif
+
+                                                    <option value="facility manager"
+                                                        {{ old('type') == 'Facility manager' ? 'selected' : '' }}>
+                                                        Facility Manager
+                                                    </option>
+                                                    <option value="operator"
+                                                        {{ old('type') == 'Operator' ? 'selected' : '' }}> Operator
+                                                    </option>
+
                                                 </select>
                                             </div>
-                                            <small class="text-danger">{{ $errors->first('designation') }}</small>
+                                            <small class="text-danger">{{ $errors->first('type') }}</small>
                                         </div>
                                     </div>
 
                                     @if ($userType === 'admin')
                                         <!-- Office/Department Radio Buttons -->
-                                        <div class="form-group mb-3 col-md-6">
-                                            <label class="fw-semibold text-primary-light text-sm mb-2">Select
-                                                Type</label>
-                                            <div class="row g-6">
-                                                <div class="col-md-6 gap-10">
-                                                    <div class="form-check d-flex align-items-center gap-2">
-                                                        <input type="radio" id="office" name="select_type"
-                                                            value="office" class="form-check-input" checked>
-                                                        <label for="office"
-                                                            class="form-check-label d-flex align-items-center gap-2">
-                                                            <iconify-icon icon="mingcute:tool-fill"
-                                                                class="icon text-lg"></iconify-icon>
-                                                            Office
-                                                        </label>
+                                        <div class="row">
+                                            <div class="form-group mb-3 col-md-6">
+                                                <label class="fw-semibold text-primary-light text-sm mb-2">Select
+                                                    Type</label>
+                                                <div class="row g-6">
+                                                    <div class="col-md-6 gap-10" style="margin-top: .8rem">
+                                                        <div class="form-check d-flex align-items-center gap-2">
+                                                            <input type="radio" id="office" name="select_type"
+                                                                value="office" class="form-check-input" checked>
+                                                            <label for="office"
+                                                                class="form-check-label d-flex align-items-center gap-2">
+                                                                <iconify-icon icon="mingcute:tool-fill"
+                                                                    class="icon text-lg"></iconify-icon>
+                                                                Office
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-check d-flex align-items-center gap-2">
-                                                        <input type="radio" id="department" name="select_type"
-                                                            value="department" class="form-check-input">
-                                                        <label for="department"
-                                                            class="form-check-label d-flex align-items-center gap-2">
-                                                            <iconify-icon icon="mingcute:home-6-fill"
-                                                                class="icon text-lg"></iconify-icon>
-                                                            Department
-                                                        </label>
+                                                    <div class="col-md-6" style="margin-top: .8rem">
+                                                        <div class="form-check d-flex align-items-center gap-2">
+                                                            <input type="radio" id="department" name="select_type"
+                                                                value="department" class="form-check-input">
+                                                            <label for="department"
+                                                                class="form-check-label d-flex align-items-center gap-2">
+                                                                <iconify-icon icon="mingcute:home-6-fill"
+                                                                    class="icon text-lg"></iconify-icon>
+                                                                Department
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        <!-- Office Dropdown -->
-                                        <div class="form-group mb-3 col-md-12" id="office-dropdown">
-                                            <label for="office_id"
-                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Select
-                                                Office</label>
-                                            <select class="form-control radius-8 scrollable-dropdown" id="office_id"
-                                                name="office_id" size="5">
-                                                <option value="" disabled selected>Select an Office</option>
-                                                <!-- This option is not scrollable -->
-                                                @foreach ($offices as $office)
-                                                    @if ($office->type == 'office')
-                                                        <option value="{{ $office->id }}">{{ $office->name }}
-                                                        </option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                        </div>
-
-                                        <!-- Department Dropdown -->
-                                        <div class="form-group mb-3 col-md-12" id="department-dropdown"
-                                            style="display: none;">
-                                            <label for="department"
-                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Select
-                                                Department</label>
-                                            <select class="form-control radius-8 scrollable-dropdown" id="department"
-                                                name="department" size="5">
-                                                <option value="" disabled selected>Select a Department</option>
-                                                <!-- This option is not scrollable -->
-                                                @foreach ($offices as $office)
-                                                    @if ($office->type == 'department')
-                                                        <option value="{{ $office->id }}">{{ $office->name }}
-                                                        </option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
+    
+                                            <!-- Office Dropdown -->
+                                            <div class="form-group mb-3 col-md-6" id="office-dropdown">
+                                                <label for="office_id"
+                                                    class="form-label fw-semibold text-primary-light text-sm mb-8">Select
+                                                    Office</label>
+                                                <select class="form-control radius-8 {{ $errors->has('office_id') ? 'is-invalid' : '' }}" id="office_id"
+                                                    name="office_id">
+                                                    <option value="" disabled selected>Select an Office</option>
+                                                    <!-- This option is not scrollable -->
+                                                    @foreach ($offices as $office)
+                                                        @if ($office->type == 'office')
+                                                            <option value="{{ $office->id }}">{{ $office->name }}
+                                                            </option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                                
+                                            </div>
+    
+                                            <!-- Department Dropdown -->
+                                            <div class="form-group mb-3 col-md-6" id="department-dropdown"
+                                                style="display: none;">
+                                                <label for="department"
+                                                    class="form-label fw-semibold text-primary-light text-sm mb-8">Select
+                                                    Department</label>
+                                                <select class="form-control radius-8" id="department"
+                                                    name="department">
+                                                    <option value="" disabled selected>Select a Department</option>
+                                                    <!-- This option is not scrollable -->
+                                                    @foreach ($offices as $office)
+                                                        @if ($office->type == 'department')
+                                                            <option value="{{ $office->id }}">{{ $office->name }}
+                                                            </option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
                                     @endif
 
-                                    <div class="d-flex align-items-center justify-content-center gap-3 mt-5">
+                                    <div class="d-flex align-items-center justify-content-center gap-3 mt-3 mb-5">
                                         <a href="/users">
                                             <button type="button"
                                                 class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8">Cancel</button>
                                         </a>
                                         <button type="submit"
-                                            class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8">Add
+                                            class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8" style="max-width: 200px">Add
                                             User</button>
                                     </div>
                                 </div>

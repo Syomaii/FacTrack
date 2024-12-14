@@ -75,7 +75,7 @@
 
                 <!-- Notification dropdown end -->
 
-                <div class="dropdown" style="z-index: 1">
+                <div class="dropdown" style="z-index: 99999">
                     <button class="d-flex justify-content-center align-items-center rounded-circle" type="button"
                         data-bs-toggle="dropdown">
                         <img src="/{{ auth()->user()->image }}" alt="image" style="z-index: 9999"
