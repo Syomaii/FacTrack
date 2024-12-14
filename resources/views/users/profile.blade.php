@@ -155,8 +155,8 @@
                                                     First Name <span class="text-danger-600">*</span>
                                                 </label>
                                                 <input type="text" class="form-control radius-8" id="firstname"
-                                                    name="firstname" value="{{ ucwords($user->firstname) }}"
-                                                    required>
+                                                    name="firstname" value="{{ ucwords($user->firstname) }}">
+                                                <small class="text-danger">{{ $errors->first('firstname') }}</small>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -166,7 +166,8 @@
                                                     Last Name <span class="text-danger-600">*</span>
                                                 </label>
                                                 <input type="text" class="form-control radius-8" id="lastname"
-                                                    name="lastname" value="{{ ucwords($user->lastname) }}" required>
+                                                    name="lastname" value="{{ ucwords($user->lastname) }}">
+                                                    <small class="text-danger">{{ $errors->first('lastname') }}</small>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -176,7 +177,8 @@
                                                     Email <span class="text-danger-600">*</span>
                                                 </label>
                                                 <input type="text" class="form-control radius-8" id="email"
-                                                    name="email" value="{{ old('email', $user->email) }}" required>
+                                                    name="email" value="{{ old('email', $user->email) }}">
+                                                <small class="text-danger">{{ $errors->first('email') }}</small>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -187,6 +189,7 @@
                                                 </label>
                                                 <input type="text" class="form-control radius-8" id="mobile_no"
                                                     name="mobile_no" value="{{ $user->mobile_no }}">
+                                                <small class="text-danger">{{ $errors->first('mobile_no') }}</small>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -246,7 +249,7 @@
                                             </label>
                                             <div class="position-relative">
                                                 <input type="password" class="form-control radius-8"
-                                                    id="current-password" name="current_password" required
+                                                    id="current-password" name="current_password"
                                                     placeholder="Enter Current Password">
                                                 <span
                                                     class="toggle-password ri-eye-line cursor-pointer position-absolute end-0 top-50 translate-middle-y me-16 text-secondary-light"
