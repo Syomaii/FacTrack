@@ -52,12 +52,25 @@
                         <button type="submit"><iconify-icon icon="ion:search-outline"
                                 class="icon"></iconify-icon></button>
                     </form>
-                    <select name="status" id="statusFilter"
-                        class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px text-decoration-none">
-                        <option value="">Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
+                    <form method="GET" action="{{ route('search-user') }}">
+                        <select name="status" class="form-select" onchange="this.form.submit()">
+                            <option value="">Select Status</option>
+                            <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active
+                            </option>
+                            <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive
+                            </option>
+                        </select>
+                    </form>
+                    <!-- Sort by Name Filter -->
+                    <form method="GET" action="{{ route('search-user') }}">
+                        <select name="sort" class="form-select" onchange="this.form.submit()">
+                            <option value="">Sort</option>
+                            <option value="asc" {{ request('sort') === 'asc' ? 'selected' : '' }}>Ascending</option>
+                            <option value="desc" {{ request('sort') === 'desc' ? 'selected' : '' }}>Descending
+                            </option>
+                        </select>
+                    </form>
+
                 </div>
                 <a href="/add-user"
                     class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
@@ -146,7 +159,8 @@
                     </table>
                 </div>
 
-                @if ($totalUsers > 0)
+                <!-- Pagination -->
+                @if ($users->total() > 0)
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
                         <span>Showing {{ $start }} to {{ $end }} of {{ $totalUsers }}
                             entries</span>
@@ -189,7 +203,6 @@
                                             href="{{ $users->url($users->lastPage()) }}">{{ $users->lastPage() }}</a>
                                     </li>
                                 @endif
-                            @else
                             @endif
 
                             <!-- Next Page Link -->
@@ -203,6 +216,7 @@
                     </div>
                 @endif
 
+
             </div>
         </div>
     </div>
@@ -210,23 +224,3 @@
     @include('templates.footer_inc')
 </main>
 @include('templates.footer')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const statusFilter = document.getElementById('statusFilter');
-        const tableRows = document.querySelectorAll('tbody tr');
-
-        // Function to filter table rows based on selected status
-        statusFilter.addEventListener('change', function() {
-            const selectedStatus = statusFilter.value.toLowerCase();
-
-            tableRows.forEach(row => {
-                const statusCell = row.cells[8].innerText.toLowerCase();
-                if (selectedStatus === '' || statusCell === selectedStatus) {
-                    row.style.display = ''; // Show row
-                } else {
-                    row.style.display = 'none'; // Hide row
-                }
-            });
-        });
-    });
-</script>

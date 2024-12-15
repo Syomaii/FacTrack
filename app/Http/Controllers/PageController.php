@@ -306,20 +306,40 @@ class PageController extends Controller
     // In BorrowerController.php
 public function borrowerSearch(Request $request)
 {
-    $search = $request->input('search');
+    $query = Borrower::query();
 
-    $borrows = Borrower::with('equipment')
-        ->when($search, function ($query, $search) {
-            return $query->where('borrowers_name', 'LIKE', "%{$search}%")
-                         ->orWhere('borrowers_id_no', 'LIKE', "%{$search}%")
-                         ->orWhereHas('equipment', function ($q) use ($search) {
-                             $q->where('name', 'LIKE', "%{$search}%")
-                               ->orWhere('brand', 'LIKE', "%{$search}%");
-                         });
-        })
-        ->paginate(10); // Adjust pagination as needed
+    // Search filter
+    if ($request->filled('search')) {
+        $searchTerm = $request->input('search');
+        $query->where(function ($q) use ($searchTerm) {
+            $q->where('borrowers_name', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('borrowers_id_no', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('department', 'LIKE', "%{$searchTerm}%")
+                ->orWhereHas('equipment', function ($q) use ($searchTerm) {
+                    $q->where('name', 'LIKE', "%{$searchTerm}%");
+                });
+        });
+    }
 
-    return view('reports/borrowers_log', compact('borrows'))->with('title', 'Borrowers Log');
+    // Status filter
+    if ($request->filled('status')) {
+        $query->where('status', $request->input('status'));
+    }
+
+    // Sort by ID filter
+    if ($request->filled('sort_by_id') && in_array($request->input('sort_by_id'), ['asc', 'desc'])) {
+        $query->orderBy('borrowers_id_no', $request->input('sort_by_id'));
+    }
+
+    // Paginate the results and preserve query parameters
+    $borrows = $query->with('equipment')->paginate(10)->appends($request->query());
+
+    return view('reports/borrowers_log', [
+        'borrows' => $borrows,
+        'totalBorrows' => $borrows->total(),
+        'start' => ($borrows->currentPage() - 1) * $borrows->perPage() + 1,
+        'end' => min(($borrows->currentPage() - 1) * $borrows->perPage() + $borrows->count(), $borrows->total())
+    ])->with('title', "Borrower's Log");
 }
 
     public function maintenance()
