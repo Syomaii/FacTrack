@@ -39,7 +39,7 @@ class UserController extends Controller
                     return $query->whereNotNull('faculty_id')->orWhereNotNull('student_id');
                 }),
             ],
-            'mobile_no' => 'required|string|max:15',
+            'mobile_no' => 'required|string|max:11',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'type' => 'required|string|max:255',  // Check if office or department is selected
             'office_id' => 'nullable|exists:offices,id', // Added validation for office_id
@@ -190,7 +190,7 @@ class UserController extends Controller
                 'firstname' => 'required|string|max:255',
                 'lastname' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
-                'mobile_no' => 'required|string|max:15',
+                'mobile_no' => 'required|string|max:11',
                 'designation_id' => 'required|exists:designations,id',
             ]);
         }else{
@@ -198,11 +198,19 @@ class UserController extends Controller
                 'firstname' => 'required|string|max:255',
                 'lastname' => 'required|string|max:255',
                 'email' => 'required|email|max:255|unique:users,email',
-                'mobile_no' => 'required|string|max:15',
+                'mobile_no' => 'required|string|max:11',
                 'designation_id' => 'required|exists:designations,id',
             ]);
         }
-    
+        
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imagePath = $image->store('images/users/profile_pictures', 'public');
+            $data['image'] = $imagePath;
+        } else {
+            $data['image'] = 'images/profile_pictures/default-profile.png';  
+        }
+
         $user->update($data);
     
         return redirect()->route('profile', ['id' => $id])->with('updateprofilesuccessfully', 'Profile updated successfully');

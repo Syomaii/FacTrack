@@ -27,7 +27,7 @@ class PageController extends Controller
         // Fetch recent logged-in users, paginated users, and equipment data
         $recentLoggedIn = User::where('type', '!=', 'admin')
             ->orderBy('last_login_at', 'desc')
-            ->take(5)
+            ->take(8)
             ->get();
 
         $facilities = Facility::where('office_id', '=', $loggedInUser->office_id)->pluck('id');  
@@ -35,8 +35,7 @@ class PageController extends Controller
         $equipments = Equipment::whereIn('facility_id', $facilities)->get();
 
         if($loggedInUser->type === 'admin'){
-            $users = User::with(['designation', 'office']) // Load relationships
-                    ->where('type', '!=', 'admin') // Filter by office ID
+            $users = User::with(['designation', 'office']) // Filter by office ID
                     ->paginate(5); 
             
             $borrows = Borrower::all(); 
@@ -98,6 +97,7 @@ class PageController extends Controller
 
     public function dashboardSearchUser (Request $request)
     {
+       
         $search = $request->input('search');
     
         // Adjust the query to exclude admin users
@@ -109,17 +109,24 @@ class PageController extends Controller
                                ->orWhere('email', 'like', '%' . $search . '%');
                          });
         }, function ($query) {
+            $loggedInUserType = Auth::user()->type;
+
             // If no search term, just exclude admin users
-            return $query->where('type', '!=', 'admin');
-        })->paginate(10);
+            if($loggedInUserType != 'admin'){
+                return $query->where('type', '!=', 'admin');
+            }else{
+                return $query;
+            }
+            
+        })->paginate(5);
     
         // Get the total count of users for pagination
-        $totalUsers = User::where('type', '!=', 'admin')->count(); // Count excluding admin users
+        $totalUsers = User::where('type', '!=', 'admin')->count(); 
         $start = $users->firstItem();
         $end = $users->lastItem();
     
         // Fetch other required data
-        $userCount = User::where('type', '!=', 'admin')->count(); // Count excluding admin users
+        $userCount = User::where('type', '!=', 'admin')->count(); 
         $equipmentCount = Equipment::count();
         $totalBorrowedEquipments = Equipment::where('status', 'Borrowed')->count();
         $totalInRepairEquipments = Equipment::where('status', 'In Repair')->count();

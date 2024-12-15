@@ -107,15 +107,16 @@
 
             <div class="d-flex flex-wrap justify-content-end gap-2">
                 @if (Auth::user()->type != 'operator')
-                    <a href="/students" class="btn btn-primary text-base radius-8 px-20 py-11 mb-3">
-                        Import Excel File
-                    </a>
+                <a href="/students" class="btn btn-primary text-base radius-8 px-20 py-11 w-sm-auto">
+                    Import Excel File
+                </a>
                 @endif
-                <a href="{{ route('add-student') }}" class="btn btn-primary text-base radius-8 px-20 py-11 mb-3">
+                <a href="{{ route('add-student') }}" class="btn btn-primary text-base radius-8 px-20 py-11 w-sm-auto">
                     Add New Student
                 </a>
             </div>
         </div>
+        
         <!-- Department Group By-->
         <div class="scrollable-content" style="overflow-y: auto; overflow-x: hidden; max-height: 700px;">
             <div class="row gy-4" id="studentList">

@@ -42,7 +42,6 @@
                 <div class="card shadow rounded p-3">
                     <h5 class="fw-semibold mb-3">Equipment Results</h5>
                     
-                    <input type="hidden" id="equipment_id" name="equipment_id" value="{{ old('equipment_id', $selectedEquipment->id ?? '') }}">
                     
 
                     <!-- Searchable Equipment Input -->
@@ -87,6 +86,7 @@
                                     <p><strong>Serial Number:</strong> {{ $selectedEquipment->serial_no }}</p>
                                     <p><strong>Facility:</strong> {{ $selectedEquipment->facility->name }}</p>
                                     <p><strong>Description:</strong> {{ $selectedEquipment->description }}</p> --}}
+                                    <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>{{ $selectedEquipment->id }}</strong></div>
                                     <div class="text-center mb-3">
                                         <img src="{{ $selectedEquipment->image }}" alt="{{ $selectedEquipment->name }}" class="img-fluid rounded" style="max-height: 200px;">
                                     </div>
@@ -114,27 +114,28 @@
                                 </div>
                             @endif
                         </div>
+                        
+
                         <!-- Purpose -->
                         <div class="mb-3">
                             <label for="purpose" class="form-label">Purpose</label>
                             <textarea id="purpose" name="purpose" class="form-control" placeholder="State the purpose for reservation" required>{{ old('purpose') }}</textarea>
                             <small class="text-danger">{{ $errors->first('purpose') }}</small>
                         </div>
-
+                        <input type="text" id="equipment_id" name="equipment_id" value="{{ old('equipment_id', $selectedEquipment->id ?? '') }}">
                         <!-- Reservation Date -->
                         <div class="mb-3">
                             <label for="reservationDate" class="form-label">Reservation Date</label>
-                            <input type="date" id="reservationDate" name="reservation_date" class="form-control" required>
+                            <input type="date" id="reservationDate" name="reservation_date" class="form-control" value="{{ old('reservation_date') }}" required >
                             <small class="text-danger">{{ $errors->first('reservation_date') }}</small>
                         </div>
 
                         <div class="mb-3">
                             <label for="expectedReturnDate" class="form-label">Expected Return Date</label>
                             <input type="date" id="expectedReturnDate" name="expected_return_date"
-                                class="form-control" required>
+                                class="form-control" value="{{ old('expected_return_date') }}" required>
                                 <small class="text-danger">{{ $errors->first('expected_return_date') }}</small>
                         </div>
-
 
                         <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary w-100 mt-3">Reserve Equipment</button>
@@ -216,6 +217,7 @@
 
                             <!-- Facility and Description -->
                             <div class="row">
+                                <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>${equipment.id}</strong></div>
                                 <!-- Office -->
                                 <div class="mb-3 col-md-6">
                                     <div class="d-flex text-xl" style="margin-left: 5rem; margin-top: 15px"><span><strong>Office/Department: </strong>${equipment.office}</span></div>
@@ -327,6 +329,7 @@
                     <!-- Facility and Description -->
                     <div class="row">
                         <!-- Office -->
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>${id}</strong></div>
                         <div class="mb-3 col-md-6">
                             <div class="d-flex text-xl" style="margin-left: 5rem; margin-top: 15px"><span><strong>Office/Department: </strong>${office}</span></div>
 
