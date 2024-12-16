@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -90,24 +91,21 @@ class StudentController extends Controller
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'gender' => 'required|in:M,F',
-            'email' => 'required|email|unique:students,email',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->where(function ($query) {
+                    return $query->whereNotNull('faculty_id')->orWhereNotNull('student_id');
+                }),
+            ],
             'course' => 'required|string|max:255',
             'department' => 'required|string|max:255',
         ]);
         $office = Office::where('type', '=', 'department')->first();
         $officeId = $office ? $office->id : null;
         
-        Students::create([
-            'id' => $data['id'],
-            'firstname' => ucwords(strtolower($data['firstname'])),
-            'lastname' => ucwords(strtolower($data['lastname'])),
-            'gender' => $data['gender'],
-            'email' => $data['email'],
-            'course' => strtoupper($data['course']), 
-            'department' => ucwords($data['department']), 
-            'overdue_count' => 0,
-        ]);
-
+        
+        
         User::create([
             'student_id' => $data['id'] ?? null,
             'designation_id' => 3,

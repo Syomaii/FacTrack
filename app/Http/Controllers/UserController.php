@@ -192,6 +192,7 @@ class UserController extends Controller
                 'email' => 'required|email|max:255',
                 'mobile_no' => 'required|string|max:11',
                 'designation_id' => 'required|exists:designations,id',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             ]);
         }else{
             $data = $request->validate([
@@ -200,6 +201,7 @@ class UserController extends Controller
                 'email' => 'required|email|max:255|unique:users,email',
                 'mobile_no' => 'required|string|max:11',
                 'designation_id' => 'required|exists:designations,id',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             ]);
         }
         

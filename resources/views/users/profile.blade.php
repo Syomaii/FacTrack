@@ -43,7 +43,7 @@
                     {{ session('successResetPassword') }}
                 </div>
             </div>
-        @elseif($errors->any())
+        {{-- @elseif($errors->any())
             <div
                 class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-2">
@@ -54,7 +54,7 @@
                         @endforeach
                     </ul>
                 </div>
-            </div>
+            </div> --}}
         @endif
         <div class="row gy-4">
             <div class="col-lg-4">

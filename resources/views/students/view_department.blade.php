@@ -28,12 +28,12 @@
                 </ul>
             </div>
         @endif
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-24">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-24" style="z-index:0">
             <!-- Search Bar -->
-            <div class="input-group flex-grow-1 flex-sm-grow-0 mb-3 mb-sm-0" style="max-width: 650px;">
+            <div class="input-group flex-grow-1 flex-sm-grow-0 mb-3 mb-sm-0" style="max-width: 650px; z-index=0">
                 <input type="text" id="departmentSearch" class="form-control" placeholder="Search Department" aria-label="Search Department">
-                <button class="btn btn-primary" type="button">
-                    <iconify-icon icon="ic:baseline-search" class="icon"></iconify-icon>
+                <button class="btn btn-primary" type="button" style="z-index:0">
+                    <iconify-icon icon="ic:baseline-search" class="icon" style="z-index=0"></iconify-icon>
                 </button>
             </div>
         
