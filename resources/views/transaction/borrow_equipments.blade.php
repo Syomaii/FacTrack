@@ -130,12 +130,17 @@
                                     </div>
 
                                     <!-- Scan Button Triggering Modal -->
-                                    <div class="d-flex justify-content-center gap-3">
-                                        <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
+                                    <div class="d-flex justify-content-center gap-3 py-2 ">
+                                        <a href="/equipments" class="">
+                                            <button type="button"
+                                            class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8" id="cancelBtn">
+                                            Cancel
+                                        </button></a>
+                                        <button type="button" class="btn btn-primary px-20 py-11 " data-bs-toggle="modal"
                                             data-bs-target="#scanModalBorrow" id="scanCodeBorrow">
                                             Scan QR Code
                                         </button>
-                                        <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
+                                        
                                     </div>
 
                                     <div class="modal fade" id="scanModalBorrow" tabindex="-1"

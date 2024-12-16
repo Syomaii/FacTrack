@@ -16,13 +16,14 @@
                     </a>
                 </li>
                 <li>-</li>
-                <li class="fw-medium"><a href="{{ url()->previous() }}" class="d-flex align-items-center gap-1 hover-text-primary">Facility Equipments</a></li>
+                <li class="fw-medium"><a href="{{ url()->previous() }}"
+                        class="d-flex align-items-center gap-1 hover-text-primary">Facility Equipments</a></li>
                 <li>-</li>
                 <li class="fw-medium">Add Equipment</li>
             </ul>
         </div>
 
-        
+
 
         <form action="{{ route('add_equipment', ['id' => $facility->id]) }}" method="POST"
             enctype="multipart/form-data">
@@ -182,7 +183,9 @@
                                         </select>
 
                                         <!-- Textbox that will appear when "Others" is selected -->
-                                        <input type="text" class="form-control radius-8 mt-2 d-none" id="owned_by_other" name="owned_by_other" placeholder="Please specify" value="{{ old('owned_by_other') }}" />
+                                        <input type="text" class="form-control radius-8 mt-2 d-none"
+                                            id="owned_by_other" name="owned_by_other" placeholder="Please specify"
+                                            value="{{ old('owned_by_other') }}" />
 
 
                                         <small class="text-danger">{{ $errors->first('owned_by') }}</small>
@@ -190,7 +193,7 @@
 
 
                                     <div class="d-flex align-items-center justify-content-center gap-3 mb-4 mt-4">
-                                        <a href="/facility-equipments/{id}">
+                                        <a href="{{ route('facility_equipment', ['id' => $facility->id]) }}">
                                             <button type="button"
                                                 class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8">
                                                 Cancel
@@ -210,12 +213,11 @@
             </div>
         </form>
     </div>
-        @include('templates.footer_inc')
+    @include('templates.footer_inc')
 </main>
 @include('templates.footer')
 
 <script>
-
     document.getElementById('upload-file').addEventListener('change', function(event) {
         const file = event.target.files[0];
         if (file) {
@@ -251,7 +253,7 @@
                 ownedByOtherInput.classList.remove('d-none');
             } else {
                 ownedByOtherInput.classList.add('d-none');
-                ownedByOtherInput.value = '';  // Reset the input value when not "Others"
+                ownedByOtherInput.value = ''; // Reset the input value when not "Others"
             }
         });
     }

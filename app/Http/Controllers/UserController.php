@@ -192,6 +192,7 @@ class UserController extends Controller
                 'email' => 'required|email|max:255',
                 'mobile_no' => 'required|string|max:11',
                 'designation_id' => 'required|exists:designations,id',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             ]);
         }else{
             $data = $request->validate([
@@ -200,6 +201,7 @@ class UserController extends Controller
                 'email' => 'required|email|max:255|unique:users,email',
                 'mobile_no' => 'required|string|max:11',
                 'designation_id' => 'required|exists:designations,id',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             ]);
         }
         
@@ -293,27 +295,49 @@ class UserController extends Controller
     public function searchUser(Request $request)
     {
         $query = User::query();
+        
+        // Exclude admin users
+        $query->where('type', '!=', 'admin');
     
-        // Handle search
+        // Handle search filter
         if ($request->has('search') && $request->input('search') !== '') {
             $searchTerm = $request->input('search');
             $query->where(function($q) use ($searchTerm) {
                 $q->where('firstname', 'LIKE', "%{$searchTerm}%")
-                ->orWhere('lastname', 'LIKE', "%{$searchTerm}%")
-                ->orWhere('email', 'LIKE', "%{$searchTerm}%")
-                ->orWhere('mobile_no', 'LIKE', "%{$searchTerm}%");
+                  ->orWhere('lastname', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('email', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('mobile_no', 'LIKE', "%{$searchTerm}%");
             });
         }
     
-        $users = $query->paginate(5);
-        $totalUsers = $query->count(); // Total users in the database
+        // Handle status filter
+        if ($request->has('status') && $request->input('status') !== '') {
+            $status = $request->input('status');
+            $query->where('status', $status);
+        }
+    
+        // Handle sorting by name (ascending or descending)
+        if ($request->has('sort') && in_array($request->input('sort'), ['asc', 'desc'])) {
+            $sortOrder = $request->input('sort');
+            $query->orderBy('firstname', $sortOrder);  // Sorting by 'firstname' field
+        }
+    
+        // Paginate the results, and append the query parameters
+        $users = $query->paginate(10)->appends(request()->query());
+    
+        // Get the total count of users
+        $totalUsers = $query->count();
     
         // Calculate start and end for display
         $start = ($users->currentPage() - 1) * $users->perPage() + 1;
-        $end = min($start + $totalUsers - 1, $totalUsers);
+        $end = min($start + $users->count() - 1, $totalUsers);
     
         return view('users.users', compact('users', 'totalUsers', 'start', 'end'))->with('title', 'Users');
     }
+    
+    
+
+
 
         
     }
