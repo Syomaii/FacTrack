@@ -61,7 +61,8 @@
 
                                     <div class="mb-3">
                                         <label for="id"
-                                            class="form-label fw-semibold text-primary-light text-sm mb-8">ID Number</label>
+                                            class="form-label fw-semibold text-primary-light text-sm mb-8">ID
+                                            Number</label>
                                         <input type="text"
                                             class="form-control radius-8 {{ $errors->has('id') ? 'is-invalid' : '' }}"
                                             id="id" name="id" placeholder="Enter ID Number"
@@ -134,8 +135,7 @@
                                             <small class="text-danger">{{ $errors->first('course') }}</small>
                                         </div>
                                         <div class="form-group mb-3 col-md-6">
-                                            <label for="department"
-                                                class="form-label fw-semibold">Select
+                                            <label for="department" class="form-label fw-semibold">Select
                                                 Department</label>
                                             <select class="form-control radius-8" id="department" name="department">
                                                 <option value="" disabled selected>Select a Department</option>
@@ -154,11 +154,11 @@
                                         <button type="submit"
                                             class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8">Add
                                             Student</button>
-                                        <a href="/students">
+                                        <a href="/view-department">
                                             <button type="button"
                                                 class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8">Cancel</button>
                                         </a>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -168,7 +168,7 @@
             </div>
         </form>
     </div>
-        @include('templates.footer_inc')
+    @include('templates.footer_inc')
 </main>
 @include('templates.footer')
 

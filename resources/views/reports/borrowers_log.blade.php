@@ -32,16 +32,43 @@
         <div class="card h-100 p-0 radius-12">
             <div
                 class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
-                <div class="d-flex align-items-center flex-wrap gap-3">
+                <div class="d-flex flex-grow-1 align-items-center flex-wrap gap-3">
+                    <!-- Search Filter -->
                     <form class="navbar-search d-flex align-items-center flex-grow-1" method="GET"
                         action="{{ route('borrower_search') }}">
                         <input type="text" class="bg-base h-40-px w-auto" name="search" id="borrowerSearch"
                             placeholder="Search" value="{{ request('search') }}">
-                        <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
+                        <button type="submit"><iconify-icon icon="ion:search-outline"
+                                class="icon"></iconify-icon></button>
+                    </form>
+
+                    <!-- Status Filter -->
+                    <form method="GET" action="{{ route('borrower_search') }}">
+                        <select name="status" class="form-select" onchange="this.form.submit()">
+                            <option value="">Select Status</option>
+                            <option value="Borrowed" {{ request('status') === 'Borrowed' ? 'selected' : '' }}>Borrowed
+                            </option>
+                            <option value="Returned" {{ request('status') === 'Returned' ? 'selected' : '' }}>Returned
+                            </option>
+                            <option value="Not Returned" {{ request('status') === 'Not Returned' ? 'selected' : '' }}>
+                                Not Returned
+                            </option>
+                        </select>
+                    </form>
+
+                    <!-- Sort by ID Filter -->
+                    <form method="GET" action="{{ route('borrower_search') }}">
+                        <select name="sort_by_id" class="form-select" onchange="this.form.submit()">
+                            <option value="">Sort by ID</option>
+                            <option value="asc" {{ request('sort_by_id') === 'asc' ? 'selected' : '' }}>Ascending
+                            </option>
+                            <option value="desc" {{ request('sort_by_id') === 'desc' ? 'selected' : '' }}>Descending
+                            </option>
+                        </select>
                     </form>
                 </div>
-
             </div>
+
             <div class="card-body p-24">
                 <div class="table-responsive scroll-sm">
                     <table class="table bordered-table sm-table mb-0">

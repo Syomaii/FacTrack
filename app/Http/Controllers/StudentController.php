@@ -42,13 +42,35 @@ class StudentController extends Controller
     
     public function search(Request $request)
     {
-        $query = $request->input('search');
-        $students = Students::where('firstname', 'like', "%$query%")
-                            ->orWhere('lastname', 'like', "%$query%")
-                            ->orWhere('email', 'like', "%$query%")
-                            ->orWhere('course', 'like', "%$query%")
-                            ->paginate(10);
+        $query = Students::query();
     
+        // Search filter
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('firstname', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('lastname', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('email', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('course', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+    
+        // Year filter (1st Year, 2nd Year, etc.)
+        if ($request->filled('year')) {
+            $year = $request->input('year'); // e.g., "1st Year", "2nd Year", etc.
+            $yearNumber = (int) filter_var($year, FILTER_SANITIZE_NUMBER_INT); // Extract the year number (1, 2, 3, 4)
+            $query->where('course', 'LIKE', "%{$yearNumber}%");
+        }
+    
+        // Sort by name (ascending or descending)
+        if ($request->filled('sort') && in_array($request->input('sort'), ['asc', 'desc'])) {
+            $query->orderBy('firstname', $request->input('sort'));
+        }
+    
+        // Paginate results
+        $students = $query->paginate(10)->appends($request->query());
+    
+        // Get the department from the first student's data
         $department = $students->isNotEmpty() ? $students->first()->department : null;
     
         // Check if the request is an AJAX request
@@ -57,18 +79,20 @@ class StudentController extends Controller
                 'students' => $students,
                 'totalStudents' => $students->total(),
                 'start' => ($students->currentPage() - 1) * $students->perPage() + 1,
-                'end' => min(($students->currentPage() - 1) * $students->perPage() + $students->perPage(), $students->total())
+                'end' => min(($students->currentPage() - 1) * $students->perPage() + $students->count(), $students->total())
             ]);
         }
     
+        // Render full view if not an AJAX request
         return view('students.view_students_by_department', [
             'students' => $students,
             'department' => $department,
             'totalStudents' => $students->total(),
             'start' => ($students->currentPage() - 1) * $students->perPage() + 1,
-            'end' => min(($students->currentPage() - 1) * $students->perPage() + $students->perPage(), $students->total())
+            'end' => min(($students->currentPage() - 1) * $students->perPage() + $students->count(), $students->total())
         ])->with('title', 'Search Results');
     }
+    
 
     public function studentProfile($id)
     {

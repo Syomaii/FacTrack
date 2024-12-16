@@ -329,9 +329,12 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const resetPasswordBtn = document.getElementById('reset-password-btn');
-        const resetPasswordForm = document.getElementById('reset-password-form');
+        const resetPasswordForm = document.getElementById(
+            'reset-password-form'); // Ensure this ID matches your form
 
-        resetPasswordBtn.addEventListener('click', function() {
+        resetPasswordBtn.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -342,7 +345,7 @@
                 confirmButtonText: 'Yes, reset it!',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    resetPasswordForm.submit();
+                    resetPasswordForm.submit(); // Submit the form only if confirmed
                     Swal.fire(
                         'Reset!',
                         'The password for reset has been sent.',
@@ -351,8 +354,8 @@
                 }
             });
         });
-    });
-    document.addEventListener('DOMContentLoaded', function() {
+
+        // Toggle password visibility
         const togglePasswordButtons = document.querySelectorAll('.toggle-password');
 
         togglePasswordButtons.forEach(button => {
