@@ -23,42 +23,42 @@ class ReservationController extends Controller
     }
 
     public function storeReservation(Request $request, $code) {
-        
-        // Convert input dates to the application's timezone
-        $reservationDate = Carbon::parse($request->input('reservation_date'))->setTimezone(config('app.timezone'));
-        $expectedReturnDate = Carbon::parse($request->input('expected_return_date'))->setTimezone(config('app.timezone'));
-
+        // Debugging: Check if the method is called
+        // dd($request->all());
+    
         // Validate the request
         $request->validate([
             'purpose' => 'required|string|max:255',
-            'reservation_date' => 'required|date|after_or_equal:now',
+            'reservation_date' => 'required|date|after_or_equal:' . now()->startOfMinute()->toDateTimeString(),
             'expected_return_date' => 'required|date|after:reservation_date',
         ]);
-
+    
         // Find the equipment by its code
         $equipment = Equipment::where('code', $code)->firstOrFail();
-
+    
         // Check if the equipment is available for reservation
         if ($equipment->status !== 'Available') {
             return back()->with('error', 'This equipment is not available for reservation.');
         }
-
+    
+        $office = Auth::user()->office_id; 
+    
         // Save the reservation
-        Reservation::create([
+        EquipmentReservation::create([
             'equipment_id' => $equipment->id,
-            'purpose' => $request->input('purpose'),
-            'reservation_date' => $reservationDate,
-            'expected_return_date' => $expectedReturnDate,
-            'reserved_by' => auth()->id(), // Assuming you are tracking who reserves the equipment
+            'office_id' => $office,
+            'reservation_date' => $request->reservation_date,
+            'expected_return_date' => $request->expected_return_date,
+            'status' => 'pending',
+            'purpose' => $request->purpose,
+            'reservers_id_no' => Auth::user()->student_id,  // Assuming this is the correct field for the user ID
         ]);
-
-        // Update equipment status to 'Reserved'
-        $equipment->update(['status' => 'Reserved']);
-
+    
         // Redirect to the facility equipment page with a success message
         return redirect()->route('facility_equipment', ['id' => $equipment->facility_id])
             ->with('success', 'Equipment reserved successfully.');
     }
+    
 
     public function searchEquipment(Request $request)
     {
