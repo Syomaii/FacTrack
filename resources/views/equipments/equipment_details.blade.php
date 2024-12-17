@@ -38,8 +38,8 @@
         @endif
 
         <!-- Equipment Details Card -->
-        <div class="card bg-white shadow rounded-3 p-3 mb-4">
-            <div class="row g-0">
+        <div class="card bg-white shadow rounded-3 mb-5">
+            <div class="d-flex flex-wrap p-5 row g-0">
                 <!-- Image Section -->
                 <div class="col-md-6 text-center">
                     <p class="ename">{{ ucwords($equipments->name) }}</p>
@@ -49,14 +49,14 @@
 
                 <!-- Details Section -->
                 <div class="col-md-6">
-                    <div class="row">
+                    <div class="row d-flex flex-wrap">
                         @foreach ([
-        'Brand' => $equipments->brand,
-        'Status' => $equipments->status,
-        'Serial Number' => $equipments->serial_no,
-        'Facility' => $equipments->facility->name,
-        'Acquisition Date' => date('d M Y', strtotime($equipments->acquired_date)),
-    ] as $label => $value)
+                            'Brand' => $equipments->brand,
+                            'Status' => $equipments->status,
+                            'Serial Number' => $equipments->serial_no,
+                            'Facility' => $equipments->facility->name,
+                            'Acquisition Date' => date('d M Y', strtotime($equipments->acquired_date)),
+                        ] as $label => $value)
                             <div class="col-md-6 mb-3">
                                 <strong>{{ $label }}:</strong>
                                 <p>{{ $value }}</p>
@@ -69,7 +69,13 @@
                     </div>
 
                     @if (auth()->user()->type === 'facility manager')
-                        <div class="mt-4">
+                        <div class="d-flex flex-wrap mt-3 gap-4">
+
+                            <a href="javascript:void(0)"
+                                class="btn btn-danger text-base radius-8 px-20 py-11 delete-equipment"
+                                data-id="{{ $equipments->id }}">Delete Equipment
+                            </a>
+
                             <a href="javascript:void(0)"
                                 class="btn btn-success text-base radius-8 px-20 py-11 edit-equipment"
                                 data-id="{{ $equipments->id }}" data-name="{{ $equipments->name }}"
@@ -80,11 +86,7 @@
                                 data-serial_no="{{ $equipments->serial_no }}">Edit
                                 Equipment
                             </a>
-                            <a href="javascript:void(0)"
-                                class="btn btn-danger text-base radius-8 px-20 py-11 delete-equipment"
-                                data-id="{{ $equipments->id }}">Delete Equipment
-                            </a>
-
+                            
                             <button type="button" class="btn btn-primary text-base radius-8 px-20 py-11"
                                 onclick="printInvoice()">
                                 Print QR Code
