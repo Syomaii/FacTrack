@@ -74,19 +74,23 @@
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-24">
             <!-- Search Bar -->
             <div class="input-group flex-grow-1 flex-sm-grow-0 mb-3 mb-sm-0" style="max-width: 650px;">
-                <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm" placeholder="Search equipment...">
+                <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
+                    placeholder="Search equipment...">
                 <button class="btn btn-primary" type="button" style="z-index: 0">
                     <iconify-icon icon="ic:baseline-search" class="icon"></iconify-icon>
                 </button>
             </div>
-        
+
             <!-- Buttons -->
             <div class="d-flex flex-wrap justify-content-start gap-3">
                 @if (auth()->user()->type === 'facility manager')
-                    <button type="button" class="btn btn-danger text-sm btn-sm px-12 py-12 radius-8 px-20 py-11" id="deleteFacilityBtn">Delete Facility</button>
-                    <button type="button" class="btn btn-warning text-sm btn-sm px-12 py-12 radius-8 px-20 py-11" id="updateFacilityBtn">Edit Facility</button>
+                    <button type="button" class="btn btn-danger text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                        id="deleteFacilityBtn">Delete Facility</button>
+                    <button type="button" class="btn btn-warning text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                        id="updateFacilityBtn">Edit Facility</button>
                     <a href="/add-equipment/{{ $facility->id }}">
-                        <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11" id="addEquipmentBtn">Add Equipment</button>
+                        <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                            id="addEquipmentBtn">Add Equipment</button>
                     </a>
                 @endif
             </div>
@@ -105,11 +109,19 @@
                                         class="img-fluid rounded mb-3 max-img-size" />
                                     <h6 class="mb-8">{{ $facEquipment->name }}</h6>
                                     <div class="d-flex justify-content-center gap-2">
-                                        <a href="/equipment-details/{{ $facEquipment->code }}"
-                                            class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
-                                            View Equipment <iconify-icon icon="iconamoon:arrow-right-2"
-                                                class="text-xl"></iconify-icon>
-                                        </a>
+                                        @if (auth()->user()->type === 'student')
+                                            <a href="/reserve-equipment/{{ $facEquipment->code }}"
+                                                class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
+                                                Reserve Equipment <iconify-icon icon="iconamoon:arrow-right-2"
+                                                    class="text-xl"></iconify-icon>
+                                            </a>
+                                        @else
+                                            <a href="/equipment-details/{{ $facEquipment->code }}"
+                                                class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
+                                                View Equipment <iconify-icon icon="iconamoon:arrow-right-2"
+                                                    class="text-xl"></iconify-icon>
+                                            </a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

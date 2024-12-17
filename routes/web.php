@@ -52,13 +52,24 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['checkRole:student'])->group(function (){
         Route::get('/student-dashboard', [StudentController::class, 'studentDashboard'])->name('student.dashboard');
         Route::get('/student-profile/{id}', [StudentController::class, 'studentProfile'])->name('student.profile');
-        Route::get('/reserve-equipment', [ReservationController::class, 'reserveEquipment'])->name('student.reserve_equipment');
+        Route::get('/reserve-equipment/{code}', [ReservationController::class, 'showReservationForm'])->name('reserve.equipment');
+        Route::post('/reserve-equipment/{code}', [ReservationController::class, 'storeReservation'])->name('reserve.equipment.store');
         Route::get('/api/search-equipment', [ReservationController::class, 'searchEquipment']);
         Route::post('/reservations', [ReservationController::class, 'reserved'])->name('students.reserved');
         Route::get('/reserve-facility', [ReservationController::class, 'reserveFacility'])->name('student.reserve_facility');
-
-
         
+    });
+
+//---------------------------------------Admin,and Student -----------------------------------------------
+    Route::middleware(['checkRole:admin,,student'])->group(function () {
+        Route::get('/offices', [PageController::class, 'offices'])->name('offices');
+        Route::get('/office/{id}', [OfficeController::class, 'officeFacilities'])->name('officeFacilities');
+    });
+
+ //---------------------------------------Admin, Operator, Facility Manager and Student -----------------------------------------------
+
+    Route::middleware(['checkRole:admin,facility manager,operator,student'])->group(function () {
+        Route::get('/facility-equipment/{id}', [PageController::class, 'facilityEquipments'])->name('facility_equipment');
     });
 
  //---------------------------------------Operator, Facility Manager and Student -----------------------------------------------
@@ -67,6 +78,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reservation-details/{id}', [ReservationController::class, 'reservationDetails'])->name('reservation_details');
 
     });
+    
 
  //---------------------------------------Operator, Facility Manager and Admin -----------------------------------------------
 
@@ -75,7 +87,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/profile/{id}', [PageController::class, 'profile'])->name('profile');
         Route::put('/profile/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
         Route::get('/add-student', [PageController::class, 'addStudent'])->name('add-student');
-        Route::get('/facility-equipment/{id}', [PageController::class, 'facilityEquipments'])->name('facility_equipment');
         Route::post('/add-studentPost', [StudentController::class, 'addStudentPost'])->name('add-studentPost');
         
         Route::get('/view-department', [StudentController::class, 'viewDepartment'])->name('view-department');
@@ -108,11 +119,9 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::middleware(['checkRole:admin'])->group(function () {
-        Route::get('/offices', [PageController::class, 'offices'])->name('offices');
         Route::delete('/delete-office/{id}', [OfficeController::class, 'deleteOffice'])->name('deleteOffice');        
         Route::post('/add-office', [OfficeController::class, 'addOffice'])->name('addOffice');
         Route::put('/update-office/{id}', [OfficeController::class, 'updateOffice'])->name('updateOffice');
-        Route::get('/office/{id}', [OfficeController::class, 'officeFacilities'])->name('officeFacilities');
         Route::post('/users/{user}/reset-password', [UserController::class, 'resetUserPassword'])->name('users.reset_password');
         Route::get('/user-reports', [ReportController::class, 'userReports'])->name('user_reports');
         Route::get('/edit-date-range', [ReportController::class, 'setDateRangeUsers'])->name('edit-date-range');

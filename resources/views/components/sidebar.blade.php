@@ -114,7 +114,7 @@
                                 Repair Equipments
                             </a>
                         </li>
-                        
+
                         <!-- Donate Equipments -->
                         <li>
                             <a href="/donate-equipment">
@@ -144,7 +144,7 @@
                     </ul>
                 </li>
             @endif
-                
+
             @if (auth()->user()->type != 'student')
                 <li class="dropdown">
                     <a href="javascript:void(0)">
@@ -155,38 +155,38 @@
                         @if (auth()->user()->type === 'admin')
                             <li>
                                 <a href="/user-reports">
-                                    <i class="ri-circle-fill circle-icon text-lilac-600 w-auto" ></i>
+                                    <i class="ri-circle-fill circle-icon text-lilac-600 w-auto"></i>
                                     Users
                                 </a>
                             </li>
                         @elseif (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
                             <li>
                                 <a href="/borrowed-equipments">
-                                    <i class="ri-circle-fill circle-icon text-orange w-auto" ></i>
+                                    <i class="ri-circle-fill circle-icon text-orange w-auto"></i>
                                     Borrowed Equipments
                                 </a>
                             </li>
                             <li>
                                 <a href="/maintenanced-equipments">
-                                    <i class="ri-circle-fill circle-icon text-info-main w-auto" ></i>
+                                    <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
                                     In Maintenance Equipments
                                 </a>
                             </li>
                             <li>
                                 <a href="/repaired-equipments">
-                                    <i class="ri-circle-fill circle-icon text-danger-main w-auto" ></i>
+                                    <i class="ri-circle-fill circle-icon text-danger-main w-auto"></i>
                                     In Repair Equipments
                                 </a>
                             </li>
                             <li>
                                 <a href="/donated-equipments">
-                                    <i class="ri-circle-fill circle-icon text-pink w-auto" ></i>
+                                    <i class="ri-circle-fill circle-icon text-pink w-auto"></i>
                                     Donated Equipments
                                 </a>
                             </li>
                             <li>
                                 <a href="/disposed-equipments">
-                                    <i class="ri-circle-fill circle-icon text-black w-auto" ></i>
+                                    <i class="ri-circle-fill circle-icon text-black w-auto"></i>
                                     Disposed Equipments
                                 </a>
                             </li>
@@ -207,18 +207,18 @@
                         <span>Reserve</span>
                     </a>
                     <ul class="sidebar-submenu">
-                            <li>
-                                <a href="/reserve-equipment">
-                                    <iconify-icon icon="mingcute:computer-line" class="menu-icon"></iconify-icon>
-                                    Reserve Equipment
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/reserve-facility">
-                                    <iconify-icon icon="mingcute:storage-line" class="menu-icon"></iconify-icon>
-                                    Reserve Facility
-                                </a>
-                            </li>
+                        <li>
+                            <a href="/offices">
+                                <iconify-icon icon="mingcute:computer-line" class="menu-icon"></iconify-icon>
+                                Reserve Equipment
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/reserve-facility">
+                                <iconify-icon icon="mingcute:storage-line" class="menu-icon"></iconify-icon>
+                                Reserve Facility
+                            </a>
+                        </li>
                     </ul>
                 </li>
             @endif

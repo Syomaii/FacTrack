@@ -57,20 +57,24 @@
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-24">
             <!-- Search Bar -->
             <div class="input-group flex-grow-1 flex-sm-grow-0 mb-3 mb-sm-0" style="max-width: 650px;">
-                <input type="text" id="officeSearch" class="form-control" placeholder="Search Facilities" aria-label="Search Office">
+                <input type="text" id="officeSearch" class="form-control" placeholder="Search Facilities"
+                    aria-label="Search Office">
                 <button class="btn btn-primary" type="button">
                     <iconify-icon icon="ic:baseline-search" class="icon"></iconify-icon>
                 </button>
             </div>
-        
-            <!-- Add Office Button -->
-            <div class="d-flex flex-wrap justify-content-start gap-3">
-                <a href="#" style="width: 170px" data-bs-toggle="modal" data-bs-target="#addOfficeModal">
-                    <button type="button" class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11">Add Office</button>
-                </a>
-            </div>
+
+            @if (auth()->user()->type === 'admin')
+                <!-- Add Office Button -->
+                <div class="d-flex flex-wrap justify-content-start gap-3">
+                    <a href="#" style="width: 170px" data-bs-toggle="modal" data-bs-target="#addOfficeModal">
+                        <button type="button"
+                            class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 px-20 py-11">Add Office</button>
+                    </a>
+                </div>
+            @endif
         </div>
-        
+
 
         <!-- Add Office Modal -->
         <div class="modal fade" id="addOfficeModal" tabindex="-1" aria-labelledby="addOfficeModalLabel"
@@ -122,8 +126,7 @@
                             <div class="card-body p-24">
                                 <div
                                     class="w-64-px h-64-px d-inline-flex align-items-center justify-content-center bg-info-200 text-primary-600 mb-16 radius-12">
-                                    <iconify-icon icon="{{ $office->getIconClass() }}"
-                                        class="h5 mb-0"></iconify-icon>
+                                    <iconify-icon icon="{{ $office->getIconClass() }}" class="h5 mb-0"></iconify-icon>
                                 </div>
                                 <h6 class="mb-8">{{ $office->name }}</h6>
                                 <a href="{{ url('/office/' . $office->id) }}"

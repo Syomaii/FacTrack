@@ -10,24 +10,54 @@ use App\Models\Facility;
 use App\Models\Office;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
-    public function reserveEquipment(Request $request)
+    public function showReservationForm($code)
     {
-        $equipments = Equipment::all();
-        $selectedEquipment = null;
+        $equipment = Equipment::where('code', $code)->firstOrFail();
 
-        if ($request->filled('equipment_id')) {
-            $selectedEquipment = Equipment::with('facility')->find($request->equipment_id);
+        return view('students.reserve_equipment', compact('equipment'))->with('title', 'Reserve Equipment');
+    }
+
+    public function storeReservation(Request $request, $code) {
+        
+        // Convert input dates to the application's timezone
+        $reservationDate = Carbon::parse($request->input('reservation_date'))->setTimezone(config('app.timezone'));
+        $expectedReturnDate = Carbon::parse($request->input('expected_return_date'))->setTimezone(config('app.timezone'));
+
+        // Validate the request
+        $request->validate([
+            'purpose' => 'required|string|max:255',
+            'reservation_date' => 'required|date|after_or_equal:now',
+            'expected_return_date' => 'required|date|after:reservation_date',
+        ]);
+
+        // Find the equipment by its code
+        $equipment = Equipment::where('code', $code)->firstOrFail();
+
+        // Check if the equipment is available for reservation
+        if ($equipment->status !== 'Available') {
+            return back()->with('error', 'This equipment is not available for reservation.');
         }
 
-        return view('students.reserve_equipment', [
-            'equipments' => $equipments,
-            'selectedEquipment' => $selectedEquipment,
-            'title' => 'Reserve Equipment',
+        // Save the reservation
+        Reservation::create([
+            'equipment_id' => $equipment->id,
+            'purpose' => $request->input('purpose'),
+            'reservation_date' => $reservationDate,
+            'expected_return_date' => $expectedReturnDate,
+            'reserved_by' => auth()->id(), // Assuming you are tracking who reserves the equipment
         ]);
+
+        // Update equipment status to 'Reserved'
+        $equipment->update(['status' => 'Reserved']);
+
+        // Redirect to the facility equipment page with a success message
+        return redirect()->route('facility_equipment', ['id' => $equipment->facility_id])
+            ->with('success', 'Equipment reserved successfully.');
     }
 
     public function searchEquipment(Request $request)

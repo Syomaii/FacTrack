@@ -61,23 +61,28 @@
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-24">
             <!-- Search Bar -->
             <div class="input-group flex-grow-1 flex-sm-grow-0 mb-3 mb-sm-0" style="max-width: 650px;">
-                <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm" placeholder="Search facilities...">
+                <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
+                    placeholder="Search facilities...">
                 <button class="btn btn-primary" type="button">
                     <iconify-icon icon="ic:baseline-search" class="icon"></iconify-icon>
                 </button>
             </div>
-        
-            <!-- Buttons -->
-            <div class="d-flex flex-wrap justify-content-start gap-3">
-                <button type="button" class="btn btn-danger text-sm btn-sm px-12 py-12 radius-8 px-20 py-11" id="deleteOfficeBtn">
-                    Delete Office
-                </button>
-                <button type="button" class="btn btn-warning text-sm btn-sm px-12 py-12 radius-8 px-20 py-11" id="updateOfficeBtn">
-                    Edit Office
-                </button>
-            </div>
+
+            @if (auth()->user()->type === 'admin')
+                <!-- Buttons -->
+                <div class="d-flex flex-wrap justify-content-start gap-3">
+                    <button type="button" class="btn btn-danger text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                        id="deleteOfficeBtn">
+                        Delete Office
+                    </button>
+                    <button type="button" class="btn btn-warning text-sm btn-sm px-12 py-12 radius-8 px-20 py-11"
+                        id="updateOfficeBtn">
+                        Edit Office
+                    </button>
+                </div>
+            @endif
         </div>
-        
+
 
         <!-- No facilities message -->
         <div class="row gy-4" id="equipmentList">
@@ -214,5 +219,3 @@
 
     });
 </script>
-
-
