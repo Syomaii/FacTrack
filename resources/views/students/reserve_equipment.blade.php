@@ -35,7 +35,6 @@
             </div>
         @endif
 
-
         <!-- Main Content -->
         <div class="row g-4">
             <!-- Left Side: Reservation Form -->
@@ -45,19 +44,17 @@
                         <h5 class="fw-semibold mb-4">Reservation Form</h5>
                         <form action="{{ route('reserve.equipment.store', $equipment->code) }}" method="POST">
                             @csrf
-
                             <!-- Purpose -->
                             <div class="mb-4">
                                 <label for="purpose" class="form-label">Purpose</label>
-                                <textarea class="form-control" id="purpose" name="purpose" rows="3" required>{{ old('purpose') }}</textarea>
+                                <textarea class="form-control" id="purpose" name="purpose" rows="3">{{ old('purpose') }}</textarea>
                             </div>
-
 
                             <!-- Reservation Date and Time -->
                             <div class="mb-4">
                                 <label for="reservation_date" class="form-label">Reservation Date and Time</label>
                                 <input type="datetime-local" class="form-control" id="reservation_date"
-                                    name="reservation_date" required>
+                                    name="reservation_date">
                             </div>
 
                             <!-- Expected Return Date and Time -->
@@ -65,7 +62,7 @@
                                 <label for="expected_return_date" class="form-label">Expected Return Date and
                                     Time</label>
                                 <input type="datetime-local" class="form-control" id="expected_return_date"
-                                    name="expected_return_date" required>
+                                    name="expected_return_date">
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100 m-1">Reserve</button>
