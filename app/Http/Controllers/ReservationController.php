@@ -23,37 +23,57 @@ class ReservationController extends Controller
     }
 
     public function storeReservation(Request $request, $code) {
-        // Debugging: Check if the method is called
-        // dd($request->all());
-    
-        // Validate the request
         $request->validate([
-            'purpose' => 'required|string|max:255',
-            'reservation_date' => 'required|date|after_or_equal:' . now()->startOfMinute()->toDateTimeString(),
+            'reservation_date' => 'required|date|after:now',
             'expected_return_date' => 'required|date|after:reservation_date',
+            'purpose' => 'required|string|max:255',
         ]);
-    
-        // Find the equipment by its code
+
         $equipment = Equipment::where('code', $code)->firstOrFail();
-    
-        // Check if the equipment is available for reservation
-        if ($equipment->status !== 'Available') {
-            return back()->with('error', 'This equipment is not available for reservation.');
+        
+        if (!$equipment) {
+            return redirect()->back()->withErrors(['error' => 'Equipment not found.']);
         }
-    
-        $office = Auth::user()->office_id; 
-    
-        // Save the reservation
-        EquipmentReservation::create([
+
+        $office = $equipment->facility->office->id; 
+        $reserver = Auth::user();
+        
+        if($reserver->type === 'student'){
+            $reservers_id_no = Auth::user()->student_id;
+        }else if($reserver->type === 'faculty'){
+            $reservers_id_no = Auth::user()->faculty_id;
+        }
+        // Check if the equipment is already reserved in the given time range
+        $existingReservation = EquipmentReservation::where('equipment_id', $request->equipment_id)
+        ->where(function ($query) use ($request) {
+            $query->whereBetween('reservation_date', [$request->reservation_date, $request->expected_return_date])
+                ->orWhereBetween('expected_return_date', [$request->reservation_date, $request->expected_return_date]);
+        })
+        ->where('status', 'completed') 
+        ->exists();
+
+        if ($existingReservation) {
+            return redirect()->back()->withErrors(['error' => 'The selected equipment is already reserved for the chosen date range.']);
+        }
+
+        // Check if the equipment is available
+        if ($equipment->status !== 'Available') {
+            return redirect()->back()->withErrors(['error' => 'The selected equipment is not available for reservation.']);
+        }
+
+        // Create a new reservation
+        $reservation = EquipmentReservation::create([
+            'reservers_id_no' =>  $reservers_id_no,
             'equipment_id' => $equipment->id,
             'office_id' => $office,
             'reservation_date' => $request->reservation_date,
             'expected_return_date' => $request->expected_return_date,
             'status' => 'pending',
             'purpose' => $request->purpose,
-            'reservers_id_no' => Auth::user()->student_id,  // Assuming this is the correct field for the user ID
         ]);
-    
+
+        event(new ReserveEquipmentEvent($reservation, $reserver, $office, $equipment));
+
         // Redirect to the facility equipment page with a success message
         return redirect()->route('facility_equipment', ['id' => $equipment->facility_id])
             ->with('success', 'Equipment reserved successfully.');
@@ -93,62 +113,6 @@ class ReservationController extends Controller
             'prevPage' => $page > 1,
             'nextPage' => ($page * $perPage) < $totalEquipments,
         ]);
-    }
-
-    public function reserved(Request $request)
-    {
-        // Validate the request
-        $request->validate([
-            'equipment_id' => 'required|exists:equipments,id',
-            'reservation_date' => 'required|date|after:now',
-            'expected_return_date' => 'required|date|after:reservation_date',
-            'purpose' => 'required|string|max:255',
-        ]);
-
-        $equipment = Equipment::find($request->equipment_id);
-        
-        if (!$equipment) {
-            return redirect()->back()->withErrors(['error' => 'Equipment not found.']);
-        }
-
-        $office = $equipment->facility->office->id; 
-        $reserver = Auth::user();
-        if($reserver->type === 'student'){
-            $reservers_id_no = Auth::user()->student_id;
-        }else if($reserver->type === 'faculty'){
-            $reservers_id_no = Auth::user()->faculty_id;
-        }
-        // Check if the equipment is already reserved in the given time range
-        $existingReservation = EquipmentReservation::where('equipment_id', $request->equipment_id)
-        ->where(function ($query) use ($request) {
-            $query->whereBetween('reservation_date', [$request->reservation_date, $request->expected_return_date])
-                ->orWhereBetween('expected_return_date', [$request->reservation_date, $request->expected_return_date]);
-        })
-        ->where('status', 'completed') 
-        ->exists();
-
-        if ($existingReservation) {
-            return redirect()->back()->withErrors(['error' => 'The selected equipment is already reserved for the chosen date range.']);
-        }
-
-        // Check if the equipment is available
-        if ($equipment->status !== 'Available') {
-            return redirect()->back()->withErrors(['error' => 'The selected equipment is not available for reservation.']);
-        }
-
-        // Create a new reservation
-        $reservation = EquipmentReservation::create([
-            'reservers_id_no' =>  $reservers_id_no,
-            'equipment_id' => $request->equipment_id,
-            'office_id' => $office,
-            'reservation_date' => $request->reservation_date,
-            'expected_return_date' => $request->expected_return_date,
-            'status' => 'pending',
-            'purpose' => $request->purpose,
-        ]);
-        event(new ReserveEquipmentEvent($reservation, $reserver, $office, $equipment));
-
-        return redirect()->back()->with('success', 'Reservation successfully created.');
     }
 
     public function equipmentReservationLog()

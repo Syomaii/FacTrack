@@ -22,14 +22,14 @@ class ReserveEquipmentEvent
      * Create a new event instance.
      */
     public $reservation;
-    public $student;
+    public $reserver;
     public $office;
     public $equipment;
 
-    public function __construct(EquipmentReservation $reservation, $student, $office, $equipment)
+    public function __construct(EquipmentReservation $reservation, $reserver, $office, $equipment)
     {
         $this->reservation = $reservation;
-        $this->student = $student;
+        $this->reserver = $reserver;
         $this->office = $office;
         $this->equipment = $equipment;
     }

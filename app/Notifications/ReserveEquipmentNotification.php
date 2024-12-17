@@ -14,12 +14,12 @@ class ReserveEquipmentNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    protected $student;
+    protected $reserver;
     protected $reservation;
     protected $equipment;
-    public function __construct($student, $reservation, $equipment)
+    public function __construct($reserver, $reservation, $equipment)
     {
-        $this->student = $student;
+        $this->reserver = $reserver;
         $this->reservation = $reservation;
         $this->equipment = $equipment;
     }
@@ -47,7 +47,7 @@ class ReserveEquipmentNotification extends Notification
     {
         return [
             'title' => 'New Equipment Reservation',
-            'message' => $this->student->firstname . ' ' . $this->student->lastname . 
+            'message' => $this->reserver->firstname . ' ' . $this->reserver->lastname . 
                 ' has requested a reservation for the equipment: ' . $this->equipment->name,
             'reservation_id' => $this->reservation->id,
             'notification_type' => 'reservation',

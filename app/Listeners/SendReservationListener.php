@@ -26,8 +26,9 @@ class SendReservationListener
     public function handle(ReserveEquipmentEvent $event): void
     {
         $users = User::where('office_id', $event->reservation->office_id)
-            ->where('type', '!=', 'student')->get();
+            ->where('type', '!=', 'student')
+            ->where('type', '!=', 'faculty')->get();
         // Send the notification
-        Notification::send($users, new ReserveEquipmentNotification($event->student, $event->reservation, $event->equipment));
+        Notification::send($users, new ReserveEquipmentNotification($event->reserver, $event->reservation, $event->equipment));
     }
 }
