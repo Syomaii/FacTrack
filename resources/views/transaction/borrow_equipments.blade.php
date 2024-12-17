@@ -155,7 +155,7 @@
                                                 <div class="modal-body">
                                                     <div id="previewBorrow"
                                                         class="display-flex align-items-center justify-content-center scan-code"
-                                                        style="width: 100%; height: 400px; border: 2px dashed #ccc;">
+                                                        style="width: 100%; height: auto; border: 2px dashed #ccc;">
                                                         <!-- QR code scanner will be displayed here -->
                                                     </div>
                                                 </div>

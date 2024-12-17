@@ -64,13 +64,18 @@
                                         <textarea name="remarks" id="remarks" class="form-control" rows="3" placeholder="Add some remarks here..."></textarea>
                                     </div>
 
-                                    <!-- Scan Button Triggering Modal -->
-                                    <div class="d-flex justify-content-center gap-3">
-                                        <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
+                                    <!-- Scan Button Triggering Modal -->                                    
+                                    <div class="d-flex justify-content-center gap-3 py-2 ">
+                                        <a href="/equipments" class="">
+                                            <button type="button"
+                                            class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8" id="cancelBtn">
+                                            Cancel
+                                        </button></a>
+                                        <button type="button" class="btn btn-primary px-20 py-11 " data-bs-toggle="modal"
                                             data-bs-target="#scanModalDonate" id="scanCodeDonate">
                                             Scan QR Code
                                         </button>
-                                        <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
+                                        
                                     </div>
 
                                     <!-- Modal for QR Code Scanning -->
@@ -86,7 +91,7 @@
                                                 <div class="modal-body">
                                                     <div id="previewDonate"
                                                         class="display-flex align-items-center justify-content-center scan-code"
-                                                        style="width: 100%; height: 400px; border: 2px dashed #ccc;">
+                                                        style="width: 100%; height: auto; border: 2px dashed #ccc;">
                                                         <!-- QR code scanner will be displayed here -->
                                                     </div>
                                                 </div>

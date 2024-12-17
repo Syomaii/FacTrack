@@ -36,24 +36,23 @@ class Equipment extends Model
         return $this->belongsTo(Office::class);
     }
 
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::updating(function ($equipment) {
-            if ($equipment->isDirty('status')) {
-                // Check if the user is authenticated
-                $userId = Auth::id(); 
+    //     static::updating(function ($equipment) {
+    //         if ($equipment->isDirty('status')) {
+    //             $userId = Auth::id(); 
 
-                Timeline::create([
-                    'equipment_id' => $equipment->id,
-                    'status' => $equipment->status,
-                    'user_id' => $userId, // Make sure this isn't null
-                    'remarks' => 'Status updated to ' . $equipment->status,
-                ]);
-            }
-        });
-    }
+    //             Timeline::create([
+    //                 'equipment_id' => $equipment->id,
+    //                 'status' => $equipment->status,
+    //                 'user_id' => $userId, // Make sure this isn't null
+    //                 'remarks' => 'Status updated to ' . $equipment->status,
+    //             ]);
+    //         }
+    //     });
+    // }
 
     public function timeline()
     {

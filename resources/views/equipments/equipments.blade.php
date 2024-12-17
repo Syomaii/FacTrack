@@ -119,7 +119,7 @@
                                                 class="bg-black text-white px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
                                         @elseif($equipment->status === 'Donated')
                                             <span
-                                                class="bg-brown text-white px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                                class="bg-pink text-white px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
                                         @endif
                                     </td>
                                     <td>

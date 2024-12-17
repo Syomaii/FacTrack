@@ -76,12 +76,17 @@
                                 value="{{ now()->format('Y-m-d\TH:i') }}">
                             <div id="preview-borrow" style="width: 300px; height: 50px;"></div>
                             <textarea class="form-control mt-3" placeholder="Remarks" id="borrow_remarks" name="remarks"></textarea>
-                            <div class="d-flex justify-content-center gap-3 mt-3">
-                                <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
-                                    data-bs-target="#scanModalBorrow">
+                            <div class="d-flex justify-content-center gap-3 py-2 mt-3">
+                                <a href="/equipments" class="">
+                                    <button type="button"
+                                    class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8" id="cancelBtn">
+                                    Cancel
+                                </button></a>
+                                <button type="button" class="btn btn-primary px-20 py-11 " data-bs-toggle="modal"
+                                    data-bs-target="#scanModalBorrow" id="scanCodeReturnBorrow">
                                     Scan QR Code
                                 </button>
-                                <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
+                                
                             </div>
                         </form>
                     </div>
@@ -111,13 +116,17 @@
                                 <textarea class="form-control mb-3" placeholder="Remarks" id="maintenance_remarks" name="remarks"></textarea>
                                 <textarea class="form-control mb-3" placeholder="Recommendations" id="maintenance_recommendations"
                                     name="recommendations"></textarea>
-
-                                <div class="d-flex justify-content-center gap-3 mt-3">
-                                    <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
-                                        data-bs-target="#scanModalMaintenance">
+                                <div class="d-flex justify-content-center gap-3 py-2 mt-3">
+                                    <a href="/equipments" class="">
+                                        <button type="button"
+                                        class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8" id="cancelBtn">
+                                        Cancel
+                                    </button></a>
+                                    <button type="button" class="btn btn-primary px-20 py-11 " data-bs-toggle="modal"
+                                    data-bs-target="#scanModalMaintenance" id="scanCodeReturnMaintenance">
                                         Scan QR Code
                                     </button>
-                                    <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
+                                    
                                 </div>
                             </form>
                         </div>
@@ -147,12 +156,17 @@
                                 <textarea class="form-control mb-3" placeholder="Recommendations" id="repair_recommendations"
                                     name="recommendations"></textarea>
 
-                                <div class="d-flex justify-content-center gap-3 mt-3">
-                                    <button type="button" class="btn btn-primary px-5 py-2" data-bs-toggle="modal"
-                                        data-bs-target="#scanModalRepair">
+                                <div class="d-flex justify-content-center gap-3 py-2 mt-3">
+                                    <a href="/equipments" class="">
+                                        <button type="button"
+                                        class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8" id="cancelBtn">
+                                        Cancel
+                                    </button></a>
+                                    <button type="button" class="btn btn-primary px-20 py-11 " data-bs-toggle="modal"
+                                    data-bs-target="#scanModalRepair" id="scanCodeReturnRepair">
                                         Scan QR Code
                                     </button>
-                                    <a href="/equipments" class="btn btn-outline-danger px-5 py-2">Cancel</a>
+                                    
                                 </div>
                             </form>
                         </div>
@@ -173,7 +187,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="preview-borrow-scan" style="width: 100%; height: 400px;"></div>
+                    <div id="preview-borrow-scan" style="width: 100%; height: auto;"></div>
                 </div>
             </div>
         </div>
@@ -188,7 +202,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="preview-maintenance-scan" style="width: 100%; height: 400px;"></div>
+                    <div id="preview-maintenance-scan" style="width: 100%; height: auto;"></div>
                 </div>
             </div>
         </div>
@@ -203,7 +217,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="preview-repair-scan" style="width: 100%; height: 400px;"></div>
+                    <div id="preview-repair-scan" style="width: 100%; height: auto;"></div>
                 </div>
             </div>
         </div>

@@ -138,7 +138,7 @@ class TransactionController extends Controller
             'purpose' => $validatedData['purpose'],
             'user_id' => Auth::user()->id,
             'borrowed_date' => now(),
-            'remarks' => 'The day the equipment is Borrowed',
+            'remarks' => 'Equipment is borrowed',
             'expected_returned_date' => date('Y-m-d H:i:s', strtotime($validatedData['expected_returned_date'])),   // Save expected_returned_date
             'equipment_id' => $equipment->id,
             'status' => 'Borrowed',
@@ -147,7 +147,7 @@ class TransactionController extends Controller
         Timeline::create([
             'equipment_id' => $equipment->id,
             'status' => 'Borrowed',
-            'remarks' => 'The day the equipment has been borrowed',
+            'remarks' => 'Equipment borrowed at',
             'user_id' => Auth::user()->id
         ]);
 
@@ -157,23 +157,22 @@ class TransactionController extends Controller
         return redirect()->route('borrow_equipment')->with('borrowEquipmentSuccessfully', 'Equipment borrowed successfully!');
     }
 
-    public function validateEquipmentStatus(Request $request)
-    {
-        $equipment = Equipment::where('code', $request->code)->first();
+    // public function validateEquipmentStatus(Request $request)
+    // {
+    //     $equipment = Equipment::where('code', $request->code)->first();
 
-        if ($equipment && $equipment->status === 'Available') {
-            return response()->json(['available' => true]);
-        } else {
-            return response()->json(['available' => false]);
-        }
+    //     if ($equipment && $equipment->status === 'Available') {
+    //         return response()->json(['available' => true]);
+    //     } else {
+    //         return response()->json(['available' => false]);
+    //     }
 
-        // Update the equipment status to 'Borrowed'
-        $equipment->status = 'Borrowed';
-        $equipment->save();
+    //     $equipment->status = 'Borrowed';
+    //     $equipment->save();
 
-        // Redirect with a success message
-        return redirect()->route('borrow_equipment')->with('borrowEquipmentSuccessfully', 'Equipment borrowed successfully!');
-    }
+    //     // Redirect with a success message
+    //     return redirect()->route('borrow_equipment')->with('borrowEquipmentSuccessfully', 'Equipment borrowed successfully!');
+    // }
 
     // ---------------------------------------------------------------------------------------------
 
@@ -313,16 +312,16 @@ class TransactionController extends Controller
             return redirect()->back()->withErrors(['error' => 'Equipment not found.']);
         }
     
-        $disposedDate = $request->input('disposed_date') ?: now()->format('Y-m-d');
-        $issueNote = $request->input('remarks') ?: 'No issue provided';
+        $disposed_date = $request->input('disposed_date') ?: now()->format('Y-m-d');
+        $remarks = $request->input('remarks') ?: 'No issue provided';
         $received_by = $request->input('received_by') ?: 'No recieved by provided';
     
         return view('transaction.disposed_equipment_details', [
             'equipment' => $equipment,
             'disposed_id_no' => $equipment->id, 
             'received_by' => $received_by,
-            'remarks' => $issueNote,
-            'disposed_date' => $disposedDate,
+            'remarks' => $remarks,
+            'disposed_date' => $disposed_date,
         ])->with('title', 'Dispose Details');
     }
 
@@ -486,6 +485,13 @@ class TransactionController extends Controller
                     'returned_date' => $validatedData['returned_date'],
                     'remarks' => $validatedData['remarks'],
                     'status' => 'Returned',
+                ]);
+
+                Timeline::create([
+                    'equipment_id' => $equipment->id,
+                    'status' => 'Available',
+                    'remarks' => 'The equipment is returned',
+                    'user_id' => Auth::user()->id
                 ]);
             
                 $equipment->update(['status' => 'Available']);

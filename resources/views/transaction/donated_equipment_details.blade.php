@@ -46,8 +46,12 @@
                                 <input type="text" class="form-control w-100" style="max-width: 1000vh" name="donated_date" value="{{ $donated_date }}" readonly>
                             </div>
                             <div class="d-flex justify-content-center gap-4" style="padding-top: 25px">
-                                <a href="/equipments" class="btn btn-outline-danger">Cancel</a>
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <a href="/equipments" class="">
+                                    <button type="button" class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8" id="cancelBtn">
+                                        Cancel
+                                    </button>
+                                </a>
+                                <button type="submit" class="btn btn-primary px-20 py-11">Save</button>
                             </div>
                         </form>
                     </div>

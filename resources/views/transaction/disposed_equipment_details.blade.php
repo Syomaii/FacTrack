@@ -8,7 +8,7 @@
 
     <div class="dashboard-main-body">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
-            <h6 class="fw-semibold mb-0">Borrow Equipment Details</h6>
+            <h6 class="fw-semibold mb-0">Dispose Equipment Details</h6>
         </div>
 
         @if ($errors->any())
@@ -32,7 +32,7 @@
             <div class="col-lg-6">
                 <div class="card h-100">
                     <div class="card-body" style="padding-top: 100px">
-                        <form action="{{ route('borrow-equipment-post', $equipment->id) }}" method="post">
+                        <form action="{{ route('disposed-equipment-post', $equipment->id) }}" method="post">
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Received By</label>
@@ -46,7 +46,14 @@
                                 <label class="form-label">Disposed date</label>
                                 <input type="text" class="form-control w-100" style="max-width: 1000vh" name="disposed_date" value="{{ $disposed_date }}" readonly>
                             </div>
-                            
+                            <div class="d-flex justify-content-center gap-4" style="padding-top: 25px">
+                                <a href="/equipments" class="">
+                                    <button type="button" class="btn btn-danger border border-danger-600 text-md px-20 py-11 radius-8" id="cancelBtn">
+                                        Cancel
+                                    </button>
+                                </a>
+                                <button type="submit" class="btn btn-primary px-20 py-11">Save</button>
+                            </div>
                         </form>
                     </div>
                 </div>

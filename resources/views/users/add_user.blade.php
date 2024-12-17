@@ -222,8 +222,8 @@
                                                     <option value="" disabled selected>Select a designation
                                                     </option>
                                                     @foreach ($designations as $designation)
-                                                        @if ($userType == 'admin' || ($userType != 'facility_manager' && $designation->name != 'Dean'))
-                                                            <option value="{{ $designation->id }}"
+                                                        @if (($userType == 'admin' || ($userType != 'facility_manager' && $designation->name != 'Dean')) && $designation->id != 3 )
+                                                            <option value="{{ $designation->id  }}"
                                                                 {{ old('designation_id') == $designation->id ? 'selected' : '' }}>
                                                                 {{ $designation->name }}
                                                             </option>

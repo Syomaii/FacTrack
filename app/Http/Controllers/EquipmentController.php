@@ -36,7 +36,7 @@ class EquipmentController extends Controller
         $data['facility_id'] = $facility->id;
         $data['user_id'] = Auth::user()->id;
     
-        $code = date('y') . $officeId . date('m') . date('d') . $facilityId . date('H') . $data['user_id'] . date('is') . $data['serial_no'];
+        $code = date('y') . $officeId . date('m') . date('d') . $facilityId . date('H') . $data['user_id'] . date('is');
         $data['code'] = $code;
 
         $data['next_due_date'] = Carbon::now()->addDays(30);
@@ -68,7 +68,7 @@ class EquipmentController extends Controller
         Timeline::create([
             'equipment_id' => $equipment->id,
             'status' => $equipment->status,
-            'remarks' => 'The day the equipment is added in the system',
+            'remarks' => 'Equipment added at',
             'user_id' => Auth::user()->id
         ]);
     
@@ -110,7 +110,7 @@ class EquipmentController extends Controller
         Timeline::create([
             'equipment_id' => $equipment->id,
             'status' => $equipment->status,
-            'remarks' => 'The day the equipment is updated in the system',
+            'remarks' => 'Equipment updated at',
             'user_id' => Auth::user()->id
         ]);
 

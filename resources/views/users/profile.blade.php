@@ -62,19 +62,15 @@
                     <img src="{{ asset('assets/images/user-grid/uc.jpg') }}" alt=""
                         class="w-100 object-fit-cover">
                     <div class="pb-24 ms-16 mb-24 me-16 mt--100">
-                        <div class="text-center border border-top-0 border-start-0 border-end-0">
+                        <div class="text-center border border-top-0 border-start-0 border-end-0 ">
                             <img src="/{{ auth()->user()->image }}" alt=""
-                                class="border br-white border-width-2-px w-200-px h-200-px rounded-circle object-fit-cover">
+                                class="border br-white border-width-2-px w-200-px h-200-px rounded-circle object-fit-cover"  style="z-index: 999">
                             <h6 class="mb-0 mt-16">{{ ucwords($user->firstname) }} {{ ucwords($user->lastname) }}</h6>
                             <span class="text-secondary-light mb-16">{{ $user->email }}</span>
                         </div>
                         <div class="mt-24">
                             <h6 class="text-xl mb-16">Personal Info</h6>
                             <ul>
-                                <li class="d-flex align-items-center gap-1 mb-12">
-                                    <span class="w-30 text-md fw-semibold text-primary-light">Email</span>
-                                    <span class="w-70 text-secondary-light fw-medium">: {{ $user->email }}</span>
-                                </li>
                                 <li class="d-flex align-items-center gap-1 mb-12">
                                     <span class="w-30 text-md fw-semibold text-primary-light">Phone Number</span>
                                     <span class="w-70 text-secondary-light fw-medium">: {{ $user->mobile_no }}</span>
@@ -97,6 +93,10 @@
                                         {{ optional($user->office)->name ?? 'Not specified' }}</span>
                                 </li>
                                 @endif
+                                <li class="d-flex align-items-center gap-1 mb-12">
+                                    <span class="w-30 text-md fw-semibold text-primary-light">Status</span>
+                                    <span class="w-70 text-secondary-light fw-medium">: {{ ucwords($user->status) }}</span>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -133,33 +133,37 @@
                             <!-- Edit Profile Form -->
                             <div class="tab-pane fade show active" id="pills-edit-profile" role="tabpanel"
                                 aria-labelledby="pills-edit-profile-tab" tabindex="0">
-                                <h6 class="text-md text-primary-light mb-16">Profile Image</h6>
-                                <div class="mb-24 mt-16">
-                                    <div class="d-flex justify-content-start">
-                                        <div class="uploaded-img position-relative h-120-px w-120-px border input-form-light radius-8 overflow-hidden border-dashed bg-neutral-50 d-none">
-                                            <button type="button"
-                                                class="uploaded-img__remove position-absolute top-0 end-0 z-1 text-2xxl line-height-1 me-8 mt-8 d-flex">
-                                                <iconify-icon icon="radix-icons:cross-2"
-                                                    class="text-xl text-danger-600"></iconify-icon>
-                                            </button>
-                                            <img id="uploaded-img__preview" class="w-100 h-100 object-fit-cover"
-                                                src="/{{ auth()->user()->image }}" alt="image">
-                                        </div>
+                                
 
-                                        <label class="upload-file h-120-px w-120-px border input-form-light radius-8 overflow-hidden border-dashed bg-neutral-50 bg-hover-neutral-200 d-flex align-items-center flex-column justify-content-center gap-1"
-                                            for="upload-file">
-                                            <iconify-icon icon="solar:camera-outline"
-                                                class="text-xl text-secondary-light"></iconify-icon>
-                                            <span class="fw-semibold text-secondary-light">Upload</span>
-                                            <input id="upload-file" type="file" name="image" hidden>
-
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <form action="{{ route('profile.update', ['id' => $user->id]) }}" method="POST">
+                                <form action="{{ route('profile.update', ['id' => $user->id]) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
+                                    
+                                    <h6 class="text-md text-primary-light mb-16">Profile Image</h6>
+                                    <div class="mb-24 mt-16">
+                                        <div class="d-flex justify-content-start">
+                                            <div class="uploaded-img position-relative h-120-px w-120-px border input-form-light radius-8 overflow-hidden border-dashed bg-neutral-50 d-none">
+                                                <button type="button"
+                                                    class="uploaded-img__remove position-absolute top-0 end-0 z-1 text-2xxl line-height-1 me-8 mt-8 d-flex">
+                                                    <iconify-icon icon="radix-icons:cross-2"
+                                                        class="text-xl text-danger-600"></iconify-icon>
+                                                </button>
+                                                <img id="uploaded-img__preview" class="w-100 h-100 object-fit-cover"
+                                                    src="/{{ auth()->user()->image }}" alt="image">
+                                            </div>
+
+                                            <label class="upload-file h-120-px w-120-px border input-form-light radius-8 overflow-hidden border-dashed bg-neutral-50 bg-hover-neutral-200 d-flex align-items-center flex-column justify-content-center gap-1"
+                                                for="upload-file">
+                                                <iconify-icon icon="solar:camera-outline"
+                                                    class="text-xl text-secondary-light"></iconify-icon>
+                                                <span class="fw-semibold text-secondary-light">Upload</span>
+                                                <input id="upload-file" type="file" name="image" hidden>
+
+                                            </label>
+                                            
+                                        </div>
+                                    </div>
+
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="mb-20">
