@@ -46,8 +46,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [PageController::class, 'notifications'])->name('notifications');
     Route::get('/notifications/redirect/{id}', [NotificationController::class, 'redirect'])->name('redirect');
     Route::get('/equipment-details/{code}', [PageController::class, 'equipmentDetails'])->name('equipment-details');
-
-
+    Route::get('/notifications/{status?}', [NotificationController::class, 'filter'])->name('notifications-filter');
+    
 
     Route::middleware(['checkRole:student'])->group(function (){
         Route::get('/student-dashboard', [StudentController::class, 'studentDashboard'])->name('student.dashboard');

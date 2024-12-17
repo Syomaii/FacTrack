@@ -44,7 +44,7 @@
                     <table class="table bordered-table sm-table mb-0">
                         <thead>
                             <tr>
-                                <th scope="col">Student ID</th>
+                                <th scope="col">Rerervers ID</th>
                                 <th scope="col">Student Name</th>
                                 <th scope="col">Department</th>
                                 <th scope="col">Equipment Name</th>
@@ -57,7 +57,7 @@
                         <tbody>
                             @forelse ($reservations as $reservation)
                                 <tr class="reservation-row">
-                                    <td>{{ $reservation->student_id }}</td>
+                                    <td>{{ $reservation->reservers_id_no }}</td>
                                     <td>
                                         @if ($reservation->student)
                                             {{ ucwords($reservation->student->firstname) }}

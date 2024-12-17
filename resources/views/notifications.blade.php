@@ -18,6 +18,16 @@
                 <li class="fw-medium">Notifications</li>
             </ul>
         </div>
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
+            <a href="/read-notifications" class="text-primary">Read All Notifications</a>
+            <form method="GET" action="{{ route('notifications-filter') }}">
+                <select name="status" class="form-select" onchange="this.form.submit()">
+                    <option value="">Filter</option>
+                    <option value="read" {{ request('status') === 'read' ? 'selected' : '' }}>Read</option>
+                    <option value="unread" {{ request('status') === 'unread' ? 'selected' : '' }}>Unread</option>
+                </select>
+            </form>
+        </div>
         @foreach ($notifications as $notification)
             <div class="d-flex flex-column gap-2 alert {{ $notification->read_at ? 'alert-success text-black' : 'alert-primary text-black' }} border-gray-300 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-20 fw-semibold text-lg radius-4 pb-5" role="alert">
                 <a href="{{ route('redirect', $notification->id) }}" class="px-24 py-12 d-flex align-items-start gap-3 mb-2 justify-content-between">

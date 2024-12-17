@@ -49,7 +49,9 @@ return new class extends Migration
             $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
             $table->string('firstname', 50);
             $table->string("lastname", 50);
-            $table->string("email", 50)->unique();
+            $table->string("email", 50);
+            $table->unique(['email', 'faculty_id']);
+            $table->unique(['email', 'student_id']);
             $table->string("password", 255);
             $table->string("mobile_no", 50);
             $table->string("image", 255)->nullable();

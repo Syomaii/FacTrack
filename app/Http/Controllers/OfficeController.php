@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Facility;
 use App\Models\Office;
+use App\Models\Students;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class OfficeController extends Controller
@@ -41,28 +43,33 @@ class OfficeController extends Controller
     public function updateOffice(Request $request)
     {
         $office = Office::find($request->id);
-        
-        if($office->name === $request->name){
+
+        if (!$office) {
+            return redirect()->back()->with('updateOfficeError', 'Office not found!');
+        }
+
+        if ($office->name === $request->name) {
             $data = $request->validate([
                 'name' => 'required',
-                'description' => '',
-                'type' => ''
+                'description' => 'nullable|string',
+                'type' => 'nullable|string',
             ]);
-        }else{
+        } else {
             $data = $request->validate([
-                'name' => 'required|unique:offices,name',
-                'description' => '',
-                'type' => ''
+                'name' => 'required|unique:offices,name,' . $request->id,
+                'description' => 'nullable|string',
+                'type' => 'nullable|string',
             ]);
         }
-        
 
-        if ($office) {
-            $office->update($data);
-            return redirect()->back()->with('updateOfficeSuccess', 'Office updated successfully!');
+        if ($office->name !== $data['name']) {
+            Students::where('department', $office->name)->update(['department' => $data['name']]);
         }
 
-        return redirect()->back()->with('updateOfficeError', 'Office not found!');
+        // Update office
+        $office->update($data);
+
+        return redirect()->back()->with('updateOfficeSuccess', 'Office updated successfully!');
     }
 
     public function deleteOffice($id)

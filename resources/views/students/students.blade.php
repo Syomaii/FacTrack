@@ -296,12 +296,10 @@
         });
     });
 
-    
-
 </script>
 <script>
     $(document).ready(function () {
-        const $modal = $('#infoModal');
+        const $modal = $('#infoModal').hide();
 
         // Open the modal
         $('#openModalButton').on('click', function () {

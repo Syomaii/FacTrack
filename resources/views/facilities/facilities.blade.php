@@ -94,6 +94,7 @@
                                 <input type="text" class="form-control" id="facilityName" name="name"
                                     value ="{{ old('name') }}" required>
                             </div>
+                            
                             <div class="mb-3">
                                 <label for="facilityDescription" class="form-label">Facility Description</label>
                                 <textarea class="form-control" id="facilityDescription" name="description" rows="3" required>{{ old('description') }}</textarea>
