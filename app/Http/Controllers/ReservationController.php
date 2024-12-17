@@ -191,6 +191,7 @@ class ReservationController extends Controller
     
     public function facilityForReservation($id){
         $facility = Facility::where('id', $id)->first();
+        
 
         return view('students.facility_to_be_reserved', compact('facility'))->with('title', 'Reserve Facility');
     }

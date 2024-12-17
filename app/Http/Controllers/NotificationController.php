@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Notifications\OverdueEquipmentsNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Request;
 
 class NotificationController extends Controller
 {
@@ -30,4 +31,25 @@ class NotificationController extends Controller
         return redirect($redirectUrl);
     }
 
+    public function filter(Request $request)
+    {
+        $status = $request->input('status'); 
+        $userId = Auth::user()->id; 
+
+        $notifications = Notification::where('notifiable_id', $userId); // Filter by notifiable_id
+
+        if ($status === 'read') {
+            $notifications->whereNotNull('read_at');
+        } elseif ($status === 'unread') {
+            $notifications->whereNull('read_at');
+        }
+
+        $notifications = Auth::check() ? $notifications->get() : collect(); // Fetch the filtered notifications
+
+        return view('notifications', compact('notifications'));
+    }
+
+    public function readNotifications(){
+
+    }
 }

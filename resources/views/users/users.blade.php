@@ -42,8 +42,7 @@
         @endif
 
         <div class="card h-100 p-0 radius-12">
-            <div
-                class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
+            <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                 <div class="d-flex flex-grow-1 flex-wrap align-items-center gap-3">
                     <form class="navbar-search d-flex align-items-center flex-grow-1" method="GET"
                         action="{{ route('search-user') }}">
@@ -72,10 +71,10 @@
                     </form>
 
                 </div>
-                <a href="/add-user"
-                    class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
-                    <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
-                    Add New User
+                <a href="/add-user">
+                    <button class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
+                        <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
+                        Add New User</button>
                 </a>
             </div>
             <div class="card-body p-24">
@@ -215,8 +214,6 @@
                         </ul>
                     </div>
                 @endif
-
-
             </div>
         </div>
     </div>

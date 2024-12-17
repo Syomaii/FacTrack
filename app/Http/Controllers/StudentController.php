@@ -128,7 +128,15 @@ class StudentController extends Controller
         $office = Office::where('type', '=', 'department')->first();
         $officeId = $office ? $office->id : null;
         
-        
+        Students::create([
+            'id' => $data['id'],
+            'firstname' => ucwords(strtolower($data['firstname'])),
+            'lastname' => ucwords(strtolower($data['lastname'])),
+            'gender' => $data['gender'],
+            'email' => $data['email'],
+            'course' => strtoupper($data['course']), 
+            'department' => ucwords($data['department']), 
+        ]);
         
         User::create([
             'student_id' => $data['id'] ?? null,

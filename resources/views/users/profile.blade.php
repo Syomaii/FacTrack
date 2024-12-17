@@ -72,11 +72,6 @@
                             <h6 class="text-xl mb-16">Personal Info</h6>
                             <ul>
                                 <li class="d-flex align-items-center gap-1 mb-12">
-                                    <span class="w-30 text-md fw-semibold text-primary-light">Full Name</span>
-                                    <span class="w-70 text-secondary-light fw-medium">: {{ ucwords($user->firstname) }}
-                                        {{ ucwords($user->lastname) }}</span>
-                                </li>
-                                <li class="d-flex align-items-center gap-1 mb-12">
                                     <span class="w-30 text-md fw-semibold text-primary-light">Email</span>
                                     <span class="w-70 text-secondary-light fw-medium">: {{ $user->email }}</span>
                                 </li>
@@ -89,7 +84,7 @@
                                     <span class="w-70 text-secondary-light fw-medium">:
                                         {{ optional($user->designation)->name ?? 'Not specified' }}</span>
                                 </li>
-                                @if ($user->designation->name === 'Dean')
+                                @if ($user->designations->name === 'Dean')
                                     <li class="d-flex align-items-center gap-1 mb-12">
                                         <span class="w-30 text-md fw-semibold text-primary-light">Department</span>
                                         <span class="w-70 text-secondary-light fw-medium">:
@@ -268,7 +263,7 @@
                                             <div class="position-relative">
                                                 <input type="password" class="form-control radius-8"
                                                     id="current-password" name="current_password" required
-                                                    placeholder="Enter Current Password">
+                                                     placeholder="Enter Current Password">
                                                 <span
                                                     class="toggle-password ri-eye-line cursor-pointer position-absolute end-0 top-50 translate-middle-y me-16 text-secondary-light"
                                                     data-toggle="#current-password"></span>

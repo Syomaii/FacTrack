@@ -122,7 +122,7 @@
                             <textarea id="purpose" name="purpose" class="form-control" placeholder="State the purpose for reservation" required>{{ old('purpose') }}</textarea>
                             <small class="text-danger">{{ $errors->first('purpose') }}</small>
                         </div>
-                        <input type="text" id="equipment_id" name="equipment_id" value="{{ old('equipment_id', $selectedEquipment->id ?? '') }}">
+                        <input type="hidden" id="equipment_id" name="equipment_id" value="{{ old('equipment_id', $selectedEquipment->id ?? '') }}">
                         <!-- Reservation Date -->
                         <div class="mb-3">
                             <label for="reservationDate" class="form-label">Reservation Date</label>
@@ -217,7 +217,7 @@
 
                             <!-- Facility and Description -->
                             <div class="row">
-                                <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>${equipment.id}</strong></div>
+                                
                                 <!-- Office -->
                                 <div class="mb-3 col-md-6">
                                     <div class="d-flex text-xl" style="margin-left: 5rem; margin-top: 15px"><span><strong>Office/Department: </strong>${equipment.office}</span></div>
@@ -329,7 +329,7 @@
                     <!-- Facility and Description -->
                     <div class="row">
                         <!-- Office -->
-                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>${id}</strong></div>
+                        
                         <div class="mb-3 col-md-6">
                             <div class="d-flex text-xl" style="margin-left: 5rem; margin-top: 15px"><span><strong>Office/Department: </strong>${office}</span></div>
 

@@ -16,15 +16,16 @@ class FileUploadController extends Controller
     public function importStudents(Request $request)
     {
         $request->validate([
-        'file' => 'required|file|mimes:xlsx,xls|max:2048',
-        'department' => 'required',
-        'email' => [
-            'required',
-            'email',
-            Rule::unique('users')->where(function ($query) {
-                return $query->whereNotNull('faculty_id')->orWhereNotNull('student_id');
-            }),
-        ],
+            'file' => 'required|file|mimes:xlsx,xls|max:2048',
+            'department' => 'required',
+            'email' => [
+                'required',
+                'email',
+                    Rule::unique('users')->where(function ($query) {
+                        return $query->whereNotNull('faculty_id')->orWhereNotNull('student_id');
+                    })
+            ],
+        ]);
         $file = $request->file("file")->store('import');
 
         $import = new StudentsImport($request->input('department'));

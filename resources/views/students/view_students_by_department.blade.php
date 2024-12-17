@@ -26,9 +26,8 @@
         </div>
 
         <div class="card h-100 p-0 radius-12">
-            <div
-                class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
-                <div class="d-flex flex-grow-1 align-items-center flex-wrap gap-3">
+            <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
+                <div class="d-flex flex-grow-1 flex-wrap align-items-center gap-3">
                     <!-- Search Input -->
                     <form class="navbar-search d-flex align-items-center flex-grow-1" method="GET"
                         action="{{ route('search-student') }}">
@@ -64,6 +63,7 @@
                         </select>
                     </form>
                 </div>
+            </div>
                 <div class="card-body p-24">
                     <div class="table-responsive scroll-sm">
                         <table class="table bordered-table sm-table mb-0">
@@ -179,7 +179,6 @@
                 </div>
             </div>
         </div>
-
-        @include('templates.footer_inc')
+    @include('templates.footer_inc')
 </main>
 @include('templates.footer')
