@@ -135,27 +135,19 @@
                                 aria-labelledby="pills-edit-profile-tab" tabindex="0">
                                 <h6 class="text-md text-primary-light mb-16">Profile Image</h6>
                                 <div class="mb-24 mt-16">
-                                    <div class="d-flex justify-content-start">
-                                        <div class="upload-image-wrapper d-flex align-items-center gap-3">
-                                            <div
-                                                class="uploaded-img position-relative h-120-px w-120-px border input-form-light radius-8 overflow-hidden border-dashed bg-neutral-50 d-none">
-                                                <button type="button"
-                                                    class="uploaded-img__remove position-absolute top-0 end-0 z-1 text-2xxl line-height-1 me-8 mt-8 d-flex">
-                                                    <iconify-icon icon="radix-icons:cross-2"
-                                                        class="text-xl text-danger-600"></iconify-icon>
-                                                </button>
-                                                <img id="uploaded-img__preview" class="w-100 h-100 object-fit-cover"
-                                                    src="/{{ auth()->user()->image }}" alt="image">
-                                            </div>
-
-                                            <label
-                                                class="upload-file h-120-px w-120-px border input-form-light radius-8 overflow-hidden border-dashed bg-neutral-50 bg-hover-neutral-200 d-flex align-items-center flex-column justify-content-center gap-1"
-                                                for="upload-file">
-                                                <iconify-icon icon="solar:camera-outline"
-                                                    class="text-xl text-secondary-light"></iconify-icon>
-                                                <span class="fw-semibold text-secondary-light">Upload</span>
-                                                <input id="upload-file" type="file" name="image" hidden>
+                                    <div class="avatar-upload">
+                                        <div
+                                            class="avatar-edit position-absolute bottom-0 end-0 me-24 mt-16 z-1 cursor-pointer">
+                                            <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" hidden>
+                                            <label for="imageUpload"
+                                                class="w-32-px h-32-px d-flex justify-content-center align-items-center bg-primary-50 text-primary-600 border border-primary-600 bg-hover-primary-100 text-lg rounded-circle">
+                                                <iconify-icon icon="solar:camera-outline" class="icon"></iconify-icon>
                                             </label>
+                                        </div>
+                                        <div class="avatar-preview">
+                                            <div id="imagePreview">
+                                                <img src="/{{ auth()->user()->image }}"" alt="">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -199,7 +191,7 @@
                                             <div class="mb-20">
                                                 <label for="phone"
                                                     class="form-label fw-semibold text-primary-light text-sm mb-8">
-                                                    Phone <span class="text-danger-600">*</span>
+                                                    Phone
                                                 </label>
                                                 <input type="text" class="form-control radius-8" id="mobile_no"
                                                     name="mobile_no" value="{{ $user->mobile_no }}">
@@ -224,16 +216,16 @@
                                         </div>
                                     </div>
 
-                                    <div class="d-flex align-items-center justify-content-center gap-3 mt-5">
+                                    <div class="d-flex align-items-center justify-content-center gap-3">
                                         @if (auth()->user()->id === $user->id ||
                                                 (auth()->user()->type === 'facility manager' && $user->type === 'operator') ||
                                                 (auth()->user()->type === 'admin' && $user->type === 'operator'))
                                             <button type="button"
-                                                class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8" id="cancelBtn" disabled>
+                                                class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8">
                                                 Cancel
                                             </button>
                                             <button type="submit"
-                                                class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8" id="saveBtn" disabled>
+                                                class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8">
                                                 Save
                                             </button>
                                         @endif
@@ -306,9 +298,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="d-flex justify-content-center align-items-center mt-5">
-                                            <button type="submit" class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8 " id="savePassBtn" disabled>Save Password</button>
-                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save Password</button>
                                     </form>
                             </div>
                             @endif
@@ -362,70 +352,6 @@
                 passwordInput.setAttribute('type', type);
                 button.classList.toggle('ri-eye-off-line');
             });
-        });
-    });
-</script>
-
-<script>
-    document.getElementById('upload-file').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('uploaded-img__preview').src = e.target.result;
-                document.querySelector('.uploaded-img').classList.remove('d-none');
-                document.querySelector('.upload-file').classList.add('d-none');
-            }
-            reader.readAsDataURL(file);
-        }
-    });
-
-    document.querySelector('.uploaded-img__remove').addEventListener('click', function() {
-        document.getElementById('uploaded-img__preview').src = 'assets/images/user.png';
-        document.querySelector('.uploaded-img').classList.add('d-none');
-        document.querySelector('.upload-file').classList.remove('d-none');
-        document.getElementById('upload-file').value = null;
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        let originalData = $('form').serialize();
-        let originalFile = $('#upload-file').val();
-
-        const cancelButton = $('#cancelBtn');
-        const saveButton = $('#saveBtn');
-        const savePass = $('#savePassBtn');
-
-        // Function to check if the form has changed
-        function checkChanges() {
-            const currentData = $('form').serialize();
-            const currentFile = $('#upload-file').val();
-
-            if (currentData !== originalData || currentFile !== originalFile) {
-                cancelButton.prop('disabled', false);
-                saveButton.prop('disabled', false);
-            } else {
-                cancelButton.prop('disabled', true);
-                saveButton.prop('disabled', true);
-            }
-        }
-
-        $('input, select').on('input change', function () {
-            checkChanges();
-        });
-
-        $('#upload-file').on('change', function () {
-            checkChanges();
-        });
-        
-        cancelButton.on('click', function () {
-            $('form')[0].reset(); 
-            $('#upload-file').val(''); 
-            originalData = $('form').serialize(); 
-            originalFile = $('#upload-file').val(); 
-            cancelButton.prop('disabled', true); 
-            saveButton.prop('disabled', true);
         });
     });
 </script>
