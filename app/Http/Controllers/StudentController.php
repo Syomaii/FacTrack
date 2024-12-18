@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\RegisteredUserMail;
 use App\Models\Borrower;
 use App\Models\Designation;
+use App\Models\EquipmentReservation;
 use App\Models\Office;
 use App\Models\Reservation;
 use App\Models\Students;
@@ -98,7 +99,7 @@ class StudentController extends Controller
     {
         $student = Students::findOrFail($id);
         $studentBorrowHistory = Borrower::with('equipment')->where('borrowers_id_no', $id)->get();
-        $studentReservations = Reservation::with('equipment')->where('student_id', $id)->get();
+        $studentReservations = EquipmentReservation::with('equipment')->where('reservers_id_no', $id)->get();
         
         if (!$student) {
             abort(404); 
