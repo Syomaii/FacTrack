@@ -121,67 +121,72 @@ class UserController extends Controller
     }
 
     public function loginUser(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
-        $remember = $request->has('remember'); // Check if "Remember Me" was selected
+{
+    $credentials = $request->only('email', 'password');
+    $remember = $request->has('remember'); // Check if "Remember Me" was selected
 
-        $user = User::where('email', $credentials['email'])
-        ->where(function ($query) {
-            $query->whereNotNull('faculty_id')
-                  ->orWhereNotNull('student_id')
-                  ->orWhereNull('faculty_id')
-                  ->whereNull('student_id');
-        })
-        ->first();
+    // Fetch the user by email
+    $users = User::where('email', $credentials['email'])->get();
 
+    if ($users->isEmpty()) {
+        return back()->with('status', 'No account found with this email')->withInput();
+    }
+
+    // Ensure the user exists and verify the password
+    foreach ($users as $user) {
         if ($user && Hash::check($credentials['password'], $user->password)) {
             Auth::login($user, $remember);
 
+            // Update the last login timestamp and status
             $user->timestamps = false;
             $user->last_login_at = Carbon::now();
+            $user->status = 'active';
             $user->save();
             $user->timestamps = true;
 
+            // Handle "Remember Me" cookies
             if ($remember) {
-                Cookie::queue('email', $request->email, 43200); 
+                Cookie::queue('email', $request->email, 43200); // Store email in cookie for 30 days
             } else {
                 Cookie::queue(Cookie::forget('email'));
                 Cookie::queue(Cookie::forget('password'));
             }
 
-            if (Auth::user()->type === 'student') {
-                if (Auth::user()->created_at->eq(Auth::user()->updated_at)) {
+            switch ($user->type) {
+                case 'student':
+                    if ($user->created_at->eq($user->updated_at)) {
+                        return redirect()->route('student.dashboard')
+                            ->with('newUser', "Looks like you haven't changed your password yet. Change it now.");
+                    }
                     return redirect()->route('student.dashboard')
-                        ->with('newUser', "Looks like you haven't changed your password yet. Change it now");
-                } else {
-                    return redirect()->route('student.dashboard')
                         ->with('loginUserSuccessfully', 'You are logged in!');
-                }
-            }
-
-            if (Auth::user()->type === 'faculty') {
-                if (Auth::user()->created_at->eq(Auth::user()->updated_at)) {
-                    return redirect()->route('faculty.dashboard')
-                        ->with('newUser', "Looks like you haven't changed your password yet. Change it now");
-                } else {
+    
+                case 'faculty':
+                    if ($user->created_at->eq($user->updated_at)) {
+                        return redirect()->route('faculty.dashboard')
+                            ->with('newUser', "Looks like you haven't changed your password yet. Change it now.");
+                    }
                     return redirect()->route('faculty.dashboard')
                         ->with('loginUserSuccessfully', 'You are logged in!');
-                }
-            }
-
-            if (Auth::user()->type != 'admin') {
-                if (Auth::user()->created_at->eq(Auth::user()->updated_at)) {
+    
+                case 'admin':
                     return redirect()->intended('dashboard')
-                        ->with('newUser', "Looks like you haven't changed your password yet. Change it now");
-                } else {
+                        ->with('loginUserSuccessfully', 'Welcome Back, Admin!');
+    
+                default:
+                    if ($user->created_at->eq($user->updated_at)) {
+                        return redirect()->intended('dashboard')
+                            ->with('newUser', "Looks like you haven't changed your password yet. Change it now.");
+                    }
                     return redirect()->intended('dashboard')
                         ->with('loginUserSuccessfully', 'You are logged in!');
-                }
             }
         }
-
-        return back()->with('status', 'Invalid login credentials')->withInput();
     }
+    // Return error if credentials are invalid
+    return back()->with('status', 'Invalid login credentials')->withInput();
+}
+
 
 
     public function logout(Request $request){

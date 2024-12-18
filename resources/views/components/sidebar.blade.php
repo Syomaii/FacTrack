@@ -57,13 +57,13 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/view-department">
+                        <a href="/view-students">
                             <i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>
                             <span>Students</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/faculty">
+                        <a href="/view-faculties">
                             <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
                             <span>Faculty</span>
                         </a>

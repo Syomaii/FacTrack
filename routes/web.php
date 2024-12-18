@@ -3,6 +3,7 @@
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\FacilityController;
+use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\NotificationController;
@@ -61,8 +62,20 @@ Route::middleware(['auth'])->group(function () {
 
     });
 
+    Route::middleware(['checkRole:faculty'])->group(function (){
+        Route::get('/student-dashboard', [FacultyController::class, 'facultyDashboard'])->name('faculty.dashboard');
+        Route::get('/faculty-profile/{id}', [FacultyController::class, 'facultyProfile'])->name('faculty.profile');
+        Route::get('/reserve-equipment/{code}', [ReservationController::class, 'showReservationForm'])->name('reserve.equipment');
+        Route::post('/reserve-equipment/{code}', [ReservationController::class, 'storeReservation'])->name('reserve.equipment.store');
+        Route::get('/api/search-equipment', [ReservationController::class, 'searchEquipment']);
+        Route::get('/reserve-facility', [ReservationController::class, 'reserveFacility'])->name('student.reserve_facility');
+        Route::get('/reserve-selected-facility/{id}', [ReservationController::class, 'facilityForReservation'])->name('facility_reservation');
+        Route::post('/submit-reservation', [ReservationController::class, 'submitReservation'])->name('submit_reservation');
+
+    });
+
 //---------------------------------------Admin,and Student -----------------------------------------------
-    Route::middleware(['checkRole:admin,,student'])->group(function () {
+    Route::middleware(['checkRole:admin,faculty,student'])->group(function () {
         Route::get('/offices', [PageController::class, 'offices'])->name('offices');
         Route::get('/office/{id}', [OfficeController::class, 'officeFacilities'])->name('officeFacilities');
     });
@@ -87,16 +100,26 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
         Route::get('/profile/{id}', [PageController::class, 'profile'])->name('profile');
         Route::put('/profile/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
+
         Route::get('/add-student', [PageController::class, 'addStudent'])->name('add-student');
         Route::post('/add-studentPost', [StudentController::class, 'addStudentPost'])->name('add-studentPost');
         
-        Route::get('/view-department', [StudentController::class, 'viewDepartment'])->name('view-department');
+        Route::get('/view-students', [StudentController::class, 'viewDepartment'])->name('view-students');
         Route::get('/department/{department}/students', [StudentController::class, 'viewStudentsByDepartment'])->name('view-department-students');
         Route::get('/search-student', [StudentController::class, 'search'])->name('search-student');
         Route::get('/student/{id}', [StudentController::class, 'studentProfile'])->name('student.show_profile');
+
         Route::put('/change-password/{id}', [UserController::class, 'changePassword'])->name('change_password');
         Route::get('/dashboard-search-user', [PageController::class, 'dashboardSearchUser'])->name('dashboard-search-user');
         
+        Route::get('/add-faculty', [PageController::class, 'addFaculty'])->name('add-faculty');
+        Route::post('/add-facultyPost', [FacultyController::class, 'addFacultyPost'])->name('add-facultyPost');
+        
+        Route::get('/view-faculties', [FacultyController::class, 'viewDepartment'])->name('view-faculties');
+        Route::get('/department/{department}/faculties', [FacultyController::class, 'viewFacultyByDepartment'])->name('view-department-faculties');
+        Route::get('/search-faculties', [FacultyController::class, 'search'])->name('search-faculty');
+        Route::get('/faculty/{id}', [FacultyController::class, 'facultyProfile'])->name('faculty.show_profile');
+
     });
 
 
@@ -110,6 +133,9 @@ Route::middleware(['auth'])->group(function () {
         //for student routes
         Route::get('/students', [PageController::class, 'students']);
         Route::post('/students', [FileUploadController::class, 'importStudents'])->name('import.file');
+
+        Route::get('/faculties', [PageController::class, 'faculties']);
+        Route::post('/faculties', [FileUploadController::class, 'importFaculties'])->name('faculty.import.file');
         
     });
     

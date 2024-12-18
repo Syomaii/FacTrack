@@ -15,17 +15,17 @@
                 </li>
                 <li class="fw-medium">-</li>
                 <li class="fw-medium">
-                    <a href="{{ route('view-department') }}" class="d-flex align-items-center gap-1 hover-text-primary">
+                    <a href="{{ route('view-faculties') }}" class="d-flex align-items-center gap-1 hover-text-primary">
                         Departments
                     </a>
                 </li>
                 <li class="fw-medium">-</li>
-                <li class="fw-medium">Add Student</li>
+                <li class="fw-medium">Add Faculty</li>
 
             </ul>
         </div>
 
-        {{-- @if (session('success'))
+        @if (session('success'))
             <div
                 class="alert alert-success bg-success-100 text-success-600 border-success-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-3 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-2">
@@ -33,9 +33,9 @@
                     {{ session('success') }}
                 </div>
             </div>
-        @endif --}}
+        @endif
 
-        @if ($errors->any())
+        {{-- @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
                     @foreach ($errors->all() as $error)
@@ -43,9 +43,9 @@
                     @endforeach
                 </ul>
             </div>
-        @endif
+        @endif --}}
 
-        <form action="{{ route('add-studentPost') }}" method="POST" enctype="multipart/form-data" id="userForm">
+        <form action="{{ route('add-facultyPost') }}" method="POST" enctype="multipart/form-data" id="userForm">
             @csrf
             <div class="card h-100 p-0 radius-12 pb-5 pt-5">
                 <div class="card-body p-24">
@@ -55,7 +55,7 @@
                                 <div class="card-body pb-5">
                                     <div class="card-body p-24">
                                         <div class="d-flex justify-content-center">
-                                            <h4 class="text-ld text-primary-light mb-16">Student Profile</h4>
+                                            <h4 class="text-ld text-primary-light mb-16">Faculty Profile</h4>
                                         </div>
                                     </div>
 
@@ -94,25 +94,7 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="form-group mb-3 col-md-6">
-                                            <label
-                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Gender</label>
-                                            <div class="d-flex gap-3">
-                                                <div class="form-check custom-radio">
-                                                    <input class="form-check-input" type="radio" name="gender"
-                                                        id="gender_m" value="M"
-                                                        {{ old('gender') == 'M' ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="gender_m">Male</label>
-                                                </div>
-                                                <div class="form-check custom-radio">
-                                                    <input class="form-check-input" type="radio" name="gender"
-                                                        id="gender_f" value="F"
-                                                        {{ old('gender') == 'F' ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="gender_f">Female</label>
-                                                </div>
-                                            </div>
-                                            <small class="text-danger">{{ $errors->first('gender') }}</small>
-                                        </div>
+                                        
                                         <div class="form-group mb-3 col-md-6">
                                             <label for="email"
                                                 class="form-label fw-semibold text-primary-light text-sm mb-8">Email</label>
@@ -122,18 +104,7 @@
                                                 value="{{ old('email') }}">
                                             <small class="text-danger">{{ $errors->first('email') }}</small>
                                         </div>
-                                    </div>
 
-                                    <div class="row">
-                                        <div class="form-group mb-3 col-md-6">
-                                            <label for="course"
-                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Course</label>
-                                            <input type="text"
-                                                class="form-control radius-8 {{ $errors->has('course') ? 'is-invalid' : '' }}"
-                                                id="course" name="course" placeholder="Enter Course"
-                                                value="{{ old('course') }}">
-                                            <small class="text-danger">{{ $errors->first('course') }}</small>
-                                        </div>
                                         <div class="form-group mb-3 col-md-6">
                                             <label for="department" class="form-label fw-semibold">Select
                                                 Department</label>
@@ -141,7 +112,6 @@
                                                 <option value="" disabled selected>Select a Department</option>
                                                 @foreach ($offices as $office)
                                                     @if ($office->type == 'department')
-                                                        <!-- Adjusted condition -->
                                                         <option value="{{ $office->name }}">{{ $office->name }}
                                                         </option>
                                                     @endif
@@ -150,16 +120,19 @@
                                         </div>
                                     </div>
 
-                                    
+                                    <div class="row">
+                                        
+                                        
+                                    </div>
 
                                     <div class="d-flex justify-content-center gap-3 py-2 ">
-                                        <a href="/view-students" class="">
+                                        <a href="/view-faculties" class="">
                                             <button type="button"
                                             class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8" id="cancelBtn">
                                             Cancel
                                         </button></a>
                                         <button type="submit" class="btn btn-primary px-20 py-11">
-                                            Add Student
+                                            Add Faculty
                                         </button>
                                         
                                     </div>

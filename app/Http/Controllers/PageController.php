@@ -365,6 +365,12 @@ public function borrowerSearch(Request $request)
         return view('students.students', compact('offices'))->with('title', 'Import');
     }
 
+    public function faculties(){
+        $offices = Office::all();
+
+        return view('students.students', compact('offices'))->with('title', 'Import');
+    }
+
     public function disposeEquipment()
     {
         // Logic for scanning or displaying equipment in maintenance
@@ -381,6 +387,12 @@ public function borrowerSearch(Request $request)
     {
         $offices = Office::all();
         return view('students/add_student', compact('offices'))->with('title', 'Add Student');
+    }
+
+    public function addFaculty()
+    {
+        $offices = Office::all();
+        return view('faculty.add_faculty', compact('offices'))->with('title', 'Add Faculty');
     }
 
 }
