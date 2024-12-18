@@ -127,17 +127,30 @@ class EquipmentController extends Controller
     }
     
     public function equipmentSearch(Request $request)
-{
-    $search = $request->input('search');
-    $equipments = Equipment::when($search, function ($query, $search) {
-        return $query->where('name', 'like', '%' . $search . '%')
-                     ->orWhere('brand', 'like', '%' . $search . '%')
-                     ->orWhere('serial_no', 'like', '%' . $search . '%')
-                     ->orWhere('owned_by', 'like', '%' . $search . '%');
-    })->paginate(10);
-
-    return view('equipments/equipments', compact('equipments'))->with('title', 'Equipments');
-}
+    {
+        $search = $request->input('search');
+        $status = $request->input('status');
+        $sort = $request->input('sort');
+    
+        $equipments = Equipment::when($search, function ($query, $search) {
+            return $query->where('name', 'like', '%' . $search . '%')
+                         ->orWhere('brand', 'like', '%' . $search . '%')
+                         ->orWhere('serial_no', 'like', '%' . $search . '%')
+                         ->orWhere('owned_by', 'like', '%' . $search . '%');
+        })
+        ->when($status, function ($query, $status) {
+            return $query->where('status', $status);
+        })->when($sort, function ($query, $sort) {
+            return $query->orderBy('name', $sort); 
+        })
+        ->paginate(10);
+    
+        return view('equipments/equipments', compact('equipments'))
+               ->with('title', 'Equipments')
+               ->with('status', $status)
+               ->with('search', $search);
+    }
+    
 
     
 }

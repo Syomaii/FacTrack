@@ -46,192 +46,212 @@
 
         <div class="card basic-data-table">
 
-            <div
-                class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
-                <div class="d-flex flex-grow-1 flex-wrap align-items-center gap-3">
-                    <form class="navbar-search d-flex align-items-center flex-grow-1" method="GET"
-                        action="{{ route('equipment_search') }}">
-                        <input type="text" class="bg-base h-40-px w-auto" name="search" id="equipmentSearch"
-                            placeholder="Search" value="{{ request('search') }}">
-                        <button type="submit"><iconify-icon icon="ion:search-outline"
-                                class="icon"></iconify-icon></button>
-                    </form>
-                    <select name="status" id="statusFilter"
-                        class="form-select form-select-sm w-auto ps-12 py-6 radius-12 h-40-px">
-                        <option value="">Status</option>
-                        <option value="Available">Available</option>
-                        <option value="Borrowed">Borrowed</option>
-                        <option value="In Maintenance">In Maintenance</option>
-                        <option value="In Repair">In Repair</option>
-                        <option value="Donated">Donated</option>
-                        <option value="Disposed">Disposed</option>
-                    </select>
+            <!-- Table Card -->
+            <div class="card basic-data-table">
+                <div
+                    class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between gap-3">
+                    <!-- Search and Status Filters -->
+                    <div class="d-flex flex-grow-1 gap-3">
+                        <!-- Search Form -->
+                        <form class="navbar-search d-flex align-items-center flex-grow-1" method="GET"
+                            action="{{ route('equipment_search') }}">
+                            <input type="text" class="bg-base h-40-px w-auto" name="search" id="equipmentSearch"
+                                placeholder="Search" value="{{ request('search') }}">
+                            <button type="submit">
+                                <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
+                            </button>
+                        </form>
+                        <!-- Sort by Name Filter -->
+                        <form method="GET" action="{{ route('equipment_search') }}">
+                            <select name="sort" class="form-select form-select-sm w-auto"
+                                onchange="this.form.submit()">
+                                <option value="">Sort by Name</option>
+                                <option value="asc" {{ request('sort') == 'asc' ? 'selected' : '' }}>Ascending
+                                </option>
+                                <option value="desc" {{ request('sort') == 'desc' ? 'selected' : '' }}>Descending
+                                </option>
+                            </select>
+                        </form>
+                        <!-- Status Filter -->
+                        <form method="GET" action="{{ route('equipment_search') }}">
+                            <select name="status" class="form-select form-select-sm w-auto"
+                                onchange="this.form.submit()">
+                                <option value="">Status</option>
+                                @foreach (['Available', 'Borrowed', 'In Maintenance', 'In Repair', 'Donated', 'Disposed'] as $status)
+                                    <option value="{{ $status }}"
+                                        {{ request('status') == $status ? 'selected' : '' }}>{{ $status }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive scroll-sm">
-                    <table class="table bordered-table mb-0" data-page-length='10'>
-                        <thead>
-                            <tr>
-                                <th scope="col">Item No.</th>
-                                <th class="col"></th>
-                                <th scope="col">Brand</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Serial No.</th>
-                                <th scope="col">Facility</th>
-                                <th scope="col">Code</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($equipments as $equipment)
-                                <tr>
-                                    <td><a href="javascript:void(0)" class="text-primary-600">#{{ $equipment->id }}</a>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <img src="{{ $equipment->image }}" alt=""
-                                                class="flex-shrink-0 me-12 radius-8" width="50">
-                                        </div>
-                                    </td>
-                                    <td>{{ ucwords($equipment->brand) }}</td> <!-- Brand Data -->
-                                    <td>{{ ucwords($equipment->name) }}</td>
-                                    <td>{{ $equipment->serial_no }}</td> <!-- Serial Number Data -->
 
-                                    <td>{{ $equipment->facility->name }}</td>
-                                    <td>{!! QrCode::size(100)->generate($equipment->code) !!}</td>
-                                    <td>
-                                        @if ($equipment->status === 'Available')
-                                            <span
-                                                class="bg-success-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
-                                        @elseif($equipment->status === 'In Maintenance')
-                                            <span
-                                                class="bg-info px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
-                                        @elseif($equipment->status === 'In Repair')
-                                            <span
-                                                class="bg-danger-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
-                                        @elseif($equipment->status === 'Borrowed')
-                                            <span
-                                                class="bg-warning-focus  px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
-                                        @elseif($equipment->status === 'Disposed')
-                                            <span
-                                                class="bg-black text-white px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
-                                        @elseif($equipment->status === 'Donated')
-                                            <span
-                                                class="bg-pink text-white px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a href="/equipment-details/{{ $equipment->code }}"
-                                            class="w-32-px h-32-px bg-primary-light text-primary-600 rounded-circle d-inline-flex align-items-center justify-content-center view-equipment"
-                                            data-id="{{ $equipment->id }}">
-                                            <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
-                                        </a>
-                                        @if ($equipment->status !== 'Donated' && $equipment->status !== 'Disposed')
-                                            <a href="javascript:void(0)"
-                                                class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center edit-equipment"
-                                                data-id="{{ $equipment->id }}" data-name="{{ $equipment->name }}"
-                                                data-brand="{{ $equipment->brand }}"
-                                                data-serial_no="{{ $equipment->serial_no }}"
-                                                data-description="{{ $equipment->description }}"
-                                                data-acquired_date="{{ $equipment->acquired_date }}"
-                                                data-status="{{ $equipment->status }}"
-                                                data-facility="{{ $equipment->facility->name }}">
-                                                <iconify-icon icon="lucide:edit"></iconify-icon>
+                <div class="card-body">
+                    <div class="table-responsive scroll-sm">
+                        <table class="table bordered-table mb-0" data-page-length='10'>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Item No.</th>
+                                    <th class="col"></th>
+                                    <th scope="col">Brand</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Serial No.</th>
+                                    <th scope="col">Facility</th>
+                                    <th scope="col">Code</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($equipments as $equipment)
+                                    <tr>
+                                        <td><a href="javascript:void(0)"
+                                                class="text-primary-600">#{{ $equipment->id }}</a>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="{{ $equipment->image }}" alt=""
+                                                    class="flex-shrink-0 me-12 radius-8" width="50">
+                                            </div>
+                                        </td>
+                                        <td>{{ ucwords($equipment->brand) }}</td> <!-- Brand Data -->
+                                        <td>{{ ucwords($equipment->name) }}</td>
+                                        <td>{{ $equipment->serial_no }}</td> <!-- Serial Number Data -->
+
+                                        <td>{{ $equipment->facility->name }}</td>
+                                        <td>{!! QrCode::size(100)->generate($equipment->code) !!}</td>
+                                        <td>
+                                            @if ($equipment->status === 'Available')
+                                                <span
+                                                    class="bg-success-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                            @elseif($equipment->status === 'In Maintenance')
+                                                <span
+                                                    class="bg-info px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                            @elseif($equipment->status === 'In Repair')
+                                                <span
+                                                    class="bg-danger-focus px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                            @elseif($equipment->status === 'Borrowed')
+                                                <span
+                                                    class="bg-warning-focus  px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                            @elseif($equipment->status === 'Disposed')
+                                                <span
+                                                    class="bg-black text-white px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                            @elseif($equipment->status === 'Donated')
+                                                <span
+                                                    class="bg-pink text-white px-24 py-4 rounded-pill fw-medium text-sm">{{ $equipment->status }}</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="/equipment-details/{{ $equipment->code }}"
+                                                class="w-32-px h-32-px bg-primary-light text-primary-600 rounded-circle d-inline-flex align-items-center justify-content-center view-equipment"
+                                                data-id="{{ $equipment->id }}">
+                                                <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
                                             </a>
+                                            @if ($equipment->status !== 'Donated' && $equipment->status !== 'Disposed')
+                                                <a href="javascript:void(0)"
+                                                    class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center edit-equipment"
+                                                    data-id="{{ $equipment->id }}" data-name="{{ $equipment->name }}"
+                                                    data-brand="{{ $equipment->brand }}"
+                                                    data-serial_no="{{ $equipment->serial_no }}"
+                                                    data-description="{{ $equipment->description }}"
+                                                    data-acquired_date="{{ $equipment->acquired_date }}"
+                                                    data-status="{{ $equipment->status }}"
+                                                    data-facility="{{ $equipment->facility->name }}">
+                                                    <iconify-icon icon="lucide:edit"></iconify-icon>
+                                                </a>
+                                            @endif
+                                            <a href="javascript:void(0)"
+                                                class="w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center delete-equipment"
+                                                data-id="{{ $equipment->id }}">
+                                                <iconify-icon icon="mingcute:delete-2-line"></iconify-icon>
+                                            </a>
+                                            <form id="delete-form-{{ $equipment->id }}"
+                                                action="{{ route('delete_equipment', $equipment->id) }}"
+                                                method="POST" style="display: none;">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="10" class="text-center"><strong>No equipments found from your
+                                                office/department.</strong></td>
+                                    </tr>
+                                @endforelse
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
+                        <span>Showing {{ $equipments->firstItem() }} to {{ $equipments->lastItem() }} of
+                            {{ $equipments->total() }} entries</span>
+
+                        @if ($equipments->total() > 0)
+                            <ul class="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
+                                <!-- Previous Page Link -->
+                                <li class="page-item">
+                                    <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                        href="{{ $equipments->previousPageUrl() }}"
+                                        aria-disabled="{{ $equipments->onFirstPage() }}">
+                                        <iconify-icon icon="ep:d-arrow-left"></iconify-icon>
+                                    </a>
+                                </li>
+
+                                <!-- Pagination Pages -->
+                                @if ($equipments->lastPage() > 1)
+                                    <!-- Show first page if not too close to current -->
+                                    @if ($equipments->currentPage() > 3)
+                                        <li class="page-item">
+                                            <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                                href="{{ $equipments->url(1) }}">1</a>
+                                        </li>
+                                        @if ($equipments->currentPage() > 4)
+                                            <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
                                         @endif
-                                        <a href="javascript:void(0)"
-                                            class="w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center delete-equipment"
-                                            data-id="{{ $equipment->id }}">
-                                            <iconify-icon icon="mingcute:delete-2-line"></iconify-icon>
-                                        </a>
-                                        <form id="delete-form-{{ $equipment->id }}"
-                                            action="{{ route('delete_equipment', $equipment->id) }}" method="POST"
-                                            style="display: none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="10" class="text-center"><strong>No equipments found from your
-                                            office/department.</strong></td>
-                                </tr>
-                            @endforelse
-
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
-                    <span>Showing {{ $equipments->firstItem() }} to {{ $equipments->lastItem() }} of
-                        {{ $equipments->total() }} entries</span>
-
-                    @if ($equipments->total() > 0)
-                        <ul class="pagination d-flex flex-wrap align-items-center gap-2 justify-content-center">
-                            <!-- Previous Page Link -->
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
-                                    href="{{ $equipments->previousPageUrl() }}"
-                                    aria-disabled="{{ $equipments->onFirstPage() }}">
-                                    <iconify-icon icon="ep:d-arrow-left"></iconify-icon>
-                                </a>
-                            </li>
-
-                            <!-- Pagination Pages -->
-                            @if ($equipments->lastPage() > 1)
-                                <!-- Show first page if not too close to current -->
-                                @if ($equipments->currentPage() > 3)
-                                    <li class="page-item">
-                                        <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
-                                            href="{{ $equipments->url(1) }}">1</a>
-                                    </li>
-                                    @if ($equipments->currentPage() > 4)
-                                        <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
                                     @endif
+
+                                    @for ($i = max(1, $equipments->currentPage() - 1); $i <= min($equipments->lastPage(), $equipments->currentPage() + 1); $i++)
+                                        <li class="page-item">
+                                            <a class="page-link {{ $i === $equipments->currentPage() ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-secondary-light' }} fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                                href="{{ $equipments->url($i) }}">{{ $i }}</a>
+                                        </li>
+                                    @endfor
+
+                                    @if ($equipments->currentPage() < $equipments->lastPage() - 2)
+                                        @if ($equipments->currentPage() < $equipments->lastPage() - 3)
+                                            <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
+                                        @endif
+                                        <li class="page-item">
+                                            <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                                href="{{ $equipments->url($equipments->lastPage()) }}">{{ $equipments->lastPage() }}</a>
+                                        </li>
+                                    @endif
+                                @else
+                                    <!-- If there's only one page -->
+                                    <span>Page 1</span>
                                 @endif
 
-                                @for ($i = max(1, $equipments->currentPage() - 1); $i <= min($equipments->lastPage(), $equipments->currentPage() + 1); $i++)
-                                    <li class="page-item">
-                                        <a class="page-link {{ $i === $equipments->currentPage() ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-secondary-light' }} fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
-                                            href="{{ $equipments->url($i) }}">{{ $i }}</a>
-                                    </li>
-                                @endfor
-
-                                @if ($equipments->currentPage() < $equipments->lastPage() - 2)
-                                    @if ($equipments->currentPage() < $equipments->lastPage() - 3)
-                                        <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
-                                    @endif
-                                    <li class="page-item">
-                                        <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
-                                            href="{{ $equipments->url($equipments->lastPage()) }}">{{ $equipments->lastPage() }}</a>
-                                    </li>
-                                @endif
-                            @else
-                                <!-- If there's only one page -->
-                                <span>Page 1</span>
-                            @endif
-
-                            <!-- Next Page Link -->
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
-                                    href="{{ $equipments->nextPageUrl() }}">
-                                    <iconify-icon icon="ep:d-arrow-right"></iconify-icon>
-                                </a>
-                            </li>
-                        </ul>
-                    @else
-                        <!-- Display message if no entries -->
-                        <span>No entries found.</span>
-                    @endif
+                                <!-- Next Page Link -->
+                                <li class="page-item">
+                                    <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
+                                        href="{{ $equipments->nextPageUrl() }}">
+                                        <iconify-icon icon="ep:d-arrow-right"></iconify-icon>
+                                    </a>
+                                </li>
+                            </ul>
+                        @else
+                            <!-- Display message if no entries -->
+                            <span>No entries found.</span>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    @include('templates.footer_inc')
+        @include('templates.footer_inc')
 </main>
 
 <!-- Edit Equipment Modal -->
@@ -365,26 +385,6 @@
                     }
                 });
             }
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const statusFilter = document.getElementById('statusFilter');
-        const tableRows = document.querySelectorAll('tbody tr');
-
-        // Function to filter table rows based on selected status
-        statusFilter.addEventListener('change', function() {
-            const selectedStatus = statusFilter.value.toLowerCase();
-
-            tableRows.forEach(row => {
-                const statusCell = row.cells[7].innerText
-                    .toLowerCase(); // Assuming status is in the 8th column (index 7)
-                if (selectedStatus === '' || statusCell.includes(selectedStatus)) {
-                    row.style.display = ''; // Show row
-                } else {
-                    row.style.display = 'none'; // Hide row
-                }
-            });
         });
     });
 </script>

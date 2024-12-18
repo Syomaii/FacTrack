@@ -198,7 +198,7 @@ class PageController extends Controller
     
         $equipments = Equipment::with('facility')  // Make sure to load the facility relationship
                     ->whereIn('facility_id', $facilities)  // Filter equipments where facility_id is in the list of retrieved facilities
-                    ->paginate(10);
+                    ->paginate(3);
         // dd($equipments->toArray());
         // Return the view with the equipments data
         return view('equipments/equipments', compact('equipments'))->with('title', 'Equipments');
