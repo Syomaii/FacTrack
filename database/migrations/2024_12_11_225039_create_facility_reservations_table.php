@@ -20,7 +20,6 @@ return new class extends Migration
             $table->foreign('facility_id')->references('id')->on('facilities')->onDelete('cascade');
             $table->time('time_in');
             $table->time('time_out');
-            $table->dateTime('returned_date');
             $table->enum('status', ['pending', 'approved', 'declined', 'completed', 'cancelled']);
             $table->text('purpose');
             $table->integer('expected_audience_no');

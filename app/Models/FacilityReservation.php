@@ -11,18 +11,24 @@ class FacilityReservation extends Model
         'reservers_id_no',
         'facility_id',
         'office_id',
-        'time_id',
+        'reservation_date',
+        'time_in',
         'time_out',
         'status',
         'purpose',
         'expected_audience_no',
         'stage_performers',
-        'venue'
+        'status'
     ];
 
     public function offices()
     {
         return $this->belongsTo(Office::class, 'office_id', 'id');
+    }
+
+    public function facility()
+    {
+        return $this->belongsTo(Facility::class, 'facility_id', 'id');
     }
 
     public function equipment()

@@ -25,7 +25,7 @@ class OfficeController extends Controller
         $data = $request->validate([
             'name' => 'required|unique:offices,name',
             'description' => 'nullable',
-            'type' => 'required|in:office,department', 
+            'type' => 'required|in:office,department,avr', 
         ]);
     
         $officeData = [

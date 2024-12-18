@@ -34,18 +34,17 @@
             </div>
         @endif
 
-
         <!-- Main Section -->
         <div class="d-flex justify-content-between align-items-center mb-24">
             <div class="input-group" style="width: 100%; max-width: 650px;">
                 <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"
                     placeholder="Search facilities...">
-                <button class="btn btn-primary" type="button" style="z-index: 0"><iconify-icon icon="ic:baseline-search"
-                        class="icon" ></iconify-icon></button>
+                <button class="btn btn-primary" type="button" style="z-index: 0"><iconify-icon
+                        icon="ic:baseline-search" class="icon"></iconify-icon></button>
             </div>
         </div>
 
-        <!-- No facilities message -->
+        <!-- Facilities List -->
         <div class="row gy-4" id="equipmentList">
             @if (!$facilities->isEmpty())
                 @foreach ($facilities as $facility)
@@ -60,17 +59,12 @@
                                     </div>
                                     <h6 class="mb-8">{{ $facility->name }}</h6>
                                     <div class="d-flex justify-content-center gap-2">
-                                        <a href="{{ route('facility_equipment', ['id' => $facility->id]) }}"
+                                        <a href="{{ route('facility_reservation', ['id' => $facility->id]) }}"
                                             class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
-                                            @if ($facility->type == 'laboratory')
-                                                View Laboratory
-                                            @elseif ($facility->type == 'office')
-                                                View Office
-                                            @elseif ($facility->type == 'room')
-                                                View Room
-                                            @endif <iconify-icon icon="iconamoon:arrow-right-2"
-                                                class="text-xl"></iconify-icon>
+                                            Reserve Facility
+                                            <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
                                         </a>
+
                                     </div>
                                 </div>
                             </div>

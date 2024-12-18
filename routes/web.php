@@ -55,9 +55,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reserve-equipment/{code}', [ReservationController::class, 'showReservationForm'])->name('reserve.equipment');
         Route::post('/reserve-equipment/{code}', [ReservationController::class, 'storeReservation'])->name('reserve.equipment.store');
         Route::get('/api/search-equipment', [ReservationController::class, 'searchEquipment']);
-        Route::post('/reservations', [ReservationController::class, 'reserved'])->name('students.reserved');
         Route::get('/reserve-facility', [ReservationController::class, 'reserveFacility'])->name('student.reserve_facility');
-        
+        Route::get('/reserve-selected-facility/{id}', [ReservationController::class, 'facilityForReservation'])->name('facility_reservation');
+        Route::post('/submit-reservation', [ReservationController::class, 'submitReservation'])->name('submit_reservation');
+
     });
 
 //---------------------------------------Admin,and Student -----------------------------------------------

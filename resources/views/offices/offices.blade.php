@@ -106,6 +106,8 @@
                                     </option>
                                     <option value="department" {{ old('type') == 'department' ? 'selected' : '' }}>
                                         Department</option>
+                                    <option value="avr" {{ old('type') == 'department' ? 'selected' : '' }}>
+                                        AVR</option>
                                 </select>
                             </div>
                         </div>
@@ -135,6 +137,8 @@
                                         View Office
                                     @elseif ($office->type == 'department')
                                         View Department
+                                    @elseif ($office->type == 'avr')
+                                        View AVR
                                     @endif
                                     <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
                                 </a>

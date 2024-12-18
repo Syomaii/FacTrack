@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Equipment;
 use App\Models\EquipmentReservation;
 use App\Models\Facility;
+use App\Models\FacilityReservation;
 use App\Models\Office;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
@@ -41,7 +42,14 @@ class ReservationController extends Controller
             return back()->with('error', 'This equipment is not available for reservation.');
         }
     
-        $office = Auth::user()->office_id; 
+        $office = $equipment->facility->office->id; 
+
+        if(Auth::user()->type === 'student'){
+            $reservers_id_no = Auth::user()->student_id;
+        }
+        else if(Auth::user()->type === 'faculty'){
+            $reservers_id_no = Auth::user()->faculty_id;
+        }
     
         // Save the reservation
         EquipmentReservation::create([
@@ -51,7 +59,7 @@ class ReservationController extends Controller
             'expected_return_date' => $request->expected_return_date,
             'status' => 'pending',
             'purpose' => $request->purpose,
-            'reservers_id_no' => Auth::user()->student_id,  // Assuming this is the correct field for the user ID
+            'reservers_id_no' =>   $reservers_id_no, 
         ]);
     
         // Redirect to the facility equipment page with a success message
@@ -211,18 +219,83 @@ class ReservationController extends Controller
     }
 
     
-    public function reserveFacility(){
-        $office = Office::with('facilities')->get();
-        $facilities = Facility::whereHas('office')->where('allow_reservation', '=', '1')->get();
-        return view('students.reserve_facility', compact('facilities', 'office'))
-            ->with('title','Reserve Facility');
+    public function reserveFacility() {
+        $offices = Office::with('facilities') 
+            ->where('type', '=', 'avr')
+            ->get();
+        
+        $facilities = Facility::whereIn('office_id', $offices->pluck('id'))
+            ->get();
+    
+        // Return the view with the filtered facilities
+        return view('students.reserve_facility', compact('facilities', 'offices'))
+            ->with('title', 'Reserve Facility');
     }
+    
 
     
     public function facilityForReservation($id){
-        $facility = Facility::where('id', $id)->first();
         
+        $facility = Facility::findOrFail($id);        
 
         return view('students.facility_to_be_reserved', compact('facility'))->with('title', 'Reserve Facility');
     }
+
+    public function submitReservation(Request $request)
+    {
+        // dd($request->all());
+
+        // Validate the request
+        $request->validate([
+            'reservation_date' => 'required|date|after_or_equal:today',
+            'time_in' => [
+                'required',
+                'date_format:H:i',
+                function ($attribute, $value, $fail) use ($request) {
+                    // Parse the reservation_date
+                    $reservationDateTime = \Carbon\Carbon::parse($request->reservation_date);
+
+                    // Extract time from reservation_date
+                    $reservationTime = $reservationDateTime->format('H:i');
+
+                    // Check if the time_in is earlier than the reservation's time
+                    if ($value < $reservationTime) {
+                        $fail('The time in must be after or equal to the reservation time.');
+                    }
+                },
+            ],
+            'time_out' => 'required|date_format:H:i|after:time_in',
+            'purpose' => 'required|string|max:255',
+            'expected_audience_no' => 'required|integer',
+            'stage_performers' => 'required|integer',
+            'facility_id' => 'required|exists:facilities,id', 
+        ]);
+
+        $facility = Facility::findOrFail($request->facility_id);
+        $officeId = $facility->office_id;
+
+        if(Auth::user()->type === 'student'){
+            $reservers_id_no = Auth::user()->student_id;
+        }
+        else if(Auth::user()->type === 'faculty'){
+            $reservers_id_no = Auth::user()->faculty_id;
+        }
+
+        // Create the reservation
+            FacilityReservation::create([
+                'reservers_id_no' => $reservers_id_no,
+                'office_id' => $officeId,
+                'facility_id' => $request->facility_id,
+                'reservation_date' => $request->reservation_date, // Use reservation_date only
+                'time_in' => $request->time_in, // Store time_in separately
+                'time_out' => $request->time_out, // Store time_out separately
+                'purpose' => $request->purpose,
+                'expected_audience_no' => $request->expected_audience_no,
+                'stage_performers' => $request->stage_performers,
+                'status' => 'pending',
+            ]);
+
+            return back()->with('success', 'Facility reserved successfully!');
+    }
+
 }
