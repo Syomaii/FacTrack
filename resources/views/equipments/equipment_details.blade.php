@@ -103,8 +103,8 @@
                 </div>
             </div>
         </div>
-
-        <div class="timeline-horizontal">
+        <h6>Equipment Timeline</h6>
+        <div class="timeline-horizontal pb-5 mt-3 pt-0">
             @foreach ($timeline->sortByDesc('created_at') as $entry)
                 @php
                     // Determine the background color based on the status
@@ -126,10 +126,10 @@
                             })
                             : collect();
                 @endphp
-
-                <div class="timeline-item {{ $loop->even ? 'below' : 'above' }}"
-                    style="border-left: 5px solid {{ $color }}; padding-left: 10px; margin-bottom: 20px; background: #f9f9f9; border-radius: 5px; padding: 15px;">
-                    <p>{{ 'The status of the equipment is ' . $entry->status }}</p>
+                
+                <div class="timeline-item {{ $loop->even ? 'below' : 'above' }} "
+                    style="border-left: 5px solid {{ $color }}; padding-left: 10px; margin-bottom: 20px; background: #f9f9f9; border-radius: 5px; padding: 15px; ">
+                    <p>{{ 'The equipment is ' . $entry->status }}</p>
 
                     @if ($entry->status == 'Borrowed')
                         @forelse ($uniqueBorrowers as $borrower)

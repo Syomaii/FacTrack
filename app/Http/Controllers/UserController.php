@@ -101,13 +101,13 @@ class UserController extends Controller
             'office_id' => $officeId, 
         ];
 
-        // Handle image upload
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imagePath = $image->store('images/users/profile_pictures', 'public');
-            $userData['image'] = $imagePath;
+            $image->move(public_path('images/profile_pictures'), $image->getClientOriginalName());
+            $imageUrl = 'images/profile_pictures/' . $image->getClientOriginalName();
+            $data['image'] = $imageUrl;
         } else {
-            $userData['image'] = 'images/profile_pictures/default-profile.png';  
+            $data['image'] = 'images/profile_pictures/default-profile.png';  
         }
 
         // Create the user
@@ -194,6 +194,14 @@ class UserController extends Controller
                 'designation_id' => 'required|exists:designations,id',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             ]);
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $image->move(public_path('images/profile_pictures'), $image->getClientOriginalName());
+                $imageUrl = 'images/profile_pictures/' . $image->getClientOriginalName();
+                $data['image'] = $imageUrl;
+            } else {
+                $data['image'] = 'images/profile_pictures/default-profile.png';  
+            }
         }else{
             $data = $request->validate([
                 'firstname' => 'required|string|max:255',
@@ -203,17 +211,18 @@ class UserController extends Controller
                 'designation_id' => 'required|exists:designations,id',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             ]);
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $image->move(public_path('images/profile_pictures'), $image->getClientOriginalName());
+                $imageUrl = 'images/profile_pictures/' . $image->getClientOriginalName();
+                $data['image'] = $imageUrl;
+            } else {
+                $data['image'] = 'images/profile_pictures/default-profile.png';  
+            }
         }
         
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imagePath = $image->store('images/users/profile_pictures', 'public');
-            $data['image'] = $imagePath;
-        } else {
-            $data['image'] = 'images/profile_pictures/default-profile.png';  
-        }
-
         $user->update($data);
+        Auth::setUser($user);
     
         return redirect()->route('profile', ['id' => $id])->with('updateprofilesuccessfully', 'Profile updated successfully');
     }

@@ -183,14 +183,18 @@
                                         </select>
 
                                         <!-- Textbox that will appear when "Others" is selected -->
-                                        <input type="text" class="form-control radius-8 mt-2 d-none"
-                                            id="owned_by_other" name="owned_by_other" placeholder="Please specify"
-                                            value="{{ old('owned_by_other') }}" />
+                                        
 
 
                                         <small class="text-danger">{{ $errors->first('owned_by') }}</small>
                                     </div>
 
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control radius-8 mt-2 d-none"
+                                            id="owned_by_other" name="owned_by_other" placeholder="Please specify"
+                                            value="{{ old('owned_by_other') }}" />
+                                            <small class="text-danger">{{ $errors->first('owned_by_other') }}</small>
+                                    </div>
 
                                     <div class="d-flex align-items-center justify-content-center gap-3 mb-4 mt-4">
                                         <a href="{{ route('facility_equipment', ['id' => $facility->id]) }}">
@@ -238,22 +242,26 @@
         document.getElementById('upload-file').value = null;
     });
 
+    
+</script>
+
+<script>
     function handleOwnedByChange() {
         var selectElement = document.getElementById('owned_by');
         var otherInput = document.getElementById('owned_by_other');
 
         // Show or hide the textbox based on the selected value
-        if (ownedBySelect.value === 'Others') {
-            ownedByOtherInput.classList.remove('d-none');
+        if (selectElement.value === 'Others') {
+            otherInput.classList.remove('d-none');
         }
 
         // Listen for changes to the dropdown
-        ownedBySelect.addEventListener('change', function() {
-            if (ownedBySelect.value === 'Others') {
-                ownedByOtherInput.classList.remove('d-none');
+        selectElement.addEventListener('change', function() {
+            if (selectElement.value === 'Others') {
+                otherInput.classList.remove('d-none');
             } else {
-                ownedByOtherInput.classList.add('d-none');
-                ownedByOtherInput.value = ''; // Reset the input value when not "Others"
+                otherInput.classList.add('d-none');
+                otherInput.value = ''; 
             }
         });
     }

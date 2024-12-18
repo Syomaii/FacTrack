@@ -141,7 +141,7 @@
                                             </table>
                                         @else
                                             <p class="text-center text-secondary-light text-sm fw-semibold">No
-                                                repaired
+                                                disposed
                                                 equipment found.</p>
                                         @endif
                                     </div>
