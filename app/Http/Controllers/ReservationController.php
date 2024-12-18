@@ -25,9 +25,9 @@ class ReservationController extends Controller
 
     public function storeReservation(Request $request, $code) {
         $request->validate([
-            'reservation_date' => 'required|date|after:now',
-            'expected_return_date' => 'required|date|after:reservation_date',
             'purpose' => 'required|string|max:255',
+            'reservation_date' => 'required|date|after_or_equal:' . now()->startOfMinute()->toDateTimeString(),
+            'expected_return_date' => 'required|date|after:reservation_date',
         ]);
 
         $equipment = Equipment::where('code', $code)->firstOrFail();
