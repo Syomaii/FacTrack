@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Imports\FacultiesImport;
 use App\Imports\StudentsImport;
 use Illuminate\Container\Attributes\Log;
 use Illuminate\Http\Request;
@@ -61,7 +62,7 @@ class FileUploadController extends Controller
         ]);
         $file = $request->file("file")->store('import');
 
-        $import = new StudentsImport($request->input('department'));
+        $import = new FacultiesImport($request->input('department'));
         $import->import($file);
 
         $totalRows = $import->getRowCount();

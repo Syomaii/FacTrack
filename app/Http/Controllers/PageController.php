@@ -368,7 +368,7 @@ public function borrowerSearch(Request $request)
     public function faculties(){
         $offices = Office::all();
 
-        return view('students.students', compact('offices'))->with('title', 'Import');
+        return view('faculty.faculties', compact('offices'))->with('title', 'Import');
     }
 
     public function disposeEquipment()

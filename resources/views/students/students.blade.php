@@ -124,7 +124,7 @@
         <div class="card h-100 p-0 radius-12">
             <div
                 class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
-                <h5 class="mb-0">Import Excel Files 
+                <h5 class="mb-0">Import Excel File for Student List 
                     <button type="button" class="tooltip-button text-primary-600 magnefic-photo" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-primary" data-bs-placement="right" id="openModalButton"><iconify-icon icon="mdi:question-mark-circle-outline" class="icon text-md opacity-75 text-primary-light"></iconify-icon> </button> 
                     <div class="my-tooltip tip-content hidden text-start shadow">
                         <h6 class="text-white text-sm mt-3">Excel Format</h6>
@@ -137,11 +137,10 @@
                 <div class="modal-content ">
                     <span class="close cursor-pointer">&times;</span>
                     <h5>Excel Format Instructions</h5>
-                    <p>Ensure your Excel file matches the required format before uploading.</p>
+                    <p>Ensure your Excel file matches the required format to avoid errors before uploading.</p>
                     <h5>Student list</h5>
-                    <img src="/images/excel-format.png" alt="">
-                    <h5>Faculty list</h5>
-                    <img src="/images/excel-format.png" alt="">
+                    <img src="/images/excel-format-students.png" alt="">
+                    
                 </div>
             </div>
 
@@ -189,7 +188,6 @@
                                 <th scope="col">Firstname</th>
                                 <th scope="col">Course/Year</th>
                                 <th scope="col">Gender</th>
-                                <th scope="col">Mobile</th>
                                 <th scope="col">Email</th>
                             </tr>
                         </thead>
