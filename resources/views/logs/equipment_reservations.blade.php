@@ -6,7 +6,7 @@
     <div class="dashboard-main-body">
 
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
-            <h6 class="fw-semibold mb-0">Borrowers Log</h6>
+            <h6 class="fw-semibold mb-0">Equipment Reservation Log</h6>
             <ul class="d-flex align-items-center gap-2">
                 <li class="fw-medium">
                     <a href="/dashboard" class="d-flex align-items-center gap-1 hover-text-primary">
@@ -14,8 +14,6 @@
                         Dashboard
                     </a>
                 </li>
-                <li>-</li>
-                <a href="{{ route('borrowersLog') }}">Borrower's Log</a>
             </ul>
         </div>
 
@@ -44,8 +42,8 @@
                     <table class="table bordered-table sm-table mb-0">
                         <thead>
                             <tr>
-                                <th scope="col">Rerervers ID</th>
-                                <th scope="col">Student Name</th>
+                                <th scope="col">Reservers ID</th>
+                                <th scope="col">Reservers Name</th>
                                 <th scope="col">Department</th>
                                 <th scope="col">Equipment Name</th>
                                 <th scope="col">Reservation Date</th>
@@ -62,6 +60,9 @@
                                         @if ($reservation->student)
                                             {{ ucwords($reservation->student->firstname) }}
                                             {{ ucwords($reservation->student->lastname) }}
+                                        @elseif($reservation->faculty)
+                                            {{ ucwords($reservation->faculty->firstname) }}
+                                            {{ ucwords($reservation->faculty->lastname) }}
                                         @else
                                             <span class="text-danger">Student Not Found</span>
                                         @endif

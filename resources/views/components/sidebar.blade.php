@@ -44,20 +44,34 @@
             @endif
 
             @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'admin')
-                <li>
-                    <a href="/users">
-                        <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
-                        <span>Users</span>
-                    </a>
-                </li>
+            <li class="dropdown">
+                <a href="javascript:void(0)">
+                    <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
+                    <span>Users</span>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li>
+                        <a href="/users">
+                            <i class="ri-circle-fill circle-icon text-lilac-600 w-auto"></i>
+                            <span>Users</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/view-department">
+                            <i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>
+                            <span>Students</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/faculty">
+                            <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
+                            <span>Faculty</span>
+                        </a>
+                    </li>
+                </ul>
             @endif
-            @if (auth()->user()->type != 'student')
-                <li>
-                    <a href="/view-department">
-                        <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
-                        <span>Students</span>
-                    </a>
-                </li>
+            @if (auth()->user()->type != 'student' && auth()->user()->type != 'faculty' )
+                
             @endif
             @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
                 <li class="dropdown">
@@ -69,13 +83,19 @@
                         <!-- Borrow Equipments -->
                         <li>
                             <a href="/borrowers-log"><i class="ri-circle-fill circle-icon text-lilac-600 w-auto"></i>
-                                Borrowers Log
+                                Borrows
                             </a>
                         </li>
                         <li>
-                            <a href="/reservations-log">
+                            <a href="{{ route('logs.equipment_reservations') }}">
                                 <i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>
-                                Reservation Log
+                                Equipment Reservation
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('logs.facility_reservations') }}">
+                                <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
+                                Facility Reservation
                             </a>
                         </li>
                     </ul>

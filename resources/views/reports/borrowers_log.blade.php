@@ -14,8 +14,6 @@
                         Dashboard
                     </a>
                 </li>
-                <li>-</li>
-                <a href="{{ route('borrowersLog') }}">Borrower's Log</a>
             </ul>
         </div>
 

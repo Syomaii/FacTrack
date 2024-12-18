@@ -72,8 +72,6 @@ class ReservationController extends Controller
         }
     
         // Save the reservation
-        EquipmentReservation::create([
-
         // Create a new reservation
         $reservation = EquipmentReservation::create([
             'reservers_id_no' =>  $reservers_id_no,
@@ -83,7 +81,6 @@ class ReservationController extends Controller
             'expected_return_date' => $request->expected_return_date,
             'status' => 'pending',
             'purpose' => $request->purpose,
-            'reservers_id_no' =>   $reservers_id_no, 
         ]);
 
         event(new ReserveEquipmentEvent($reservation, $reserver, $office, $equipment));
@@ -145,8 +142,10 @@ class ReservationController extends Controller
             $reservations = collect(); 
         }
     
-        return view('logs.reservation_logs', compact('reservations'))->with('title', 'Reservation Logs');
+        return view('logs.equipment_reservations', compact('reservations'))->with('title', 'Reservation Logs');
     }
+
+    
     
     public function reservationDetails($id){
         $reservation = EquipmentReservation::with(['student', 'faculty', 'equipment', 'offices'])->where('id', $id)->first();
@@ -188,6 +187,24 @@ class ReservationController extends Controller
         return redirect()->back()->with('error', 'Invalid status value.');
     }
 
+    public function facilityReservationLog()
+    {
+        // Get the authenticated user
+        $user = Auth::user();
+    
+        if ($user && $user->office) {
+            $reservations = FacilityReservation::with(['student', 'facility', 'offices'])
+                ->whereHas('offices', function ($query) use ($user) {
+                    $query->where('id', $user->office->id); 
+                })
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+        } else {
+            $reservations = collect(); 
+        }
+    
+        return view('logs.facility_reservations', compact('reservations'))->with('title', 'Reservation Logs');
+    }
     
     public function reserveFacility() {
         $offices = Office::with('facilities') 

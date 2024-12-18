@@ -151,7 +151,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/disposed-equipments', [ReportController::class, 'disposedEquipmentReports']);
         Route::get('/disposed-equipment-reports', [ReportController::class, 'setDateDisposedEquipmentReports'])->name('disposed.equipment.reports');
         Route::get('/borrowers-log', [PageController::class, 'borrowersLog'])->name('borrowersLog');
-        Route::get('/reservations-log', [ReservationController::class, 'equipmentReservationLog'])->name('reservationsLog');
+        Route::get('/equipment-reservations-log', [ReservationController::class, 'equipmentReservationLog'])->name('logs.equipment_reservations');
+        Route::get('/facility-reservations-log', [ReservationController::class, 'facilityReservationLog'])->name('logs.facility_reservations');
         Route::post('/reservation/{id}/accept', [ReservationController::class, 'accept'])->name('reservation.accept');
         Route::post('/reservation/{id}/decline', [ReservationController::class, 'decline'])->name('reservation.decline');
 

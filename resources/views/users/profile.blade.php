@@ -307,7 +307,7 @@
                                         </div>
 
                                         <div class="d-flex justify-content-center align-items-center mt-5">
-                                            <button type="submit" class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8 " id="savePassBtn" disabled>Save Password</button>
+                                            <button type="submit" class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8 " id="savePassBtn" >Save Password</button>
                                         </div>
 
                                     </form>

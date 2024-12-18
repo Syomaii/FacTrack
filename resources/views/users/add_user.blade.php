@@ -264,30 +264,35 @@
                                         <!-- Office/Department Radio Buttons -->
                                         <div class="row">
                                             <div class="form-group mb-3 col-md-6">
-                                                <label class="fw-semibold text-primary-light text-sm mb-2">Select
-                                                    Type</label>
-                                                <div class="row g-6">
-                                                    <div class="col-md-6 gap-10" style="margin-top: .8rem">
+                                                <label class="fw-semibold text-primary-light text-sm mb-2">Select Type</label>
+                                                <div class="row g-3">
+                                                    <div class="col-md-3" style="margin-top: .8rem">
                                                         <div class="form-check d-flex align-items-center gap-2">
                                                             <input type="radio" id="office" name="select_type"
                                                                 value="office" class="form-check-input" checked>
                                                             <label for="office"
                                                                 class="form-check-label d-flex align-items-center gap-2">
-                                                                <iconify-icon icon="mingcute:tool-fill"
-                                                                    class="icon text-lg"></iconify-icon>
                                                                 Office
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6" style="margin-top: .8rem">
+                                                    <div class="col-md-3" style="margin-top: .8rem">
                                                         <div class="form-check d-flex align-items-center gap-2">
                                                             <input type="radio" id="department" name="select_type"
                                                                 value="department" class="form-check-input">
                                                             <label for="department"
                                                                 class="form-check-label d-flex align-items-center gap-2">
-                                                                <iconify-icon icon="mingcute:home-6-fill"
-                                                                    class="icon text-lg"></iconify-icon>
                                                                 Department
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3" style="margin-top: .8rem">
+                                                        <div class="form-check d-flex align-items-center gap-2">
+                                                            <input type="radio" id="avr" name="select_type"
+                                                                value="avr" class="form-check-input">
+                                                            <label for="avr"
+                                                                class="form-check-label d-flex align-items-center gap-2">
+                                                                Avr
                                                             </label>
                                                         </div>
                                                     </div>
@@ -325,6 +330,24 @@
                                                     <!-- This option is not scrollable -->
                                                     @foreach ($offices as $office)
                                                         @if ($office->type == 'department')
+                                                            <option value="{{ $office->id }}">{{ $office->name }}
+                                                            </option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group mb-3 col-md-6" id="avr-dropdown"
+                                                style="display: none;">
+                                                <label for="avr"
+                                                    class="form-label fw-semibold text-primary-light text-sm mb-8">Select
+                                                    AVR</label>
+                                                <select class="form-control radius-8" id="avr"
+                                                    name="avr">
+                                                    <option value="" disabled selected>Select an AVR</option>
+                                                    <!-- This option is not scrollable -->
+                                                    @foreach ($offices as $office)
+                                                        @if ($office->type == 'avr')
                                                             <option value="{{ $office->id }}">{{ $office->name }}
                                                             </option>
                                                         @endif
@@ -381,13 +404,20 @@
         elem.addEventListener('change', function() {
             const officeDropdown = document.getElementById('office-dropdown');
             const departmentDropdown = document.getElementById('department-dropdown');
+            const avrDropdown = document.getElementById('avr-dropdown');
 
             if (this.value === 'office') {
                 officeDropdown.style.display = 'block';
                 departmentDropdown.style.display = 'none';
+                avrDropdown.style.display = 'none';
             } else if (this.value === 'department') {
                 departmentDropdown.style.display = 'block';
                 officeDropdown.style.display = 'none';
+                avrDropdown.style.display = 'none';
+            } else if (this.value === 'avr') {
+                departmentDropdown.style.display = 'none';
+                officeDropdown.style.display = 'none';
+                avrDropdown.style.display = 'block';
             }
         });
     });
