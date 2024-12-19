@@ -19,13 +19,13 @@ class FileUploadController extends Controller
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls|max:2048',
             'department' => 'required',
-            'email' => [
-                'required',
-                'email',
-                    Rule::unique('users')->where(function ($query) {
-                        return $query->whereNotNull('faculty_id')->orWhereNotNull('student_id');
-                    })
-            ],
+            // 'email' => [
+            //     'required',
+            //     'email',
+            //         Rule::unique('users')->where(function ($query) {
+            //             return $query->whereNotNull('faculty_id')->orWhereNotNull('student_id');
+            //         })
+            // ],
         ]);
         $file = $request->file("file")->store('import');
 
