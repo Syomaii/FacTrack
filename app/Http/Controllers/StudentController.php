@@ -159,15 +159,18 @@ class StudentController extends Controller
     }
 
     public function studentDashboard(){
-        
-        $student = Auth::user();
-
-        $data = ([
+        $student = Auth::user(); // Get the authenticated student
+    
+        // Fetch the student's reservations
+        $studentReservations = EquipmentReservation::with('equipment')->where('reservers_id_no', $student->id)->get();
+    
+        // Return the view with student data and reservations
+        $data = [
             'student' => $student,
-            'title' => 'Student Dashboard'
-        ]);
-
-
+            'studentReservations' => $studentReservations, // Include the reservations data
+            'title' => 'Student Dashboard',
+        ];
+    
         return view('students.student_dashboard', $data);
     }
 
