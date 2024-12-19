@@ -117,7 +117,7 @@
                                         class="img-fluid rounded mb-3 max-img-size" />
                                     <h6 class="mb-8">{{ $facEquipment->name }}</h6>
                                     <div class="d-flex justify-content-center gap-2">
-                                        @if (auth()->user()->type == 'student' || auth()->user()->type == 'faculty' )
+                                        @if (auth()->user()->type == 'student' || auth()->user()->type == 'faculty')
                                             <a href="/reserve-equipment/{{ $facEquipment->code }}"
                                                 class="btn text-primary-600 hover-text-primary px-0 py-10 d-inline-flex align-items-center gap-2">
                                                 Reserve Equipment <iconify-icon icon="iconamoon:arrow-right-2"

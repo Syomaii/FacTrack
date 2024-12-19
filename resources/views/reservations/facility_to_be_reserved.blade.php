@@ -24,12 +24,19 @@
             <div class="alert alert-success">
                 {{ session('success') }}
             </div>
-        @elseif ($errors->any())
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger">
+                <strong>{{ session('error') }}</strong>
+            </div>
+        @endif
+
+        @if ($errors->any())
             <div class="alert alert-danger">
                 <strong>{{ $errors->first() }}</strong>
             </div>
         @endif
-
         <div class="row g-4">
             <div class="col-lg-6">
                 <div class="card h-100">
@@ -60,23 +67,24 @@
                                     <!-- Reservation Date -->
                                     <div class="mb-3">
                                         <label for="reservation_date" class="form-label">Reservation Date & Time</label>
-                                        <input type="datetime-local" id="reservation_date" name="reservation_date" class="form-control">
+                                        <input type="date" id="reservation_date" name="reservation_date"
+                                            class="form-control">
                                     </div>
 
                                     <div class="row">
                                         <!-- Time In -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="time_in" class="form-label">Time In</label>
-                                        <input type="time" id="time_in" name="time_in" class="form-control"
-                                            value="{{ old('time_in') }}">
-                                    </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="time_in" class="form-label">Time In</label>
+                                            <input type="time" id="time_in" name="time_in" class="form-control"
+                                                value="{{ old('time_in') }}">
+                                        </div>
 
-                                    <!-- Time Out -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="time_out" class="form-label">Time Out</label>
-                                        <input type="time" id="time_out" name="time_out" class="form-control"
-                                            value="{{ old('time_out') }}">
-                                    </div>
+                                        <!-- Time Out -->
+                                        <div class="col-md-6 mb-3">
+                                            <label for="time_out" class="form-label">Time Out</label>
+                                            <input type="time" id="time_out" name="time_out" class="form-control"
+                                                value="{{ old('time_out') }}">
+                                        </div>
                                     </div>
 
                                     <!-- Purpose -->
@@ -89,22 +97,26 @@
                                     <!-- Expected Audience -->
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label for="expected_audience_no" class="form-label">Expected Number of Audience</label>
-                                            <input type="text" id="expected_audience_no" name="expected_audience_no" class="form-control"
-                                                placeholder="Enter number of people" value="{{ old('expected_audience_no') }}">
+                                            <label for="expected_audience_no" class="form-label">Expected Number of
+                                                Audience</label>
+                                            <input type="text" id="expected_audience_no" name="expected_audience_no"
+                                                class="form-control" placeholder="Enter number of people"
+                                                value="{{ old('expected_audience_no') }}">
                                         </div>
-                    
+
                                         <!-- Stage Performers -->
                                         <div class="col-md-6 mb-3">
                                             <label for="stage_performers" class="form-label">Stage Performers</label>
-                                            <input type="text" id="stage_performers" name="stage_performers" class="form-control"
-                                                placeholder="Enter number of performers" value="{{ old('stage_performers') }}">
+                                            <input type="text" id="stage_performers" name="stage_performers"
+                                                class="form-control" placeholder="Enter number of performers"
+                                                value="{{ old('stage_performers') }}">
                                         </div>
                                     </div>
 
                                     <!-- Submit Button -->
                                     <div class="d-flex justify-content-center m-3 gap-3">
-                                        <a href="/reserve-facility"><button type="submit" class="btn btn-danger">Cancel Reservation</button></a>
+                                        <a href="/reserve-facility"><button type="submit" class="btn btn-danger">Cancel
+                                                Reservation</button></a>
                                         <button type="submit" class="btn btn-primary">Submit Reservation</button>
                                     </div>
                                 </form>
@@ -118,46 +130,46 @@
                 <div class="card h-100">
                     <div class="card-body py-5">
                         <div class="" id="pills-reservations" role="tabpanel"
-                                aria-labelledby="pills-reservations-tab" tabindex="0">
-                                <h6 class="text-xl mb-16">Reservations</h6>
-                                @if ($facilityReservations->isEmpty())
-                                    <div class="d-flex justify-content-center align-items-center w-100 mt-5">
-                                        <strong class="text-center p-3" style="font-size: 20px">No reservations found
-                                            for this facility.</strong>
-                                    </div>
-                                @else
-                                    <div class="table-responsive">
-                                        <table class="table table-striped">
-                                            <thead>
+                            aria-labelledby="pills-reservations-tab" tabindex="0">
+                            <h6 class="text-xl mb-16">Reservations</h6>
+                            @if ($facilityReservations->isEmpty())
+                                <div class="d-flex justify-content-center align-items-center w-100 mt-5">
+                                    <strong class="text-center p-3" style="font-size: 20px">No reservations found
+                                        for this facility.</strong>
+                                </div>
+                            @else
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Facility</th>
+                                                <th scope="col">Reservation Date</th>
+                                                <th scope="col">Purpose</th>
+                                                <th scope="col">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($facilityReservations as $reservation)
                                                 <tr>
-                                                    <th scope="col">Facility</th>
-                                                    <th scope="col">Reservation Date</th>
-                                                    <th scope="col">Purpose</th>
-                                                    <th scope="col">Status</th>
+                                                    {{-- onclick="window.location='{{ route('reservation_details', ['id' => $reservation->id]) }}'"> --}}
+
+                                                    <td>{{ $reservation->facility->name }}</td>
+                                                    <td>{{ $reservation->reservation_date }}</td>
+                                                    <td>{{ $reservation->purpose }}</td>
+                                                    <td>
+                                                        @if ($reservation->status === 'approved')
+                                                            <span class="badge bg-success">Approved</span>
+                                                        @else
+                                                            <span class="badge bg-warning">Pending</span>
+                                                        @endif
+                                                    </td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($facilityReservations as $reservation)
-                                                    <tr>
-                                                        {{-- onclick="window.location='{{ route('reservation_details', ['id' => $reservation->id]) }}'"> --}}
-                                                        
-                                                        <td>{{ $reservation->facility->name }}</td>
-                                                        <td>{{ $reservation->reservation_date }}</td>
-                                                        <td>{{ $reservation->purpose }}</td>
-                                                        <td>
-                                                            @if ($reservation->status === 'approved')
-                                                                <span class="badge bg-success">Approved</span>
-                                                            @else
-                                                                <span class="badge bg-warning">Pending</span>
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                @endif
-                            </div>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
