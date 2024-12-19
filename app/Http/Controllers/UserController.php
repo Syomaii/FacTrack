@@ -48,7 +48,7 @@ class UserController extends Controller
 
         $validatedData = $request->validate($rules);
 
-        $officeId = null;
+        $officeId = '';
 
         $typeofOffice = $request->input('select_type');
 
@@ -76,7 +76,7 @@ class UserController extends Controller
                                                         ->first();
 
                     if ($existingUserWithSameDesignation) {
-                        return back()->withErrors(['designation' => 'Their is already an existing dean in this department.']);
+                        return back()->withErrors(['designation' => 'There is already an existing dean in this department.']);
                     }
                 } else {
                     return back()->withErrors(['department' => 'Selected department does not exist.']);
@@ -102,10 +102,10 @@ class UserController extends Controller
                 } else {
                     return back()->withErrors(['department' => 'Selected '. $office->name .' does not exist.']);
                 }
-            } elseif(($userRole != 'admin')) {
-                // If not admin, use the authenticated user's office_id
-                $officeId = Auth::user()->office_id;
-            }
+            } 
+        }elseif(($userRole != 'admin')) {
+            // If not admin, use the authenticated user's office_id
+            $officeId = Auth::user()->office_id;
         }
 
         $randomPassword = Str::random(10);
@@ -238,14 +238,6 @@ class UserController extends Controller
                 'designation_id' => 'required|exists:designations,id',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             ]);
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $image->move(public_path('images/profile_pictures'), $image->getClientOriginalName());
-                $imageUrl = 'images/profile_pictures/' . $image->getClientOriginalName();
-                $data['image'] = $imageUrl;
-            } else {
-                $data['image'] = 'images/profile_pictures/default-profile.png';  
-            }
         }else{
             $data = $request->validate([
                 'firstname' => 'required|string|max:255',
@@ -255,14 +247,16 @@ class UserController extends Controller
                 'designation_id' => 'required|exists:designations,id',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             ]);
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $image->move(public_path('images/profile_pictures'), $image->getClientOriginalName());
-                $imageUrl = 'images/profile_pictures/' . $image->getClientOriginalName();
-                $data['image'] = $imageUrl;
-            } else {
-                $data['image'] = 'images/profile_pictures/default-profile.png';  
-            }
+            
+        }
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $image->move(public_path('images/profile_pictures'), $image->getClientOriginalName());
+            $imageUrl = 'images/profile_pictures/' . $image->getClientOriginalName();
+            $data['image'] = $imageUrl;
+        } else {
+            $data['image'] = Auth::user()->image;  
         }
         
         $user->update($data);

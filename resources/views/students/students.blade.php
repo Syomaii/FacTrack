@@ -133,7 +133,7 @@
                 </h5>
             </div>
             
-            <div id="infoModal" class="modal hidden mb-5">
+            {{-- <div id="infoModal" class="modal hidden mb-5">
                 <div class="modal-content ">
                     <span class="close cursor-pointer">&times;</span>
                     <h5>Excel Format Instructions</h5>
@@ -142,7 +142,7 @@
                     <img src="/images/excel-format-students.png" alt="">
                     
                 </div>
-            </div>
+            </div> --}}
 
             <div class="card-body">
                 <form action="{{ route('import.file') }}" method="POST" enctype="multipart/form-data" class="p-3">
