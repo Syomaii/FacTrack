@@ -41,7 +41,7 @@
             <!-- Reservation Details -->
             <div class="col-lg-6">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-secondary text-white">
+                    <div class="card-header text-white">
                         <h5 class="mb-0">Reservation Details</h5>
                     </div>
                     <div class="card-body">
@@ -87,7 +87,7 @@
             <!-- Facility Details -->
             <div class="col-lg-6">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-secondary text-white text-center">
+                    <div class="card-header text-white text-center">
                         <h5 class="mb-0">{{ ucwords($reservation->facility->name) }}</h5>
                     </div>
                     <div class="card-body text-center">
