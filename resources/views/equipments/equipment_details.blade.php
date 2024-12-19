@@ -37,6 +37,38 @@
             </div>
         @endif
 
+        @if (auth()->user()->type === 'facility manager')
+            <div class="d-flex justify-content-end flex-wrap mt-3 gap-4 mb-3">
+
+                <a href="javascript:void(0)"
+                    class="btn btn-danger text-base radius-8 px-20 py-11 delete-equipment"
+                    data-id="{{ $equipments->id }}">Delete Equipment
+                </a>
+
+                <a href="javascript:void(0)"
+                    class="btn btn-success text-base radius-8 px-20 py-11 edit-equipment"
+                    data-id="{{ $equipments->id }}" data-name="{{ $equipments->name }}"
+                    data-description="{{ $equipments->description }}"
+                    data-acquired_date="{{ $equipments->acquired_date }}"
+                    data-facility="{{ $equipments->facility->name }}"
+                    data-brand="{{ $equipments->brand }}"
+                    data-serial_no="{{ $equipments->serial_no }}">Edit
+                    Equipment
+                </a>
+                
+                <button type="button" class="btn btn-primary text-base radius-8 px-20 py-11"
+                    onclick="printDetails()">
+                    Print QR Code
+                </button>
+
+                <form id="delete-form-{{ $equipments->id }}"
+                    action="{{ route('delete_equipment', $equipments->id) }}" method="POST"
+                    style="display: none;">
+                    @csrf
+                    @method('DELETE')
+                </form>
+            </div>
+        @endif
         <!-- Equipment Details Card -->
         <div class="card bg-white shadow rounded-3 mb-5">
             <div class="d-flex flex-wrap p-5 row g-0">
@@ -52,55 +84,25 @@
                     <div class="row d-flex flex-wrap">
                         @foreach ([
                             'Brand' => $equipments->brand,
+                            'Model' => $equipments->name,
                             'Status' => $equipments->status,
                             'Serial Number' => $equipments->serial_no,
                             'Facility' => $equipments->facility->name,
                             'Acquisition Date' => date('d M Y', strtotime($equipments->acquired_date)),
                         ] as $label => $value)
-                            <div class="col-md-6 mb-3">
-                                <strong>{{ $label }}:</strong>
+                            <div class="col-md-6 mb-3" id="{{ str_replace(' ', '-', strtolower($label)) }}">
+                                <strong class="text-lg">{{ $label }}:</strong>
                                 <p>{{ $value }}</p>
                             </div>
                         @endforeach
-                        <div class="col-md-6">
-                            <strong>QR Code:</strong>
+                        <div class="col-md-6" id="qr-code">
+                            <strong class="text-lg">QR Code:</strong>
                             <div id="qrCode">{!! QrCode::size(100)->generate($equipments->code) !!}</div>
+                            <input type="hidden" id="qrCodeValue" value="{{ $equipments->code }}">
                         </div>
                     </div>
-
-                    @if (auth()->user()->type === 'facility manager')
-                        <div class="d-flex flex-wrap mt-3 gap-4">
-
-                            <a href="javascript:void(0)"
-                                class="btn btn-danger text-base radius-8 px-20 py-11 delete-equipment"
-                                data-id="{{ $equipments->id }}">Delete Equipment
-                            </a>
-
-                            <a href="javascript:void(0)"
-                                class="btn btn-success text-base radius-8 px-20 py-11 edit-equipment"
-                                data-id="{{ $equipments->id }}" data-name="{{ $equipments->name }}"
-                                data-description="{{ $equipments->description }}"
-                                data-acquired_date="{{ $equipments->acquired_date }}"
-                                data-facility="{{ $equipments->facility->name }}"
-                                data-brand="{{ $equipments->brand }}"
-                                data-serial_no="{{ $equipments->serial_no }}">Edit
-                                Equipment
-                            </a>
-                            
-                            <button type="button" class="btn btn-primary text-base radius-8 px-20 py-11"
-                                onclick="printInvoice()">
-                                Print QR Code
-                            </button>
-
-                            <form id="delete-form-{{ $equipments->id }}"
-                                action="{{ route('delete_equipment', $equipments->id) }}" method="POST"
-                                style="display: none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
-                    @endif
                 </div>
+                
             </div>
         </div>
         <h6>Equipment Timeline</h6>
@@ -311,14 +313,42 @@
         });
     });
 
-    function printInvoice() {
-        var printContents = document.getElementById('qrCode').innerHTML;
+    function printDetails() {
+        // Fetch equipment details dynamically using the IDs
+        var qrCodeHTML = document.getElementById('qrCode').innerHTML;
+        var equipmentBrand = document.getElementById('brand').querySelector('p').innerText;
+        var equipmentModel = document.getElementById('model').querySelector('p').innerText;
+        var equipmentSerialNo = document.getElementById('serial-number').querySelector('p').innerText;
+        var equipmentQrCode = document.getElementById('qrCodeValue').value;
+
+        // Create the print content
+        var printContents = `
+            <div style="display: flex; align-items: center; gap: 20px; font-family: Arial, sans-serif; padding: 20px;">
+                <!-- QR Code Section -->
+                <div>
+                    ${qrCodeHTML}
+                </div>
+                
+                <!-- Details Section -->
+                <div>
+                    <h2 style="margin: 0; font-size: 16px;">${equipmentBrand} ${equipmentModel}</h2>
+                    <p style="margin: 5px 0; font-size: 12px;"><strong>Serial Number:</strong> ${equipmentSerialNo}</p>
+                    <p style="margin: 5px 0; font-size: 12px;"><strong>QR Code Value:</strong> ${equipmentQrCode}</p>
+                </div>
+            </div>
+        `;
+
+        // Save original page content
         var originalContents = document.body.innerHTML;
 
+        // Set the content for printing
         document.body.innerHTML = printContents;
 
+        // Trigger print
         window.print();
 
+        // Restore the original content
         document.body.innerHTML = originalContents;
     }
+
 </script>

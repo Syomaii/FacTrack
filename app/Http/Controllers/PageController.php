@@ -144,10 +144,23 @@ class PageController extends Controller
         ))->with('title', 'Dashboard');
     }
     
-    public function notifications(){
-        $notifications = Auth::check() ? Auth::user()->notifications()->get() : collect();
+    public function notifications()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'You need to log in to view notifications.');
+        }
+
+        $notifications = Auth::user()->notifications;
+
+        foreach ($notifications as $notification) {
+            if (is_null($notification->read_at)) {
+                $notification->update(['read_at' => now()]);
+            }
+        }
+
         return view('notifications', compact('notifications'))->with('title', 'Notifications');
     }
+
     
 
     public function facilities(){

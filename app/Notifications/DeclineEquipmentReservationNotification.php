@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AcceptEquipmentReservationNotification extends Notification
+class DeclineEquipmentReservationNotification extends Notification
 {
     use Queueable;
 
@@ -37,7 +37,13 @@ class AcceptEquipmentReservationNotification extends Notification
     /**
      * Get the mail representation of the notification.
      */
-    
+    public function toMail(object $notifiable): MailMessage
+    {
+        return (new MailMessage)
+                    ->line('The introduction to the notification.')
+                    ->action('Notification Action', url('/'))
+                    ->line('Thank you for using our application!');
+    }
 
     /**
      * Get the array representation of the notification.
@@ -47,10 +53,10 @@ class AcceptEquipmentReservationNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => 'Reservation Equipment Accepted',
-            'message' => 'Your equipment reservation for: ' . $this->equipment->brand . ' ' . $this->equipment->name . ' has been accepted',
+            'title' => 'Reservation Equipment Declined',
+            'message' => 'Your equipment reservation for: ' . $this->equipment->brand . ' ' . $this->equipment->name . ' has been declined',
             'reservation_id' => $this->reservation->id,
-            'notification_type' => 'accepted-equipment-reservation',
+            'notification_type' => 'declined-equipment-reservation',
         ];
     }
 }

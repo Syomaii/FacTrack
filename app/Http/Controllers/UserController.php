@@ -81,10 +81,31 @@ class UserController extends Controller
                 } else {
                     return back()->withErrors(['department' => 'Selected department does not exist.']);
                 }
-            }   
-        } elseif(($userRole != 'admin')) {
-            // If not admin, use the authenticated user's office_id
-            $officeId = Auth::user()->office_id;
+            }   elseif ($typeofOffice !=  'department' && $typeofOffice != 'office') {
+                // Validate that department is provided
+                if (!$request->department) {
+                    return back()->withErrors(['department' => 'Department field cannot be empty.']);
+                }
+                // Find office ID based on department
+                $office = Office::find($request->department);
+                
+                if ($office) {
+                    $officeId = $office->id;
+
+                    $existingUserWithSameDesignation = User::where('designation_id', $validatedData['designation_id'])
+                                                        ->where('office_id', $officeId)
+                                                        ->first();
+
+                    if ($existingUserWithSameDesignation) {
+                        return back()->withErrors(['designation' => 'Their is already an existing supervisor in this department.']);
+                    }
+                } else {
+                    return back()->withErrors(['department' => 'Selected '. $office->name .' does not exist.']);
+                }
+            } elseif(($userRole != 'admin')) {
+                // If not admin, use the authenticated user's office_id
+                $officeId = Auth::user()->office_id;
+            }
         }
 
         $randomPassword = Str::random(10);
@@ -121,71 +142,71 @@ class UserController extends Controller
     }
 
     public function loginUser(Request $request)
-{
-    $credentials = $request->only('email', 'password');
-    $remember = $request->has('remember'); // Check if "Remember Me" was selected
+    {
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember'); // Check if "Remember Me" was selected
 
-    // Fetch the user by email
-    $users = User::where('email', $credentials['email'])->get();
+        // Fetch the user by email
+        $users = User::where('email', $credentials['email'])->get();
 
-    if ($users->isEmpty()) {
-        return back()->with('status', 'No account found with this email')->withInput();
-    }
+        if ($users->isEmpty()) {
+            return back()->with('status', 'No account found with this email')->withInput();
+        }
 
-    // Ensure the user exists and verify the password
-    foreach ($users as $user) {
-        if ($user && Hash::check($credentials['password'], $user->password)) {
-            Auth::login($user, $remember);
+        // Ensure the user exists and verify the password
+        foreach ($users as $user) {
+            if ($user && Hash::check($credentials['password'], $user->password)) {
+                Auth::login($user, $remember);
 
-            // Update the last login timestamp and status
-            $user->timestamps = false;
-            $user->last_login_at = Carbon::now();
-            $user->status = 'active';
-            $user->save();
-            $user->timestamps = true;
+                // Update the last login timestamp and status
+                $user->timestamps = false;
+                $user->last_login_at = Carbon::now();
+                $user->status = 'active';
+                $user->save();
+                $user->timestamps = true;
 
-            // Handle "Remember Me" cookies
-            if ($remember) {
-                Cookie::queue('email', $request->email, 43200); // Store email in cookie for 30 days
-            } else {
-                Cookie::queue(Cookie::forget('email'));
-                Cookie::queue(Cookie::forget('password'));
-            }
+                // Handle "Remember Me" cookies
+                if ($remember) {
+                    Cookie::queue('email', $request->email, 43200); // Store email in cookie for 30 days
+                } else {
+                    Cookie::queue(Cookie::forget('email'));
+                    Cookie::queue(Cookie::forget('password'));
+                }
 
-            switch ($user->type) {
-                case 'student':
-                    if ($user->created_at->eq($user->updated_at)) {
+                switch ($user->type) {
+                    case 'student':
+                        if ($user->created_at->eq($user->updated_at)) {
+                            return redirect()->route('student.dashboard')
+                                ->with('newUser', "Looks like you haven't changed your password yet. Change it now.");
+                        }
                         return redirect()->route('student.dashboard')
-                            ->with('newUser', "Looks like you haven't changed your password yet. Change it now.");
-                    }
-                    return redirect()->route('student.dashboard')
-                        ->with('loginUserSuccessfully', 'You are logged in!');
-    
-                case 'faculty':
-                    if ($user->created_at->eq($user->updated_at)) {
+                            ->with('loginUserSuccessfully', 'You are logged in!');
+        
+                    case 'faculty':
+                        if ($user->created_at->eq($user->updated_at)) {
+                            return redirect()->route('faculty.dashboard')
+                                ->with('newUser', "Looks like you haven't changed your password yet. Change it now.");
+                        }
                         return redirect()->route('faculty.dashboard')
-                            ->with('newUser', "Looks like you haven't changed your password yet. Change it now.");
-                    }
-                    return redirect()->route('faculty.dashboard')
-                        ->with('loginUserSuccessfully', 'You are logged in!');
-    
-                case 'admin':
-                    return redirect()->intended('dashboard')
-                        ->with('loginUserSuccessfully', 'Welcome Back, Admin!');
-    
-                default:
-                    if ($user->created_at->eq($user->updated_at)) {
+                            ->with('loginUserSuccessfully', 'You are logged in!');
+        
+                    case 'admin':
                         return redirect()->intended('dashboard')
-                            ->with('newUser', "Looks like you haven't changed your password yet. Change it now.");
-                    }
-                    return redirect()->intended('dashboard')
-                        ->with('loginUserSuccessfully', 'You are logged in!');
+                            ->with('loginUserSuccessfully', 'Welcome Back, Admin!');
+        
+                    default:
+                        if ($user->created_at->eq($user->updated_at)) {
+                            return redirect()->intended('dashboard')
+                                ->with('newUser', "Looks like you haven't changed your password yet. Change it now.");
+                        }
+                        return redirect()->intended('dashboard')
+                            ->with('loginUserSuccessfully', 'You are logged in!');
+                }
             }
         }
+        // Return error if credentials are invalid
+        return back()->with('status', 'Invalid login credentials')->withInput();
     }
-    // Return error if credentials are invalid
-    return back()->with('status', 'Invalid login credentials')->withInput();
-}
 
 
 

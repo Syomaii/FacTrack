@@ -13305,3 +13305,11 @@ td.fc-header-center {
   display: none;
 }
 
+@media print {
+  @page {
+      margin: 0; /* Removes all default margins */
+  }
+  body {
+      margin: 0; /* Ensures no margins in the body */
+  }
+}
