@@ -31,9 +31,6 @@ class FacilityController extends Controller
     
         return redirect('/facilities')->with('addFacilitySuccessfully', 'Facility added successfully.');
     }
-    
-    
-
 
     public function updateFacility(Request $request)
     {

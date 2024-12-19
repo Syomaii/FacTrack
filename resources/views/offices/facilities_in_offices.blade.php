@@ -157,7 +157,16 @@
                             <option value="department" {{ $office->type == 'department' ? 'selected' : '' }}>
                                 Department
                             </option>
+                            <option value="others" {{ old('type') == 'others' ? 'selected' : '' }}>
+                                Other Amenities
+                            </option>
                         </select>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control radius-8 mt-2 d-none"
+                            id="other_amenities" name="other_amenities" placeholder="Please specify"
+                            value="{{ old('other_amenities') }}" />
+                            <small class="text-danger">{{ $errors->first('other_amenities') }}</small>
                     </div>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </form>
@@ -218,4 +227,25 @@
         });
 
     });
+</script>
+<script>
+    function handleOwnedByChange() {
+        var selectElement = document.getElementById('type');
+        var otherInput = document.getElementById('other_amenities');
+
+        // Show or hide the textbox based on the selected value
+        if (selectElement.value === 'others') {
+            otherInput.classList.remove('d-none');
+        }
+
+        // Listen for changes to the dropdown
+        selectElement.addEventListener('change', function() {
+            if (selectElement.value === 'others') {
+                otherInput.classList.remove('d-none');
+            } else {
+                otherInput.classList.add('d-none');
+                otherInput.value = ''; 
+            }
+        });
+    }
 </script>

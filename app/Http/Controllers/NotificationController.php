@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Request;
 
 class NotificationController extends Controller
 {
-    
-
     public function redirect($id)
     {
         $notification = Auth::user()->notifications()->find($id);

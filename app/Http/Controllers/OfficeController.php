@@ -25,13 +25,17 @@ class OfficeController extends Controller
         $data = $request->validate([
             'name' => 'required|unique:offices,name',
             'description' => 'nullable',
-            'type' => 'required|in:office,department,avr', 
+            'type' => 'required|in:office,department,others', 
+            'other_amenities' => 'required_if:type,others',
         ]);
+        
+        $officeType = $request->type === 'others' ? $request->other_amenities : $request->type;
+
     
         $officeData = [
             'name' => ucwords($data['name']),
             'description' => $data['description'],
-            'type' => $data['type'], 
+            'type' => $officeType, 
         ];
     
         // Create the office
@@ -53,12 +57,14 @@ class OfficeController extends Controller
                 'name' => 'required',
                 'description' => 'nullable|string',
                 'type' => 'nullable|string',
+                'other_amenities' => 'required_if:type,others',
             ]);
         } else {
             $data = $request->validate([
                 'name' => 'required|unique:offices,name,' . $request->id,
                 'description' => 'nullable|string',
                 'type' => 'nullable|string',
+                'other_amenities' => 'required_if:type,others',
             ]);
         }
 
