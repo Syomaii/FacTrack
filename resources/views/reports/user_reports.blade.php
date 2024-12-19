@@ -104,13 +104,6 @@
                                         End of Report</p>
                                 </div>
 
-                                <div
-                                    class="d-flex flex-wrap justify-content-between align-items-end mt-64  signature-container">
-                                    <div class="text-sm border-top d-inline-block px-12" id="signature-admin">Signature
-                                        of Admin</div>
-                                    <div class="text-sm border-top d-inline-block px-12"
-                                        id="signature-authorized-person">Signature of Supervisor</div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -236,13 +229,6 @@
         printWindow.document.write(
             '@media print { #end-of-report { text-align: center; font-size: 18px; font-weight: bold; display: block; margin: 25px 0; } }'
         );
-        printWindow.document.write(
-            '@media print { .signature-container { display: flex; justify-content: space-between; } }');
-        printWindow.document.write(
-            '@media print { #signature-admin { font-size: 18px; font-weight: bold; margin: 20px 0; } }'
-        );
-        printWindow.document.write(
-            '@media print { #signature-authorized-person { font-size: 18px; font-weight: bold; margin: 20px 0; } }');
         printWindow.document.write('</style>');
 
         printWindow.document.write('</head><body>');

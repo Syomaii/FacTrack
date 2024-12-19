@@ -192,15 +192,15 @@
         printWindow.document.write(
             '@media print { h6.text-md { font-size: 18px; font-weight: bold; } }');
         printWindow.document.write(
-            '@media print { #end-of-report { text-align: center; font-size: 18px; font-weight: bold; display: block; margin: 25px 0; } }'
+            '@media print { #end-of-report { text-align: center; font-size: 12px; font-weight: bold; display: block; margin: 25px 0; } }'
         );
         printWindow.document.write(
             '@media print { .signature-container { display: flex; justify-content: space-between; } }');
         printWindow.document.write(
-            '@media print { #technician-signature { font-size: 18px; font-weight: bold; margin: 20px 0; } }'
+            '@media print { #technician-signature { font-size: 12px; font-weight: bold; margin: 20px 0; } }'
         );
         printWindow.document.write(
-            '@media print { #supervisor-signature { font-size: 18px; font-weight: bold; margin: 20px 0; } }');
+            '@media print { #supervisor-signature { font-size: 12px; font-weight: bold; margin: 20px 0; } }');
         printWindow.document.write('</style>');
 
         printWindow.document.write('</head><body>');
