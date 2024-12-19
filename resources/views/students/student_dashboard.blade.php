@@ -40,28 +40,28 @@
                         </div>
                         <div class="profile-icon d-flex align-items-center justify-content-center" style="position: relative; left: -50px; width: 300px; height: 150px; border-radius: 8px; background-color: #007bff;">
                              <img src="{{ asset('images/students.png') }}" alt="Profile Image" class="icon text-xl rectangle" style="width: 100%; height: 100%; object-fit: cover;">
-                            </div> 
-                          </div>
+                        </div> 
+                    </div>
                 </div>
             </div>
-            <div></div>
-            <div class="row">
+            <div class="row mt-5">
                 <div class="col-lg-8">
                     <!-- My Schedule Card -->
                     <div class="mb-4 mt-n5">
-                        <h6>Reservations</h6>
+                        
                         <div class="card shadow-sm p-3 rounded w-100">
-                            <p>Here is your schedule for the day!</p>
+                            <h6>Reservations</h6>
+                            <p>Here is your reservations for today!</p>
+
+                            <div class="d-flex w-50">
+                                <div class="card shadow-sm p-3 rounded w-100">
+                                    <h6>Projector</h6>
+                                    <p>Details about the projector here</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-            
-                    <!-- Projector Card -->
-                    <div class="d-flex w-50">
-                        <div class="card shadow-sm p-3 rounded w-100">
-                            <h6>Projector</h6>
-                            <p>Details about the projector here</p>
-                        </div>
-                    </div>
+                    
                 </div>
             
             <div class="col-lg-4">
@@ -91,31 +91,34 @@
                 </div>
 
                <!-- Pending Approval Card -->
-               <div class="card shadow-sm p-3 mt-4 rounded">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="fw-semibold mb-0">Pending Reservation</h6>
-                </div>
-                <div class="mt-2">
-                    <!-- Dynamically list pending approvals -->
-                    @if ($studentReservations->isEmpty())
-                        <p class="text-muted">You have no pending requests for approval.</p>
-                    @else
-                        <ul class="list-unstyled">
-                            @foreach ($studentReservations as $reservation)
-                                @if ($reservation->status === 'pending')
-                                    <li class="d-flex justify-content-between mb-2">
-                                        <span>{{ $reservation->equipment->name }}</span>
-                                        <a href="{{ route('reservation_details', ['id' => $reservation->id]) }}" class="btn btn-sm btn-outline-warning">View</a>
-                                    </li>
-                                @endif
-                            @endforeach
-                        </ul>
-                    @endif
+                <div class="card shadow-sm p-3 mt-4 rounded">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="fw-semibold mb-0">Pending Reservation</h6>
+                    </div>
+                    <div class="mt-2">
+                        <!-- Dynamically list pending approvals -->
+                        @if ($studentReservations->isEmpty())
+                            <p class="text-muted">You have no pending requests for approval.</p>
+                        @else
+                            <ul class="list-unstyled">
+                                @foreach ($studentReservations as $reservation)
+                                    @if ($reservation->status === 'pending')
+                                        <li class="d-flex justify-content-between mb-2">
+                                            <span>{{ $reservation->equipment->name }}</span>
+                                            <a href="{{ route('reservation_details', ['id' => $reservation->id]) }}" class="btn btn-sm btn-outline-warning">View</a>
+                                        </li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
 
         
-@include('templates.footer_inc')
+    @include('templates.footer_inc')
 </main>
 @include('templates.footer')
 
