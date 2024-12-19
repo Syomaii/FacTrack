@@ -309,13 +309,24 @@ class PageController extends Controller
         return view('equipments/generateqr', compact('equipments'))->with('title', 'Generated Qr');
     }
 
-   public function facilityEquipments($id)
+    public function facilityEquipments($id)
     {
         $facility = Facility::with('office')->findOrFail($id); 
-        $equipments = Equipment::where('facility_id', $id)->paginate(5);
-
+    
+        // Check user type
+        if (Auth::user()->type === 'student' || Auth::user()->type === 'faculty') {
+            // Exclude disposed and donated equipment
+            $equipments = Equipment::where('facility_id', $id)
+                ->whereNotIn('status', ['disposed', 'donated'])
+                ->paginate(5);
+        } else {
+            // No restriction for other user types
+            $equipments = Equipment::where('facility_id', $id)->paginate(5);
+        }
+    
         return view('facilities/facility_equipments', compact('facility', 'equipments'))->with('title', 'Facility Equipments');
     }
+    
 
     public function borrowersLog()
 {

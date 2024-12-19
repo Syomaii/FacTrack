@@ -41,7 +41,7 @@
             <!-- Reservation Details -->
             <div class="col-lg-6">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-secondary text-white">
+                    <div class="card-header text-white">
                         <h5 class="mb-0">Reservation Details</h5>
                     </div>
                     <div class="card-body">
@@ -62,18 +62,20 @@
                         <p><strong>Status:</strong>
                             <span
                                 class="badge 
-                                {{ $reservation->status === 'pending' ? 'bg-warning' : ($reservation->status === 'accepted' ? 'bg-success' : 'bg-danger') }}">
+                                {{ $reservation->status === 'pending' ? 'bg-warning' : ($reservation->status === 'approved' ? 'bg-success' : 'bg-danger') }}">
                                 {{ ucfirst($reservation->status) }}
                             </span>
                         </p>
                         @if (auth()->user()->type === 'operator' || auth()->user()->type === 'facility manager')
                             @if ($reservation->status === 'pending')
                                 <div class="mt-4 d-flex justify-content-center gap-3">
-                                    <form action="{{ route('reservation.decline', $reservation->id) }}" method="POST">
+                                    <form action="{{ route('reservation.declineFacility', $reservation->id) }}"
+                                        method="POST">
                                         @csrf
                                         <button type="submit" class="btn btn-outline-danger">Decline</button>
                                     </form>
-                                    <form action="{{ route('reservation.accept', $reservation->id) }}" method="POST">
+                                    <form action="{{ route('reservation.acceptFacility', $reservation->id) }}"
+                                        method="POST">
                                         @csrf
                                         <button type="submit" class="btn btn-primary">Accept</button>
                                     </form>
@@ -87,7 +89,7 @@
             <!-- Facility Details -->
             <div class="col-lg-6">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-secondary text-white text-center">
+                    <div class="card-header text-white text-center">
                         <h5 class="mb-0">{{ ucwords($reservation->facility->name) }}</h5>
                     </div>
                     <div class="card-body text-center">

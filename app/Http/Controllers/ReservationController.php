@@ -34,52 +34,47 @@ class ReservationController extends Controller
             'reservation_date' => 'required|date|after_or_equal:' . now()->startOfMinute()->toDateTimeString(),
             'expected_return_date' => 'required|date|after:reservation_date',
         ]);
-
+    
         $equipment = Equipment::where('code', $code)->firstOrFail();
         
         if (!$equipment) {
             return redirect()->back()->withErrors(['error' => 'Equipment not found.']);
         }
-
+    
         $office = $equipment->facility->office->id; 
         $reserver = Auth::user();
         
-        if($reserver->type === 'student'){
-            $reservers_id_no = Auth::user()->student_id;
-        }else if($reserver->type === 'faculty'){
-            $reservers_id_no = Auth::user()->faculty_id;
+        if ($reserver->type === 'student') {
+            $reservers_id_no = $reserver->student_id;
+        } else if ($reserver->type === 'faculty') {
+            $reservers_id_no = $reserver->faculty_id;
         }
+    
         // Check if the equipment is already reserved in the given time range
-        $existingReservation = EquipmentReservation::where('equipment_id', $request->equipment_id)
-        ->where(function ($query) use ($request) {
-            $query->whereBetween('reservation_date', [$request->reservation_date, $request->expected_return_date])
-                ->orWhereBetween('expected_return_date', [$request->reservation_date, $request->expected_return_date]);
-        })
-        ->where('status', 'completed') 
-        ->exists();
-
+        $existingReservation = EquipmentReservation::where('equipment_id', $equipment->id)
+            ->where(function ($query) use ($request) {
+                $query->whereBetween('reservation_date', [$request->reservation_date, $request->expected_return_date])
+                    ->orWhereBetween('expected_return_date', [$request->reservation_date, $request->expected_return_date])
+                    ->orWhere(function ($query) use ($request) {
+                        $query->where('reservation_date', '<=', $request->reservation_date)
+                              ->where('expected_return_date', '>=', $request->expected_return_date);
+                    });
+            })
+            ->where('status', 'approved') // Only check approved reservations
+            ->exists();
+    
         if ($existingReservation) {
             return redirect()->back()->withErrors(['error' => 'The selected equipment is already reserved for the chosen date range.']);
         }
-
+    
         // Check if the equipment is available
         if ($equipment->status !== 'Available') {
             return redirect()->back()->withErrors(['error' => 'The selected equipment is not available for reservation.']);
         }
     
-        $office = $equipment->facility->office->id; 
-
-        if(Auth::user()->type === 'student'){
-            $reservers_id_no = Auth::user()->student_id;
-        }
-        else if(Auth::user()->type === 'faculty'){
-            $reservers_id_no = Auth::user()->faculty_id;
-        }
-    
         // Save the reservation
-        // Create a new reservation
         $reservation = EquipmentReservation::create([
-            'reservers_id_no' =>  $reservers_id_no,
+            'reservers_id_no' => $reservers_id_no,
             'equipment_id' => $equipment->id,
             'office_id' => $office,
             'reservation_date' => $request->reservation_date,
@@ -87,9 +82,9 @@ class ReservationController extends Controller
             'status' => 'pending',
             'purpose' => $request->purpose,
         ]);
-
+    
         event(new ReserveEquipmentEvent($reservation, $reserver, $office, $equipment));
-
+    
         // Redirect to the facility equipment page with a success message
         return redirect()->route('facility_equipment', ['id' => $equipment->facility_id])
             ->with('success', 'Equipment reserved successfully.');
@@ -181,6 +176,76 @@ class ReservationController extends Controller
         return redirect()->back()->with('error', 'Invalid status value.');
     }
 
+    public function acceptFacility($id)
+    {
+        // Retrieve the facility reservation by ID
+        $reservation = FacilityReservation::where('id', $id)->firstOrFail();
+
+        // Attempt to find the reserver as a student first
+        $reserver = User::where('student_id', $reservation->reservers_id_no)->first();
+
+        // If not found as a student, try to find as a faculty member
+        if (!$reserver) {
+            $reserver = User::where('faculty_id', $reservation->reservers_id_no)->first();
+        }
+        // Check if the reserver was found
+        if (!$reserver) {
+            return redirect()->back()->with('error', 'Reserver not found.')->with('title', 'Facility Reservation');
+        }
+        // Check if the reservation status is 'pending'
+        if ($reservation->status == 'pending') { 
+            // Update the reservation status to 'approved'
+            $reservation->status = 'approved';
+            $reservation->save();
+            // Redirect back with a success message and title
+            return redirect()->back()
+                ->with('success', 'Reservation approved successfully.')
+                ->with('title', 'Facility Reservation');
+        }
+
+        // Redirect back with an error message if the status is not 'pending'
+        return redirect()->back()
+            ->with('error', 'Invalid status value.')
+            ->with('title', 'Facility Reservation');
+    }
+
+
+    public function declineFacility($id)
+    {
+        // Retrieve the facility reservation by ID
+        $reservation = FacilityReservation::where('id', $id)->firstOrFail();
+    
+        // Attempt to find the reserver as a student first
+        $reserver = User::where('student_id', $reservation->reservers_id_no)->first();
+    
+        // If not found as a student, try to find as a faculty member
+        if (!$reserver) {
+            $reserver = User::where('faculty_id', $reservation->reservers_id_no)->first();
+        }
+    
+        // Check if the reserver was found
+        if (!$reserver) {
+            return redirect()->back()->with('error', 'Reserver not found.')->with('title', 'Facility Reservation');
+        }
+    
+        // Check if the reservation status is 'pending'
+        if ($reservation->status == 'pending') { 
+            // Update the reservation status to 'declined'
+            $reservation->status = 'declined';
+            $reservation->save();
+    
+            // Redirect back with a success message and title
+            return redirect()->back()
+                ->with('success', 'Reservation declined successfully.')
+                ->with('title', 'Facility Reservation');
+        }
+    
+        // Redirect back with an error message if the status is not 'pending'
+        return redirect()->back()
+            ->with('error', 'Invalid status value.')
+            ->with('title', 'Facility Reservation');
+    }
+
     public function decline($id)
     {
         $reservation = EquipmentReservation::where('id', $id)->firstOrFail();
@@ -254,8 +319,6 @@ class ReservationController extends Controller
 
     public function submitReservation(Request $request)
     {
-        // dd($request->all());
-
         // Validate the request
         $request->validate([
             'reservation_date' => 'required|date|after_or_equal:today',
@@ -263,15 +326,11 @@ class ReservationController extends Controller
                 'required',
                 'date_format:H:i',
                 function ($attribute, $value, $fail) use ($request) {
-                    // Parse the reservation_date
-                    $reservationDateTime = \Carbon\Carbon::parse($request->reservation_date);
-
-                    // Extract time from reservation_date
-                    $reservationTime = $reservationDateTime->format('H:i');
-
-                    // Check if the time_in is earlier than the reservation's time
-                    if ($value < $reservationTime) {
-                        $fail('The time in must be after or equal to the reservation time.');
+                    // Get the current time in H:i format
+                    $currentTime = now()->format('H:i');
+                    // Check if the time_in is later than the current time
+                    if ($value > $currentTime && $request->reservation_date == today()->toDateString()) {
+                        $fail('The time in must not be later than the current time.');
                     }
                 },
             ],
@@ -279,35 +338,55 @@ class ReservationController extends Controller
             'purpose' => 'required|string|max:255',
             'expected_audience_no' => 'required|integer',
             'stage_performers' => 'required|integer',
-            'facility_id' => 'required|exists:facilities,id', 
+            'facility_id' => 'required|exists:facilities,id',
         ]);
-
+    
         $facility = Facility::findOrFail($request->facility_id);
         $office = $facility->office_id;
-
-        if(Auth::user()->type === 'student'){
+    
+        // Determine the reservers_id_no based on user type
+        if (Auth::user()->type === 'student') {
             $reservers_id_no = Auth::user()->student_id;
-        }
-        else if(Auth::user()->type === 'faculty'){
+        } else if (Auth::user()->type === 'faculty') {
             $reservers_id_no = Auth::user()->faculty_id;
         }
-
+    
+        // Check for conflicting reservations
+        $conflictingReservation = FacilityReservation::where('facility_id', $request->facility_id)
+            ->where('reservation_date', $request->reservation_date)
+            ->where('status', 'approved') // Only check approved reservations
+            ->where(function ($query) use ($request) {
+                $query->whereBetween('time_in', [$request->time_in, $request->time_out])
+                      ->orWhereBetween('time_out', [$request->time_in, $request->time_out])
+                      ->orWhere(function ($query) use ($request) {
+                          $query->where('time_in', '<=', $request->time_in)
+                                ->where('time_out', '>=', $request->time_out);
+                      });
+            })
+            ->first();
+    
+        // If there is a conflicting reservation, return an error message
+        if ($conflictingReservation) {
+            return back()->with('error', 'The facility is already reserved during the selected time. Please choose a different time.')->with('title', 'Facility Reservation');
+        }
+    
         // Create the reservation
         $reservation = FacilityReservation::create([
             'reservers_id_no' => $reservers_id_no,
             'office_id' => $office,
             'facility_id' => $request->facility_id,
-            'reservation_date' => $request->reservation_date, // Use reservation_date only
-            'time_in' => $request->time_in, // Store time_in separately
-            'time_out' => $request->time_out, // Store time_out separately
+            'reservation_date' => $request->reservation_date,
+            'time_in' => $request->time_in,
+            'time_out' => $request->time_out,
             'purpose' => $request->purpose,
             'expected_audience_no' => $request->expected_audience_no,
             'stage_performers' => $request->stage_performers,
             'status' => 'pending',
         ]);
-
+    
+        // Trigger an event for the reservation
         event(new FacilityReservationEvent($reservation, Auth::user(), $office, $facility));
-
+    
         return back()->with('success', 'Facility reserved successfully!');
     }
 
