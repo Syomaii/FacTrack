@@ -248,8 +248,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    @include('templates.footer_inc')
 
-        @include('templates.footer_inc')
 </main>
 
 <!-- Edit Equipment Modal -->
