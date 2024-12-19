@@ -54,25 +54,20 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['checkRole:student'])->group(function (){
         Route::get('/student-dashboard', [StudentController::class, 'studentDashboard'])->name('student.dashboard');
         Route::get('/student-profile/{id}', [StudentController::class, 'studentProfile'])->name('student.profile');
-        Route::get('/reserve-equipment/{code}', [ReservationController::class, 'showReservationForm'])->name('reserve.equipment');
-        Route::post('/reserve-equipment/{code}', [ReservationController::class, 'storeReservation'])->name('reserve.equipment.store');
-        Route::get('/api/search-equipment', [ReservationController::class, 'searchEquipment']);
-        Route::get('/reserve-facility', [ReservationController::class, 'reserveFacility'])->name('student.reserve_facility');
-        Route::get('/reserve-selected-facility/{id}', [ReservationController::class, 'facilityForReservation'])->name('facility_reservation');
-        Route::post('/submit-reservation', [ReservationController::class, 'submitReservation'])->name('submit_reservation');
-
     });
 
     Route::middleware(['checkRole:faculty'])->group(function (){
         Route::get('/faculty-dashboard', [FacultyController::class, 'facultyDashboard'])->name('faculty.dashboard');
         Route::get('/faculty-profile/{id}', [FacultyController::class, 'facultyProfile'])->name('faculty.profile');
-        Route::get('/reserve-equipment/{code}', [FacultyReservationController::class, 'showReservationForm'])->name('faculty.reserve.equipment');
-        Route::post('/reserve-equipment/{code}', [FacultyReservationController::class, 'storeReservation'])->name('faculty.reserve.equipment.store');
-        Route::get('/api/search-equipment', [FacultyReservationController::class, 'searchEquipment']);
-        Route::get('/reserve-facility', [FacultyReservationController::class, 'reserveFacility'])->name('faculty.reserve_facility');
-        Route::get('/reserve-selected-facility/{id}', [FacultyReservationController::class, 'facilityForReservation'])->name('faculty.facility_reservation');
-        Route::post('/submit-reservation', [FacultyReservationController::class, 'submitReservation'])->name('faculty.submit_reservation');
+    });
 
+    Route::middleware(['checkRole:faculty,student'])->group(function (){
+        Route::get('/reserve-equipment/{code}', [ReservationController::class, 'showReservationForm'])->name('reserve.equipment');
+        Route::post('/reserve-equipment/{code}', [ReservationController::class, 'storeReservation'])->name('reserve.equipment.store');
+        Route::get('/api/search-equipment', [ReservationController::class, 'searchEquipment']);
+        Route::get('/reserve-facility', [ReservationController::class, 'reserveFacility'])->name('reserve.reserve_facility');
+        Route::get('/reserve-selected-facility/{id}', [ReservationController::class, 'facilityForReservation'])->name('facility_reservation');
+        Route::post('/submit-reservation', [ReservationController::class, 'submitReservation'])->name('submit_reservation');
     });
 
 //---------------------------------------Admin,and Student -----------------------------------------------

@@ -20,14 +20,12 @@ class AcceptEquipmentReservationEvent
      */
     public $reservation;
     public $reserver;
-    public $office;
     public $equipment;
 
-    public function __construct(EquipmentReservation $reservation, $reserver, $office, $equipment)
+    public function __construct(EquipmentReservation $reservation, $reserver, $equipment)
     {
         $this->reservation = $reservation;
         $this->reserver = $reserver;
-        $this->office = $office;
         $this->equipment = $equipment;
     }
     /**

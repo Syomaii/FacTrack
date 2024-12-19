@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AcceptEquipmentReservationEvent;
 use App\Events\ReserveEquipmentEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Equipment;
@@ -10,6 +11,8 @@ use App\Models\Facility;
 use App\Models\FacilityReservation;
 use App\Models\Office;
 use App\Models\Reservation;
+use App\Models\Students;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +23,7 @@ class ReservationController extends Controller
     {
         $equipment = Equipment::where('code', $code)->firstOrFail();
 
-        return view('students.reserve_equipment', compact('equipment'))->with('title', 'Reserve Equipment');
+        return view('reservations.reserve_equipment', compact('equipment'))->with('title', 'Reserve Equipment');
     }
 
     public function storeReservation(Request $request, $code) {
@@ -132,7 +135,7 @@ class ReservationController extends Controller
         $user = Auth::user();
     
         if ($user && $user->office) {
-            $reservations = EquipmentReservation::with(['student', 'equipment', 'offices'])
+            $reservations = EquipmentReservation::with(['student', 'faculty', 'equipment', 'offices'])
                 ->whereHas('offices', function ($query) use ($user) {
                     $query->where('id', $user->office->id); 
                 })
@@ -155,18 +158,21 @@ class ReservationController extends Controller
             'title' => $title
         ];
 
-        return view('students.reservation_details')->with($data);
+        return view('reservations.reservation_details')->with($data);
     }
 
     
     public function accept($id)
     {
-        $reservation = EquipmentReservation::findOrFail($id);
+        $reservation = EquipmentReservation::where('id', $id)->firstOrFail();
+        $reserver = User::where('student_id', $reservation->reservers_id_no)->first();
+        $equipment = Equipment::where('id', $reservation->equipment_id)->firstOrFail();
 
-        if (in_array('approved', ['pending', 'approved', 'declined'])) { // Replace with your ENUM values
+        if ($reservation->status == 'pending') { // Only approve if pending
             $reservation->status = 'approved';
             $reservation->save();
 
+            event(new AcceptEquipmentReservationEvent($reservation, $reserver, $equipment));
             return redirect()->back()->with('success', 'Reservation approved successfully.');
         }
 
@@ -215,7 +221,7 @@ class ReservationController extends Controller
             ->get();
     
         // Return the view with the filtered facilities
-        return view('students.reserve_facility', compact('facilities', 'offices'))
+        return view('reservations.reserve_facility', compact('facilities', 'offices'))
             ->with('title', 'Reserve Facility');
     }
     
@@ -225,7 +231,7 @@ class ReservationController extends Controller
         
         $facility = Facility::findOrFail($id);        
 
-        return view('students.facility_to_be_reserved', compact('facility'))->with('title', 'Reserve Facility');
+        return view('reservations.facility_to_be_reserved', compact('facility'))->with('title', 'Reserve Facility');
     }
 
     public function submitReservation(Request $request)

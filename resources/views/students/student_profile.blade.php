@@ -159,6 +159,7 @@
                                                 <tr>
                                                     <th scope="col">Equipment</th>
                                                     <th scope="col">Reservation Date</th>
+                                                    <th scope="col">Expected Return Date</th>
                                                     <th scope="col">Status</th>
                                                 </tr>
                                             </thead>
@@ -168,9 +169,10 @@
                                                         onclick="window.location='{{ route('reservation_details', ['id' => $reservation->id]) }}'">
                                                         <td>{{ $reservation->equipment->name }}</td>
                                                         <td>{{ $reservation->reservation_date }}</td>
+                                                        <td>{{ $reservation->expected_return_date }}</td>
                                                         <td>
-                                                            @if ($reservation->status === 'confirmed')
-                                                                <span class="badge bg-success">Confirmed</span>
+                                                            @if ($reservation->status === 'approved')
+                                                                <span class="badge bg-success">Approved</span>
                                                             @else
                                                                 <span class="badge bg-warning">Pending</span>
                                                             @endif

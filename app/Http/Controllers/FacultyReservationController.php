@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AcceptEquipmentReservationEvent;
 use App\Events\ReserveEquipmentEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Equipment;
@@ -168,6 +169,7 @@ class FacultyReservationController extends Controller
             $reservation->save();
 
             return redirect()->back()->with('success', 'Reservation approved successfully.');
+            event(new AcceptEquipmentReservationEvent($reservation, $reserver, $office, $equipment));
         }
 
         return redirect()->back()->with('error', 'Invalid status value.');
