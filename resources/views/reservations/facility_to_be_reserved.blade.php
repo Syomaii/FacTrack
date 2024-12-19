@@ -24,12 +24,19 @@
             <div class="alert alert-success">
                 {{ session('success') }}
             </div>
-        @elseif ($errors->any())
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger">
+                <strong>{{ session('error') }}</strong>
+            </div>
+        @endif
+
+        @if ($errors->any())
             <div class="alert alert-danger">
                 <strong>{{ $errors->first() }}</strong>
             </div>
         @endif
-
         <div class="row g-4">
             <div class="col-lg-6">
                 <div class="card h-100">
@@ -97,7 +104,7 @@
                                                 placeholder="Enter number of people" value="{{ old('expected_audience_no') }}">
                                                 <small class="text-danger">{{ $errors->first('expected_audience_no') }}</small>
                                         </div>
-                    
+
                                         <!-- Stage Performers -->
                                         <div class="col-md-6 mb-3">
                                             <label for="stage_performers" class="form-label">Stage Performers</label>
@@ -109,7 +116,8 @@
 
                                     <!-- Submit Button -->
                                     <div class="d-flex justify-content-center m-3 gap-3">
-                                        <a href="/reserve-facility"><button type="submit" class="btn btn-danger">Cancel Reservation</button></a>
+                                        <a href="/reserve-facility"><button type="submit" class="btn btn-danger">Cancel
+                                                Reservation</button></a>
                                         <button type="submit" class="btn btn-primary">Submit Reservation</button>
                                     </div>
                                 </form>
@@ -123,46 +131,46 @@
                 <div class="card h-100">
                     <div class="card-body py-5">
                         <div class="" id="pills-reservations" role="tabpanel"
-                                aria-labelledby="pills-reservations-tab" tabindex="0">
-                                <h6 class="text-xl mb-16">Reservations</h6>
-                                @if ($facilityReservations->isEmpty())
-                                    <div class="d-flex justify-content-center align-items-center w-100 mt-5">
-                                        <strong class="text-center p-3" style="font-size: 20px">No reservations found
-                                            for this facility.</strong>
-                                    </div>
-                                @else
-                                    <div class="table-responsive">
-                                        <table class="table table-striped">
-                                            <thead>
+                            aria-labelledby="pills-reservations-tab" tabindex="0">
+                            <h6 class="text-xl mb-16">Reservations</h6>
+                            @if ($facilityReservations->isEmpty())
+                                <div class="d-flex justify-content-center align-items-center w-100 mt-5">
+                                    <strong class="text-center p-3" style="font-size: 20px">No reservations found
+                                        for this facility.</strong>
+                                </div>
+                            @else
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Facility</th>
+                                                <th scope="col">Reservation Date</th>
+                                                <th scope="col">Purpose</th>
+                                                <th scope="col">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($facilityReservations as $reservation)
                                                 <tr>
-                                                    <th scope="col">Facility</th>
-                                                    <th scope="col">Reservation Date</th>
-                                                    <th scope="col">Purpose</th>
-                                                    <th scope="col">Status</th>
+                                                    {{-- onclick="window.location='{{ route('reservation_details', ['id' => $reservation->id]) }}'"> --}}
+
+                                                    <td>{{ $reservation->facility->name }}</td>
+                                                    <td>{{ $reservation->reservation_date }}</td>
+                                                    <td>{{ $reservation->purpose }}</td>
+                                                    <td>
+                                                        @if ($reservation->status === 'approved')
+                                                            <span class="badge bg-success">Approved</span>
+                                                        @else
+                                                            <span class="badge bg-warning">Pending</span>
+                                                        @endif
+                                                    </td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($facilityReservations as $reservation)
-                                                    <tr>
-                                                        {{-- onclick="window.location='{{ route('reservation_details', ['id' => $reservation->id]) }}'"> --}}
-                                                        
-                                                        <td>{{ $reservation->facility->name }}</td>
-                                                        <td>{{ $reservation->reservation_date }}</td>
-                                                        <td>{{ $reservation->purpose }}</td>
-                                                        <td>
-                                                            @if ($reservation->status === 'approved')
-                                                                <span class="badge bg-success">Approved</span>
-                                                            @else
-                                                                <span class="badge bg-warning">Pending</span>
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                @endif
-                            </div>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
