@@ -5,6 +5,7 @@
     <x-navbar />
 
     <div class="dashboard-main-body">
+        
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
             <h6 class="fw-semibold mb-0">Notifications</h6>
             <ul class="d-flex align-items-center gap-2">
@@ -18,16 +19,25 @@
                 <li class="fw-medium">Notifications</li>
             </ul>
         </div>
-        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
-            <a href="/notifications/read-all" class="text-primary text-hover-green" role="button" aria-label="Read all notifications">Read All Notifications</a>
+        
+        <div class="">
             <form method="GET" action="{{ route('notifications-filter') }}">
-                <select name="status" class="form-select" onchange="this.form.submit()">
-                    <option value="">Filter</option>
-                    <option value="read" {{ request('status') === 'read' ? 'selected' : '' }}>Read</option>
-                    <option value="unread" {{ request('status') === 'unread' ? 'selected' : '' }}>Unread</option>
-                </select>
+                <div class="d-flex flex-wrap align-items-between justify-content-between gap-3 mb-24 w-100" style="max-width: 100%;">
+                    <!-- Read All Notifications Link -->
+                    <button type="submit" name="mark_all_as_read" value="1" class="text-primary text-hover-green" role="button" aria-label="Read all notifications">Read All Notifications</button>
+        
+                    <!-- Filter Notifications -->
+                    <div class="d-flex flex-wrap align-items-between justify-content-end gap-3 mb-24">
+                        <select name="status" class="form-select" onchange="this.form.submit()">
+                            <option value="">Filter</option>
+                            <option value="read" {{ request('status') === 'read' ? 'selected' : '' }}>Read</option>
+                            <option value="unread" {{ request('status') === 'unread' ? 'selected' : '' }}>Unread</option>
+                        </select>
+                    </div>
+                </div>
             </form>
         </div>
+        
 
         @foreach ($notifications as $notification)
             <div class="d-flex flex-column gap-2 alert {{ $notification->read_at ? 'alert-success text-black' : 'alert-primary text-black' }} border-gray-300 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-20 fw-semibold text-lg radius-4 pb-5"

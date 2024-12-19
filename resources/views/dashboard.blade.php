@@ -111,9 +111,18 @@
         <div class="row gy-4 mt-1 mb-3">
             <div class="col-xxl-12 col-xl-12">
                 <div class="card h-100">
-                    <div class="card-header border-bottom bg-base py-16 px-24">
+                    <div class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
                         <h6 class="text-lg fw-semibold mb-0">Borrowed Equipments Per Month</h6>
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                            <select id="yearFilter" class="form-select" onchange="updateChart()">
+                                <option value="">Select Year</option>
+                                @foreach ($years as $year)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
+                    
                     <div class="card-body p-24">
                         <div id="borrowedEquipmentPerMonth" class=""></div>
                     </div>
@@ -281,103 +290,119 @@
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
         const borrowedPerMonthData = @json($borrowedPerMonth);
-
-        // Define months from January to December
-        const months = [
-            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-        ];
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
         // Initialize data structure for all months
-        const dataMap = Array.from({
-            length: 12
-        }, (_, index) => ({
+        const dataMap = Array.from({ length: 12 }, (_, index) => ({
             x: months[index],
             y: 0 // Default to 0 if no data is provided for the month
         }));
 
-        // Fill in the data from borrowedPerMonthData
-        borrowedPerMonthData.forEach(data => {
-            const monthIndex = data.month - 1; // `data.month` is 1-based, array is 0-based
-            if (monthIndex >= 0 && monthIndex < 12) {
-                dataMap[monthIndex].y = data.total;
+        // Populate the chart with initial data for the first year (or all data)
+        let currentYear = new Date().getFullYear(); // Default to current year
+        updateChart(currentYear);
+
+        // Function to update chart with filtered data for the selected year
+        function updateChart(year = currentYear) {
+            // Filter data for the selected year
+            const filteredData = borrowedPerMonthData.filter(data => data.year === year);
+
+            // Reset dataMap to 0s for each month
+            const newDataMap = Array.from({ length: 12 }, (_, index) => ({
+                x: months[index],
+                y: 0
+            }));
+
+            // Fill in the data for the selected year
+            filteredData.forEach(data => {
+                const monthIndex = data.month - 1; // `data.month` is 1-based, array is 0-based
+                if (monthIndex >= 0 && monthIndex < 12) {
+                    newDataMap[monthIndex].y = data.total;
+                }
+            });
+
+            // Update the chart series with the filtered data
+            const maxYValue = Math.max(...newDataMap.map(d => d.y), 10); // Ensure minimum Y max is 10
+            const yAxisMax = Math.ceil(maxYValue / 10) * 10;
+
+            const options = {
+                series: [{
+                    name: "Borrowed Equipments",
+                    data: newDataMap
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 264,
+                    toolbar: {
+                        show: false
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        borderRadius: 8,
+                        columnWidth: '23%',
+                        endingShape: 'rounded',
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                fill: {
+                    type: 'gradient',
+                    colors: ['#487FFF'],
+                    gradient: {
+                        shade: 'light',
+                        type: 'vertical',
+                        shadeIntensity: 0.5,
+                        gradientToColors: ['#487FFF'],
+                        inverseColors: false,
+                        opacityFrom: 1,
+                        opacityTo: 1,
+                        stops: [0, 100],
+                    }
+                },
+                grid: {
+                    show: true,
+                    borderColor: '#D1D5DB',
+                    strokeDashArray: 4,
+                    position: 'back',
+                },
+                xaxis: {
+                    type: 'category',
+                    categories: months, 
+                },
+                yaxis: {
+                    min: 0,
+                    max: yAxisMax,
+                    tickAmount: yAxisMax / 4,
+                    labels: {
+                        formatter: function(value) {
+                            return value.toFixed(0);
+                        }
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(value) {
+                            return value + ' borrows';
+                        }
+                    }
+                }
+            };
+
+            const chart = new ApexCharts(document.querySelector("#borrowedEquipmentPerMonth"), options);
+            chart.render();
+        }
+
+        // Handle year filter change
+        document.getElementById('yearFilter').addEventListener('change', function() {
+            const selectedYear = this.value;
+            if (selectedYear) {
+                currentYear = selectedYear;
+                updateChart(currentYear); // Update chart with data for the selected year
             }
         });
-
-        // Determine Y-axis max dynamically based on the highest value
-        const maxYValue = Math.max(...dataMap.map(d => d.y), 10); // Ensure minimum Y max is 10
-        const yAxisStepSize = maxYValue <= 10 ? 10 : 10; // Steps of 10
-        const yAxisMax = Math.ceil(maxYValue / yAxisStepSize) * yAxisStepSize;
-
-        // ApexCharts configuration
-        const options = {
-            series: [{
-                name: "Borrowed Equipments",
-                data: dataMap
-            }],
-            chart: {
-                type: 'bar',
-                height: 264,
-                toolbar: {
-                    show: false
-                }
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    borderRadius: 8,
-                    columnWidth: '23%',
-                    endingShape: 'rounded',
-                }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            fill: {
-                type: 'gradient',
-                colors: ['#487FFF'],
-                gradient: {
-                    shade: 'light',
-                    type: 'vertical',
-                    shadeIntensity: 0.5,
-                    gradientToColors: ['#487FFF'],
-                    inverseColors: false,
-                    opacityFrom: 1,
-                    opacityTo: 1,
-                    stops: [0, 100],
-                }
-            },
-            grid: {
-                show: true,
-                borderColor: '#D1D5DB',
-                strokeDashArray: 4,
-                position: 'back',
-            },
-            xaxis: {
-                type: 'category',
-                categories: months, 
-            },
-            yaxis: {
-                min: 0,
-                max: yAxisMax,
-                tickAmount: yAxisMax / 4,
-                labels: {
-                    formatter: function (value) {
-                        return value.toFixed(0); 
-                    }
-                }
-            },
-            tooltip: {
-                y: {
-                    formatter: function(value) {
-                        return value + ' borrows';
-                    }
-                }
-            }
-        };
-
-        // Render the chart
-        const chart = new ApexCharts(document.querySelector("#borrowedEquipmentPerMonth"), options);
-        chart.render();
     });
+
 </script>

@@ -31,29 +31,37 @@ class NotificationController extends Controller
 
     public function filter(Request $request)
     {
-        $status = $request->input('status'); // Get the status filter from the request
-        $userId = Auth::user()->id; // Get the logged-in user's ID
-    
-        // Fetch notifications based on the filter
-        $notifications = Notification::where('notifiable_id', $userId)
-            ->when($status === 'read', function ($query) {
-                $query->whereNotNull('read_at'); // Notifications with a `read_at` timestamp are "read"
-            })
-            ->when($status === 'unread', function ($query) {
-                $query->whereNull('read_at'); // Notifications without a `read_at` timestamp are "unread"
-            })
-            ->orderBy('created_at', 'desc') // Order notifications by latest first
-            ->get();
-    
-        return view('notifications', compact('notifications', 'status'));
+        $status = $request->input('status');
+        $markAsRead = $request->input('mark_all_as_read'); // Check if we need to mark all as read
+        $userId = Auth::user()->id;
+        
+        // Get notifications based on user ID
+        $notifications = Notification::where('notifiable_id', $userId);
+
+        // If the request indicates to mark all as read, mark all unread notifications as read
+        if ($markAsRead) {
+            // Mark all unread notifications as read for the authenticated user
+            $notifications = $notifications->whereNull('read_at')->get(); // Only get unread notifications
+            
+            foreach ($notifications as $notification) {
+                $notification->update(['read_at' => now()]); // Mark as read
+            }
+        }
+
+        // Filter notifications based on the 'status' (read or unread)
+        if ($status === 'read') {
+            $notifications = $notifications->whereNotNull('read_at')->get();
+        } elseif ($status === 'unread') {
+            $notifications = $notifications->whereNull('read_at')->get();
+        } else {
+            // If no status filter is applied, just get all notifications
+            $notifications = $notifications->get();
+        }
+
+        // Return the notifications view with the filtered notifications
+        return view('notifications', compact('notifications'));
     }
+
+
     
-
-
-    public function markAllAsRead()
-    {
-        Auth::user()->unreadNotifications->markAsRead();
-
-        return response()->json(['message' => 'All notifications have been marked as read']);
-    }
 }
