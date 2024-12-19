@@ -49,7 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications/redirect/{id}', [NotificationController::class, 'redirect'])->name('redirect');
     Route::get('/equipment-details/{code}', [PageController::class, 'equipmentDetails'])->name('equipment-details');
     Route::get('/notifications/{status?}', [NotificationController::class, 'filter'])->name('notifications-filter');
-    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');    
+    
 
     Route::middleware(['checkRole:student'])->group(function (){
         Route::get('/student-dashboard', [StudentController::class, 'studentDashboard'])->name('student.dashboard');
@@ -86,6 +86,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['checkRole:operator,facility manager,student,faculty'])->group(function () {
         Route::get('/reservation-details/{id}', [ReservationController::class, 'reservationDetails'])->name('reservation_details');
+        Route::get('/facility-reservation-details/{id}', [ReservationController::class, 'facilityReservationDetails'])->name('facility_reservation_log');
 
     });
     

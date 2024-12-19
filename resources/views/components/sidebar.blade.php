@@ -44,34 +44,33 @@
             @endif
 
             @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'admin')
-            <li class="dropdown">
-                <a href="javascript:void(0)">
-                    <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
-                    <span>Users</span>
-                </a>
-                <ul class="sidebar-submenu">
-                    <li>
-                        <a href="/users">
-                            <i class="ri-circle-fill circle-icon text-lilac-600 w-auto"></i>
-                            <span>Users</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/view-students">
-                            <i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>
-                            <span>Students</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/view-faculties">
-                            <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
-                            <span>Faculty</span>
-                        </a>
-                    </li>
-                </ul>
+                <li class="dropdown">
+                    <a href="javascript:void(0)">
+                        <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
+                        <span>Users</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="/users">
+                                <i class="ri-circle-fill circle-icon text-lilac-600 w-auto"></i>
+                                <span>Users</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/view-students">
+                                <i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>
+                                <span>Students</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/view-faculties">
+                                <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
+                                <span>Faculty</span>
+                            </a>
+                        </li>
+                    </ul>
             @endif
-            @if (auth()->user()->type != 'student' && auth()->user()->type != 'faculty' )
-                
+            @if (auth()->user()->type != 'student' && auth()->user()->type != 'faculty')
             @endif
             @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
                 <li class="dropdown">
@@ -92,12 +91,14 @@
                                 Equipment Reservation
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('logs.facility_reservations') }}">
-                                <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
-                                Facility Reservation
-                            </a>
-                        </li>
+                        @if (auth()->user()->designation->name === 'Office Head')
+                            <li>
+                                <a href="{{ route('logs.facility_reservations') }}">
+                                    <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
+                                    Facility Reservation
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </li>
                 <li class="dropdown">

@@ -21,9 +21,10 @@ class PageController extends Controller
         return view('users/index')->with('title', 'Login');
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         $loggedInUser = Auth::user();
+
         // Fetch recent logged-in users, paginated users, and equipment data
         $recentLoggedIn = User::where('type', '!=', 'admin')
             ->orderBy('last_login_at', 'desc')
@@ -34,64 +35,75 @@ class PageController extends Controller
 
         $equipments = Equipment::whereIn('facility_id', $facilities)->get();
 
-        if($loggedInUser->type === 'admin'){
-            $users = User::with(['designation', 'office']) // Filter by office ID
-                    ->paginate(5); 
-            
+        if ($loggedInUser->type === 'admin') {
+            $users = User::with(['designation', 'office'])
+                ->paginate(5);
+
             $borrows = Borrower::all(); 
-            
+
             $equipmentCount = Equipment::count();
-            
+
             $userCount = User::count();
-            
+
             $totalBorrowedEquipments = Borrower::whereNull('returned_date')->count();
-            
+
             $totalInRepairEquipments = Equipment::where('status', 'in_repair')->count();
-            
+
             $borrowedPerMonth = Borrower::selectRaw('YEAR(borrowed_date) as year, MONTH(borrowed_date) as month, COUNT(*) as total')
                 ->groupBy('year', 'month')
                 ->orderBy('year', 'desc')
                 ->orderBy('month', 'desc')
                 ->get();
-        }elseif($loggedInUser->type === 'operator' || $loggedInUser->type === 'facility manager'){
-            $users = User::where('type', '!=', 'admin') // Exclude admin users
-                    ->where('office_id', $loggedInUser->office_id) // Filter by office ID
-                    ->paginate(5); 
-            
-                    $equipmentCount = Equipment::with('facility') 
-                    ->whereIn('facility_id', $facilities) 
-                    ->count();
-            // Get all the borrowers who have borrowed the equipments from the retrieved list
-            $borrows = Borrower::whereIn('equipment_id', $equipments->pluck('id'))->get();
-            
-            $totalBorrowedEquipments = Borrower::whereIn('equipment_id', $equipments->pluck('id'))
-                                    ->whereNull('returned_date')->count();
-            $totalInRepairEquipments = Repair::whereIn('equipment_id', $equipments->pluck('id'))
-                                    ->whereNull('returned_date')->count();
+        } elseif ($loggedInUser->type === 'operator' || $loggedInUser->type === 'facility manager') {
+            $users = User::where('type', '!=', 'admin')
+                ->where('office_id', $loggedInUser->office_id)
+                ->paginate(5);
 
-            $userCount = User::where('type', '!=', 'admin')->where('office_id', $loggedInUser->office_id)->count();
-            
+            $equipmentCount = Equipment::with('facility')
+                ->whereIn('facility_id', $facilities)
+                ->count();
+
+            $borrows = Borrower::whereIn('equipment_id', $equipments->pluck('id'))->get();
+
+            $totalBorrowedEquipments = Borrower::whereIn('equipment_id', $equipments->pluck('id'))
+                ->whereNull('returned_date')->count();
+
+            $totalInRepairEquipments = Repair::whereIn('equipment_id', $equipments->pluck('id'))
+                ->whereNull('returned_date')->count();
+
+            $userCount = User::where('type', '!=', 'admin')
+                ->where('office_id', $loggedInUser->office_id)
+                ->count();
+
             $borrowedPerMonth = Borrower::selectRaw('YEAR(borrowed_date) as year, MONTH(borrowed_date) as month, COUNT(*) as total')
-                ->join('equipments', 'borrows.equipment_id', '=', 'equipments.id') // Join with the equipment table
-                ->join('facilities', 'equipments.facility_id', '=', 'facilities.id') // Join with the facilities table
-                ->whereIn('equipments.facility_id', $facilities) // Filter by the equipment's facility_id (which belongs to the same office)
+                ->join('equipments', 'borrows.equipment_id', '=', 'equipments.id')
+                ->join('facilities', 'equipments.facility_id', '=', 'facilities.id')
+                ->whereIn('equipments.facility_id', $facilities)
                 ->groupBy('year', 'month')
                 ->orderBy('year', 'desc')
                 ->orderBy('month', 'desc')
                 ->get();
         }
 
+        // Extract unique years from the borrowedPerMonth data
+        $years = $borrowedPerMonth->pluck('year')->unique()->sort()->values();
+
+        // If a year filter is set, filter the borrowedPerMonth data for that year
+        if ($request->has('year')) {
+            $year = $request->input('year');
+            $borrowedPerMonth = $borrowedPerMonth->where('year', $year);
+        }
+
         $start = ($users->currentPage() - 1) * $users->perPage() + 1;
         $end = min($start + $users->perPage() - 1, $userCount);
 
-        
-    
         return view('dashboard', compact(
             'userCount', 'equipmentCount', 'totalBorrowedEquipments',
             'totalInRepairEquipments', 'borrows', 'users', 'recentLoggedIn', 'borrowedPerMonth',
-            'start', 'end'
+            'start', 'end', 'years' // Pass years to the view
         ))->with('title', 'Dashboard');
     }
+
 
     
 
@@ -152,11 +164,11 @@ class PageController extends Controller
 
         $notifications = Auth::user()->notifications;
 
-        foreach ($notifications as $notification) {
-            if (is_null($notification->read_at)) {
-                $notification->update(['read_at' => now()]);
-            }
-        }
+        // foreach ($notifications as $notification) {
+        //     if (is_null($notification->read_at)) {
+        //         $notification->update(['read_at' => now()]);
+        //     }
+        // }
 
         return view('notifications', compact('notifications'))->with('title', 'Notifications');
     }

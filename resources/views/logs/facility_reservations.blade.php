@@ -6,7 +6,7 @@
     <div class="dashboard-main-body">
 
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
-            <h6 class="fw-semibold mb-0">Equipment Reservation Log</h6>
+            <h6 class="fw-semibold mb-0">Facility Reservation Log</h6>
             <ul class="d-flex align-items-center gap-2">
                 <li class="fw-medium">
                     <a href="/dashboard" class="d-flex align-items-center gap-1 hover-text-primary">
@@ -45,9 +45,10 @@
                                 <th scope="col">Reservers ID</th>
                                 <th scope="col">Reservers Name</th>
                                 <th scope="col">Department</th>
-                                <th scope="col">Equipment Name</th>
+                                <th scope="col">Facility Name</th>
                                 <th scope="col">Reservation Date</th>
-                                <th scope="col">Expected Return Date</th>
+                                <th scope="col">Time In</th>
+                                <th scope="col">Time Out</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -60,26 +61,28 @@
                                         @if ($reservation->student)
                                             {{ ucwords($reservation->student->firstname) }}
                                             {{ ucwords($reservation->student->lastname) }}
+                                        @elseif($reservation->faculty)
+                                            {{ ucwords($reservation->facult->firstname) }}
+                                            {{ ucwords($reservation->faculty->lastname) }}
                                         @else
-                                            <span class="text-danger">Student Not Found</span>
+                                            <span class="text-danger">Reserver Not Found</span>
                                         @endif
                                     </td>
                                     <td>
                                         @if ($reservation->offices)
                                             {{ ucwords($reservation->offices->name) }}
+                                            <!-- Displaying the office name -->
                                         @else
                                             <span class="text-danger">Office Not Found</span>
                                         @endif
                                     </td>
-                                    <td>{{ ucwords($reservation->equipment->name) }}
-                                        ({{ ucwords($reservation->equipment->brand) }})
-                                    </td>
+                                    <td>{{ ucwords($reservation->facility->name) }}</td>
                                     <td>{{ $reservation->reservation_date }}</td>
-                                    <td>{{ $reservation->expected_return_date }}
-                                    </td>
+                                    <td>{{ $reservation->time_in }}</td>
+                                    <td>{{ $reservation->time_out }}</td>
                                     <td>{{ ucwords($reservation->status) }}</td>
                                     <td>
-                                        <a href="{{ route('reservation_details', $reservation->id) }}"
+                                        <a href="{{ route('facility_reservation_log', $reservation->id) }}"
                                             class="w-32-px h-32-px bg-primary-light text-primary-600 rounded-circle d-inline-flex align-items-center justify-content-center view-equipment">
                                             <iconify-icon icon="iconamoon:eye-light"></iconify-icon>
                                         </a>
@@ -87,14 +90,14 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="10" class="text-center">No reservations at the moment</td>
+                                    <td colspan="9" class="text-center">No reservations at the moment</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
 
-                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-24">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt -24">
                     <span>Showing {{ $reservations->firstItem() }} to {{ $reservations->lastItem() }} of
                         {{ $reservations->total() }} entries</span>
 
@@ -111,14 +114,13 @@
 
                             <!-- Pagination Pages -->
                             @if ($reservations->lastPage() > 1)
-                                <!-- Show first page if not too close to current -->
                                 @if ($reservations->currentPage() > 3)
                                     <li class="page-item">
                                         <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
                                             href="{{ $reservations->url(1) }}">1</a>
                                     </li>
                                     @if ($reservations->currentPage() > 4)
-                                        <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
+                                        <li class="page-item">...</li>
                                     @endif
                                 @endif
 
@@ -131,7 +133,7 @@
 
                                 @if ($reservations->currentPage() < $reservations->lastPage() - 2)
                                     @if ($reservations->currentPage() < $reservations->lastPage() - 3)
-                                        <li class="page-item">...</li> <!-- Ellipsis for skipped pages -->
+                                        <li class="page-item">...</li>
                                     @endif
                                     <li class="page-item">
                                         <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
@@ -139,7 +141,6 @@
                                     </li>
                                 @endif
                             @else
-                                <!-- If there's only one page -->
                                 <span>Page 1</span>
                             @endif
 
@@ -152,12 +153,9 @@
                             </li>
                         </ul>
                     @else
-                        <!-- Display message if no entries -->
                         <span>No entries found.</span>
                     @endif
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -168,20 +166,17 @@
 <script>
     document.getElementById('borrowerSearch').addEventListener('input', function() {
         let filter = this.value.toLowerCase();
-        let rows = document.querySelectorAll('.reservation-row'); // Select all borrower rows
+        let rows = document.querySelectorAll('.reservation-row');
 
         rows.forEach(function(row) {
-            // Get the text content of the relevant columns (borrower's name, department, and equipment name)
             let name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
             let department = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-            let equipmentName = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+            let facilityName = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
 
-            // Check if the filter matches any of the fields
-            if (name.includes(filter) || department.includes(filter) || equipmentName.includes(
-                    filter)) {
-                row.style.display = ''; // Show the row
+            if (name.includes(filter) || department.includes(filter) || facilityName.includes(filter)) {
+                row.style.display = '';
             } else {
-                row.style.display = 'none'; // Hide the row
+                row.style.display = 'none';
             }
         });
     });
