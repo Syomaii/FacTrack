@@ -53,7 +53,7 @@
                         <li>
                             <a href="/users">
                                 <i class="ri-circle-fill circle-icon text-lilac-600 w-auto"></i>
-                                <span>Users</span>
+                                <span>All Users</span>
                             </a>
                         </li>
                         <li>
