@@ -177,7 +177,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/equipment-reservations-log', [ReservationController::class, 'equipmentReservationLog'])->name('logs.equipment_reservations');
         Route::get('/facility-reservations-log', [ReservationController::class, 'facilityReservationLog'])->name('logs.facility_reservations');
         Route::post('/reservation/{id}/accept', [ReservationController::class, 'accept'])->name('reservation.accept');
+        Route::post('/facility-reservation/{id}/acceptFacility', [ReservationController::class, 'acceptFacility'])->name('reservation.acceptFacility');
         Route::post('/reservation/{id}/decline', [ReservationController::class, 'decline'])->name('reservation.decline');
+        Route::post('/facility-reservation/{id}/declineFacility', [ReservationController::class, 'declineFacility'])->name('reservation.declineFacility');
 
         // Route::get('/product-details/{id}', [PageController::class, 'productDetails'])->name('product.details');
         
