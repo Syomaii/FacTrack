@@ -51,7 +51,7 @@
                 <div
                     class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center justify-content-between gap-3">
                     <!-- Search and Status Filters -->
-                    <div class="d-flex flex-grow-1 gap-3">
+                    <div class="d-flex flex-grow-1 gap-3 flex-wrap">
                         <!-- Search Form -->
                         <form class="navbar-search d-flex align-items-center flex-grow-1" method="GET"
                             action="{{ route('equipment_search') }}">
@@ -62,9 +62,8 @@
                             </button>
                         </form>
                         <!-- Sort by Name Filter -->
-                        <form method="GET" action="{{ route('equipment_search') }}">
-                            <select name="sort" class="form-select form-select-sm w-auto"
-                                onchange="this.form.submit()">
+                        <form method="GET" action="{{ route('equipment_search') }}" class="w-auto">
+                            <select name="sort" class="form-select form-select-sm" onchange="this.form.submit()">
                                 <option value="">Sort by Name</option>
                                 <option value="asc" {{ request('sort') == 'asc' ? 'selected' : '' }}>Ascending
                                 </option>
@@ -73,9 +72,8 @@
                             </select>
                         </form>
                         <!-- Status Filter -->
-                        <form method="GET" action="{{ route('equipment_search') }}">
-                            <select name="status" class="form-select form-select-sm w-auto"
-                                onchange="this.form.submit()">
+                        <form method="GET" action="{{ route('equipment_search') }}" class="w-auto">
+                            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
                                 <option value="">Status</option>
                                 @foreach (['Available', 'Borrowed', 'In Maintenance', 'In Repair', 'Donated', 'Disposed'] as $status)
                                     <option value="{{ $status }}"
