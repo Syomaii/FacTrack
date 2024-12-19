@@ -31,15 +31,26 @@
 
         <div class="row gy-4">
             <div class="col-lg-14">
-                <div class="card shadow-sm p-3 rounded" style="background-color: #007bff;">
+                <div class="card shadow-sm p-3 rounded" style="background-color: #ffff;">
                     <div class="d-flex align-items-center">
-                        <div class="flex-grow-1 text-white">
-                            <p class="text-white">{{ now()->format('F d, Y') }}</p>
-                            <h5 class="mb-1 text-white">Hi! {{ $student->firstname }} {{ $student->lastname }}</h5>
-                            <p class="text-white">Welcome to FacTrack</p>
+                        <div class="flex-grow-1">
+                            <p class="text-black">{{ now()->format('F d, Y') }}</p>
+                            <h3 class="mb-1 text-black">Welcome, {{ $student->firstname }} !</h3>
+                            <!-- Random Message Display -->
+                            @php
+                                $messages = [
+                                    "What are you up to today?",
+                                    "What's on your schedule today?",
+                                    "How's your day looking?",
+                                    "Your doing great!",
+                                    "Keep up the good work"
+                                ];
+                                $randomMessage = $messages[array_rand($messages)];
+                            @endphp
+                            <h5 style="color: black;">{{ $randomMessage }}</h5>
                         </div>
-                        <div class="profile-icon d-flex align-items-center justify-content-center" style="position: relative; left: -50px; width: 300px; height: 150px; border-radius: 8px; background-color: #007bff;">
-                             <img src="{{ asset('images/students.png') }}" alt="Profile Image" class="icon text-xl rectangle" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="profile-icon d-flex align-items-center justify-content-center" style="position: relative; left: -50px; width: 500px; height: 250px; border-radius: 8px; background-color: #ffff;">
+                             <img src="{{ asset('images/student.png') }}" alt="Profile Image" class="icon text-l rectangle" style="width: 100%; height: 100%; object-fit: cover;">
                             </div> 
                           </div>
                 </div>
