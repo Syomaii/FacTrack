@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\AcceptEquipmentReservationEvent;
+use App\Events\DeclineEquipmentReservationEvent;
 use App\Events\ReserveEquipmentEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Equipment;
@@ -181,12 +182,15 @@ class ReservationController extends Controller
 
     public function decline($id)
     {
-        $reservation = EquipmentReservation::findOrFail($id);
+        $reservation = EquipmentReservation::where('id', $id)->firstOrFail();
+        $reserver = User::where('student_id', $reservation->reservers_id_no)->first();
+        $equipment = Equipment::where('id', $reservation->equipment_id)->firstOrFail();
 
         if (in_array('declined', ['pending', 'approved', 'declined'])) { // Replace with your ENUM values
             $reservation->status = 'declined';
             $reservation->save();
 
+            event(new DeclineEquipmentReservationEvent($reservation, $reserver, $equipment));
             return redirect()->back()->with('success', 'Reservation declined successfully.');
         }
 

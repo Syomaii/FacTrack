@@ -99,16 +99,22 @@
                                 <textarea class="form-control" id="officeDescription" name="description" rows="3" required>{{ old('description') }}</textarea>
                             </div>
                             <div class="mb-3">
-                                <label for="officeType" class="form-label">Type</label>
-                                <select class="form-control" id="officeType" name="type" required>
+                                <label for="type" class="form-label"  >Type</label>
+                                <select class="form-control {{ $errors->has('type') ? 'is-invalid' : '' }}" id="type" name="type" onchange="handleOwnedByChange()" required>
                                     <option value="" disabled selected>Select Type</option>
                                     <option value="office" {{ old('type') == 'office' ? 'selected' : '' }}>Office
                                     </option>
                                     <option value="department" {{ old('type') == 'department' ? 'selected' : '' }}>
                                         Department</option>
-                                    <option value="avr" {{ old('type') == 'department' ? 'selected' : '' }}>
-                                        AVR</option>
+                                    <option value="others" {{ old('type') == 'others' ? 'selected' : '' }}>
+                                        Other Amenities</option>
                                 </select>
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control radius-8 mt-2 d-none"
+                                    id="other_amenities" name="other_amenities" placeholder="Please specify"
+                                    value="{{ old('other_amenities') }}" />
+                                    <small class="text-danger">{{ $errors->first('other_amenities') }}</small>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -137,8 +143,8 @@
                                         View Office
                                     @elseif ($office->type == 'department')
                                         View Department
-                                    @elseif ($office->type == 'avr')
-                                        View AVR
+                                    @elseif ($office->type != 'office' && $office->type != 'department' )
+                                        View {{ $office->type }}
                                     @endif
                                     <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
                                 </a>
@@ -177,3 +183,26 @@
 
 </main>
 @include('templates.footer')
+
+
+<script>
+    function handleOwnedByChange() {
+        var selectElement = document.getElementById('type');
+        var otherInput = document.getElementById('other_amenities');
+
+        // Show or hide the textbox based on the selected value
+        if (selectElement.value === 'others') {
+            otherInput.classList.remove('d-none');
+        }
+
+        // Listen for changes to the dropdown
+        selectElement.addEventListener('change', function() {
+            if (selectElement.value === 'others') {
+                otherInput.classList.remove('d-none');
+            } else {
+                otherInput.classList.add('d-none');
+                otherInput.value = ''; 
+            }
+        });
+    }
+</script>

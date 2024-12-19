@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Events\AcceptEquipmentReservationEvent;
+use App\Events\DeclineEquipmentReservationEvent;
 use App\Events\OverdueEquipmentEvent;
 use App\Events\ReserveEquipmentEvent;
 use App\Listeners\AcceptEquipmentReservationListener;
+use App\Listeners\DeclineEquipmentReservationListener;
 use App\Listeners\OverdueEquipmentListener;
 use App\Listeners\SendReservationListener;
 use App\Models\Reservation;
@@ -22,7 +24,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         AcceptEquipmentReservationEvent::class => [
             AcceptEquipmentReservationListener::class,
-        ]
+        ],
+        DeclineEquipmentReservationEvent::class => [    
+            DeclineEquipmentReservationListener::class,
+        ],
     ];
 
     /**
