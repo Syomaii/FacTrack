@@ -181,6 +181,76 @@ class ReservationController extends Controller
         return redirect()->back()->with('error', 'Invalid status value.');
     }
 
+    public function acceptFacility($id)
+    {
+        // Retrieve the facility reservation by ID
+        $reservation = FacilityReservation::where('id', $id)->firstOrFail();
+
+        // Attempt to find the reserver as a student first
+        $reserver = User::where('student_id', $reservation->reservers_id_no)->first();
+
+        // If not found as a student, try to find as a faculty member
+        if (!$reserver) {
+            $reserver = User::where('faculty_id', $reservation->reservers_id_no)->first();
+        }
+        // Check if the reserver was found
+        if (!$reserver) {
+            return redirect()->back()->with('error', 'Reserver not found.')->with('title', 'Facility Reservation');
+        }
+        // Check if the reservation status is 'pending'
+        if ($reservation->status == 'pending') { 
+            // Update the reservation status to 'approved'
+            $reservation->status = 'approved';
+            $reservation->save();
+            // Redirect back with a success message and title
+            return redirect()->back()
+                ->with('success', 'Reservation approved successfully.')
+                ->with('title', 'Facility Reservation');
+        }
+
+        // Redirect back with an error message if the status is not 'pending'
+        return redirect()->back()
+            ->with('error', 'Invalid status value.')
+            ->with('title', 'Facility Reservation');
+    }
+
+
+    public function declineFacility($id)
+    {
+        // Retrieve the facility reservation by ID
+        $reservation = FacilityReservation::where('id', $id)->firstOrFail();
+    
+        // Attempt to find the reserver as a student first
+        $reserver = User::where('student_id', $reservation->reservers_id_no)->first();
+    
+        // If not found as a student, try to find as a faculty member
+        if (!$reserver) {
+            $reserver = User::where('faculty_id', $reservation->reservers_id_no)->first();
+        }
+    
+        // Check if the reserver was found
+        if (!$reserver) {
+            return redirect()->back()->with('error', 'Reserver not found.')->with('title', 'Facility Reservation');
+        }
+    
+        // Check if the reservation status is 'pending'
+        if ($reservation->status == 'pending') { 
+            // Update the reservation status to 'declined'
+            $reservation->status = 'declined';
+            $reservation->save();
+    
+            // Redirect back with a success message and title
+            return redirect()->back()
+                ->with('success', 'Reservation declined successfully.')
+                ->with('title', 'Facility Reservation');
+        }
+    
+        // Redirect back with an error message if the status is not 'pending'
+        return redirect()->back()
+            ->with('error', 'Invalid status value.')
+            ->with('title', 'Facility Reservation');
+    }
+
     public function decline($id)
     {
         $reservation = EquipmentReservation::where('id', $id)->firstOrFail();

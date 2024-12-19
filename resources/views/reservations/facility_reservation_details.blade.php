@@ -62,18 +62,20 @@
                         <p><strong>Status:</strong>
                             <span
                                 class="badge 
-                                {{ $reservation->status === 'pending' ? 'bg-warning' : ($reservation->status === 'accepted' ? 'bg-success' : 'bg-danger') }}">
+                                {{ $reservation->status === 'pending' ? 'bg-warning' : ($reservation->status === 'approved' ? 'bg-success' : 'bg-danger') }}">
                                 {{ ucfirst($reservation->status) }}
                             </span>
                         </p>
                         @if (auth()->user()->type === 'operator' || auth()->user()->type === 'facility manager')
                             @if ($reservation->status === 'pending')
                                 <div class="mt-4 d-flex justify-content-center gap-3">
-                                    <form action="{{ route('reservation.decline', $reservation->id) }}" method="POST">
+                                    <form action="{{ route('reservation.declineFacility', $reservation->id) }}"
+                                        method="POST">
                                         @csrf
                                         <button type="submit" class="btn btn-outline-danger">Decline</button>
                                     </form>
-                                    <form action="{{ route('reservation.accept', $reservation->id) }}" method="POST">
+                                    <form action="{{ route('reservation.acceptFacility', $reservation->id) }}"
+                                        method="POST">
                                         @csrf
                                         <button type="submit" class="btn btn-primary">Accept</button>
                                     </form>
