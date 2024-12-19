@@ -233,9 +233,11 @@ class ReservationController extends Controller
     
     public function facilityForReservation($id){
         
-        $facility = Facility::findOrFail($id);        
+        $facility = Facility::findOrFail($id);      
+        
+        $facilityReservations = FacilityReservation::with('facility')->where('facility_id', $id)->get();
 
-        return view('reservations.facility_to_be_reserved', compact('facility'))->with('title', 'Reserve Facility');
+        return view('reservations.facility_to_be_reserved', compact('facility', 'facilityReservations'))->with('title', 'Reserve Facility');
     }
 
     public function submitReservation(Request $request)
