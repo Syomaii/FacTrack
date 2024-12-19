@@ -49,7 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications/redirect/{id}', [NotificationController::class, 'redirect'])->name('redirect');
     Route::get('/equipment-details/{code}', [PageController::class, 'equipmentDetails'])->name('equipment-details');
     Route::get('/notifications/{status?}', [NotificationController::class, 'filter'])->name('notifications-filter');
-    
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');    
 
     Route::middleware(['checkRole:student'])->group(function (){
         Route::get('/student-dashboard', [StudentController::class, 'studentDashboard'])->name('student.dashboard');

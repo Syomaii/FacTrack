@@ -216,7 +216,7 @@
                                             <div class="form-group mb-3 col-md-6">
                                                 <label class="fw-semibold text-primary-light text-sm mb-2">Select Type</label>
                                                 <div class="row g-3">
-                                                    <div class="col-md-3" style="margin-top: .8rem">
+                                                    <div class="col-md-3" style="margin-top: 1.8rem">
                                                         <div class="form-check d-flex align-items-center gap-2">
                                                             <input type="radio" id="office" name="select_type"
                                                                 value="office" class="form-check-input" checked>
@@ -226,7 +226,7 @@
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-3" style="margin-top: .8rem">
+                                                    <div class="col-md-3" style="margin-top: 1.8rem">
                                                         <div class="form-check d-flex align-items-center gap-2">
                                                             <input type="radio" id="department" name="select_type"
                                                                 value="department" class="form-check-input">
@@ -236,8 +236,8 @@
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-3" style="margin-top: .8rem">
-                                                        <div class="form-check d-flex align-items-center gap-2">
+                                                    <div class="col-md-3" style="margin-top: 1.8rem">
+                                                        <div class="form-check d-flex align-items-center gap-2 ms-5">
                                                             <input type="radio" id="avr" name="select_type"
                                                                 value="avr" class="form-check-input">
                                                             <label for="avr"
@@ -346,7 +346,7 @@
                                                         <option value="" disabled selected>Select a designation
                                                         </option>
                                                         @foreach ($designations as $designation)
-                                                            @if (($userType == 'admin' || ($userType != 'facility_manager' && $designation->name != 'Dean')) && $designation->id != 3 )
+                                                            @if (($userType == 'admin' || ($userType != 'facility_manager' && $designation->name != 'Dean')) && $designation->id != 3 && $designation->id != 4 && $designation->id != 6 )
                                                                 <option value="{{ $designation->id  }}"
                                                                     {{ old('designation_id') == $designation->id ? 'selected' : '' }}>
                                                                     {{ $designation->name }}
@@ -363,7 +363,7 @@
                                     <div class="d-flex align-items-center justify-content-center gap-3 mt-3 mb-5">
                                         <a href="/users">
                                             <button type="button"
-                                                class="border border-danger-600 bg-hover-danger-200 text-danger-600 text-md px-56 py-11 radius-8">Cancel</button>
+                                                class="btn btn-danger text-md px-56 py-11 radius-8">Cancel</button>
                                         </a>
                                         <button type="submit"
                                             class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8" style="max-width: 200px">Add

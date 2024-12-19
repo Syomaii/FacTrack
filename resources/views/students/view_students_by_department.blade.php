@@ -16,7 +16,7 @@
                 </li>
                 <li>-</li>
                 <li class="fw-medium">
-                    <a href="{{ route('view-department') }}" class="d-flex align-items-center gap-1 hover-text-primary">
+                    <a href="{{ route('view-students') }}" class="d-flex align-items-center gap-1 hover-text-primary">
                         Departments
                     </a>
                 </li>

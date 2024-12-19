@@ -47,7 +47,10 @@ class NotificationController extends Controller
         return view('notifications', compact('notifications'));
     }
 
-    public function readNotifications(){
+    public function markAllAsRead()
+    {
+        Auth::user()->unreadNotifications->markAsRead();
 
+        return response()->json(['message' => 'All notifications have been marked as read']);
     }
 }

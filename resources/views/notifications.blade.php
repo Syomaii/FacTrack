@@ -19,6 +19,7 @@
             </ul>
         </div>
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
+            <a href="/notifications/read-all" class="text-primary text-hover-green" role="button" aria-label="Read all notifications">Read All Notifications</a>
             <form method="GET" action="{{ route('notifications-filter') }}">
                 <select name="status" class="form-select" onchange="this.form.submit()">
                     <option value="">Filter</option>

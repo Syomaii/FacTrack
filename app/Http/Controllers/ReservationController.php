@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\AcceptEquipmentReservationEvent;
 use App\Events\DeclineEquipmentReservationEvent;
+use App\Events\FacilityReservationEvent;
 use App\Events\ReserveEquipmentEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Equipment;
@@ -271,7 +272,7 @@ class ReservationController extends Controller
         ]);
 
         $facility = Facility::findOrFail($request->facility_id);
-        $officeId = $facility->office_id;
+        $office = $facility->office_id;
 
         if(Auth::user()->type === 'student'){
             $reservers_id_no = Auth::user()->student_id;
@@ -281,20 +282,22 @@ class ReservationController extends Controller
         }
 
         // Create the reservation
-            FacilityReservation::create([
-                'reservers_id_no' => $reservers_id_no,
-                'office_id' => $officeId,
-                'facility_id' => $request->facility_id,
-                'reservation_date' => $request->reservation_date, // Use reservation_date only
-                'time_in' => $request->time_in, // Store time_in separately
-                'time_out' => $request->time_out, // Store time_out separately
-                'purpose' => $request->purpose,
-                'expected_audience_no' => $request->expected_audience_no,
-                'stage_performers' => $request->stage_performers,
-                'status' => 'pending',
-            ]);
+        $reservation = FacilityReservation::create([
+            'reservers_id_no' => $reservers_id_no,
+            'office_id' => $office,
+            'facility_id' => $request->facility_id,
+            'reservation_date' => $request->reservation_date, // Use reservation_date only
+            'time_in' => $request->time_in, // Store time_in separately
+            'time_out' => $request->time_out, // Store time_out separately
+            'purpose' => $request->purpose,
+            'expected_audience_no' => $request->expected_audience_no,
+            'stage_performers' => $request->stage_performers,
+            'status' => 'pending',
+        ]);
 
-            return back()->with('success', 'Facility reserved successfully!');
+        event(new FacilityReservationEvent($reservation, Auth::user(), $office, $facility));
+
+        return back()->with('success', 'Facility reserved successfully!');
     }
 
 }

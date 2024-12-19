@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\FacilityReservation;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -17,9 +18,17 @@ class FacilityReservationEvent
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public $reservation;
+    public $reserver;
+    public $office;
+    public $facility;
+
+    public function __construct(FacilityReservation $reservation, $reserver, $office, $facility)
     {
-        //
+        $this->reservation = $reservation;
+        $this->reserver = $reserver;
+        $this->office = $office;
+        $this->facility = $facility;
     }
 
     /**
