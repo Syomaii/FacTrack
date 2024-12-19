@@ -86,6 +86,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['checkRole:operator,facility manager,student,faculty'])->group(function () {
         Route::get('/reservation-details/{id}', [ReservationController::class, 'reservationDetails'])->name('reservation_details');
+        Route::get('/facility-reservation-details/{id}', [ReservationController::class, 'facilityReservationDetails'])->name('facility_reservation_log');
 
     });
     

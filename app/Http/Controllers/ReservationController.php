@@ -200,21 +200,32 @@ class ReservationController extends Controller
 
     public function facilityReservationLog()
     {
-        // Get the authenticated user
-        $user = Auth::user();
+        // Fetch all reservations with related student, facility, and office data
+        $reservations = FacilityReservation::with(['student', 'facility', 'offices'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
     
-        if ($user && $user->office) {
-            $reservations = FacilityReservation::with(['student', 'facility', 'offices'])
-                ->whereHas('offices', function ($query) use ($user) {
-                    $query->where('id', $user->office->id); 
-                })
-                ->orderBy('created_at', 'desc')
-                ->paginate(10);
-        } else {
-            $reservations = collect(); 
-        }
-    
-        return view('logs.facility_reservations', compact('reservations'))->with('title', 'Reservation Logs');
+        // Return the view with the reservations data
+        return view('logs.facility_reservations', [
+            'reservations' => $reservations,
+            'title' => 'Facility Reservation Logs'
+        ]);
+    }
+
+    public function facilityReservationDetails($id)
+    {
+        // Fetch the facility reservation by ID with related data
+        $reservation = FacilityReservation::with(['student', 'facility', 'offices'])
+            ->where('id', $id)
+            ->firstOrFail(); 
+
+        $title = "Reservation Details";
+        $data = [
+            'reservation' => $reservation,
+            'title' => $title
+        ];
+
+        return view('reservations.facility_reservation_details')->with($data);
     }
     
     public function reserveFacility() {
