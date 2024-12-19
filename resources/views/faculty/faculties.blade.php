@@ -139,7 +139,7 @@
                         <h5>Excel Format Instructions</h5>
                         <p>Ensure your Excel file matches the required format to avoid errors before uploading.</p>
                         <h5>Faculty list</h5>
-                        <img src="/images/excel-format.png" alt="">
+                        <img src="/images/excel-format-faculty.png" alt="">
                     </div>
                 </div>
     

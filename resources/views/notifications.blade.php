@@ -5,6 +5,7 @@
     <x-navbar />
 
     <div class="dashboard-main-body">
+        
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
             <h6 class="fw-semibold mb-0">Notifications</h6>
             <ul class="d-flex align-items-center gap-2">
@@ -18,6 +19,7 @@
                 <li class="fw-medium">Notifications</li>
             </ul>
         </div>
+        
         <div class="">
             <form method="GET" action="{{ route('notifications-filter') }}">
                 <div class="d-flex flex-wrap align-items-between justify-content-between gap-3 mb-24 w-100" style="max-width: 100%;">
