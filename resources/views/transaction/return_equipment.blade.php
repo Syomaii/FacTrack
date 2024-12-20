@@ -46,7 +46,7 @@
                         Borrow
                     </button>
                 </li>
-                @if (Auth::user()->designation_id === 4)
+                @if (Auth::user()->designation_id === 5)
                     <li class="nav-item" role="presentation">
                         <button class="nav-link d-flex align-items-center px-24" id="maintenance-tab" data-bs-toggle="pill"
                             data-bs-target="#maintenance" type="button" role="tab" aria-controls="maintenance"
@@ -92,7 +92,7 @@
                     </div>
                 </div>
 
-                @if (Auth::user()->designation_id === 4)
+                @if (Auth::user()->designation_id === 5)
                     <!-- Maintenance Tab -->
                     <div class="tab-pane fade" id="maintenance" role="tabpanel" aria-labelledby="maintenance-tab">
                         <div class="card p-3">
