@@ -26,7 +26,8 @@
                         type="button" data-bs-toggle="dropdown">
                         <iconify-icon icon="iconoir:bell" class="text-primary-light text-2xl""></iconify-icon>
                         @if ($notifications->whereNull('read_at')->count() > 0)
-                            <span class="position-absolute top-0 start-50 translate-middle-y badge rounded-pill bg-danger-600 border-0">
+                            <span
+                                class="position-absolute top-0 start-50 translate-middle-y badge rounded-pill bg-danger-600 border-0">
                                 {{ $notifications->whereNull('read_at')->count() }}
                             </span>
                         @endif
@@ -47,9 +48,12 @@
                             @foreach ($notifications as $notification)
                                 <a href="{{ route('redirect', $notification->id) }}"
                                     class="px-24 py-12 d-flex align-items-start gap-3 mb-2 justify-content-between bg-blue {{ $notification->read_at ? 'bg-white' : 'bg-blue-50' }}">
-                                    <div class="text-black hover-bg-transparent hover-text-primary d-flex align-items-center gap-3">
-                                        <span class="w-44-px h-44-px bg-success-subtle text-success-main rounded-circle d-flex justify-content-center align-items-center flex-shrink-0">
-                                            <iconify-icon icon="bitcoin-icons:verify-outline" class="icon text-xxl"></iconify-icon>
+                                    <div
+                                        class="text-black hover-bg-transparent hover-text-primary d-flex align-items-center gap-3">
+                                        <span
+                                            class="w-44-px h-44-px bg-success-subtle text-success-main rounded-circle d-flex justify-content-center align-items-center flex-shrink-0">
+                                            <iconify-icon icon="bitcoin-icons:verify-outline"
+                                                class="icon text-xxl"></iconify-icon>
                                         </span>
                                         <div>
                                             <h6 class="text-md fw-semibold mb-4">
@@ -59,7 +63,8 @@
                                             </p>
                                         </div>
                                     </div>
-                                    <span class="text-sm text-secondary-light flex-shrink-0">{{ $notification->created_at->diffForHumans() }}</span>
+                                    <span
+                                        class="text-sm text-secondary-light flex-shrink-0">{{ $notification->created_at->diffForHumans() }}</span>
                                 </a>
                             @endforeach
 
@@ -96,7 +101,7 @@
                             </button>
                         </div>
                         <ul class="to-top-list">
-                            @if (auth()->user()->type != 'student')
+                            @if (auth()->user()->type != 'student' && auth()->user()->type != 'faculty')
                                 <li>
                                     <a class="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
                                         href="{{ route('profile', ['id' => Auth::user()->id]) }}">
@@ -108,6 +113,14 @@
                                 <li>
                                     <a class="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
                                         href="/student-profile/{{ auth()->user()->student_id }}"">
+                                        <iconify-icon icon="solar:user-linear" class="icon text-xl"></iconify-icon> My
+                                        Profile</a>
+                                </li>
+                            @endif
+                            @if (auth()->user()->type === 'faculty')
+                                <li>
+                                    <a class="dropdown-item text-black px-0 py-8 hover-bg-transparent hover-text-primary d-flex align-items-center gap-3"
+                                        href="/faculty-profile/{{ auth()->user()->faculty_id }}">
                                         <iconify-icon icon="solar:user-linear" class="icon text-xl"></iconify-icon> My
                                         Profile</a>
                                 </li>
