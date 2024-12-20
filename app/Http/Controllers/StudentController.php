@@ -45,6 +45,12 @@ class StudentController extends Controller
     {
         $query = Students::query();
     
+        // Get the department from the request
+        if ($request->filled('department')) {
+            $department = $request->input('department');
+            $query->where('department', $department);
+        }
+    
         // Search filter
         if ($request->filled('search')) {
             $searchTerm = $request->input('search');

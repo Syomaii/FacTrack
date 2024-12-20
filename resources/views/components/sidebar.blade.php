@@ -116,6 +116,20 @@
                                 </a>
                             </li>
                         @endif
+                        @if (Auth::user()->designation->name === 'Maintenance Personnel')
+                            <li>
+                                <a href="{{ route('logs.in_maintenance_equipment_log') }}">
+                                    <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
+                                    Maintenance Equipment Log
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('logs.in_repair_equipment_log') }}">
+                                    <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
+                                    Repair Equipment Log
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </li>
                 <li class="dropdown">

@@ -216,17 +216,22 @@ class PageController extends Controller
     }
 
     public function equipments() {
-        
         $officeId = Auth::user()->office_id;
-
+    
+        // Get the facilities associated with the user's office
         $facilities = Facility::where('office_id', '=', $officeId)->pluck('id');  
     
-        $equipments = Equipment::with('facility')  // Make sure to load the facility relationship
-                    ->whereIn('facility_id', $facilities)  // Filter equipments where facility_id is in the list of retrieved facilities
-                    ->paginate(3);
-        // dd($equipments->toArray());
+        // Get the equipments associated with the facilities
+        $equipments = Equipment::with('facility')
+                    ->whereIn('facility_id', $facilities)
+                    ->paginate(10);
+    
+        // Assuming you want to pass the first facility ID or a specific one
+        $facilityId = $facilities->first(); // or set it to a specific facility ID if needed
+    
         // Return the view with the equipments data
-        return view('equipments/equipments', compact('equipments'))->with('title', 'Equipments');
+        return view('equipments/equipments', compact('equipments', 'facilities', 'facilityId')) // Pass the facilityId
+               ->with('title', 'Equipments');
     }
     
     
@@ -329,61 +334,76 @@ class PageController extends Controller
     
 
     public function borrowersLog()
-{
-    $user = Auth::user();
-
-    if ($user && $user->office) {
-        $borrows = Borrower::with(['equipment', 'user'])
-            ->whereHas('user', function ($query) use ($user) {
-                $query->where('office_id', $user->office->id); 
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-    }else {
-        $borrows = collect(); 
+    {
+        $user = Auth::user();
+    
+        if ($user && $user->office) {
+            // Get the office ID of the authenticated user
+            $officeId = $user->office->id;
+    
+            // Debugging: Check the office ID
+            // dd($officeId); 
+    
+            // Retrieve borrowers associated with the same office
+            $borrows = Borrower::with(['equipment', 'user'])
+                ->whereHas('user', function ($query) use ($officeId) {
+                    $query->where('office_id', $officeId); 
+                })
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+    
+            // Debugging: Check the generated SQL query
+            // \DB::enableQueryLog();
+            // dd(\DB::getQueryLog()); // Uncomment to see the last executed query
+        } else {
+            $borrows = collect(); 
+        }
+    
+        return view('reports.borrowers_log', compact('borrows'))->with('title', 'Borrowers Details');
     }
 
-    return view('reports.borrowers_log', compact('borrows'))->with('title', 'Borrowers Details');
-}
 
     // In BorrowerController.php
-public function borrowerSearch(Request $request)
-{
-    $query = Borrower::query();
+    public function borrowerSearch(Request $request)
+    {
+        $query = Borrower::query();
 
-    // Search filter
-    if ($request->filled('search')) {
-        $searchTerm = $request->input('search');
-        $query->where(function ($q) use ($searchTerm) {
-            $q->where('borrowers_name', 'LIKE', "%{$searchTerm}%")
-                ->orWhere('borrowers_id_no', 'LIKE', "%{$searchTerm}%")
-                ->orWhere('department', 'LIKE', "%{$searchTerm}%")
-                ->orWhereHas('equipment', function ($q) use ($searchTerm) {
-                    $q->where('name', 'LIKE', "%{$searchTerm}%");
-                });
-        });
+        $officeId = Auth::user()->office_id;
+
+        $query->where('office_id', $officeId); // Assuming the Borrower model has an office_id field
+        // Search filter
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('borrowers_name', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('borrowers_id_no', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('department', 'LIKE', "%{$searchTerm}%")
+                    ->orWhereHas('equipment', function ($q) use ($searchTerm) {
+                        $q->where('name', 'LIKE', "%{$searchTerm}%");
+                    });
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        // Sort by ID filter
+        if ($request->filled('sort_by_id') && in_array($request->input('sort_by_id'), ['asc', 'desc'])) {
+            $query->orderBy('borrowers_id_no', $request->input('sort_by_id'));
+        }
+
+        // Paginate the results and preserve query parameters
+        $borrows = $query->with('equipment')->paginate(10)->appends($request->query());
+
+        return view('reports/borrowers_log', [
+            'borrows' => $borrows,
+            'totalBorrows' => $borrows->total(),
+            'start' => ($borrows->currentPage() - 1) * $borrows->perPage() + 1,
+            'end' => min(($borrows->currentPage() - 1) * $borrows->perPage() + $borrows->count(), $borrows->total())
+        ])->with('title', "Borrower's Log");
     }
-
-    // Status filter
-    if ($request->filled('status')) {
-        $query->where('status', $request->input('status'));
-    }
-
-    // Sort by ID filter
-    if ($request->filled('sort_by_id') && in_array($request->input('sort_by_id'), ['asc', 'desc'])) {
-        $query->orderBy('borrowers_id_no', $request->input('sort_by_id'));
-    }
-
-    // Paginate the results and preserve query parameters
-    $borrows = $query->with('equipment')->paginate(10)->appends($request->query());
-
-    return view('reports/borrowers_log', [
-        'borrows' => $borrows,
-        'totalBorrows' => $borrows->total(),
-        'start' => ($borrows->currentPage() - 1) * $borrows->perPage() + 1,
-        'end' => min(($borrows->currentPage() - 1) * $borrows->perPage() + $borrows->count(), $borrows->total())
-    ])->with('title', "Borrower's Log");
-}
 
     public function maintenance()
     {

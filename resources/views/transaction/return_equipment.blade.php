@@ -48,9 +48,9 @@
                 </li>
                 @if (Auth::user()->designation_id === 5)
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link d-flex align-items-center px-24" id="maintenance-tab" data-bs-toggle="pill"
-                            data-bs-target="#maintenance" type="button" role="tab" aria-controls="maintenance"
-                            aria-selected="false">
+                        <button class="nav-link d-flex align-items-center px-24" id="maintenance-tab"
+                            data-bs-toggle="pill" data-bs-target="#maintenance" type="button" role="tab"
+                            aria-controls="maintenance" aria-selected="false">
                             In Maintenance
                         </button>
                     </li>
@@ -79,14 +79,15 @@
                             <div class="d-flex justify-content-center gap-3 py-2 mt-3">
                                 <a href="/equipments" class="">
                                     <button type="button"
-                                    class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8" id="cancelBtn">
-                                    Cancel
-                                </button></a>
+                                        class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8"
+                                        id="cancelBtn">
+                                        Cancel
+                                    </button></a>
                                 <button type="button" class="btn btn-primary px-20 py-11 " data-bs-toggle="modal"
                                     data-bs-target="#scanModalBorrow" id="scanCodeReturnBorrow">
                                     Scan QR Code
                                 </button>
-                                
+
                             </div>
                         </form>
                     </div>
@@ -108,8 +109,14 @@
                                     <option value="HDD Failure">HDD Failure</option>
                                     <option value="FDD Failure">FDD Failure</option>
                                     <option value="Memory error">Memory error</option>
-                                    <option value="Other">Other</option>
+                                    <option value="Other">Others</option>
                                 </select>
+
+                                <div id="otherIssueContainer" style="display: none;">
+                                    <input class="form-control mb-3" placeholder="Specify Other Problems Encountered"
+                                        id="issue_note" name="issue_note" />
+                                </div>
+
                                 <input class="form-control mb-3" placeholder="Technician" id="maintenance_technician"
                                     name="technician"></input>
                                 <textarea class="form-control mb-3" placeholder="Action Taken" id="maintenance_action_taken" name="action_taken"></textarea>
@@ -119,14 +126,16 @@
                                 <div class="d-flex justify-content-center gap-3 py-2 mt-3">
                                     <a href="/equipments" class="">
                                         <button type="button"
-                                        class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8" id="cancelBtn">
-                                        Cancel
-                                    </button></a>
-                                    <button type="button" class="btn btn-primary px-20 py-11 " data-bs-toggle="modal"
-                                    data-bs-target="#scanModalMaintenance" id="scanCodeReturnMaintenance">
+                                            class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8"
+                                            id="cancelBtn">
+                                            Cancel
+                                        </button></a>
+                                    <button type="button" class="btn btn-primary px-20 py-11 "
+                                        data-bs-toggle="modal" data-bs-target="#scanModalMaintenance"
+                                        id="scanCodeReturnMaintenance">
                                         Scan QR Code
                                     </button>
-                                    
+
                                 </div>
                             </form>
                         </div>
@@ -147,8 +156,12 @@
                                     <option value="HDD Failure">HDD Failure</option>
                                     <option value="FDD Failure">FDD Failure</option>
                                     <option value="Memory error">Memory error</option>
-                                    <option value="Other">Other</option>
+                                    <option value="Other">Others</option>
                                 </select>
+                                <div id="otherRepairIssueContainer" style="display: none;">
+                                    <input class="form-control mb-3" placeholder="Specify Other Problems Encountered"
+                                        id="issue_note" name="issue_note" />
+                                </div>
                                 <input class="form-control mb-3" placeholder="Technician" id="repair_technician"
                                     name="technician"></input>
                                 <textarea class="form-control mb-3" placeholder="Action Taken" id="repair_action_taken" name="action_taken"></textarea>
@@ -159,14 +172,16 @@
                                 <div class="d-flex justify-content-center gap-3 py-2 mt-3">
                                     <a href="/equipments" class="">
                                         <button type="button"
-                                        class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8" id="cancelBtn">
-                                        Cancel
-                                    </button></a>
-                                    <button type="button" class="btn btn-primary px-20 py-11 " data-bs-toggle="modal"
-                                    data-bs-target="#scanModalRepair" id="scanCodeReturnRepair">
+                                            class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8"
+                                            id="cancelBtn">
+                                            Cancel
+                                        </button></a>
+                                    <button type="button" class="btn btn-primary px-20 py-11 "
+                                        data-bs-toggle="modal" data-bs-target="#scanModalRepair"
+                                        id="scanCodeReturnRepair">
                                         Scan QR Code
                                     </button>
-                                    
+
                                 </div>
                             </form>
                         </div>
@@ -254,9 +269,15 @@
             scanner = repairScanner;
         }
 
-        scanner.start(
-            { facingMode: "environment" },
-            { fps: 20, qrbox: { width: 300, height: 300 } },
+        scanner.start({
+                facingMode: "environment"
+            }, {
+                fps: 20,
+                qrbox: {
+                    width: 300,
+                    height: 300
+                }
+            },
             successCallback,
             console.error
         ).then(() => {
@@ -347,5 +368,29 @@
         stopScanner(borrowScanner);
         stopScanner(maintenanceScanner);
         stopScanner(repairScanner);
+    });
+
+    document.getElementById('maintenance_issue').addEventListener('change', function() {
+        const otherIssueContainer = document.getElementById('otherIssueContainer');
+        const selectedValue = this.value;
+
+        if (selectedValue === 'Other') {
+            otherIssueContainer.style.display = 'block'; // Show the input field
+        } else {
+            otherIssueContainer.style.display = 'none'; // Hide the input field
+            document.getElementById('issue_note').value = ''; // Clear the input field
+        }
+    });
+
+    document.getElementById('repair_issue').addEventListener('change', function() {
+        const otherIssueContainer = document.getElementById('otherRepairIssueContainer');
+        const selectedValue = this.value;
+
+        if (selectedValue === 'Other') {
+            otherIssueContainer.style.display = 'block'; // Show the input field
+        } else {
+            otherIssueContainer.style.display = 'none'; // Hide the input field
+            document.getElementById('issue_note').value = ''; // Clear the input field
+        }
     });
 </script>
