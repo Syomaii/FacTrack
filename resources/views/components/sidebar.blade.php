@@ -11,7 +11,7 @@
     </div>
     <div class="sidebar-menu-area">
         <ul class="sidebar-menu" id="sidebar-menu">
-            @if (auth()->user()->type != 'student')
+            @if (Auth::user()->type !== 'student' && Auth::user()->type !== 'faculty')
                 <li>
                     <a href="/dashboard">
                         <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
@@ -19,7 +19,7 @@
                     </a>
                 </li>
             @endif
-            @if (auth()->user()->type === 'admin')
+            @if (Auth::user()->type === 'admin')
                 <li>
                     <a href="/offices">
                         <iconify-icon icon="ci:house-01" class="menu-icon"></iconify-icon>
@@ -28,7 +28,7 @@
                 </li>
             @endif
 
-            @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
+            @if (Auth::user()->type === 'facility manager' || Auth::user()->type === 'operator')
                 <li>
                     <a href="/facilities">
                         <iconify-icon icon="mingcute:storage-line" class="menu-icon"></iconify-icon>
@@ -43,7 +43,7 @@
                 </li>
             @endif
 
-            @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'admin')
+            @if (Auth::user()->type === 'facility manager' || Auth::user()->type === 'admin')
                 <li class="dropdown">
                     <a href="javascript:void(0)">
                         <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
@@ -70,9 +70,9 @@
                         </li>
                     </ul>
             @endif
-            @if (auth()->user()->type != 'student' && auth()->user()->type != 'faculty')
-            @endif
-            @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
+            {{-- @if (auth()->user()->type != 'student' && auth()->user()->type != 'faculty')
+            @endif --}}
+            @if (Auth::user()->type === 'facility manager' || Auth::user()->type === 'operator')
                 <li class="dropdown">
                     <a href="javascript:void(0)">
                         <iconify-icon icon="mingcute:clipboard-line" class="menu-icon"></iconify-icon>
@@ -91,7 +91,7 @@
                                 Equipment Reservation
                             </a>
                         </li>
-                        @if (auth()->user()->designation->name === 'Office Head')
+                        @if (Auth::user()->designation->name === 'Office Head')
                             <li>
                                 <a href="{{ route('logs.facility_reservations') }}">
                                     <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
@@ -166,21 +166,21 @@
                 </li>
             @endif
 
-            @if (auth()->user()->type != 'student')
+            @if (Auth::user()->type != 'student' && Auth::user()->type != 'faculty')
                 <li class="dropdown">
                     <a href="javascript:void(0)">
                         <iconify-icon icon="heroicons:document" class="menu-icon"></iconify-icon>
                         <span>Reports</span>
                     </a>
                     <ul class="sidebar-submenu">
-                        @if (auth()->user()->type === 'admin')
+                        @if (Auth::user()->type === 'admin')
                             <li>
                                 <a href="/user-reports">
                                     <i class="ri-circle-fill circle-icon text-lilac-600 w-auto"></i>
                                     Users
                                 </a>
                             </li>
-                        @elseif (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
+                        @elseif (Auth::user()->type === 'facility manager' || Auth::user()->type === 'operator')
                             <li>
                                 <a href="/borrowed-equipments">
                                     <i class="ri-circle-fill circle-icon text-orange w-auto"></i>
@@ -215,7 +215,7 @@
                     </ul>
                 </li>
             @endif
-            @if (auth()->user()->type === 'student')
+            @if (Auth::user()->type === 'student' || Auth::user()->type === 'faculty')
                 <li>
                     <a href="/student-dashboard">
                         <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
