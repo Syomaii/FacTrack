@@ -62,7 +62,7 @@
                         
                         <div class="card shadow-sm p-3 rounded w-100">
                             <h6>Reservations</h6>
-                            <p>Here is your reservations for today!</p>
+                            <p>Here are your reservations for today!</p>
 
                             <div class="d-flex w-50">
                                 <div class="card shadow-sm p-3 rounded w-100">

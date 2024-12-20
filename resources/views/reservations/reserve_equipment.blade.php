@@ -92,6 +92,7 @@
                                 <label for="reservation_date" class="form-label">Reservation Date and Time</label>
                                 <input type="datetime-local" class="form-control" id="reservation_date"
                                     name="reservation_date">
+                                    <small class="text-danger">{{ $errors->first('reservation_date') }}</small>
                             </div>
 
                             <!-- Expected Return Date and Time -->
@@ -100,6 +101,7 @@
                                     Time</label>
                                 <input type="datetime-local" class="form-control" id="expected_return_date"
                                     name="expected_return_date">
+                                    <small class="text-danger">{{ $errors->first('expected_return_date') }}</small>
                             </div>
                             <div class="d-flex justify-content-center m-3 gap-3">
                                 <a href="{{ url()->previous() }}">
