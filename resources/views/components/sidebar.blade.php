@@ -3,11 +3,25 @@
         <iconify-icon icon="radix-icons:cross-2"></iconify-icon>
     </button>
     <div>
-        <a href="/dashboard" class="sidebar-logo">
-            <img src="/assets/images/logo.png" alt="site logo" class="light-logo">
-            <img src="/assets/images/logo-light.png" alt="site logo" class="dark-logo">
-            <img src="/assets/images/logo-icon.png" alt="site logo" class="logo-icon">
-        </a>
+        @if (Auth::user()->type === 'student')
+            <a href="/student-dashboard" class="sidebar-logo">
+                <img src="/assets/images/logo.png" alt="site logo" class="light-logo">
+                <img src="/assets/images/logo-light.png" alt="site logo" class="dark-logo">
+                <img src="/assets/images/logo-icon.png" alt="site logo" class="logo-icon">
+            </a>
+        @elseif(Auth::user()->type === 'faculty')
+            <a href="/faculty-dashboard" class="sidebar-logo">
+                <img src="/assets/images/logo.png" alt="site logo" class="light-logo">
+                <img src="/assets/images/logo-light.png" alt="site logo" class="dark-logo">
+                <img src="/assets/images/logo-icon.png" alt="site logo" class="logo-icon">
+            </a>
+        @else
+            <a href="/dashboard" class="sidebar-logo">
+                <img src="/assets/images/logo.png" alt="site logo" class="light-logo">
+                <img src="/assets/images/logo-light.png" alt="site logo" class="dark-logo">
+                <img src="/assets/images/logo-icon.png" alt="site logo" class="logo-icon">
+            </a>
+        @endif
     </div>
     <div class="sidebar-menu-area">
         <ul class="sidebar-menu" id="sidebar-menu">
@@ -219,12 +233,21 @@
                 </li>
             @endif
             @if (Auth::user()->type === 'student' || Auth::user()->type === 'faculty')
-                <li>
-                    <a href="/student-dashboard">
-                        <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
+                @if (Auth::user()->type === 'student')
+                    <li>
+                        <a href="/student-dashboard">
+                            <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                @elseif(Auth::user()->type === 'faculty')
+                    <li>
+                        <a href="/faculty-dashboard">
+                            <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                @endif
                 <li class="dropdown">
                     <a href="javascript:void(0)">
                         <iconify-icon icon="tabler:calendar-filled" class="menu-icon"></iconify-icon>
