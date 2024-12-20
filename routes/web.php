@@ -69,6 +69,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reserve-selected-facility/{id}', [ReservationController::class, 'facilityForReservation'])->name('facility_reservation');
         Route::post('/submit-reservation', [ReservationController::class, 'submitReservation'])->name('submit_reservation');
         Route::post('/reservations/{id}/cancel', [ReservationController::class, 'cancel'])->name('reservation.cancel');
+        Route::post('/facility-reservations/{id}/cancel', [ReservationController::class, 'facilityReservationCancel'])->name('facilityReservation.cancel');
 
     });
 

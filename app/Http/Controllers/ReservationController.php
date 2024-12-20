@@ -297,19 +297,22 @@ class ReservationController extends Controller
         $reservation = FacilityReservation::with(['student', 'faculty', 'facility', 'offices'])
             ->where('id', $id)
             ->firstOrFail(); 
-
-        $facilityReservations = FacilityReservation::with('facility')->where('facility_id', $id)->get();
-        
-
+    
+        // Fetch reservations for the same facility
+        $facilityReservations = FacilityReservation::with('facility')
+            ->where('facility_id', $reservation->facility_id)
+            ->get();
+    
         $title = "Reservation Details";
         $data = [
             'reservation' => $reservation,
             'facilityReservations' => $facilityReservations,
             'title' => $title
         ];
-
+    
         return view('reservations.facility_reservation_details')->with($data);
     }
+    
     
     public function reserveFacility() {
         $offices = Office::with('facilities') 
@@ -418,6 +421,18 @@ class ReservationController extends Controller
 
         return redirect()->back()->with('success', 'Reservation has been cancelled successfully.');
     }
+
+    public function facilityReservationCancel($id)
+    {
+        $reservation = FacilityReservation::findOrFail($id);
+
+        // Update the status to "cancelled"
+        $reservation->status = 'cancelled';
+        $reservation->save();
+
+        return redirect()->back()->with('success', 'Reservation has been cancelled successfully.');
+    }
+
 
 
 }

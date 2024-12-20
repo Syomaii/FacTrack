@@ -62,7 +62,7 @@
                                             {{ ucwords($reservation->student->firstname) }}
                                             {{ ucwords($reservation->student->lastname) }}
                                         @elseif($reservation->faculty)
-                                            {{ ucwords($reservation->facult->firstname) }}
+                                            {{ ucwords($reservation->faculty->firstname) }}
                                             {{ ucwords($reservation->faculty->lastname) }}
                                         @else
                                             <span class="text-danger">Reserver Not Found</span>

@@ -174,7 +174,7 @@
                                             <tbody>
                                                 @foreach ($studentReservations as $reservation)
                                                     <tr
-                                                        onclick="window.location='{{ route('facility_reservation_log', ['id' => $reservation->id]) }}'">
+                                                        onclick="window.location='{{ route('reservation_details', ['id' => $reservation->id]) }}'">
                                                         <td>{{ $reservation->equipment->name }}</td>
                                                         <td>{{ $reservation->reservation_date }}</td>
                                                         <td>{{ $reservation->expected_return_date }}</td>
@@ -218,7 +218,7 @@
                                             <tbody>
                                                 @foreach ($studentFacilityReservations as $reservation)
                                                     <tr
-                                                        onclick="window.location='{{ route('reservation_details', ['id' => $reservation->id]) }}'">
+                                                        onclick="window.location='{{ route('facility_reservation_log', ['id' => $reservation->id]) }}'">
                                                         <td>{{ $reservation->facility->name }}</td>
                                                         <td>{{ $reservation->purpose }}</td>
                                                         <td>{{ $reservation->reservation_date }}</td>
