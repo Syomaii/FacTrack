@@ -107,12 +107,13 @@ class StudentController extends Controller
         $student = Students::findOrFail($id);
         $studentBorrowHistory = Borrower::with('equipment')->where('borrowers_id_no', $id)->get();
         $studentReservations = EquipmentReservation::with('equipment')->where('reservers_id_no', $id)->get();
+        $studentFacilityReservations = FacilityReservation::with('facility')->where('reservers_id_no', $id)->get();
         
         if (!$student) {
             abort(404); 
         }
 
-        return view('students.student_profile', compact('student', 'studentBorrowHistory', 'studentReservations'))
+        return view('students.student_profile', compact('student', 'studentBorrowHistory', 'studentReservations', 'studentFacilityReservations'))
             ->with('title', 'Student Profile');
     }
 

@@ -44,10 +44,12 @@
                     <div class="card-body py-5">
                         <h5 class="mb-0 ms-5">Reservation Details</h5>
 
-                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Reservers Id:</strong></div>
-                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->reservers_id_no}}</div>
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Reservers Id:</strong>
+                        </div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->reservers_id_no }}</div>
 
-                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Reservers Name:</strong></div>
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Reservers Name:</strong>
+                        </div>
                         <div class="d-flex mt-4" style="margin-left: 4rem;">
                             @if ($reservation->student)
                                 {{ $reservation->student->firstname }} {{ $reservation->student->lastname }}
@@ -55,28 +57,20 @@
                                 {{ $reservation->faculty->firstname }} {{ $reservation->faculty->lastname }}
                             @endif
                         </div>
-
-                        <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Reservation Date:</strong></div>
-                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->reservation_date }}</div>
-                        
-                        <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Time In:</strong></div>
-                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->time_in }}</div>
-
-                        <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Time Out:</strong></div>
-                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->time_out }}</div>
-
-                        <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Expected number of audience:</strong></div>
-                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->expected_audience_no }}</div>
-
-                        <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Stage performers if present</strong></div>
-                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->stage_performers }}</div>
-
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->reservers_id_no }}</div>
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Student Name:</strong>
+                        </div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->student->firstname }}
+                            {{ $reservation->student->lastname }}</div>
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Department:</strong>
+                        </div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->offices->name }}</div>
                         <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Status:</strong></div>
                         <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->status }}</div>
 
                         <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Purpose:</strong></div>
                         <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->purpose }}</div>
-                        
+
                         @if (auth()->user()->type === 'operator' || auth()->user()->type === 'facility manager')
                             @if ($reservation->status === 'pending')
                                 <div class="mt-4 d-flex justify-content-center gap-3">
@@ -92,6 +86,17 @@
                                     </form>
                                 </div>
                             @endif
+                        @endif
+                        @if (auth()->user()->type === 'faculty' || auth()->user()->type === 'student')
+                            <div class="d-flex justify-content-center gap-4" style="padding-top: 25px">
+                                <form id="decline-form"
+                                    action="{{ route('facilityReservation.cancel', $reservation->id) }}"
+                                    method="POST">
+                                    @csrf
+                                    <button type="button" class="btn btn-danger px-56 py-12" id="decline-button"
+                                        @if ($reservation->status === 'cancelled') disabled @endif>Cancel Reservation</button>
+                                </form>
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -109,15 +114,17 @@
                         <p><strong>Description:</strong> {{ $reservation->facility->description }}</p>
                     </div>
                 </div>
-            
+
                 <!-- Reservations Card -->
                 <div class="card">
                     <div class="card-body py-5">
-                        <div id="pills-reservations" role="tabpanel" aria-labelledby="pills-reservations-tab" tabindex="0">
+                        <div id="pills-reservations" role="tabpanel" aria-labelledby="pills-reservations-tab"
+                            tabindex="0">
                             <h6 class="text-xl mb-16">Reservations</h6>
                             @if ($facilityReservations->isEmpty())
                                 <div class="d-flex justify-content-center align-items-center w-100 mt-5">
-                                    <strong class="text-center p-3" style="font-size: 20px">No reservations found for this facility.</strong>
+                                    <strong class="text-center p-3" style="font-size: 20px">No reservations found for
+                                        this facility.</strong>
                                 </div>
                             @else
                                 <div class="table-responsive">
@@ -153,11 +160,30 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
-    
+
 
     @include('templates.footer_inc')
 </main>
 @include('templates.footer')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('decline-button').addEventListener('click', function() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to cancel this reservation?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the form
+                document.getElementById('decline-form').submit();
+            }
+        });
+    });
+</script>

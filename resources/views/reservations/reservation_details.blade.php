@@ -46,7 +46,7 @@
                         <h5 class="mb-0">Reservation Details</h5>
                         <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Reservers Id:</strong>
                         </div>
-                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->reservers_id_no}}</div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->reservers_id_no }}</div>
                         <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Student Name:</strong>
                         </div>
                         <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->student->firstname }}
@@ -81,6 +81,17 @@
                                 </div>
                             @endif
                         @endif
+                        @if (auth()->user()->type === 'faculty' || auth()->user()->type === 'student')
+                            <div class="d-flex justify-content-center gap-4" style="padding-top: 25px">
+                                <form id="decline-form" action="{{ route('reservation.cancel', $reservation->id) }}"
+                                    method="POST">
+                                    @csrf
+                                    <button type="button" class="btn btn-danger px-56 py-12" id="decline-button"
+                                        @if ($reservation->status === 'cancelled') disabled @endif>Cancel Reservation</button>
+                                </form>
+                            </div>
+                        @endif
+
                     </div>
                 </div>
             </div>
@@ -89,7 +100,8 @@
             <div class="col-lg-6">
                 <div class="card h-100">
                     <h4 class="fw-bold d-flex justify-content-end mt-5" style="margin-right: 75px">
-                        {{ ucwords($reservation->equipment->brand) }} {{ ucwords($reservation->equipment->name) }}</h4>
+                        {{ ucwords($reservation->equipment->brand) }} {{ ucwords($reservation->equipment->name) }}
+                    </h4>
                     <div class="card-body text-center">
                         <img src="/{{ $reservation->equipment->image }}" alt="Equipment Image"
                             class="img-fluid rounded mb-3 bg-light w-100" style="max-width: 620px;">
@@ -125,3 +137,22 @@
     @include('templates.footer_inc')
 </main>
 @include('templates.footer')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('decline-button').addEventListener('click', function() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to cancel this reservation?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the form
+                document.getElementById('decline-form').submit();
+            }
+        });
+    });
+</script>
