@@ -42,8 +42,8 @@
                                     "What are you up to today?",
                                     "What's on your schedule today?",
                                     "How's your day looking?",
-                                    "Your doing great!",
-                                    "Keep up the good work"
+                                    "You're doing great! Keep up the good work!",
+                                    "Anything exciting planned for today?"
                                 ];
                                 $randomMessage = $messages[array_rand($messages)];   
                             @endphp
