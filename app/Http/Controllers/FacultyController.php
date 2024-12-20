@@ -92,7 +92,7 @@ class FacultyController extends Controller
     {
         $faculty = Faculty::findOrFail($id);
         $facultyBorrowHistory = Borrower::with('equipment')->where('borrowers_id_no', $id)->get();
-        $facultyReservations = Reservation::with('equipment')->where('faculty_id', $id)->get();
+        $facultyReservations = EquipmentReservation::with('equipment')->where('reservers_id_no', $id)->get();
         
         if (!$faculty) {
             abort(404); 

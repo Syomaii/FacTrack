@@ -5,7 +5,7 @@
     <x-navbar />
     <div class="dashboard-main-body">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
-            <h6 class="fw-semibold mb-0">Student Profile</h6>
+            <h6 class="fw-semibold mb-0">Faculty Profile</h6>
             <ul class="d-flex align-items-center gap-2">
                 <li class="fw-medium">
                     <a href="{{ route('dashboard') }}" class="d-flex align-items-center gap-1 hover-text-primary">
@@ -16,11 +16,11 @@
                 <li>-</li>
                 <li class="fw-medium">
                     <a href="{{ url()->previous() }}" class="d-flex align-items-center gap-1 hover-text-primary">
-                        {{ $student->department }}
+                        {{ $faculty->department }}
                     </a>
                 </li>
                 <li>-</li>
-                <li class="fw-medium">{{ $student->id }}</li>
+                <li class="fw-medium">{{ $faculty->id }}</li>
             </ul>
         </div>
         @if (session('updateprofilesuccessfully'))
@@ -39,9 +39,9 @@
                         class="w-100 object-fit-cover">
                     <div class="pb-24 ms-16 mb-24 me-16 mt--100">
                         <div class="text-center border border-top-0 border-start-0 border-end-0 pt-5 mt-5">
-                            <h6 class="mb-0 mt-16">{{ ucwords($student->firstname) }} {{ ucwords($student->lastname) }}
+                            <h6 class="mb-0 mt-16">{{ ucwords($faculty->firstname) }} {{ ucwords($faculty->lastname) }}
                             </h6>
-                            <span class="text-secondary-light mb-16">{{ $student->email }}</span>
+                            <span class="text-secondary-light mb-16">{{ $faculty->email }}</span>
                         </div>
                         <div class="mt-24">
                             <h6 class="text-xl mb-16">Personal Info</h6>
@@ -49,21 +49,22 @@
                                 <li class="d-flex align-items-center gap-1 mb-12">
                                     <span class="w-30 text-md fw-semibold text-primary-light">Full Name</span>
                                     <span class="w-70 text-secondary-light fw-medium">:
-                                        {{ ucwords($student->firstname) }}
-                                        {{ ucwords($student->lastname) }}</span>
+                                        {{ ucwords($faculty->firstname) }}
+                                        {{ ucwords($faculty->lastname) }}</span>
                                 </li>
                                 <li class="d-flex align-items-center gap-1 mb-12">
                                     <span class="w-30 text-md fw-semibold text-primary-light">ID Number</span>
-                                    <span class="w-70 text-secondary-light fw-medium">: {{ $student->id }}</span>
+                                    <span class="w-70 text-secondary-light fw-medium">: {{ $faculty->id }}</span>
                                 </li>
-                                <li class="d-flex align-items-center gap-1 mb-12">
-                                    <span class="w-30 text-md fw-semibold text-primary-light">Course / Year</span>
-                                    <span class="w-70 text-secondary-light fw-medium">: {{ $student->course }}</span>
-                                </li>
+                                {{-- <li class="d-flex align-items-center gap-1 mb-12">
+                                    <span class="w-30 text-md fw-semibold text-primary-light">Designation</span>
+                                    <span class="w-70 text-secondary-light fw-medium">:
+                                        {{ $faculty->designation->name }}</span>
+                                </li> --}}
                                 <li class="d-flex align-items-center gap-1 mb-12">
                                     <span class="w-30 text-md fw-semibold text-primary-light">Department</span>
                                     <span class="w-70 text-secondary-light fw-medium">:
-                                        {{ $student->department }}</span>
+                                        {{ $faculty->department }}</span>
                                 </li>
                             </ul>
                         </div>
@@ -97,10 +98,11 @@
                                 aria-labelledby="pills-borrow-history-tab" tabindex="0">
                                 <h6 class="text-xl mb-16">Borrow History</h6>
 
-                                @if ($studentBorrowHistory->isEmpty())
+                                @if ($facultyBorrowHistory->isEmpty())
                                     @if (auth()->user()->type != 'student')
                                         <div class="d-flex justify-content-center align-items-center w-100 mt-5">
-                                            <strong class="text-center p-3" style="font-size: 20px">This student hasn't
+                                            <strong class="text-center p-3" style="font-size: 20px">This faculty member
+                                                hasn't
                                                 borrowed anything yet.</strong>
                                         </div>
                                     @else
@@ -122,7 +124,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($studentBorrowHistory as $borrowHistory)
+                                                @foreach ($facultyBorrowHistory as $borrowHistory)
                                                     <tr>
                                                         <td>{{ $borrowHistory->equipment->name }}</td>
                                                         <td>{{ $borrowHistory->borrowed_date }}</td>
@@ -147,7 +149,7 @@
                             <div class="tab-pane fade" id="pills-reservations" role="tabpanel"
                                 aria-labelledby="pills-reservations-tab" tabindex="0">
                                 <h6 class="text-xl mb-16">Reservations</h6>
-                                @if ($studentReservations->isEmpty())
+                                @if ($facultyReservations->isEmpty())
                                     <div class="d-flex justify-content-center align-items-center w-100 mt-5">
                                         <strong class="text-center p-3" style="font-size: 20px">No reservations found
                                             for this student.</strong>
@@ -164,7 +166,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($studentReservations as $reservation)
+                                                @foreach ($facultyReservations as $reservation)
                                                     <tr
                                                         onclick="window.location='{{ route('reservation_details', ['id' => $reservation->id]) }}'">
                                                         <td>{{ $reservation->equipment->name }}</td>
