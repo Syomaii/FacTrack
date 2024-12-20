@@ -97,7 +97,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="10" class="text-center">No borrows at the moment</td>
+                                    <td colspan="10" class="text-center">No borrowing activity at the moment.</td>
                                 </tr>
                             @endforelse
                         </tbody>
