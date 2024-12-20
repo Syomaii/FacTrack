@@ -40,11 +40,9 @@
         <div class="row g-4">
             <!-- Reservation Details -->
             <div class="col-lg-6">
-                <div class="card shadow-sm border-0">
-                    <div class="card-header text-white">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body py-5">
                         <h5 class="mb-0">Reservation Details</h5>
-                    </div>
-                    <div class="card-body">
                         <p><strong>Reservers ID:</strong> {{ $reservation->reservers_id_no }}</p>
                         <p><strong>Reservers Name:</strong>
                             @if ($reservation->student)
@@ -66,18 +64,39 @@
                                 {{ ucfirst($reservation->status) }}
                             </span>
                         </p>
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Reservers Id:</strong>
+                        </div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->reservers_id_no}}</div>
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Student Name:</strong>
+                        </div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->student->firstname }}
+                            {{ $reservation->student->lastname }}</div>
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Department:</strong>
+                        </div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->offices->name }}</div>
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Status:</strong></div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->status }}</div>
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Purpose:</strong></div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->purpose }}</div>
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Reservation
+                                Date:</strong></div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->reservation_date }}</div>
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Expected Return
+                                Date:</strong></div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->expected_return_date }}
+                        </div>
                         @if (auth()->user()->type === 'operator' || auth()->user()->type === 'facility manager')
                             @if ($reservation->status === 'pending')
                                 <div class="mt-4 d-flex justify-content-center gap-3">
                                     <form action="{{ route('reservation.declineFacility', $reservation->id) }}"
                                         method="POST">
                                         @csrf
-                                        <button type="submit" class="btn btn-outline-danger">Decline</button>
+                                        <button type="submit" class="btn btn-danger px-56 py-12">Decline</button>
                                     </form>
                                     <form action="{{ route('reservation.acceptFacility', $reservation->id) }}"
                                         method="POST">
                                         @csrf
-                                        <button type="submit" class="btn btn-primary">Accept</button>
+                                        <button type="submit" class="btn btn-primary px-56 py-12">Accept</button>
                                     </form>
                                 </div>
                             @endif

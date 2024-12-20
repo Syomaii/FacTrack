@@ -43,6 +43,7 @@
             <div class="col-lg-6">
                 <div class="card h-100">
                     <div class="card-body py-5">
+                        <h5 class="mb-0">Reservation Details</h5>
                         <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Reservers Id:</strong>
                         </div>
                         <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->reservers_id_no}}</div>
@@ -70,12 +71,12 @@
                                     <form action="{{ route('reservation.decline', $reservation->id) }}" method="POST"
                                         class="d-inline">
                                         @csrf
-                                        <button type="submit" class="btn btn-outline-danger">Decline</button>
+                                        <button type="submit" class="btn btn-danger px-56 py-12">Decline</button>
                                     </form>
                                     <form action="{{ route('reservation.accept', $reservation->id) }}" method="POST"
                                         class="d-inline">
                                         @csrf
-                                        <button type="submit" class="btn btn-primary">Accept</button>
+                                        <button type="submit" class="btn btn-primary px-56 py-12">Accept</button>
                                     </form>
                                 </div>
                             @endif

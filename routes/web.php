@@ -179,12 +179,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/in-maintenance-equipment-log', [EquipmentController::class, 'inMaintenanceEquipmentLog'])->name('logs.in_maintenance_equipment_log');
         Route::get('/in-repair-equipment-log', [EquipmentController::class, 'inRepairEquipmentLog'])->name('logs.in_repair_equipment_log');
         Route::post('/reservation/{id}/accept', [ReservationController::class, 'accept'])->name('reservation.accept');
-        Route::post('/facility-reservation/{id}/acceptFacility', [ReservationController::class, 'acceptFacility'])->name('reservation.acceptFacility');
+        Route::post('/facility-reservation/{id}/accept-facility', [ReservationController::class, 'acceptFacility'])->name('reservation.acceptFacility');
         Route::post('/reservation/{id}/decline', [ReservationController::class, 'decline'])->name('reservation.decline');
-        Route::post('/facility-reservation/{id}/declineFacility', [ReservationController::class, 'declineFacility'])->name('reservation.declineFacility');
+        Route::post('/facility-reservation/{id}/decline-facility', [ReservationController::class, 'declineFacility'])->name('reservation.declineFacility');
 
         // Route::get('/product-details/{id}', [PageController::class, 'productDetails'])->name('product.details');
-        
+        Route::get('/add-equipment/{id}', [PageController::class, 'addEquipment'])->name('add_equipment');
+        Route::post('/add-equipment/{id}', [EquipmentController::class, 'addEquipmentPost'])->name('add_equipment');
         //Equipment Controller
         Route::put('/equipments/update', [EquipmentController::class, 'updateEquipment'])->name('update_equipment');
         Route::get('/equipment-search', [EquipmentController::class, 'equipmentSearch'])->name('equipment_search');
@@ -236,8 +237,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['checkRole:facility manager'])->group(function () {
         Route::get('/generatedqr', [PageController::class, 'generatedQr']);
-        Route::get('/add-equipment/{id}', [PageController::class, 'addEquipment'])->name('add_equipment');
-        Route::post('/add-equipment/{id}', [EquipmentController::class, 'addEquipmentPost'])->name('add_equipment');
+        
         Route::get('/equipment-code/{code}', [EquipmentController::class, 'equipmentCode'])->name('added-equipment');
         
         Route::delete('/equipments/{id}', [EquipmentController::class, 'deleteEquipment'])->name('delete_equipment');
