@@ -210,56 +210,76 @@
         document.getElementById('previewBtn').addEventListener('click', function() {
             var fileInput = document.getElementById('file');
             var file = fileInput.files[0];
-    
+
             if (file && (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file
                     .type === 'application/vnd.ms-excel')) {
                 var reader = new FileReader();
-    
+
                 reader.onload = function(e) {
                     var data = new Uint8Array(e.target.result);
-                    var workbook = XLSX.read(data, {
-                        type: 'array'
-                    });
+                    var workbook = XLSX.read(data, { type: 'array' });
                     var firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    var sheetData = XLSX.utils.sheet_to_json(firstSheet, {
-                        header: 1
-                    });
-    
+                    var sheetData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
                     // Clear previous table content
                     var tableBody = document.querySelector('table tbody');
                     tableBody.innerHTML = "";
-    
+
                     // Process headers and rows for display
                     var headers = sheetData[0];
                     sheetData.slice(1).forEach(function(row) {
                         var newRow = document.createElement('tr');
-    
+
                         headers.forEach((header, index) => {
                             var cell = document.createElement('td');
-                            cell.textContent = row[index] ||
-                                ''; // Fallback to empty if cell data is missing
+                            cell.textContent = row[index] || ''; // Fallback to empty if cell data is missing
                             newRow.appendChild(cell);
                         });
-    
+
                         tableBody.appendChild(newRow);
                     });
-    
+
                     // Enable and display the submit button after preview
                     var submitBtn = document.getElementById('submitBtn');
                     var previewTable = document.getElementById('previewTable');
                     submitBtn.style.display = 'block';
                     previewTable.style.display = 'block';
                     submitBtn.disabled = false;
-    
-    
+
+                    // Hide and disable preview button
                     var previewBtn = document.getElementById('previewBtn');
                     previewBtn.style.display = 'none';
                     previewBtn.disabled = true;
                 };
-    
+
                 reader.readAsArrayBuffer(file);
             } else {
                 alert('Please upload a valid Excel file (XLSX or XLS).');
+            }
+        });
+
+        document.getElementById('file').addEventListener('change', function() {
+            var fileInput = document.getElementById('file');
+            var file = fileInput.files[0];
+
+            // Reset UI when the file input changes or is cleared
+            if (!file) {
+                var submitBtn = document.getElementById('submitBtn');
+                var previewTable = document.getElementById('previewTable');
+                var previewBtn = document.getElementById('previewBtn');
+
+                // Hide table and submit button
+                previewTable.style.display = 'none';
+                submitBtn.style.display = 'none';
+                submitBtn.disabled = true;
+
+                // Re-enable preview button
+                previewBtn.style.display = 'block';
+                previewBtn.disabled = false;
+
+                // Clear table content
+                var tableBody = document.querySelector('table tbody');
+                tableBody.innerHTML = "";
             }
         });
     </script>

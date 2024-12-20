@@ -66,8 +66,17 @@
 
                             <div class="d-flex w-50">
                                 <div class="card shadow-sm p-3 rounded w-100">
-                                    <h6>Projector</h6>
-                                    <p>Details about the projector here</p>
+                                    @foreach ($studentReservations as $reservations)
+                                        @if ($reservations->reservation_date === now()->format('Y-m-d'))
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6 class="fw-semibold mb-0">{{ $reservations->equipment->name }}</h6>
+                                                <p class="fw-semibold mb-0">{{ $reservations->purpose }}</p>
+                                                <a href="{{ route('reservation_details', ['id' => $reservations->id]) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                            </div>
+                                            
+                                        @endif
+                                    @endforeach
+                                    
                                 </div>
                             </div>
                         </div>
@@ -104,7 +113,7 @@
                <!-- Pending Approval Card -->
                 <div class="card shadow-sm p-3 mt-4 rounded">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="fw-semibold mb-0">Pending Reservation</h6>
+                        <h6 class="fw-semibold mb-0">Pending Facility Reservation</h6>
                     </div>
                     <div class="mt-2">
                         <!-- Dynamically list pending approvals -->
@@ -114,10 +123,13 @@
                             <ul class="list-unstyled">
                                 @foreach ($studentReservations as $reservation)
                                     @if ($reservation->status === 'pending')
-                                        <li class="d-flex justify-content-between mb-2">
-                                            <span>{{ $reservation->equipment->name }}</span>
-                                            <a href="{{ route('reservation_details', ['id' => $reservation->id]) }}" class="btn btn-sm btn-outline-warning">View</a>
-                                        </li>
+                                        <div class="card d-flex justify-content-between mb-2 p-3">
+                                            <span><strong>{{ $reservation->facility->name }}</strong></span>
+                                            <span>{{ $reservation->purpose }}</span>
+                                            <a href="{{ route('reservation_details', ['id' => $reservation->id]) }}">
+                                                <button class="btn btn-sm btn-warning d-flex justify-content-end">View</button>
+                                            </a>
+                                        </div>
                                     @endif
                                 @endforeach
                             </ul>
@@ -127,7 +139,7 @@
             </div>
         </div>
     </div>
-
+    </div>
         
     @include('templates.footer_inc')
 </main>

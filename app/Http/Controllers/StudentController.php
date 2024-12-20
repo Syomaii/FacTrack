@@ -7,6 +7,7 @@ use App\Mail\RegisteredUserMail;
 use App\Models\Borrower;
 use App\Models\Designation;
 use App\Models\EquipmentReservation;
+use App\Models\FacilityReservation;
 use App\Models\Office;
 use App\Models\Reservation;
 use App\Models\Students;
@@ -167,8 +168,9 @@ class StudentController extends Controller
     public function studentDashboard(){
         $student = Auth::user(); // Get the authenticated student
     
+        
         // Fetch the student's reservations
-        $studentReservations = EquipmentReservation::with('equipment')->where('reservers_id_no', $student->id)->get();
+        $studentReservations = FacilityReservation::with('facility')->where('reservers_id_no', $student->student_id)->get();
     
         // Return the view with student data and reservations
         $data = [

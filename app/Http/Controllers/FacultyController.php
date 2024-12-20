@@ -110,7 +110,7 @@ class FacultyController extends Controller
     public function addFacultyPost(Request $request)
     {
         $data = $request->validate([
-            'id' => 'required|integer|digits:8|unique:faculty,id', 
+            'id' => 'required|integer|digits:6|unique:faculty,id', 
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'email' => [

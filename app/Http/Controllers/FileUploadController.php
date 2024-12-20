@@ -65,7 +65,7 @@ class FileUploadController extends Controller
         $totalRows = $import->getRowCount();
         $failureCount = $import->failures()->count();
 
-        FacadesLog::info('Import Failures: ', $import->failures()->toArray());
+        Log::info('Import Failures: ', $import->failures()->toArray());
         if ($failureCount === $totalRows) {
             return redirect()->back()->with('error', 'All the IDs are taken.');
         } elseif ($failureCount > 0 && $failureCount < $totalRows) {

@@ -298,7 +298,7 @@ class ReservationController extends Controller
             ->where('id', $id)
             ->firstOrFail(); 
 
-        $facilityReservations = FacilityReservation::with('facility')->where('facility_id', $id)->get();
+        $facilityReservations = FacilityReservation::with('facility')->where('facility_id', $reservation->facility_id)->get();
         
 
         $title = "Reservation Details";
