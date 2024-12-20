@@ -26,27 +26,7 @@
 {{-- <script type="text/javascript" src="/assets/js/lib/instascan.min.js"></script> --}}
 {{-- <script src="/assets/js/homeTwoChart.js"></script> --}}
 
-@if (url()->current() == 'http://localhost:8000')
-    <script>
-        // ================== Password Show Hide Js Start ==========
-        function initializePasswordToggle(toggleSelector) {
-            $(toggleSelector).on('click', function() {
-                $(this).toggleClass("ri-eye-off-line");
-                var input = $($(this).attr("data-toggle"));
-                if (input.attr("type") === "password") {
-                    input.attr("type", "text");
-                } else {
-                    input.attr("type", "password");
-                }
-            });
-        }
 
-        // Call the function
-        initializePasswordToggle('.toggle-password');
-
-        // ========================= Password Show Hide Js End ===========================
-    </script>
-@endif
 
 
 @if (url()->current() == url('borrow-equipment'))

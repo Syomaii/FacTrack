@@ -53,22 +53,25 @@
                         <li>
                             <a href="/users">
                                 <i class="ri-circle-fill circle-icon text-lilac-600 w-auto"></i>
-                                <span>Users</span>
+                                <span>All</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="/view-students">
-                                <i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>
-                                <span>Students</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/view-faculties">
-                                <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
-                                <span>Faculty</span>
-                            </a>
-                        </li>
+                        @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'admin')
+                            <li>
+                                <a href="/view-students">
+                                    <i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>
+                                    <span>Students</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/view-faculties">
+                                    <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
+                                    <span>Faculty</span>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
+                </li>
             @endif
             {{-- @if (auth()->user()->type != 'student' && auth()->user()->type != 'faculty')
             @endif --}}

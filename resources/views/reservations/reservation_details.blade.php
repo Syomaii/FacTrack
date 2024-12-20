@@ -88,7 +88,7 @@
             <div class="col-lg-6">
                 <div class="card h-100">
                     <h4 class="fw-bold d-flex justify-content-end mt-5" style="margin-right: 75px">
-                        {{ ucwords($reservation->equipment->name) }}</h4>
+                        {{ ucwords($reservation->equipment->brand) }} {{ ucwords($reservation->equipment->name) }}</h4>
                     <div class="card-body text-center">
                         <img src="/{{ $reservation->equipment->image }}" alt="Equipment Image"
                             class="img-fluid rounded mb-3 bg-light w-100" style="max-width: 620px;">

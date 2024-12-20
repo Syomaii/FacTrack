@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Imports\FacultiesImport;
 use App\Imports\StudentsImport;
-use Illuminate\Container\Attributes\Log;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log as FacadesLog;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Laravel\Prompts\Concerns\Fallback;
 use Maatwebsite\Excel\Facades\Excel;
@@ -16,17 +16,19 @@ class FileUploadController extends Controller
 {
     public function importStudents(Request $request)
     {
-        $request->validate([
-            'file' => 'required|file|mimes:xlsx,xls|max:2048',
-            'department' => 'required',
-            'email' => [
-                'required',
-                'email',
-                    Rule::unique('users')->where(function ($query) {
-                        return $query->whereNotNull('faculty_id')->orWhereNotNull('student_id');
-                    })
-            ],
-        ]);
+        $userType = Auth::user()->type;
+        try {
+            $request->validate([
+                'file' => 'required|file|mimes:xlsx,xls|max:2048',
+                'department' => $userType === 'admin' ? 'required|string' : 'nullable|string',
+
+            ]);
+            Log::info('File validation passed');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation failed', ['errors' => $e->errors()]);
+            return back()->withErrors($e->errors());
+        }
+        
         $file = $request->file("file")->store('import');
 
         $import = new StudentsImport($request->input('department'));
@@ -35,7 +37,7 @@ class FileUploadController extends Controller
         $totalRows = $import->getRowCount();
         $failureCount = $import->failures()->count();
 
-        FacadesLog::info('Import Failures: ', $import->failures()->toArray());
+        Log::info('Import Failures: ', $import->failures()->toArray());
         if ($failureCount === $totalRows) {
             return redirect()->back()->with('error', 'All the IDs are taken.');
         } elseif ($failureCount > 0 && $failureCount < $totalRows) {
@@ -49,16 +51,11 @@ class FileUploadController extends Controller
 
     public function importFaculties(Request $request)
     {
+        $userType = Auth::user()->type;
+
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls|max:2048',
-            'department' => 'required',
-            'email' => [
-                'required',
-                'email',
-                    Rule::unique('users')->where(function ($query) {
-                        return $query->whereNotNull('faculty_id')->orWhereNotNull('student_id');
-                    })
-            ],
+            'department' => $userType === 'admin' ? 'required|string' : 'nullable|string',
         ]);
         $file = $request->file("file")->store('import');
 

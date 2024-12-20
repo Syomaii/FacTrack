@@ -48,7 +48,7 @@ class UserController extends Controller
 
         $validatedData = $request->validate($rules);
 
-        $officeId = null;
+        $officeId = '';
 
         $typeofOffice = $request->input('select_type');
 
@@ -76,7 +76,7 @@ class UserController extends Controller
                                                         ->first();
 
                     if ($existingUserWithSameDesignation) {
-                        return back()->withErrors(['designation' => 'Their is already an existing dean in this department.']);
+                        return back()->withErrors(['designation' => 'There is already an existing dean in this department.']);
                     }
                 } else {
                     return back()->withErrors(['department' => 'Selected department does not exist.']);
@@ -102,10 +102,10 @@ class UserController extends Controller
                 } else {
                     return back()->withErrors(['department' => 'Selected '. $office->name .' does not exist.']);
                 }
-            } elseif(($userRole != 'admin')) {
-                // If not admin, use the authenticated user's office_id
-                $officeId = Auth::user()->office_id;
-            }
+            } 
+        }elseif(($userRole != 'admin')) {
+            // If not admin, use the authenticated user's office_id
+            $officeId = Auth::user()->office_id;
         }
 
         $randomPassword = Str::random(10);
@@ -244,7 +244,7 @@ class UserController extends Controller
                 $imageUrl = 'images/profile_pictures/' . $image->getClientOriginalName();
                 $data['image'] = $imageUrl;
             } else {
-                $data['image'] = 'images/profile_pictures/default-profile.png';  
+                $data['image'] = $user->image;  
             }
         }else{
             $data = $request->validate([
@@ -261,9 +261,11 @@ class UserController extends Controller
                 $imageUrl = 'images/profile_pictures/' . $image->getClientOriginalName();
                 $data['image'] = $imageUrl;
             } else {
-                $data['image'] = 'images/profile_pictures/default-profile.png';  
+                $data['image'] = $user->image;  
             }
         }
+
+        
         
         $user->update($data);
         Auth::setUser($user);

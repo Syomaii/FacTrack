@@ -154,6 +154,7 @@
                         @error('file')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        
                     </div>
                     @if (auth()->user()->type === 'admin')
                         <div class="form-group mb-3 col-md-12">
@@ -297,23 +298,24 @@
 </script>
 <script>
     $(document).ready(function () {
-        const $modal = $('#infoModal').hide();
+        const $modal = $('#infoModal');
 
         // Open the modal
         $('#openModalButton').on('click', function () {
-            $modal.show();
+            $modal.removeClass('hidden');
         });
 
         // Close the modal
         $modal.find('.close').on('click', function () {
-            $modal.hide();
+            $modal.addClass('hidden');
         });
 
         // Close the modal when clicking outside of it
         $(window).on('click', function (event) {
             if ($(event.target).is($modal)) {
-                $modal.hide();
+                $modal.addClass('hidden');
             }
         });
     });
+
 </script>

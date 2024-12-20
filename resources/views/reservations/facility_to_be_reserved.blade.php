@@ -67,24 +67,26 @@
                                     <!-- Reservation Date -->
                                     <div class="mb-3">
                                         <label for="reservation_date" class="form-label">Reservation Date & Time</label>
-                                        <input type="date" id="reservation_date" name="reservation_date"
-                                            class="form-control">
+                                        <input type="datetime-local" id="reservation_date" name="reservation_date" class="form-control">
+                                        <small class="text-danger">{{ $errors->first('reservation_date') }}</small>
                                     </div>
 
                                     <div class="row">
                                         <!-- Time In -->
-                                        <div class="col-md-6 mb-3">
-                                            <label for="time_in" class="form-label">Time In</label>
-                                            <input type="time" id="time_in" name="time_in" class="form-control"
-                                                value="{{ old('time_in') }}">
-                                        </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="time_in" class="form-label">Time In</label>
+                                        <input type="time" id="time_in" name="time_in" class="form-control"
+                                            value="{{ old('time_in') }}">
+                                        <small class="text-danger">{{ $errors->first('time_in') }}</small>
+                                    </div>
 
-                                        <!-- Time Out -->
-                                        <div class="col-md-6 mb-3">
-                                            <label for="time_out" class="form-label">Time Out</label>
-                                            <input type="time" id="time_out" name="time_out" class="form-control"
-                                                value="{{ old('time_out') }}">
-                                        </div>
+                                    <!-- Time Out -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="time_out" class="form-label">Time Out</label>
+                                        <input type="time" id="time_out" name="time_out" class="form-control"
+                                            value="{{ old('time_out') }}">
+                                            <small class="text-danger">{{ $errors->first('time_out') }}</small>
+                                    </div>
                                     </div>
 
                                     <!-- Purpose -->
@@ -97,19 +99,18 @@
                                     <!-- Expected Audience -->
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label for="expected_audience_no" class="form-label">Expected Number of
-                                                Audience</label>
-                                            <input type="text" id="expected_audience_no" name="expected_audience_no"
-                                                class="form-control" placeholder="Enter number of people"
-                                                value="{{ old('expected_audience_no') }}">
+                                            <label for="expected_audience_no" class="form-label">Expected Number of Audience</label>
+                                            <input type="text" id="expected_audience_no" name="expected_audience_no" class="form-control"
+                                                placeholder="Enter number of people" value="{{ old('expected_audience_no') }}">
+                                                <small class="text-danger">{{ $errors->first('expected_audience_no') }}</small>
                                         </div>
 
                                         <!-- Stage Performers -->
                                         <div class="col-md-6 mb-3">
                                             <label for="stage_performers" class="form-label">Stage Performers</label>
-                                            <input type="text" id="stage_performers" name="stage_performers"
-                                                class="form-control" placeholder="Enter number of performers"
-                                                value="{{ old('stage_performers') }}">
+                                            <input type="text" id="stage_performers" name="stage_performers" class="form-control"
+                                                placeholder="Enter number of performers" value="{{ old('stage_performers') }}">
+                                                <small class="text-danger">{{ $errors->first('stage_performers') }}</small>
                                         </div>
                                     </div>
 
