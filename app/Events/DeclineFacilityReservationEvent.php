@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\FacilityReservation;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -17,9 +18,15 @@ class DeclineFacilityReservationEvent
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public $reservation;
+    public $reserver;
+    public $facility;
+
+    public function __construct(FacilityReservation $reservation, $reserver, $facility)
     {
-        //
+        $this->reservation = $reservation;
+        $this->reserver = $reserver;
+        $this->facility = $facility;
     }
 
     /**

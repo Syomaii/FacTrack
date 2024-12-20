@@ -31,19 +31,19 @@ class AcceptFacilityReservationNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['database'];
     }
 
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
+    // public function toMail(object $notifiable): MailMessage
+    // {
+    //     return (new MailMessage)
+    //                 ->line('The introduction to the notification.')
+    //                 ->action('Notification Action', url('/'))
+    //                 ->line('Thank you for using our application!');
+    // }
 
     /**
      * Get the array representation of the notification.
@@ -54,7 +54,7 @@ class AcceptFacilityReservationNotification extends Notification
     {
         return [
             'title' => 'Reservation Facility Accepted',
-            'message' => 'Your facility reservation for: ' . $this->facility->brand .  ' has been accepted',
+            'message' => 'Your facility reservation for: ' . $this->facility->name .  ' has been accepted',
             'reservation_id' => $this->reservation->id,
             'notification_type' => 'accepted-facility-reservation',
         ];

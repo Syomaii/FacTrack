@@ -40,31 +40,20 @@
         <div class="row g-4">
             <!-- Reservation Details -->
             <div class="col-lg-6">
-                <div class="card shadow-sm h-100">
+                <div class="card h-100">
                     <div class="card-body py-5">
-                        <h5 class="mb-0">Reservation Details</h5>
-                        <p><strong>Reservers ID:</strong> {{ $reservation->reservers_id_no }}</p>
-                        <p><strong>Reservers Name:</strong>
+                        <h5 class="mb-0 ms-5">Reservation Details</h5>
+
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Reservers Id:</strong></div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->reservers_id_no}}</div>
+
+                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Reservers Name:</strong></div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">
                             @if ($reservation->student)
                                 {{ $reservation->student->firstname }} {{ $reservation->student->lastname }}
                             @elseif ($reservation->faculty)
                                 {{ $reservation->faculty->firstname }} {{ $reservation->faculty->lastname }}
                             @endif
-                        </p>
-                        <p><strong>Purpose:</strong> {{ $reservation->purpose }}</p>
-                        <p><strong>Reservation Date:</strong> {{ $reservation->reservation_date }}</p>
-                        <p><strong>Time In:</strong> {{ $reservation->time_in }}</p>
-                        <p><strong>Time Out:</strong> {{ $reservation->time_out }}</p>
-                        <p><strong>Expected Audience:</strong> {{ $reservation->expected_audience_no }}</p>
-                        <p><strong>Stage Performers:</strong> {{ $reservation->stage_performers }}</p>
-                        <p><strong>Status:</strong>
-                            <span
-                                class="badge 
-                                {{ $reservation->status === 'pending' ? 'bg-warning' : ($reservation->status === 'approved' ? 'bg-success' : 'bg-danger') }}">
-                                {{ ucfirst($reservation->status) }}
-                            </span>
-                        </p>
-                        <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Reservers Id:</strong>
                         </div>
                         <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->reservers_id_no }}</div>
                         <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Student Name:</strong>
@@ -76,15 +65,10 @@
                         <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->offices->name }}</div>
                         <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Status:</strong></div>
                         <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->status }}</div>
+
                         <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Purpose:</strong></div>
                         <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->purpose }}</div>
-                        <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Reservation
-                                Date:</strong></div>
-                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->reservation_date }}</div>
-                        <div class="d-flex" style="margin-left: 4rem; margin-top: 18px"><strong>Expected Return
-                                Date:</strong></div>
-                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->expected_return_date }}
-                        </div>
+                        
                         @if (auth()->user()->type === 'operator' || auth()->user()->type === 'facility manager')
                             @if ($reservation->status === 'pending')
                                 <div class="mt-4 d-flex justify-content-center gap-3">
@@ -107,20 +91,64 @@
 
             <!-- Facility Details -->
             <div class="col-lg-6">
-                <div class="card shadow-sm border-0">
-                    <div class="card-header text-white text-center">
+                <!-- Facility Details Card -->
+                <div class="card mb-4"> <!-- Add 'mb-4' for spacing -->
+                    <div class="card-body text-center pb-5">
                         <h5 class="mb-0">{{ ucwords($reservation->facility->name) }}</h5>
-                    </div>
-                    <div class="card-body text-center">
                         <div class="d-flex justify-content-center mb-4">
                             <iconify-icon icon="mdi:home" style="font-size: 80px; color: #6c757d;"></iconify-icon>
                         </div>
                         <p><strong>Description:</strong> {{ $reservation->facility->description }}</p>
                     </div>
                 </div>
+            
+                <!-- Reservations Card -->
+                <div class="card">
+                    <div class="card-body py-5">
+                        <div id="pills-reservations" role="tabpanel" aria-labelledby="pills-reservations-tab" tabindex="0">
+                            <h6 class="text-xl mb-16">Reservations</h6>
+                            @if ($facilityReservations->isEmpty())
+                                <div class="d-flex justify-content-center align-items-center w-100 mt-5">
+                                    <strong class="text-center p-3" style="font-size: 20px">No reservations found for this facility.</strong>
+                                </div>
+                            @else
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Facility</th>
+                                                <th scope="col">Reservation Date</th>
+                                                <th scope="col">Purpose</th>
+                                                <th scope="col">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($facilityReservations as $reservation)
+                                                <tr>
+                                                    <td>{{ $reservation->facility->name }}</td>
+                                                    <td>{{ $reservation->reservation_date }}</td>
+                                                    <td>{{ $reservation->purpose }}</td>
+                                                    <td>
+                                                        @if ($reservation->status === 'approved')
+                                                            <span class="badge bg-success">Approved</span>
+                                                        @else
+                                                            <span class="badge bg-warning">Pending</span>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
             </div>
+            
         </div>
     </div>
+    
 
     @include('templates.footer_inc')
 </main>
