@@ -286,7 +286,7 @@ class ReservationController extends Controller
     public function facilityReservationDetails($id)
     {
         // Fetch the facility reservation by ID with related data
-        $reservation = FacilityReservation::with(['student', 'facility', 'offices'])
+        $reservation = FacilityReservation::with(['student', 'faculty', 'facility', 'offices'])
             ->where('id', $id)
             ->firstOrFail(); 
 
@@ -395,5 +395,17 @@ class ReservationController extends Controller
     
         return back()->with('success', 'Facility reserved successfully!');
     }
+
+    public function cancel($id)
+    {
+        $reservation = EquipmentReservation::findOrFail($id);
+
+        // Update the status to "cancelled"
+        $reservation->status = 'cancelled';
+        $reservation->save();
+
+        return redirect()->back()->with('success', 'Reservation has been cancelled successfully.');
+    }
+
 
 }

@@ -66,7 +66,7 @@
                         </p>
                         <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Reservers Id:</strong>
                         </div>
-                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->reservers_id_no}}</div>
+                        <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->reservers_id_no }}</div>
                         <div class="d-flex" style="margin-left: 4rem; margin-top: 15px"><strong>Student Name:</strong>
                         </div>
                         <div class="d-flex mt-4" style="margin-left: 4rem;">{{ $reservation->student->firstname }}
