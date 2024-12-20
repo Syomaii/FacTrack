@@ -25,7 +25,9 @@ class ReservationController extends Controller
     {
         $equipment = Equipment::where('code', $code)->firstOrFail();
 
-        return view('reservations.reserve_equipment', compact('equipment'))->with('title', 'Reserve Equipment');
+        $equipmentReservations = EquipmentReservation::with('equipment')->where('equipment_id', $equipment->id)->get();
+
+        return view('reservations.reserve_equipment', compact('equipment', 'equipmentReservations'))->with('title', 'Reserve Equipment');
     }
 
     public function storeReservation(Request $request, $code) {
@@ -157,7 +159,6 @@ class ReservationController extends Controller
 
         return view('reservations.reservation_details')->with($data);
     }
-
     
     public function accept($id)
     {

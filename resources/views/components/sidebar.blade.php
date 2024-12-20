@@ -43,35 +43,36 @@
                 </li>
             @endif
 
-            
-            <li class="dropdown">
-                <a href="javascript:void(0)">
-                    <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
-                    <span>Users</span>
-                </a>
-                <ul class="sidebar-submenu">
-                    <li>
-                        <a href="/users">
-                            <i class="ri-circle-fill circle-icon text-lilac-600 w-auto"></i>
-                            <span>All</span>
-                        </a>
-                    </li>
-                    @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'admin')
+            @if (auth()->user()->type != 'faculty' && auth()->user()->type != 'student')
+                <li class="dropdown">
+                    <a href="javascript:void(0)">
+                        <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
+                        <span>Users</span>
+                    </a>
+                    <ul class="sidebar-submenu">
                         <li>
-                            <a href="/view-students">
-                                <i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>
-                                <span>Students</span>
+                            <a href="/users">
+                                <i class="ri-circle-fill circle-icon text-lilac-600 w-auto"></i>
+                                <span>All</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="/view-faculties">
-                                <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
-                                <span>Faculty</span>
-                            </a>
-                        </li>
-                    @endif
-                </ul>
-            </li>
+                        @if (auth()->user()->type === 'facility manager' || auth()->user()->type === 'admin')
+                            <li>
+                                <a href="/view-students">
+                                    <i class="ri-circle-fill circle-icon text-warning-main w-auto"></i>
+                                    <span>Students</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/view-faculties">
+                                    <i class="ri-circle-fill circle-icon text-info-main w-auto"></i>
+                                    <span>Faculty</span>
+                                </a>
+                            </li>
+                        @endif
+                    </ul>
+                </li>
+            @endif
             
             @if (auth()->user()->type != 'student' && auth()->user()->type != 'faculty')
             @endif
