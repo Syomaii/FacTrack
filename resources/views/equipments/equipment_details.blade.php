@@ -45,16 +45,18 @@
                     data-id="{{ $equipments->id }}">Delete Equipment
                 </a>
 
-                <a href="javascript:void(0)"
-                    class="btn btn-success text-base radius-8 px-20 py-11 edit-equipment"
-                    data-id="{{ $equipments->id }}" data-name="{{ $equipments->name }}"
-                    data-description="{{ $equipments->description }}"
-                    data-acquired_date="{{ $equipments->acquired_date }}"
-                    data-facility="{{ $equipments->facility->name }}"
-                    data-brand="{{ $equipments->brand }}"
-                    data-serial_no="{{ $equipments->serial_no }}">Edit
-                    Equipment
-                </a>
+                @if ($equipments->status != 'Disposed' && $equipments->status != 'Donated')
+                    <a href="javascript:void(0)"
+                        class="btn btn-success text-base radius-8 px-20 py-11 edit-equipment"
+                        data-id="{{ $equipments->id }}" data-name="{{ $equipments->name }}"
+                        data-description="{{ $equipments->description }}"
+                        data-acquired_date="{{ $equipments->acquired_date }}"
+                        data-facility="{{ $equipments->facility->name }}"
+                        data-brand="{{ $equipments->brand }}"
+                        data-serial_no="{{ $equipments->serial_no }}">Edit
+                        Equipment
+                    </a>
+                @endif
                 
                 <button type="button" class="btn btn-primary text-base radius-8 px-20 py-11"
                     onclick="printDetails()">
@@ -106,7 +108,7 @@
             </div>
         </div>
         <h6>Equipment Timeline</h6>
-        <div class="timeline-horizontal pb-5 mt-3 pt-0">
+        <div class="timeline-horizontal mt-3 w-auto" style="padding-top: 4rem; ">
             @foreach ($timeline->sortByDesc('created_at') as $entry)
                 @php
                     // Determine the background color based on the status

@@ -23,6 +23,9 @@ class NotificationController extends Controller
         $redirectUrl = match($notification->data['notification_type'] ?? '') {
             'reservation' => route('reservation_details', $notification->data['reservation_id']),
             'borrows' => route('student.show_profile', $notification->data['student_id']),
+            'accepted-equipment-reservation' => route('student.show_profile', $notification->data['student_id']),
+            'facility-reservation' => route('facility_reservation_log', $notification->data['reservation_id']),
+            
             default => route('notifications'),
         };
 

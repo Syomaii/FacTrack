@@ -542,6 +542,13 @@ class TransactionController extends Controller
                     'recommendations' => $validatedData['recommendations'],
                 ]);
 
+                Timeline::create([
+                    'equipment_id' => $equipment->id,
+                    'status' => 'Available',
+                    'remarks' => 'The equipment is returned',
+                    'user_id' => Auth::user()->id
+                ]);
+
                 $equipment->status = 'Available';
                 $equipment->save();
                 $maintenance->save();
@@ -584,6 +591,13 @@ class TransactionController extends Controller
                     'recommendations' => $validatedData['recommendations'],
                 ]);
 
+                Timeline::create([
+                    'equipment_id' => $equipment->id,
+                    'status' => 'Available',
+                    'remarks' => 'The equipment is returned',
+                    'user_id' => Auth::user()->id
+                ]);
+                
                 $equipment->status = 'Available';
                 $equipment->save();
                 $repair->save();
