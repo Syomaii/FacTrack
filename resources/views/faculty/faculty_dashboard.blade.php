@@ -39,11 +39,11 @@
                             <!-- Random Message Display -->
                             @php
                                 $messages = [
-                                    'What are you up to today?',
+                                    "What are you up to today?",
                                     "What's on your schedule today?",
                                     "How's your day looking?",
-                                    'Your doing great!',
-                                    'Keep up the good work',
+                                    "You're doing great! Keep up the good work!",
+                                    "Anything exciting planned for today?"
                                 ];
                                 $randomMessage = $messages[array_rand($messages)];
                             @endphp
@@ -64,7 +64,7 @@
 
                         <div class="card shadow-sm p-3 rounded w-100">
                             <h6>Reservations</h6>
-                            <p>Here is your reservations for today!</p>
+                            <p>Here are your reservations for today!</p>
 
                             <div class="d-flex w-50">
                                 <div class="card shadow-sm p-3 rounded w-100">
