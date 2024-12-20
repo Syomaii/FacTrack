@@ -164,11 +164,11 @@ class PageController extends Controller
 
         $notifications = Auth::user()->notifications;
 
-        // foreach ($notifications as $notification) {
-        //     if (is_null($notification->read_at)) {
-        //         $notification->update(['read_at' => now()]);
-        //     }
-        // }
+        foreach ($notifications as $notification) {
+            if (is_null($notification->read_at)) {
+                $notification->update(['read_at' => now()]);
+            }
+        }
 
         return view('notifications', compact('notifications'))->with('title', 'Notifications');
     }

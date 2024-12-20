@@ -20,7 +20,7 @@
             </ul>
         </div>
         
-        <div class="">
+        {{-- <div class="">
             <form method="GET" action="{{ route('notifications-filter') }}">
                 <div class="d-flex flex-wrap align-items-between justify-content-between gap-3 mb-24 w-100" style="max-width: 100%;">
                     <!-- Read All Notifications Link -->
@@ -36,7 +36,7 @@
                     </div>
                 </div>
             </form>
-        </div>
+        </div> --}}
         
 
         @foreach ($notifications as $notification)

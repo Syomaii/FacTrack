@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Events\AcceptEquipmentReservationEvent;
+use App\Events\AcceptFacilityReservationEvent;
 use App\Events\DeclineEquipmentReservationEvent;
+use App\Events\DeclineFacilityReservationEvent;
 use App\Events\FacilityReservationEvent;
 use App\Events\ReserveEquipmentEvent;
 use App\Http\Controllers\Controller;
@@ -184,10 +186,10 @@ class ReservationController extends Controller
     {
         // Retrieve the facility reservation by ID
         $reservation = FacilityReservation::where('id', $id)->firstOrFail();
-
+        $facility = Facility::where('id', $reservation->facility_id)->firstOrFail();
         // Attempt to find the reserver as a student first
         $reserver = User::where('student_id', $reservation->reservers_id_no)->first();
-
+        // $avr = User::where('office_id', 2)->first();
         // If not found as a student, try to find as a faculty member
         if (!$reserver) {
             $reserver = User::where('faculty_id', $reservation->reservers_id_no)->first();
@@ -202,10 +204,14 @@ class ReservationController extends Controller
             $reservation->status = 'approved';
             $reservation->save();
             // Redirect back with a success message and title
+            event(new AcceptFacilityReservationEvent($reservation, $reserver, $facility));
+
             return redirect()->back()
                 ->with('success', 'Reservation approved successfully.')
                 ->with('title', 'Facility Reservation');
+            
         }
+
 
         // Redirect back with an error message if the status is not 'pending'
         return redirect()->back()
@@ -218,6 +224,7 @@ class ReservationController extends Controller
     {
         // Retrieve the facility reservation by ID
         $reservation = FacilityReservation::where('id', $id)->firstOrFail();
+        $facility = Facility::where('id', $reservation->facility_id)->firstOrFail();
     
         // Attempt to find the reserver as a student first
         $reserver = User::where('student_id', $reservation->reservers_id_no)->first();
@@ -237,6 +244,7 @@ class ReservationController extends Controller
             // Update the reservation status to 'declined'
             $reservation->status = 'declined';
             $reservation->save();
+            event(new DeclineFacilityReservationEvent($reservation, $reserver, $facility));
     
             // Redirect back with a success message and title
             return redirect()->back()
@@ -290,9 +298,13 @@ class ReservationController extends Controller
             ->where('id', $id)
             ->firstOrFail(); 
 
+        $facilityReservations = FacilityReservation::with('facility')->where('facility_id', $id)->get();
+        
+
         $title = "Reservation Details";
         $data = [
             'reservation' => $reservation,
+            'facilityReservations' => $facilityReservations,
             'title' => $title
         ];
 
