@@ -149,7 +149,7 @@
                                                         class="text-xl text-danger-600"></iconify-icon>
                                                 </button>
                                                 <img id="uploaded-img__preview" class="w-100 h-100 object-fit-cover"
-                                                    src="/{{ auth()->user()->image }}" alt="image">
+                                                    src="/{{ $user->image }}" alt="image">
                                             </div>
 
                                             <label class="upload-file h-120-px w-120-px border input-form-light radius-8 overflow-hidden border-dashed bg-neutral-50 bg-hover-neutral-200 d-flex align-items-center flex-column justify-content-center gap-1"

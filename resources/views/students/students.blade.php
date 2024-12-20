@@ -133,7 +133,7 @@
                 </h5>
             </div>
             
-            {{-- <div id="infoModal" class="modal hidden mb-5">
+            <div id="infoModal" class="modal hidden mb-5">
                 <div class="modal-content ">
                     <span class="close cursor-pointer">&times;</span>
                     <h5>Excel Format Instructions</h5>
@@ -142,7 +142,7 @@
                     <img src="/images/excel-format-students.png" alt="">
                     
                 </div>
-            </div> --}}
+            </div>
 
             <div class="card-body">
                 <form action="{{ route('import.file') }}" method="POST" enctype="multipart/form-data" class="p-3">
@@ -154,6 +154,7 @@
                         @error('file')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        
                     </div>
                     @if (auth()->user()->type === 'admin')
                         <div class="form-group mb-3 col-md-12">
@@ -297,23 +298,24 @@
 </script>
 <script>
     $(document).ready(function () {
-        const $modal = $('#infoModal').hide();
+        const $modal = $('#infoModal');
 
         // Open the modal
         $('#openModalButton').on('click', function () {
-            $modal.show();
+            $modal.removeClass('hidden');
         });
 
         // Close the modal
         $modal.find('.close').on('click', function () {
-            $modal.hide();
+            $modal.addClass('hidden');
         });
 
         // Close the modal when clicking outside of it
         $(window).on('click', function (event) {
             if ($(event.target).is($modal)) {
-                $modal.hide();
+                $modal.addClass('hidden');
             }
         });
     });
+
 </script>

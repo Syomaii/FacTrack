@@ -25,7 +25,9 @@ class ReservationController extends Controller
     {
         $equipment = Equipment::where('code', $code)->firstOrFail();
 
-        return view('reservations.reserve_equipment', compact('equipment'))->with('title', 'Reserve Equipment');
+        $equipmentReservations = EquipmentReservation::with('equipment')->where('equipment_id', $equipment->id)->get();
+
+        return view('reservations.reserve_equipment', compact('equipment', 'equipmentReservations'))->with('title', 'Reserve Equipment');
     }
 
     public function storeReservation(Request $request, $code) {
@@ -157,24 +159,26 @@ class ReservationController extends Controller
 
         return view('reservations.reservation_details')->with($data);
     }
-
     
     public function accept($id)
-    {
-        $reservation = EquipmentReservation::where('id', $id)->firstOrFail();
-        $reserver = User::where('student_id', $reservation->reservers_id_no)->first();
-        $equipment = Equipment::where('id', $reservation->equipment_id)->firstOrFail();
+{
+    $reservation = EquipmentReservation::where('id', $id)->firstOrFail();
+    $reserver = User::where('student_id', $reservation->reservers_id_no)
+                ->orWhere('faculty_id', $reservation->reservers_id_no) // Assuming you have a faculty_id field
+                ->first();
 
-        if ($reservation->status == 'pending') { // Only approve if pending
-            $reservation->status = 'approved';
-            $reservation->save();
+    $equipment = Equipment::where('id', $reservation->equipment_id)->firstOrFail();
 
-            event(new AcceptEquipmentReservationEvent($reservation, $reserver, $equipment));
-            return redirect()->back()->with('success', 'Reservation approved successfully.');
-        }
+    if ($reservation->status == 'pending') { // Only approve if pending
+        $reservation->status = 'approved';
+        $reservation->save();
 
-        return redirect()->back()->with('error', 'Invalid status value.');
+        event(new AcceptEquipmentReservationEvent($reservation, $reserver, $equipment));
+        return redirect()->back()->with('success', 'Reservation approved successfully.');
     }
+
+    return redirect()->back()->with('error', 'Invalid status value.');
+}
 
     public function acceptFacility($id)
     {
@@ -249,7 +253,9 @@ class ReservationController extends Controller
     public function decline($id)
     {
         $reservation = EquipmentReservation::where('id', $id)->firstOrFail();
-        $reserver = User::where('student_id', $reservation->reservers_id_no)->first();
+        $reserver = User::where('student_id', $reservation->reservers_id_no)
+                ->orWhere('faculty_id', $reservation->reservers_id_no) // Assuming you have a faculty_id field
+                ->first();
         $equipment = Equipment::where('id', $reservation->equipment_id)->firstOrFail();
 
         if (in_array('declined', ['pending', 'approved', 'declined'])) { // Replace with your ENUM values

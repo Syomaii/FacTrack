@@ -238,6 +238,14 @@ class UserController extends Controller
                 'designation_id' => 'required|exists:designations,id',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             ]);
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $image->move(public_path('images/profile_pictures'), $image->getClientOriginalName());
+                $imageUrl = 'images/profile_pictures/' . $image->getClientOriginalName();
+                $data['image'] = $imageUrl;
+            } else {
+                $data['image'] = $user->image;  
+            }
         }else{
             $data = $request->validate([
                 'firstname' => 'required|string|max:255',
@@ -247,17 +255,17 @@ class UserController extends Controller
                 'designation_id' => 'required|exists:designations,id',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             ]);
-            
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $image->move(public_path('images/profile_pictures'), $image->getClientOriginalName());
+                $imageUrl = 'images/profile_pictures/' . $image->getClientOriginalName();
+                $data['image'] = $imageUrl;
+            } else {
+                $data['image'] = $user->image;  
+            }
         }
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $image->move(public_path('images/profile_pictures'), $image->getClientOriginalName());
-            $imageUrl = 'images/profile_pictures/' . $image->getClientOriginalName();
-            $data['image'] = $imageUrl;
-        } else {
-            $data['image'] = Auth::user()->image;  
-        }
+        
         
         $user->update($data);
         Auth::setUser($user);

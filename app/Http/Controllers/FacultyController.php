@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\RegisteredUserMail;
 use App\Models\Borrower;
 use App\Models\Designation;
+use App\Models\EquipmentReservation;
 use App\Models\Faculty;
 use App\Models\Office;
 use App\Models\Reservation;
@@ -151,8 +152,11 @@ class FacultyController extends Controller
         
         $faculty = Auth::user();
 
+        $facultyReservations = EquipmentReservation::with('equipment')->where('reservers_id_no', $faculty->id)->get();
+
         $data = ([
             'faculty' => $faculty,
+            'facultyReservations' => $facultyReservations,
             'title' => 'Faculty Dashboard'
         ]);
 
