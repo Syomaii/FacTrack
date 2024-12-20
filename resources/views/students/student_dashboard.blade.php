@@ -65,19 +65,23 @@
                             <p>Here are your reservations for today!</p>
 
                             <div class="d-flex w-50">
-                                <div class="card shadow-sm p-3 rounded w-100">
-                                    @foreach ($studentReservations as $reservations)
-                                        @if ($reservations->reservation_date === now()->format('Y-m-d'))
-                                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <h6 class="fw-semibold mb-0">{{ $reservations->equipment->name }}</h6>
-                                                <p class="fw-semibold mb-0">{{ $reservations->purpose }}</p>
-                                                <a href="{{ route('reservation_details', ['id' => $reservations->id]) }}" class="btn btn-sm btn-outline-primary">View</a>
-                                            </div>
-                                            
-                                        @endif
-                                    @endforeach
-                                    
-                                </div>
+                                @if ($studentReservations->isEmpty())
+                                    <p class="text-muted">You have no pending requests for approval.</p>
+                                @else
+                                    <div class="card shadow-sm p-3 rounded w-100">
+                                        @foreach ($studentReservations as $reservations)s
+                                            @if ($reservations->reservation_date === now()->format('Y-m-d'))
+                                                <div class="card d-flex justify-content-between align-items-center mb-3">
+                                                    <h6 class="fw-semibold mb-0">{{ $reservations->facility->name }}</h6>
+                                                    <p class="fw-semibold mb-0">{{ $reservations->purpose }}</p>
+                                                    <a href="{{ route('reservation_details', ['id' => $reservations->id]) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                                </div>
+                                                
+                                            @endif
+                                        @endforeach
+                                        
+                                    </div>
+                                @else
                             </div>
                         </div>
                     </div>
@@ -111,7 +115,7 @@
                 </div>
 
                <!-- Pending Approval Card -->
-                <div class="card shadow-sm p-3 mt-4 rounded">
+                {{-- <div class="card shadow-sm p-3 mt-4 rounded">
                     <div class="d-flex justify-content-between align-items-center">
                         <h6 class="fw-semibold mb-0">Pending Facility Reservation</h6>
                     </div>
@@ -135,7 +139,7 @@
                             </ul>
                         @endif
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

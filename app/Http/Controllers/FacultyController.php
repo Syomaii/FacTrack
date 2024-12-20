@@ -157,7 +157,7 @@ class FacultyController extends Controller
         
         $faculty = Auth::user();
 
-        $facultyReservations = EquipmentReservation::with('equipment')->where('reservers_id_no', $faculty->id)->get();
+        $facultyReservations = EquipmentReservation::with('equipment')->where('reservers_id_no', $faculty->faculty_id)->get();
 
         $data = ([
             'faculty' => $faculty,
