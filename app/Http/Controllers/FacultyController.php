@@ -45,6 +45,11 @@ class FacultyController extends Controller
     public function search(Request $request)
     {
         $query = Faculty::query();
+
+        if ($request->filled('department')) {
+            $department = $request->input('department');
+            $query->where('department', $department);
+        }
     
         // Search filter
         if ($request->filled('search')) {

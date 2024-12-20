@@ -36,6 +36,8 @@
                         action="{{ route('borrower_search') }}">
                         <input type="text" class="bg-base h-40-px w-auto" name="search" id="borrowerSearch"
                             placeholder="Search" value="{{ request('search') }}">
+                        <input type="hidden" name="office_id" value="{{ Auth::user()->office_id }}">
+
                         <button type="submit"><iconify-icon icon="ion:search-outline"
                                 class="icon"></iconify-icon></button>
                     </form>
@@ -52,6 +54,7 @@
                                 Not Returned
                             </option>
                         </select>
+                        <input type="hidden" name="office_id" value="{{ Auth::user()->office_id }}">
                     </form>
 
                     <!-- Sort by ID Filter -->
@@ -63,6 +66,8 @@
                             <option value="desc" {{ request('sort_by_id') === 'desc' ? 'selected' : '' }}>Descending
                             </option>
                         </select>
+                        <input type="hidden" name="office_id" value="{{ Auth::user()->office_id }}">
+
                     </form>
                 </div>
             </div>

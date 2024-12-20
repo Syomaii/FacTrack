@@ -176,6 +176,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/borrowers-log', [PageController::class, 'borrowersLog'])->name('borrowersLog');
         Route::get('/equipment-reservations-log', [ReservationController::class, 'equipmentReservationLog'])->name('logs.equipment_reservations');
         Route::get('/facility-reservations-log', [ReservationController::class, 'facilityReservationLog'])->name('logs.facility_reservations');
+        Route::get('/in-maintenance-equipment-log', [EquipmentController::class, 'inMaintenanceEquipmentLog'])->name('logs.in_maintenance_equipment_log');
+        Route::get('/in-repair-equipment-log', [EquipmentController::class, 'inRepairEquipmentLog'])->name('logs.in_repair_equipment_log');
         Route::post('/reservation/{id}/accept', [ReservationController::class, 'accept'])->name('reservation.accept');
         Route::post('/facility-reservation/{id}/acceptFacility', [ReservationController::class, 'acceptFacility'])->name('reservation.acceptFacility');
         Route::post('/reservation/{id}/decline', [ReservationController::class, 'decline'])->name('reservation.decline');
@@ -187,6 +189,9 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/equipments/update', [EquipmentController::class, 'updateEquipment'])->name('update_equipment');
         Route::get('/equipment-search', [EquipmentController::class, 'equipmentSearch'])->name('equipment_search');
         Route::get('/borrower-search', [PageController::class, 'borrowerSearch'])->name('borrower_search');
+        Route::get('/in-maintenance-search', [EquipmentController::class, 'inMaintenanceSearch'])->name('in_maintenance_search');
+        Route::get('/in-repair-search', [EquipmentController::class, 'inRepairSearch'])->name('in_repair_search');
+
 
         
         //QRCodeController

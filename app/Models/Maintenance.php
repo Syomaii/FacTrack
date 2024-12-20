@@ -32,6 +32,11 @@ class Maintenance extends Model
         return $this->belongsTo(Equipment::class);
     }
 
+    public function office()
+    {
+        return $this->belongsTo(Office::class, 'office_id'); // Adjust 'office_id' as necessary
+    }
+
     protected $casts = [
         'maintained_date' => 'datetime',
         'returned_date' => 'datetime',

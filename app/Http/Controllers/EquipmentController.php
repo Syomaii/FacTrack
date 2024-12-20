@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Equipment;
 use App\Models\Facility;
+use App\Models\Maintenance;
 use App\Models\Timeline;
 use App\Models\Office;
+use App\Models\Repair;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -132,27 +134,129 @@ class EquipmentController extends Controller
         $status = $request->input('status');
         $sort = $request->input('sort');
     
-        $equipments = Equipment::when($search, function ($query, $search) {
-            return $query->where('name', 'like', '%' . $search . '%')
-                         ->orWhere('brand', 'like', '%' . $search . '%')
-                         ->orWhere('serial_no', 'like', '%' . $search . '%')
-                         ->orWhere('owned_by', 'like', '%' . $search . '%');
-        })
-        ->when($status, function ($query, $status) {
-            return $query->where('status', $status);
-        })->when($sort, function ($query, $sort) {
-            return $query->orderBy('name', $sort); 
-        })
-        ->paginate(10);
+        // Get the user's office ID
+        $officeId = Auth::user()->office_id;
     
-        return view('equipments/equipments', compact('equipments'))
+        // Get the facilities associated with the user's office
+        $facilities = Facility::where('office_id', '=', $officeId)->pluck('id');
+    
+        // Start the query for equipments
+        $query = Equipment::with('facility')->whereIn('facility_id', $facilities);
+    
+        // Apply filters based on the request inputs
+        $equipments = $query->when($search, function ($query, $search) {
+                return $query->where('name', 'like', '%' . $search . '%')
+                             ->orWhere('brand', 'like', '%' . $search . '%')
+                             ->orWhere('serial_no', 'like', '%' . $search . '%')
+                             ->orWhere('owned_by', 'like', '%' . $search . '%');
+            })
+            ->when($status, function ($query, $status) {
+                return $query->where('status', $status);
+            })
+            ->when($sort, function ($query, $sort) {
+                return $query->orderBy('name', $sort); 
+            })
+            ->paginate(10);
+    
+        return view('equipments/equipments', compact('equipments', 'facilities'))
                ->with('title', 'Equipments')
                ->with('status', $status)
                ->with('search', $search);
     }
+
+    public function inMaintenanceEquipmentLog(){
+        $user = Auth::user();
+    
+        if ($user && $user->office) {
+            // Get the office ID of the authenticated user
+            $officeId = $user->office->id;
+    
+            $maintenance = Maintenance::with(['equipment', 'user'])
+                ->whereHas('user', function ($query) use ($officeId) {
+                    $query->where('office_id', $officeId); 
+                })
+                ->orderBy('created_at', 'desc')
+                ->paginate(3);
+    
+        } else {
+            $maintenance = collect(); 
+        }
+    
+        return view('logs.in_maintenance_equipment_log', compact('maintenance'))->with('title', 'In Maintenance Equipment Details');
+    }
+
+    public function inMaintenanceSearch(Request $request)
+    {
+        // Start a query on the Maintenance model
+        $query = Maintenance::query();
+    
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+    
+            // Apply the search filters within the same office
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('remarks', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('issue', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('technician', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('status', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+    
+        // Paginate the results
+        $maintenance = $query->paginate(10);
+    
+        // Return the view with the maintenance logs
+        return view('logs.in_maintenance_equipment_log', compact('maintenance'))->with('title', 'In Maintenance Equipment Details');
+    }
+
+
+    public function inRepairEquipmentLog(){
+        $user = Auth::user();
+    
+        if ($user && $user->office) {
+            // Get the office ID of the authenticated user
+            $officeId = $user->office->id;
+    
+            $repair = Repair::with(['equipment', 'user'])
+                ->whereHas('user', function ($query) use ($officeId) {
+                    $query->where('office_id', $officeId); 
+                })
+                ->orderBy('created_at', 'desc')
+                ->paginate(3);
+    
+        } else {
+            $repair = collect(); 
+        }
+    
+        return view('logs.in_repair_equipment_log', compact('repair'))->with('title', 'In Repair Equipment Details');
+    }
+
+
+    public function inRepairSearch(Request $request)
+    {
+        // Start a query on the Maintenance model
+        $query = Repair::query();
+    
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+    
+            // Apply the search filters within the same office
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('remarks', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('issue', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('technician', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('status', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+    
+        // Paginate the results
+        $repair = $query->paginate(10);
+    
+        // Return the view with the maintenance logs
+        return view('logs.in_repair_equipment_log', compact('repair'))->with('title', 'In Repair Equipment Details');
+    }
     
 
-    
 }
 
 
