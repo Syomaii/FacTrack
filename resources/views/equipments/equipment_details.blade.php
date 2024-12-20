@@ -323,6 +323,7 @@
 
         // Create the print content
         var printContents = `
+            <h2 style="padding-top: 5px; font-size: 12px; text-align: center">UCLM Property</h2>
             <div style="display: flex; align-items: center; gap: 20px; font-family: Arial, sans-serif; padding: 20px;">
                 <!-- QR Code Section -->
                 <div>
@@ -331,9 +332,9 @@
                 
                 <!-- Details Section -->
                 <div>
-                    <h2 style="margin: 0; font-size: 16px;">${equipmentBrand} ${equipmentModel}</h2>
-                    <p style="margin: 5px 0; font-size: 12px;"><strong>Serial Number:</strong> ${equipmentSerialNo}</p>
-                    <p style="margin: 5px 0; font-size: 12px;"><strong>QR Code Value:</strong> ${equipmentQrCode}</p>
+                    <h3 style="margin: 0; font-size: 12px;">${equipmentBrand} ${equipmentModel}</h3>
+                    <p style="margin: 5px 0; font-size: 10px;"><strong>Serial Number:</strong> ${equipmentSerialNo}</p>
+                    <p style="margin: 5px 0; font-size: 10px;"><strong>QR Code Value:</strong> ${equipmentQrCode}</p>
                 </div>
             </div>
         `;
