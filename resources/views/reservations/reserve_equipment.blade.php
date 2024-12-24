@@ -32,14 +32,28 @@
         @endif
 
         @if (session('error'))
-            <div class="alert alert-danger">
-                <strong>{{ session('error') }}</strong>
+            <div class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-0 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between"
+                role="alert">
+                <div class="d-flex align-items-center gap-2">
+                    <iconify-icon icon="mingcute:delete-2-line" class="icon text-xl"></iconify-icon>
+                    {{ session('error') }}
+                </div>
+                <button class="remove-button text-danger-600 text-xxl line-height-1"> <iconify-icon
+                        icon="iconamoon:sign-times-light" class="icon" data-bs-dismiss="alert"
+                        aria-label="Close"></iconify-icon></button>
             </div>
         @endif
 
         @if ($errors->any())
-            <div class="alert alert-danger">
-                <strong>{{ $errors->first() }}</strong>
+            <div class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-0 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between"
+                role="alert">
+                <div class="d-flex align-items-center gap-2">
+                    <iconify-icon icon="mingcute:delete-2-line" class="icon text-xl"></iconify-icon>
+                    {{ $errors->first() }}
+                </div>
+                <button class="remove-button text-danger-600 text-xxl line-height-1"> <iconify-icon
+                        icon="iconamoon:sign-times-light" class="icon" data-bs-dismiss="alert"
+                        aria-label="Close"></iconify-icon></button>
             </div>
         @endif
 
@@ -53,10 +67,10 @@
                             <div class="card-body text-center">
                                 <!-- Equipment Image -->
                                 <div class="mb-5">
-                                    <img src="{{ asset($equipment->image) }}" alt="{{ $equipment->name }}" class="img-fluid"
-                                        style="max-height: 200px;">
+                                    <img src="{{ asset($equipment->image) }}" alt="{{ $equipment->name }}"
+                                        class="img-fluid" style="max-height: 200px;">
                                 </div>
-        
+
                                 <!-- Equipment Details -->
                                 <div class="row g-4 px-5">
                                     <div class="col-6 text-start ">
@@ -78,13 +92,13 @@
                                 </div>
                             </div>
                         </div>
-                        <h5 class="fw-semibold mb-4 mt-5">Reservation Form</h5>  
+                        <h5 class="fw-semibold mb-4 mt-5">Reservation Form</h5>
                         <form action="{{ route('reserve.equipment.store', $equipment->code) }}" method="POST">
                             @csrf
                             <!-- Purpose -->
                             <div class="mb-4">
                                 <label for="purpose" class="form-label">Purpose</label>
-                                <textarea class="form-control" id="purpose" name="purpose" rows="3" autofocus>{{ old('purpose') }}</textarea>
+                                <textarea class="form-control" id="purpose" name="purpose" rows="3">{{ old('purpose') }}</textarea>
                             </div>
 
                             <!-- Reservation Date and Time -->
@@ -92,7 +106,7 @@
                                 <label for="reservation_date" class="form-label">Reservation Date and Time</label>
                                 <input type="datetime-local" class="form-control" id="reservation_date"
                                     name="reservation_date">
-                                    <small class="text-danger">{{ $errors->first('reservation_date') }}</small>
+                                <small class="text-danger">{{ $errors->first('reservation_date') }}</small>
                             </div>
 
                             <!-- Expected Return Date and Time -->
@@ -101,7 +115,7 @@
                                     Time</label>
                                 <input type="datetime-local" class="form-control" id="expected_return_date"
                                     name="expected_return_date">
-                                    <small class="text-danger">{{ $errors->first('expected_return_date') }}</small>
+                                <small class="text-danger">{{ $errors->first('expected_return_date') }}</small>
                             </div>
                             <div class="d-flex justify-content-center m-3 gap-3">
                                 <a href="{{ url()->previous() }}">
@@ -122,7 +136,8 @@
                         <h6 class="text-xl mb-16">Reservations</h6>
                         @if ($equipmentReservations->isEmpty())
                             <div class="d-flex justify-content-center align-items-center w-100 mt-5">
-                                <strong class="text-center p-3" style="font-size: 20px">No reservation records are found for this equipment.</strong>
+                                <strong class="text-center p-3" style="font-size: 20px">No reservation records are found
+                                    for this equipment.</strong>
                             </div>
                         @else
                             <div class="table-responsive">
@@ -158,7 +173,7 @@
                                 </table>
                             </div>
                         @endif
-                        
+
                     </div>
                 </div>
             </div>
