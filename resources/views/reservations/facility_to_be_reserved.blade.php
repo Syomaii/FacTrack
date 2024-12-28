@@ -27,14 +27,28 @@
         @endif
 
         @if (session('error'))
-            <div class="alert alert-danger">
-                <strong>{{ session('error') }}</strong>
+            <div class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-0 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between"
+                role="alert">
+                <div class="d-flex align-items-center gap-2">
+                    <iconify-icon icon="mingcute:delete-2-line" class="icon text-xl"></iconify-icon>
+                    {{ session('error') }}
+                </div>
+                <button class="remove-button text-danger-600 text-xxl line-height-1"> <iconify-icon
+                        icon="iconamoon:sign-times-light" class="icon" data-bs-dismiss="alert"
+                        aria-label="Close"></iconify-icon></button>
             </div>
         @endif
 
         @if ($errors->any())
-            <div class="alert alert-danger">
-                <strong>{{ $errors->first() }}</strong>
+            <div class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-0 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between"
+                role="alert">
+                <div class="d-flex align-items-center gap-2">
+                    <iconify-icon icon="mingcute:delete-2-line" class="icon text-xl"></iconify-icon>
+                    {{ $errors->first() }}
+                </div>
+                <button class="remove-button text-danger-600 text-xxl line-height-1"> <iconify-icon
+                        icon="iconamoon:sign-times-light" class="icon" data-bs-dismiss="alert"
+                        aria-label="Close"></iconify-icon></button>
             </div>
         @endif
         <div class="row g-4">
@@ -67,26 +81,27 @@
                                     <!-- Reservation Date -->
                                     <div class="mb-3">
                                         <label for="reservation_date" class="form-label">Reservation Date & Time</label>
-                                        <input type="datetime-local" id="reservation_date" name="reservation_date" class="form-control">
+                                        <input type="datetime-local" id="reservation_date" name="reservation_date"
+                                            class="form-control">
                                         <small class="text-danger">{{ $errors->first('reservation_date') }}</small>
                                     </div>
 
                                     <div class="row">
                                         <!-- Time In -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="time_in" class="form-label">Time In</label>
-                                        <input type="time" id="time_in" name="time_in" class="form-control"
-                                            value="{{ old('time_in') }}">
-                                        <small class="text-danger">{{ $errors->first('time_in') }}</small>
-                                    </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="time_in" class="form-label">Time In</label>
+                                            <input type="time" id="time_in" name="time_in" class="form-control"
+                                                value="{{ old('time_in') }}">
+                                            <small class="text-danger">{{ $errors->first('time_in') }}</small>
+                                        </div>
 
-                                    <!-- Time Out -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="time_out" class="form-label">Time Out</label>
-                                        <input type="time" id="time_out" name="time_out" class="form-control"
-                                            value="{{ old('time_out') }}">
+                                        <!-- Time Out -->
+                                        <div class="col-md-6 mb-3">
+                                            <label for="time_out" class="form-label">Time Out</label>
+                                            <input type="time" id="time_out" name="time_out" class="form-control"
+                                                value="{{ old('time_out') }}">
                                             <small class="text-danger">{{ $errors->first('time_out') }}</small>
-                                    </div>
+                                        </div>
                                     </div>
 
                                     <!-- Purpose -->
@@ -99,24 +114,30 @@
                                     <!-- Expected Audience -->
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label for="expected_audience_no" class="form-label">Expected Number of Audience</label>
-                                            <input type="text" id="expected_audience_no" name="expected_audience_no" class="form-control"
-                                                placeholder="Enter number of people" value="{{ old('expected_audience_no') }}">
-                                                <small class="text-danger">{{ $errors->first('expected_audience_no') }}</small>
+                                            <label for="expected_audience_no" class="form-label">Expected Number of
+                                                Audience</label>
+                                            <input type="text" id="expected_audience_no" name="expected_audience_no"
+                                                class="form-control" placeholder="Enter number of people"
+                                                value="{{ old('expected_audience_no') }}">
+                                            <small
+                                                class="text-danger">{{ $errors->first('expected_audience_no') }}</small>
                                         </div>
 
                                         <!-- Stage Performers -->
                                         <div class="col-md-6 mb-3">
                                             <label for="stage_performers" class="form-label">Stage Performers</label>
-                                            <input type="text" id="stage_performers" name="stage_performers" class="form-control"
-                                                placeholder="Enter number of performers" value="{{ old('stage_performers') }}">
-                                                <small class="text-danger">{{ $errors->first('stage_performers') }}</small>
+                                            <input type="text" id="stage_performers" name="stage_performers"
+                                                class="form-control" placeholder="Enter number of performers"
+                                                value="{{ old('stage_performers') }}">
+                                            <small
+                                                class="text-danger">{{ $errors->first('stage_performers') }}</small>
                                         </div>
                                     </div>
 
                                     <!-- Submit Button -->
                                     <div class="d-flex justify-content-center m-3 gap-3">
-                                        <a href="/reserve-facility"><button type="submit" class="btn btn-danger">Cancel
+                                        <a href="/reserve-facility"><button type="submit"
+                                                class="btn btn-danger">Cancel
                                                 Reservation</button></a>
                                         <button type="submit" class="btn btn-primary">Submit Reservation</button>
                                     </div>

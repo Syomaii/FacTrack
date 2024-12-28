@@ -127,7 +127,7 @@
                             <!-- Next Page Link -->
                             <li class="page-item">
                                 <a class="page-link bg-neutral-300 text-secondary-light fw-semibold radius-8 border-0 d-flex align-items-center justify-content-center h-32-px w-32-px"
-                                    href="{{ $maintenance->nextPageUrl() }}">
+                                    href="{{ $repair->nextPageUrl() }}">
                                     <iconify-icon icon="ep:d-arrow-right"></iconify-icon>
                                 </a>
                             </li>

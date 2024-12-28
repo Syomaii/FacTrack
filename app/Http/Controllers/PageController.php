@@ -278,10 +278,11 @@ class PageController extends Controller
         return view('equipments/add_equipment', compact('facility'))->with('title', 'Add Equipment');
     }
 
-    public function equipmentDetails(Request $request, $code)
+    public function equipmentDetails($code)
     {
         $equipments = Equipment::where('code', $code)->first();
-
+        
+        // Check if equipment exists
         if (!$equipments) {
             return redirect()->back()->with('error', 'Equipment not found');
         }
@@ -290,31 +291,15 @@ class PageController extends Controller
         $timeline = $equipments->timeline()->get(); // Get the timeline entries
     
         // Pass the data to the view
-        // $data = [
-        //     'equipments' => $equipments,
-        //     'timeline' => $timeline,
-        //     'title' => 'Equipment Details'
-        // ];
-
-        $startDate = Carbon::parse($request->query('start'))->startOfDay();
-        $endDate = Carbon::parse($request->query('end'))->endOfDay();
-
-        $inRepairedEquipments = Repair::whereBetween('repaired_date', [$startDate, $endDate])
-        ->with('equipment') 
-        ->get();
-
-        $reportData = $inRepairedEquipments->groupBy('equipment_id')->map(function ($group) {
-            return [
-                'equipment' => $group[0]->equipment,
-                'timeline' => $group[0]->equipment->timeline()->get(), 
-                'last_repaired' => $group->max('repaired_date') ? Carbon::parse($group->max('repaired_date'))->format('Y-m-d') : 'N/A',
-                'last_returned' => $group->max('returned_date') ? Carbon::parse($group->max('returned_date'))->format('Y-m-d') : 'N/A',
-                'times_repaired' => $group->count(), 
-            ];
-        })->values();
+        $data = [
+            'equipment' => $equipments,
+            'timeline' => $timeline,
+            'title' => 'Equipment Details'
+        ];
         
-        return view('equipments/equipment_details', $reportData)->with('title', 'Equipment Details');
-    }
+        return view('equipments/equipment_details', $data);
+    }   
+
     
     public function addUser(){
         $designations = Designation::all();

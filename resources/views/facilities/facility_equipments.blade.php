@@ -67,19 +67,20 @@
                 </div>
             </div>
         @elseif ($errors->any())
-            @foreach ($errors->all() as $error)
-                <div class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-0 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between"
-                    role="alert">
-                    <div class="d-flex align-items-center gap-2">
-                        <iconify-icon icon="mingcute:delete-2-line" class="icon text-xl"></iconify-icon>
-                        {{ $error }}
-                    </div>
+            <div class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-0 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between"
+                role="alert">
+                <div class="d-flex align-items-center gap-2">
+                    <iconify-icon icon="mingcute:delete-2-line" class="icon text-xl"></iconify-icon>
+                    {{ $errors->first() }}
                 </div>
-            @endforeach
+                <button class="remove-button text-danger-600 text-xxl line-height-1"> <iconify-icon
+                        icon="iconamoon:sign-times-light" class="icon" data-bs-dismiss="alert"
+                        aria-label="Close"></iconify-icon></button>
+            </div>
         @endif
 
         <!-- Search Bar and Buttons -->
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-24">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-24 mt-3">
             <!-- Search Bar -->
             <div class="input-group flex-grow-1 flex-sm-grow-0 mb-3 mb-sm-0" style="max-width: 650px;">
                 <input type="text" id="equipmentSearch" class="form-control radius-8 border-0 shadow-sm"

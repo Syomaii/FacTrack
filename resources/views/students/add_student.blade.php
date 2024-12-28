@@ -34,7 +34,7 @@
                 </div>
             </div>
         @endif --}}
-
+        {{-- 
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -43,7 +43,7 @@
                     @endforeach
                 </ul>
             </div>
-        @endif
+        @endif --}}
 
         <form action="{{ route('add-studentPost') }}" method="POST" enctype="multipart/form-data" id="userForm">
             @csrf
@@ -150,18 +150,19 @@
                                         </div>
                                     </div>
 
-                                    
+
 
                                     <div class="d-flex justify-content-center gap-3 py-2 ">
                                         <a href="/view-students" class="">
                                             <button type="button"
-                                            class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8" id="cancelBtn">
-                                            Cancel
-                                        </button></a>
+                                                class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8"
+                                                id="cancelBtn">
+                                                Cancel
+                                            </button></a>
                                         <button type="submit" class="btn btn-primary px-20 py-11">
                                             Add Student
                                         </button>
-                                        
+
                                     </div>
                                 </div>
                             </div>

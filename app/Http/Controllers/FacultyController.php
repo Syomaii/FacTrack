@@ -7,6 +7,7 @@ use App\Mail\RegisteredUserMail;
 use App\Models\Borrower;
 use App\Models\Designation;
 use App\Models\EquipmentReservation;
+use App\Models\FacilityReservation;
 use App\Models\Faculty;
 use App\Models\Office;
 use App\Models\Reservation;
@@ -98,12 +99,14 @@ class FacultyController extends Controller
         $faculty = Faculty::findOrFail($id);
         $facultyBorrowHistory = Borrower::with('equipment')->where('borrowers_id_no', $id)->get();
         $facultyReservations = EquipmentReservation::with('equipment')->where('reservers_id_no', $id)->get();
+        $facultyFacilityReservations = FacilityReservation::with('facility')->where('reservers_id_no', $id)->get();
+        
         
         if (!$faculty) {
             abort(404); 
         }
 
-        return view('faculty.faculty_profile', compact('faculty', 'facultyBorrowHistory', 'facultyReservations'))
+        return view('faculty.faculty_profile', compact('faculty', 'facultyBorrowHistory', 'facultyFacilityReservations', 'facultyReservations'))
             ->with('title', 'Faculty Profile');
     }
 

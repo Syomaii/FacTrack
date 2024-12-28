@@ -41,20 +41,21 @@
                 </div>
             </div>
         @elseif ($errors->any())
-            @foreach ($errors->all() as $error)
-                <div class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-0 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between"
-                    role="alert">
-                    <div class="d-flex align-items-center gap-2">
-                        <iconify-icon icon="mingcute:delete-2-line" class="icon text-xl"></iconify-icon>
-                        {{ $error }}
-                    </div>
+            <div class="alert alert-danger bg-danger-100 text-danger-600 border-danger-600 border-start-width-4-px border-top-0 border-end-0 border-bottom-0 px-24 py-13 mb-0 fw-semibold text-lg radius-4 d-flex align-items-center justify-content-between"
+                role="alert">
+                <div class="d-flex align-items-center gap-2">
+                    <iconify-icon icon="mingcute:delete-2-line" class="icon text-xl"></iconify-icon>
+                    {{ $errors->first() }}
                 </div>
-            @endforeach
+                <button class="remove-button text-danger-600 text-xxl line-height-1"> <iconify-icon
+                        icon="iconamoon:sign-times-light" class="icon" data-bs-dismiss="alert"
+                        aria-label="Close"></iconify-icon></button>
+            </div>
         @endif
 
         <!-- Search Bar -->
 
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-24">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-24 mt-3">
             <!-- Search Bar -->
             <div class="input-group flex-grow-1 flex-sm-grow-0 mb-3 mb-sm-0" style="max-width: 650px;">
                 <input type="text" id="officeSearch" class="form-control" placeholder="Search Facilities"
@@ -92,15 +93,16 @@
                             <div class="mb-3">
                                 <label for="officeName" class="form-label">Office Name</label>
                                 <input type="text" class="form-control" id="officeName" name="name"
-                                    value="{{ old('name') }}" required>
+                                    value="{{ old('name') }}">
                             </div>
                             <div class="mb-3">
                                 <label for="officeDescription" class="form-label">Office Description</label>
-                                <textarea class="form-control" id="officeDescription" name="description" rows="3" required>{{ old('description') }}</textarea>
+                                <textarea class="form-control" id="officeDescription" name="description" rows="3">{{ old('description') }}</textarea>
                             </div>
                             <div class="mb-3">
-                                <label for="type" class="form-label"  >Type</label>
-                                <select class="form-control {{ $errors->has('type') ? 'is-invalid' : '' }}" id="type" name="type" onchange="handleOwnedByChange()" required>
+                                <label for="type" class="form-label">Type</label>
+                                <select class="form-control {{ $errors->has('type') ? 'is-invalid' : '' }}"
+                                    id="type" name="type" onchange="handleOwnedByChange()">
                                     <option value="" disabled selected>Select Type</option>
                                     <option value="office" {{ old('type') == 'office' ? 'selected' : '' }}>Office
                                     </option>
@@ -111,10 +113,10 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <input type="text" class="form-control radius-8 mt-2 d-none"
-                                    id="other_amenities" name="other_amenities" placeholder="Please specify"
+                                <input type="text" class="form-control radius-8 mt-2 d-none" id="other_amenities"
+                                    name="other_amenities" placeholder="Please specify"
                                     value="{{ old('other_amenities') }}" />
-                                    <small class="text-danger">{{ $errors->first('other_amenities') }}</small>
+                                <small class="text-danger">{{ $errors->first('other_amenities') }}</small>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -134,7 +136,8 @@
                             <div class="card-body p-24">
                                 <div
                                     class="w-64-px h-64-px d-inline-flex align-items-center justify-content-center bg-info-200 text-primary-600 mb-16 radius-12">
-                                    <iconify-icon icon="{{ $office->getIconClass() }}" class="h5 mb-0"></iconify-icon>
+                                    <iconify-icon icon="{{ $office->getIconClass() }}"
+                                        class="h5 mb-0"></iconify-icon>
                                 </div>
                                 <h6 class="mb-8">{{ $office->name }}</h6>
                                 <a href="{{ url('/office/' . $office->id) }}"
@@ -143,7 +146,7 @@
                                         View Office
                                     @elseif ($office->type == 'department')
                                         View Department
-                                    @elseif ($office->type != 'office' && $office->type != 'department' )
+                                    @elseif ($office->type != 'office' && $office->type != 'department')
                                         View {{ $office->type }}
                                     @endif
                                     <iconify-icon icon="iconamoon:arrow-right-2" class="text-xl"></iconify-icon>
@@ -201,7 +204,7 @@
                 otherInput.classList.remove('d-none');
             } else {
                 otherInput.classList.add('d-none');
-                otherInput.value = ''; 
+                otherInput.value = '';
             }
         });
     }

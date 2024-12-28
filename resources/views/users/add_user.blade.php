@@ -97,7 +97,7 @@
                 <li class="fw-medium">Add User</li>
             </ul>
         </div>
-{{-- 
+        {{-- 
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -201,20 +201,21 @@
                                                 </span>
                                                 <input id="mobile_no" type="text"
                                                     class="form-control radius-8 {{ $errors->has('mobile_no') ? 'is-invalid' : '' }}"
-                                                    name="mobile_no" value="{{ old('mobile_no') }}" required
+                                                    name="mobile_no" value="{{ old('mobile_no') }}"
                                                     placeholder="09xxxxxxxxx">
                                             </div>
                                             <small class="text-danger">{{ $errors->first('mobile_no') }}</small>
                                         </div>
                                     </div>
 
-                                    
+
 
                                     @if ($userType === 'admin')
                                         <!-- Office/Department Radio Buttons -->
                                         <div class="row">
                                             <div class="form-group mb-3 col-md-6">
-                                                <label class="fw-semibold text-primary-light text-sm mb-2">Select Type</label>
+                                                <label class="fw-semibold text-primary-light text-sm mb-2">Select
+                                                    Type</label>
                                                 <div class="row g-3">
                                                     <div class="col-md-3" style="margin-top: 1.8rem">
                                                         <div class="form-check d-flex align-items-center gap-2">
@@ -248,14 +249,15 @@
                                                     </div>
                                                 </div>
                                             </div>
-    
+
                                             <!-- Office Dropdown -->
                                             <div class="form-group mb-3 col-md-6" id="office-dropdown">
                                                 <label for="office_id"
                                                     class="form-label fw-semibold text-primary-light text-sm mb-8">Select
                                                     Office</label>
-                                                <select class="form-control radius-8 {{ $errors->has('office_id') ? 'is-invalid' : '' }}" id="office_id"
-                                                    name="office_id">
+                                                <select
+                                                    class="form-control radius-8 {{ $errors->has('office_id') ? 'is-invalid' : '' }}"
+                                                    id="office_id" name="office_id">
                                                     <option value="" disabled selected>Select an Office</option>
                                                     <!-- This option is not scrollable -->
                                                     @foreach ($offices as $office)
@@ -265,9 +267,9 @@
                                                         @endif
                                                     @endforeach
                                                 </select>
-                                                
+
                                             </div>
-    
+
                                             <!-- Department Dropdown -->
                                             <div class="form-group mb-3 col-md-6" id="department-dropdown"
                                                 style="display: none;">
@@ -276,7 +278,8 @@
                                                     Department</label>
                                                 <select class="form-control radius-8" id="department"
                                                     name="department">
-                                                    <option value="" disabled selected>Select a Department</option>
+                                                    <option value="" disabled selected>Select a Department
+                                                    </option>
                                                     <!-- This option is not scrollable -->
                                                     @foreach ($offices as $office)
                                                         @if ($office->type == 'department')
@@ -292,9 +295,9 @@
                                                 <label for="avr"
                                                     class="form-label fw-semibold text-primary-light text-sm mb-8">Select
                                                     Other Amenities</label>
-                                                <select class="form-control radius-8" id="avr"
-                                                    name="avr">
-                                                    <option value="" disabled selected>Choose from other amenities</option>
+                                                <select class="form-control radius-8" id="avr" name="avr">
+                                                    <option value="" disabled selected>Choose from other
+                                                        amenities</option>
                                                     <!-- This option is not scrollable -->
                                                     @foreach ($offices as $office)
                                                         @if ($office->type != 'office' && $office->type != 'department')
@@ -306,67 +309,72 @@
                                             </div>
                                         </div>
 
-                                        
+
                                     @endif
-                                        <div class="row">
-                                            <div class="form-group mb-3 col-md-6">
-                                                <label for="type"
-                                                    class="form-label fw-semibold text-primary-light text-sm mb-8">Type</label>
-                                                <div class="icon-field">
-                                                    <span class="icon">
-                                                        <iconify-icon icon="f7:person"></iconify-icon>
-                                                    </span>
-                                                    <select
-                                                        class="form-control radius-8 {{ $errors->has('type') ? 'is-invalid' : '' }}"
-                                                        id="type" name="type">
-                                                        <option value="" disabled selected>Select a role</option>
+                                    <div class="row">
+                                        <div class="form-group mb-3 col-md-6">
+                                            <label for="type"
+                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Type</label>
+                                            <div class="icon-field">
+                                                <span class="icon">
+                                                    <iconify-icon icon="f7:person"></iconify-icon>
+                                                </span>
+                                                <select
+                                                    class="form-control radius-8 {{ $errors->has('type') ? 'is-invalid' : '' }}"
+                                                    id="type" name="type">
+                                                    <option value="" disabled selected>Select a role</option>
 
-                                                        <option value="facility manager"
-                                                            {{ old('type') == 'Facility manager' ? 'selected' : '' }}>
-                                                            Facility Manager
-                                                        </option>
-                                                        <option value="operator"
-                                                            {{ old('type') == 'Operator' ? 'selected' : '' }}> Operator
-                                                        </option>
+                                                    <option value="facility manager"
+                                                        {{ old('type') == 'Facility manager' ? 'selected' : '' }}>
+                                                        Facility Manager
+                                                    </option>
+                                                    <option value="operator"
+                                                        {{ old('type') == 'Operator' ? 'selected' : '' }}> Operator
+                                                    </option>
 
-                                                    </select>
-                                                </div>
-                                                <small class="text-danger">{{ $errors->first('type') }}</small>
+                                                </select>
                                             </div>
-                                            <div class="form-group mb-3 col-md-6">
-                                                <label for="designation_id"
-                                                    class="form-label fw-semibold text-primary-light text-sm mb-8">Designation</label>
-                                                <div class="icon-field">
-                                                    <span class="icon">
-                                                        <iconify-icon icon="f7:person"></iconify-icon>
-                                                    </span>
-                                                    <select
-                                                        class="form-control radius-8 {{ $errors->has('designation_id') ? 'is-invalid' : '' }}"
-                                                        id="designation_id" name="designation_id">
-                                                        <option value="" disabled selected>Select a designation
-                                                        </option>
-                                                        @foreach ($designations as $designation)
-                                                            @if (($userType == 'admin' || ($userType != 'facility_manager' && $designation->name != 'Dean')) && $designation->id != 3 && $designation->id != 4 && $designation->id != 6 )
-                                                                <option value="{{ $designation->id  }}"
-                                                                    {{ old('designation_id') == $designation->id ? 'selected' : '' }}>
-                                                                    {{ $designation->name }}
-                                                                </option>
-                                                            @endif
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <small class="text-danger">{{ $errors->first('designation') }}</small>
-                                            </div>
-
-                                            
+                                            <small class="text-danger">{{ $errors->first('type') }}</small>
                                         </div>
+                                        <div class="form-group mb-3 col-md-6">
+                                            <label for="designation_id"
+                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Designation</label>
+                                            <div class="icon-field">
+                                                <span class="icon">
+                                                    <iconify-icon icon="f7:person"></iconify-icon>
+                                                </span>
+                                                <select
+                                                    class="form-control radius-8 {{ $errors->has('designation_id') ? 'is-invalid' : '' }}"
+                                                    id="designation_id" name="designation_id">
+                                                    <option value="" disabled selected>Select a designation
+                                                    </option>
+                                                    @foreach ($designations as $designation)
+                                                        @if (
+                                                            ($userType == 'admin' || ($userType != 'facility_manager' && $designation->name != 'Dean')) &&
+                                                                $designation->id != 3 &&
+                                                                $designation->id != 4 &&
+                                                                $designation->id != 6)
+                                                            <option value="{{ $designation->id }}"
+                                                                {{ old('designation_id') == $designation->id ? 'selected' : '' }}>
+                                                                {{ $designation->name }}
+                                                            </option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <small class="text-danger">{{ $errors->first('designation') }}</small>
+                                        </div>
+
+
+                                    </div>
                                     <div class="d-flex align-items-center justify-content-center gap-3 mt-3 mb-5">
                                         <a href="/users">
                                             <button type="button"
                                                 class="btn btn-danger text-md px-56 py-11 radius-8">Cancel</button>
                                         </a>
                                         <button type="submit"
-                                            class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8" style="max-width: 200px">Add
+                                            class="btn btn-primary border border-primary-600 text-md px-56 py-12 radius-8"
+                                            style="max-width: 200px">Add
                                             User</button>
                                     </div>
                                 </div>

@@ -39,11 +39,11 @@
                             <!-- Random Message Display -->
                             @php
                                 $messages = [
-                                    "What are you up to today?",
+                                    'What are you up to today?',
                                     "What's on your schedule today?",
                                     "How's your day looking?",
                                     "You're doing great! Keep up the good work!",
-                                    "Anything exciting planned for today?"
+                                    'Anything exciting planned for today?',
                                 ];
                                 $randomMessage = $messages[array_rand($messages)];
                             @endphp
@@ -68,17 +68,17 @@
 
                             <div class="d-flex w-50">
                                 <div class="card shadow-sm p-3 rounded w-100">
-                                    @foreach ($studentReservations as $reservations)
+                                    @foreach ($facultyReservations as $reservations)
                                         @if ($reservations->reservation_date === now()->format('Y-m-d'))
                                             <div class="d-flex justify-content-between align-items-center mb-3">
                                                 <h6 class="fw-semibold mb-0">{{ $reservations->equipment->name }}</h6>
                                                 <p class="fw-semibold mb-0">{{ $reservations->purpose }}</p>
-                                                <a href="{{ route('reservation_details', ['id' => $reservations->id]) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                                <a href="{{ route('reservation_details', ['id' => $reservations->id]) }}"
+                                                    class="btn btn-sm btn-outline-primary">View</a>
                                             </div>
-                                            
                                         @endif
                                     @endforeach
-                                    
+
                                 </div>
                             </div>
                         </div>

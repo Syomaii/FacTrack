@@ -87,7 +87,15 @@
                                     data-bs-toggle="pill" data-bs-target="#pills-reservations" type="button"
                                     role="tab" aria-controls="pills-reservations" aria-selected="false"
                                     tabindex="-1">
-                                    Reservations
+                                    Equipment Reservations
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link d-flex align-items-center px-24"
+                                    id="pills-facility-reservations-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-facility-reservations" type="button" role="tab"
+                                    aria-controls="pills-facility-reservations" aria-selected="false" tabindex="-1">
+                                    Facility Reservations
                                 </button>
                             </li>
                         </ul>
@@ -152,7 +160,7 @@
                                 @if ($facultyReservations->isEmpty())
                                     <div class="d-flex justify-content-center align-items-center w-100 mt-5">
                                         <strong class="text-center p-3" style="font-size: 20px">No reservations found
-                                            for this student.</strong>
+                                            for this faculty member.</strong>
                                     </div>
                                 @else
                                     <div class="table-responsive">
@@ -175,6 +183,50 @@
                                                         <td>
                                                             @if ($reservation->status === 'approved')
                                                                 <span class="badge bg-success">Approved</span>
+                                                            @else
+                                                                <span class="badge bg-warning">Pending</span>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Facility Reservations Tab -->
+                            <div class="tab-pane fade" id="pills-facility-reservations" role="tabpanel"
+                                aria-labelledby="pills-facility-reservations-tab" tabindex="0">
+                                <h6 class="text-xl mb-16">Facility Reservations</h6>
+                                @if ($facultyFacilityReservations->isEmpty())
+                                    <div class="d-flex justify-content-center align-items-center w-100 mt-5">
+                                        <strong class="text-center p-3" style="font-size: 20px">No reservations found
+                                            for this student.</strong>
+                                    </div>
+                                @else
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Facility</th>
+                                                    <th scope="col">Reservation Date</th>
+                                                    <th scope="col">Purpose</th>
+                                                    <th scope="col">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($facultyFacilityReservations as $reservation)
+                                                    <tr
+                                                        onclick="window.location='{{ route('facility_reservation_log', ['id' => $reservation->id]) }}'">
+                                                        <td>{{ $reservation->facility->name }}</td>
+                                                        <td>{{ $reservation->purpose }}</td>
+                                                        <td>{{ $reservation->reservation_date }}</td>
+                                                        <td>
+                                                            @if ($reservation->status === 'approved')
+                                                                <span class="badge bg-success">Approved</span>
+                                                            @elseif ($reservation->status === 'cancelled')
+                                                                <span class="badge bg-danger">Cancelled</span>
                                                             @else
                                                                 <span class="badge bg-warning">Pending</span>
                                                             @endif
