@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ForMaintenanceEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Borrower;
 use App\Models\Equipment;
@@ -260,6 +261,7 @@ class TransactionController extends Controller
             'repair_id_no' => $equipment->id, 
             'issue_note' => $issueNote,
             'repair_date' => $repairedDate,
+            
         ])->with('title', 'Repair Details');
     }
     
@@ -277,7 +279,12 @@ class TransactionController extends Controller
         if ($equipment->status !== 'Available') {
             return back()->withErrors(['equipment' => 'This equipment is not available for repair.']);
         }
-    
+        $repair_count = $equipment->repair_count + 1;
+        
+        $repairs = Equipment::where('id', $equipment->id)
+            ->first();
+
+        
         // Create the maintenance record
         Repair::create([
             'equipment_id' => $equipment->id, 
@@ -286,7 +293,14 @@ class TransactionController extends Controller
             'repaired_date' => $validatedData['repair_date'], 
             'user_id' => Auth::user()->id,
             'status' => 'In Repair',
+            'repair_count' => $repair_count,
         ]);
+        $equipment->repair_count = $repair_count + 1;
+        $equipment->save();
+
+        if($repair_count >= 2){
+            event(new ForMaintenanceEvent($repairs, $equipment));
+        }
 
         Timeline::create([
             'equipment_id' => $equipment->id,
@@ -560,7 +574,7 @@ class TransactionController extends Controller
                 $validatedData = $request->validate([
                     'returned_date' => 'required|date',
                     'technician' => 'required|string',
-                    'issue_note' => 'required_if:status,In Repair|string',
+                    'issue_note' => 'required_if:status,In Repair',
                     'action_taken' => 'required_if:status,In Repair|string',
                     'remarks' => 'nullable|string',
                     'recommendations' => 'nullable|string',

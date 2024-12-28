@@ -7,6 +7,7 @@ use App\Events\AcceptFacilityReservationEvent;
 use App\Events\DeclineEquipmentReservationEvent;
 use App\Events\DeclineFacilityReservationEvent;
 use App\Events\FacilityReservationEvent;
+use App\Events\ForMaintenanceEvent;
 use App\Events\OverdueEquipmentEvent;
 use App\Events\ReserveEquipmentEvent;
 use App\Listeners\AcceptEquipmentReservationListener;
@@ -14,6 +15,7 @@ use App\Listeners\AcceptFacilityReservationListener;
 use App\Listeners\DeclineEquipmentReservationListener;
 use App\Listeners\DeclineFacilityReservationListener;
 use App\Listeners\FacilityReservationListener;
+use App\Listeners\ForMaintenanceListener;
 use App\Listeners\OverdueEquipmentListener;
 use App\Listeners\SendReservationListener;
 use App\Models\Reservation;
@@ -42,6 +44,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         DeclineFacilityReservationEvent::class => [
             DeclineFacilityReservationListener::class,
+        ],
+        ForMaintenanceEvent::class => [
+            ForMaintenanceListener::class,
         ],
     ];
 

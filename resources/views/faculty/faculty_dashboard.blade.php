@@ -68,7 +68,7 @@
 
                             <div class="d-flex w-50">
                                 <div class="card shadow-sm p-3 rounded w-100">
-                                    @foreach ($studentReservations as $reservations)
+                                    @foreach ($facultyReservations as $reservations)
                                         @if ($reservations->reservation_date === now()->format('Y-m-d'))
                                             <div class="d-flex justify-content-between align-items-center mb-3">
                                                 <h6 class="fw-semibold mb-0">{{ $reservations->equipment->name }}</h6>
