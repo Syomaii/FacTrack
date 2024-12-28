@@ -440,7 +440,7 @@
 @endif
 
 
-{@if (url()->current() != url('notifications'))
+@if (url()->current() != url('notifications'))
     <script>
         $(document).ready(function() {
             setTimeout(function() {
