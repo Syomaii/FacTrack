@@ -116,8 +116,7 @@
                                     Edit Profile
                                 </button>
                             </li>
-                            @if (
-                                !(auth()->id() !== $user->id &&
+                            @if (!(auth()->id() !== $user->id &&
                                     (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
                                 ))
                                 <li class="nav-item" role="presentation">

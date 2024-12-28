@@ -22,6 +22,7 @@ class Equipment extends Model
         'status',
         'owned_by',
         'next_due_date',
+        'repair_count = 0',
         'user_id'
     ];
 

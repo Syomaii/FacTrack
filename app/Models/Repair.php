@@ -22,6 +22,7 @@ class Repair extends Model
         'action_taken',
         'recommendations',
         'technician',
+        'repair_count',
         'status',
     ];
 
