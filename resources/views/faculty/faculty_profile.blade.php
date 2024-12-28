@@ -246,8 +246,8 @@
     </div>
 
     @include('templates.footer_inc')
-    @include('templates.footer')
 </main>
+@include('templates.footer')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const togglePasswordButtons = document.querySelectorAll('.toggle-password');
