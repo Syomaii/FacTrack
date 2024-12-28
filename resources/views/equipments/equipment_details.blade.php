@@ -22,7 +22,7 @@
                     </li>
                 @endif
                 <li>-</li>
-                <li>{{ $equipments->name }}</li>
+                <li>{{ $equipment->name }}</li>
             </ul>
         </div>
 
@@ -40,32 +40,27 @@
         @if (auth()->user()->type === 'facility manager')
             <div class="d-flex justify-content-end flex-wrap mt-3 gap-4 mb-3">
 
-                <a href="javascript:void(0)"
-                    class="btn btn-danger text-base radius-8 px-20 py-11 delete-equipment"
-                    data-id="{{ $equipments->id }}">Delete Equipment
+                <a href="javascript:void(0)" class="btn btn-danger text-base radius-8 px-20 py-11 delete-equipment"
+                    data-id="{{ $equipment->id }}">Delete Equipment
                 </a>
 
-                @if ($equipments->status != 'Disposed' && $equipments->status != 'Donated')
-                    <a href="javascript:void(0)"
-                        class="btn btn-success text-base radius-8 px-20 py-11 edit-equipment"
-                        data-id="{{ $equipments->id }}" data-name="{{ $equipments->name }}"
-                        data-description="{{ $equipments->description }}"
-                        data-acquired_date="{{ $equipments->acquired_date }}"
-                        data-facility="{{ $equipments->facility->name }}"
-                        data-brand="{{ $equipments->brand }}"
-                        data-serial_no="{{ $equipments->serial_no }}">Edit
+                @if ($equipment->status != 'Disposed' && $equipment->status != 'Donated')
+                    <a href="javascript:void(0)" class="btn btn-success text-base radius-8 px-20 py-11 edit-equipment"
+                        data-id="{{ $equipment->id }}" data-name="{{ $equipment->name }}"
+                        data-description="{{ $equipment->description }}"
+                        data-acquired_date="{{ $equipment->acquired_date }}"
+                        data-facility="{{ $equipment->facility->name }}" data-brand="{{ $equipment->brand }}"
+                        data-serial_no="{{ $equipment->serial_no }}">Edit
                         Equipment
                     </a>
                 @endif
-                
-                <button type="button" class="btn btn-primary text-base radius-8 px-20 py-11"
-                    onclick="printDetails()">
+
+                <button type="button" class="btn btn-primary text-base radius-8 px-20 py-11" onclick="printDetails()">
                     Print QR Code
                 </button>
 
-                <form id="delete-form-{{ $equipments->id }}"
-                    action="{{ route('delete_equipment', $equipments->id) }}" method="POST"
-                    style="display: none;">
+                <form id="delete-form-{{ $equipment->id }}" action="{{ route('delete_equipment', $equipment->id) }}"
+                    method="POST" style="display: none;">
                     @csrf
                     @method('DELETE')
                 </form>
@@ -76,22 +71,22 @@
             <div class="d-flex flex-wrap p-5 row g-0">
                 <!-- Image Section -->
                 <div class="col-md-6 text-center">
-                    <p class="ename">{{ ucwords($equipments->name) }}</p>
-                    <img src="{{ asset($equipments->image) }}" class="img-fluid rounded"
-                        alt="{{ ucwords($equipments->name) }}">
+                    <p class="ename">{{ ucwords($equipment->name) }}</p>
+                    <img src="{{ asset($equipment->image) }}" class="img-fluid rounded"
+                        alt="{{ ucwords($equipment->name) }}">
                 </div>
 
                 <!-- Details Section -->
                 <div class="col-md-6">
                     <div class="row d-flex flex-wrap">
                         @foreach ([
-                            'Brand' => $equipments->brand,
-                            'Model' => $equipments->name,
-                            'Status' => $equipments->status,
-                            'Serial Number' => $equipments->serial_no,
-                            'Facility' => $equipments->facility->name,
-                            'Acquisition Date' => date('d M Y', strtotime($equipments->acquired_date)),
-                        ] as $label => $value)
+        'Brand' => $equipment->brand,
+        'Model' => $equipment->name,
+        'Status' => $equipment->status,
+        'Serial Number' => $equipment->serial_no,
+        'Facility' => $equipment->facility->name,
+        'Acquisition Date' => date('d M Y', strtotime($equipment->acquired_date)),
+    ] as $label => $value)
                             <div class="col-md-6 mb-3" id="{{ str_replace(' ', '-', strtolower($label)) }}">
                                 <strong class="text-lg">{{ $label }}:</strong>
                                 <p>{{ $value }}</p>
@@ -99,12 +94,12 @@
                         @endforeach
                         <div class="col-md-6" id="qr-code">
                             <strong class="text-lg">QR Code:</strong>
-                            <div id="qrCode">{!! QrCode::size(100)->generate($equipments->code) !!}</div>
-                            <input type="hidden" id="qrCodeValue" value="{{ $equipments->code }}">
+                            <div id="qrCode">{!! QrCode::size(100)->generate($equipment->code) !!}</div>
+                            <input type="hidden" id="qrCodeValue" value="{{ $equipment->code }}">
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
         <h6>Equipment Timeline</h6>
@@ -130,7 +125,7 @@
                             })
                             : collect();
                 @endphp
-                
+
                 <div class="timeline-item {{ $loop->even ? 'below' : 'above' }} "
                     style="border-left: 5px solid {{ $color }}; padding-left: 10px; margin-bottom: 20px; background: #f9f9f9; border-radius: 5px; padding: 15px; ">
                     <p>{{ 'The equipment is ' . $entry->status }}</p>
@@ -221,7 +216,8 @@
                         <!-- Serial Number -->
                         <div class="mb-3">
                             <label for="equipmentSerialNo" class="form-label">Serial Number</label>
-                            <input type="text" class="form-control" id="equipmentSerialNo" name="serial_no" required>
+                            <input type="text" class="form-control" id="equipmentSerialNo" name="serial_no"
+                                required>
                             @error('serial_no')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -353,5 +349,4 @@
         // Restore the original content
         document.body.innerHTML = originalContents;
     }
-
 </script>

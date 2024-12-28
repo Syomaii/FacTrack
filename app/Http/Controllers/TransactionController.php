@@ -571,6 +571,7 @@ class TransactionController extends Controller
             break;
 
             case 'In Repair':
+
                 $validatedData = $request->validate([
                     'returned_date' => 'required|date',
                     'technician' => 'required|string',
@@ -581,6 +582,10 @@ class TransactionController extends Controller
                 ]);
 
                 $equipment = Equipment::where('code', $code)->first();
+
+                if($equipment->status == 'In Repair' > 2){
+                    return redirect()->back()->withErrors(['msg' => 'This equipment is suggested for In Maintenance']);
+                }
             
                 if (!$equipment) {
                     return redirect()->back()->withErrors(['msg' => 'Equipment not found.']);
