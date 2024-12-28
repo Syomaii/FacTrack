@@ -114,8 +114,7 @@
                                     Edit Profile
                                 </button>
                             </li>
-                            @if (
-                                !(auth()->id() !== $user->id &&
+                            @if (!(auth()->id() !== $user->id &&
                                     (auth()->user()->type === 'facility manager' || auth()->user()->type === 'operator')
                                 ))
                                 <li class="nav-item" role="presentation">
@@ -226,9 +225,7 @@
                                     </div>
 
                                     <div class="d-flex align-items-center justify-content-center gap-3 mt-5">
-                                        @if (auth()->user()->id === $user->id ||
-                                                (auth()->user()->type === 'facility manager' && $user->type === 'operator') ||
-                                                (auth()->user()->type === 'admin' && $user->type === 'operator'))
+                                        @if (auth()->user()->id === $user->id || (auth()->user()->type === 'facility manager' && $user->type === 'operator') || auth()->user()->type === 'admin')
                                             <button type="button" class="btn btn-danger border border-danger-600 text-md px-56 py-12 radius-8" id="cancelBtn" disabled>
                                                 Cancel
                                             </button>
