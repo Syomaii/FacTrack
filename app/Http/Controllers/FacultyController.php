@@ -14,6 +14,7 @@ use App\Models\Reservation;
 use App\Models\Students;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -97,17 +98,54 @@ class FacultyController extends Controller
     public function facultyProfile($id)
     {
         $faculty = Faculty::findOrFail($id);
-        $facultyBorrowHistory = Borrower::with('equipment')->where('borrowers_id_no', $id)->get();
-        $facultyReservations = EquipmentReservation::with('equipment')->where('reservers_id_no', $id)->get();
-        $facultyFacilityReservations = FacilityReservation::with('facility')->where('reservers_id_no', $id)->get();
-        
-        
-        if (!$faculty) {
-            abort(404); 
+       // Get current date
+        $currentDate = Carbon::now();
+
+        // Fetch approved equipment reservations that have passed their expected return date
+        $facultyReservations = EquipmentReservation::with('equipment')
+            ->where('reservers_id_no', $id)
+            ->where('status', 'approved')
+            ->where('expected_return_date', '<', $currentDate)
+            ->get();
+
+        // Process each approved equipment reservation that has passed the expected return date
+        foreach ($facultyReservations as $reservation) {
+            // Create a new borrow history entry
+            Borrower::create([
+                'equipment_id' => $reservation->equipment_id,
+                'user_id' => Auth::user()->id, 
+                'borrowers_id_no' => $reservation->reservers_id_no,
+                'borrowers_name' => $faculty->firstname . ' ' . $faculty->lastname,
+                'department' => $faculty->department,
+                'borrowed_date' => $currentDate,
+                'expected_returned_date' => $reservation->expected_return_date,
+                'returned_date' => $currentDate, // Set returned_date to current date
+                'status' => 'Returned', // Set status to Returned
+                'purpose' => $reservation->purpose,
+                'remarks' => 'The day the equipment is Returned', 
+            ]);
+
+            $reservation->status = 'completed'; 
+            $reservation->save();
         }
 
-        return view('faculty.faculty_profile', compact('faculty', 'facultyBorrowHistory', 'facultyFacilityReservations', 'facultyReservations'))
+        // Fetch the updated borrow history
+        $facultyBorrowHistory = Borrower::with('equipment')->where('borrowers_id_no', $id)->get();
+
+        // Fetch active reservations (not completed or archived)
+        $facultyReservations = EquipmentReservation::with('equipment')
+            ->where('reservers_id_no', $id)
+            ->where('status', '!=', 'completed') // Exclude completed reservations
+            ->get();
+
+        $facultyFacilityReservations = FacilityReservation::with('facility')
+            ->where('reservers_id_no', $id)
+            ->where('status', '!=', 'approved') 
+            ->get();
+
+        return view('faculty.faculty_profile', compact('faculty', 'facultyBorrowHistory', 'facultyReservations', 'facultyFacilityReservations'))
             ->with('title', 'Faculty Profile');
+
     }
 
     public function addFacultyPost(Request $request)
